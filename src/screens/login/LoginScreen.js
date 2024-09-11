@@ -13,7 +13,7 @@ import CommonStyles from '../../components/common/CommonStyles';
 import {Colors} from '../../components/common/Colors';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Constants from '../../components/common/Constants';
-import CommonSafeAreaView from '../../components/CommonSafeAreaView';
+import CommonSafeAreaView from '../../components/ReusableComponents/CommonSafeAreaView';
 
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
