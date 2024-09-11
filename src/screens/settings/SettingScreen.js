@@ -1,10 +1,27 @@
-import {View, Text} from 'react-native';
 import React from 'react';
+import CommonSafeAreaView from '../../components/ReusableComponents/CommonSafeAreaView';
+import Header from '../../components/Header/Header';
+import LogoutConfirmation from '../../components/ReusableComponents/LogoutConfirmation';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Constants from '../../components/common/Constants';
+import {Colors} from '../../components/common/Colors';
 
 export default function SettingScreen() {
+  const handleLogout = LogoutConfirmation();
+
   return (
-    <View>
-      <Text>SettingScreen</Text>
-    </View>
+    <CommonSafeAreaView>
+      <Header
+        title="Settings"
+        onRightIconPressed={handleLogout}
+        rightIcon={
+          <Ionicons
+            name="log-out-outline"
+            size={Constants.SIZE.medIcon}
+            color={Colors.blueColor}
+          />
+        }
+      />
+    </CommonSafeAreaView>
   );
 }

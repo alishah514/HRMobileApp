@@ -15,10 +15,13 @@ const CommonStyles = StyleSheet.create({
 
   //text
   boldTitle: {fontWeight: '600', fontSize: wp('8')},
-  bold3: {fontWeight: '600', fontSize: wp('4')},
+  bold3: {fontWeight: '600', fontSize: wp('3')},
   bold4: {fontWeight: '600', fontSize: wp('4')},
+  bold6: {fontWeight: '600', fontSize: wp('6')},
   lessBold3: {fontWeight: '500', fontSize: wp('3')},
   lessBold4: {fontWeight: '500', fontSize: wp('4')},
+  lessBold5: {fontWeight: '500', fontSize: wp('5')},
+  font5: {fontSize: wp('5')},
   lessBold3P: {fontWeight: '500', fontSize: wp('3.5')},
   lessBold4P: {fontWeight: '500', fontSize: wp('4.5')},
 
@@ -28,39 +31,12 @@ const CommonStyles = StyleSheet.create({
   textGrey: {color: Colors.greyColor},
   textBlack: {color: Colors.greyBlack},
   textBlue: {color: Colors.blueColor},
+  backgroundBlue: {backgroundColor: Colors.blueColor},
+  yellowBorder: {borderColor: Colors.yellowColor},
+  blueBorder: {borderColor: Colors.blueColor},
 
   //others
   underlineText: {textDecorationLine: 'underline'},
-  whiteText: {
-    fontSize: wp('4'),
-    color: Colors.whiteColor,
-    fontWeight: '500',
-  },
-  grey3text: {
-    fontSize: wp('3'),
-    color: Colors.lightGrey,
-    fontWeight: '500',
-  },
-  grey3PText: {
-    fontSize: wp('3.5'),
-    color: Colors.lightGrey,
-    fontWeight: '500',
-  },
-  grey4text: {
-    fontSize: wp('4'),
-    color: Colors.lightGrey,
-    fontWeight: '500',
-  },
-  blue4Text: {
-    fontSize: wp('4'),
-    color: Colors.blueColor,
-    fontWeight: '600',
-  },
-  whiteTitleText: {
-    fontSize: wp('8'),
-    fontWeight: '600',
-    color: Colors.whiteColor,
-  },
   loginField: {
     height: wp('12'),
     backgroundColor: Colors.lightGrey,
@@ -157,6 +133,16 @@ const CommonStyles = StyleSheet.create({
     height: '100%',
   },
 
+  shadow: {
+    shadowColor: Colors.blackColor,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.5,
+    elevation: 5,
+  },
   // tab bar styles
 
   tabBarStyle: {
@@ -170,7 +156,7 @@ const CommonStyles = StyleSheet.create({
     height: 90,
   },
   shadowTabBar: {
-    shadowColor: Colors.blueColor,
+    shadowColor: Colors.blackColor,
     shadowOffset: {
       width: 0,
       height: 10,

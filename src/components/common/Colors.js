@@ -21,7 +21,7 @@ export const Colors = {
   placeholderColorLight: '#CCCCCC',
 
   //yellow color
-  yellowColor: '#FFDC64',
+  yellowColor: '#FF8000',
 
   //orange
   orangeColor: '#ee7600',
