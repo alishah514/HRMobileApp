@@ -1,16 +1,16 @@
 import React from 'react';
-import CommonSafeAreaView from '../../components/ReusableComponents/CommonSafeAreaView';
+import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonSafeAreaViewComponent';
 import Header from '../../components/Header/Header';
-import LogoutConfirmation from '../../components/ReusableComponents/LogoutConfirmation';
+import LogoutConfirmationComponent from '../../components/ReusableComponents/LogoutConfirmationComponent';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
 
 export default function SettingScreen() {
-  const handleLogout = LogoutConfirmation();
+  const handleLogout = LogoutConfirmationComponent();
 
   return (
-    <CommonSafeAreaView>
+    <CommonSafeAreaViewComponent>
       <Header
         title="Settings"
         onRightIconPressed={handleLogout}
@@ -22,6 +22,6 @@ export default function SettingScreen() {
           />
         }
       />
-    </CommonSafeAreaView>
+    </CommonSafeAreaViewComponent>
   );
 }

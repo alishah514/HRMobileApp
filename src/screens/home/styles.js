@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: Colors.blackColor,
   },
-  titleView: {
+  curveView: {
     height: hp(30),
     alignItems: 'center',
     paddingBottom: wp('30'),
@@ -17,12 +17,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoIcon: {width: wp('15'), height: wp('15'), marginRight: wp('3')},
-
-  boxStyles: {
-    height: Platform.OS === 'android' ? hp(65) : hp(75),
-    backgroundColor: Colors.whiteColor,
-    borderTopLeftRadius: wp(20),
-    borderTopRightRadius: wp(20),
+  rowTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: wp('30'),
   },
   boxView: {
     width: wp('35'),

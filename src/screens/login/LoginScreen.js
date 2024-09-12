@@ -13,7 +13,7 @@ import CommonStyles from '../../components/common/CommonStyles';
 import {Colors} from '../../components/common/Colors';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Constants from '../../components/common/Constants';
-import CommonSafeAreaView from '../../components/ReusableComponents/CommonSafeAreaView';
+import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonSafeAreaViewComponent';
 
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
@@ -25,7 +25,7 @@ export default function LoginScreen({navigation}) {
   };
 
   return (
-    <CommonSafeAreaView style={[CommonStyles.containerCenter]}>
+    <CommonSafeAreaViewComponent style={[CommonStyles.containerCenter]}>
       <ImageBackground
         source={require('../../assets/images/BuildingHd.jpg')}
         style={[styles.fullscreenImage]}
@@ -149,6 +149,6 @@ export default function LoginScreen({navigation}) {
           </View>
         </View>
       </ImageBackground>
-    </CommonSafeAreaView>
+    </CommonSafeAreaViewComponent>
   );
 }

@@ -8,6 +8,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: 'rgba(0, 0, 0, 0.2)',
   },
+  blueScreenView: {
+    backgroundColor: Colors.blueColor,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lightGrey,
+  },
   mainHeader: {
     flexDirection: 'row',
     height: hp(7),
@@ -29,7 +34,7 @@ const styles = StyleSheet.create({
   },
 
   titleText: {
-    color: Colors.blackColor,
+    color: Colors.whiteColor,
     fontSize: wp(5.5),
     fontWeight: '500',
   },

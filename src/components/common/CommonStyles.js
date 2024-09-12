@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 
-import {wp} from './Dimensions';
+import {hp, wp} from './Dimensions';
 import {Colors} from './Colors';
 
 const CommonStyles = StyleSheet.create({
@@ -22,6 +22,9 @@ const CommonStyles = StyleSheet.create({
   lessBold4: {fontWeight: '500', fontSize: wp('4')},
   lessBold5: {fontWeight: '500', fontSize: wp('5')},
   font5: {fontSize: wp('5')},
+  font6: {fontSize: wp('6')},
+  lessBold300: {fontWeight: '300'},
+  Bold600: {fontWeight: '600'},
   lessBold3P: {fontWeight: '500', fontSize: wp('3.5')},
   lessBold4P: {fontWeight: '500', fontSize: wp('4.5')},
 
@@ -29,7 +32,7 @@ const CommonStyles = StyleSheet.create({
   textWhite: {color: Colors.whiteColor},
   textLightGrey: {color: Colors.lightGrey},
   textGrey: {color: Colors.greyColor},
-  textBlack: {color: Colors.greyBlack},
+  textBlack: {color: Colors.blackColor},
   textBlue: {color: Colors.blueColor},
   backgroundBlue: {backgroundColor: Colors.blueColor},
   yellowBorder: {borderColor: Colors.yellowColor},
@@ -54,6 +57,7 @@ const CommonStyles = StyleSheet.create({
   paddingVertical1: {paddingVertical: wp('1')},
   paddingVertical2: {paddingVertical: wp('2')},
   paddingVertical3: {paddingVertical: wp('3')},
+  marginVertical1: {marginVertical: wp('1')},
   marginVertical2: {marginVertical: wp('2')},
   marginVertical5: {marginVertical: wp('5')},
   paddingVertical5: {paddingVertical: wp('5')},
@@ -132,7 +136,18 @@ const CommonStyles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  backgroundCurve: {
+    height: Platform.OS === 'android' ? hp(65) : hp(75),
+    backgroundColor: Colors.whiteColor,
+    borderTopLeftRadius: wp(20),
+    borderTopRightRadius: wp(20),
+  },
+  curveView: {
+    height: hp(30),
+    alignItems: 'center',
 
+    justifyContent: 'center',
+  },
   shadow: {
     shadowColor: Colors.blackColor,
     shadowOffset: {
@@ -143,8 +158,15 @@ const CommonStyles = StyleSheet.create({
     shadowRadius: 3.5,
     elevation: 5,
   },
-  // tab bar styles
+  borderLineWithoutMargin: {
+    width: wp('85'),
+    borderWidth: wp('0.2'),
+    borderColor: Colors.lightGrey,
+    alignSelf: 'center',
+    marginTop: wp('4'),
+  },
 
+  // tab bar styles
   tabBarStyle: {
     position: 'absolute',
     bottom: 25,
@@ -159,7 +181,7 @@ const CommonStyles = StyleSheet.create({
     shadowColor: Colors.blackColor,
     shadowOffset: {
       width: 0,
-      height: 10,
+      height: 1,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.5,
@@ -168,6 +190,41 @@ const CommonStyles = StyleSheet.create({
 
   tabBarItemView: {alignItems: 'center', justifyContent: 'center', top: 10},
   tabBarItemText: {fontSize: wp(3.5), fontWeight: '500', paddingTop: wp(1)},
+
+  // half modal
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.transparent,
+  },
+  modalView: {
+    backgroundColor: Colors.whiteColor,
+    borderRadius: wp('5%'),
+    padding: wp('8%'),
+    alignItems: 'center',
+    shadowColor: Colors.blackColor,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: Platform.OS === 'ios' ? 5 : 0.5,
+  },
+  inputField: {
+    borderBottomWidth: 1,
+    width: wp('70%'),
+    paddingBottom: wp('1%'),
+    fontSize: wp('4%'),
+  },
+  multilineInputField: {
+    borderWidth: 1,
+    width: wp('70%'),
+    height: wp('30%'),
+    paddingBottom: wp('1%'),
+    fontSize: wp('4%'),
+  },
 });
 
 export default CommonStyles;
