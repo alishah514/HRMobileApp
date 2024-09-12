@@ -1,6 +1,7 @@
 import {View, Text, TouchableOpacity, SafeAreaView} from 'react-native';
 import React from 'react';
 import styles from './styles';
+import CommonStyles from '../common/CommonStyles';
 
 const Header = props => {
   const truncateTitle = (title, maxLength) => {
@@ -92,7 +93,7 @@ const Header = props => {
   );
 
   return (
-    <SafeAreaView style={styles.whiteScreenView}>
+    <SafeAreaView style={styles.blueScreenView}>
       <View style={styles.mainHeader}>
         {/* Render title && left icon */}
         {props?.leftIcon &&

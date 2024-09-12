@@ -16,6 +16,9 @@ export const Colors = {
   lightGrey: '#D3D3D3',
   darkGrey: '#3b3b3b',
 
+  // silver
+  silverColor: '#C0C0C0',
+
   //placeholder color
   placeholderColorDark: '#888888',
   placeholderColorLight: '#CCCCCC',

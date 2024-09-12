@@ -32,8 +32,18 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow this app to access your camera</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need your microphone for...</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need your location for...</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location for...</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>We need your location for...</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to select images.</string>
   <key>UIAppFonts</key>
     <array>
       <string>SimpleLineIcons.ttf</string>

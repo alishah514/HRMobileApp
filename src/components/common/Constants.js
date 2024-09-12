@@ -15,6 +15,7 @@ const ROLE = 'role';
 const ROLE_STATUS = ['Transporter', 'Customer', 'Driver', 'Staff'];
 
 const SIZE = {
+  xxLargeIcon: wp('18'),
   xLargeIcon: wp('9'),
   largeIcon: wp('7'),
   medIcon: wp('6'),

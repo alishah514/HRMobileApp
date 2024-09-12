@@ -4,7 +4,7 @@ import {CommonActions} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import logout from '../utils/logout';
 
-const LogoutConfirmation = () => {
+const LogoutConfirmationComponent = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -39,4 +39,4 @@ const LogoutConfirmation = () => {
   return handleLogout;
 };
 
-export default LogoutConfirmation;
+export default LogoutConfirmationComponent;

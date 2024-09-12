@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, KeyboardAvoidingView, Platform} from 'react-native';
 import CommonStyles from '../common/CommonStyles';
 
-export default function CommonSafeAreaView({children, styling}) {
+export default function CommonSafeAreaViewComponent({children, styling}) {
   return (
     <SafeAreaView style={[CommonStyles.container, styling && styling]}>
       <KeyboardAvoidingView
