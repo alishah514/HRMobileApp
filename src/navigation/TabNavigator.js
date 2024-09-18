@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
-    <View style={CommonStyles.container}>
+    <View style={[CommonStyles.container, CommonStyles.whiteColor]}>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
