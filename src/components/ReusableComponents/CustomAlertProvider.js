@@ -5,6 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import CommonStyles from '../common/CommonStyles';
 import {wp} from '../common/Dimensions';
 import {Colors} from '../common/Colors';
+import Constants from '../common/Constants';
 
 const CustomAlertContext = createContext();
 
@@ -106,7 +107,7 @@ export const CustomAlertProvider = ({children}) => {
                 onPress={hideAlert}>
                 <AntDesign
                   name="close"
-                  size={Constants?.SIZE.headerIcon}
+                  size={Constants?.SIZE.largeIcon}
                   color={Colors.whiteColor}
                 />
               </TouchableOpacity>

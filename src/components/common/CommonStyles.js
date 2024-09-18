@@ -22,6 +22,7 @@ const CommonStyles = StyleSheet.create({
   lessBold4: {fontWeight: '500', fontSize: wp('4')},
   lessBold5: {fontWeight: '500', fontSize: wp('5')},
   font5: {fontSize: wp('5')},
+  fon5p5: {fontSize: wp('5.5')},
   font6: {fontSize: wp('6')},
   lessBold300: {fontWeight: '300'},
   Bold600: {fontWeight: '600'},
@@ -95,6 +96,8 @@ const CommonStyles = StyleSheet.create({
   paddingLeft5: {paddingLeft: wp('5')},
 
   // right
+  paddingRight1: {paddingRight: wp('1')},
+  paddingRight2: {paddingRight: wp('2')},
   paddingRight3: {paddingRight: wp('3')},
   paddingRight3p5: {paddingRight: wp('3.5')},
 
@@ -168,27 +171,25 @@ const CommonStyles = StyleSheet.create({
 
   // tab bar styles
   tabBarStyle: {
-    position: 'absolute',
-    bottom: 25,
-    left: 20,
-    right: 20,
-    elevation: 0,
     backgroundColor: Colors.whiteColor,
-    borderRadius: 15,
-    height: 90,
+    height: wp('20'),
   },
   shadowTabBar: {
     shadowColor: Colors.blackColor,
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 0.5,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.45,
     shadowRadius: 3.5,
     elevation: 5,
   },
 
-  tabBarItemView: {alignItems: 'center', justifyContent: 'center', top: 10},
+  tabBarItemView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: Platform.OS === 'ios' && 10,
+  },
   tabBarItemText: {fontSize: wp(3.5), fontWeight: '500', paddingTop: wp(1)},
 
   // half modal

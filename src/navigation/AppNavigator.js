@@ -4,7 +4,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import TabNavigator from './TabNavigator.js';
 import SplashScreen from '../screens/splash/SplashScreen.js';
 import LoginScreen from '../screens/login/LoginScreen.js';
-import HomeScreen from '../screens/home/HomeScreen.js';
 
 const Stack = createStackNavigator();
 

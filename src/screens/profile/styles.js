@@ -73,6 +73,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignSelf: 'center',
   },
-  maxHeight: {maxHeight: Platform.OS === 'ios' ? hp('42') : hp('47')},
+  maxHeight: {
+    maxHeight: Platform.OS === 'ios' ? hp('47') : hp('53'),
+  },
+  paddingBottom5Align: {
+    paddingBottom: wp('5'),
+    alignItems: 'center',
+  },
 });
 export default styles;
