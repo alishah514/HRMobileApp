@@ -1,7 +1,7 @@
 import {View, Text, TouchableOpacity, SafeAreaView} from 'react-native';
 import React from 'react';
 import styles from './styles';
-import CommonStyles from '../common/CommonStyles';
+import CommonStyles from '../../common/CommonStyles';
 
 const Header = props => {
   const truncateTitle = (title, maxLength) => {

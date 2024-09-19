@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonSafeAreaViewComponent';
-import Header from '../../components/Header/Header';
+import Header from '../../components/ReusableComponents/Header/Header';
 import LogoutConfirmationComponent from '../../components/ReusableComponents/LogoutConfirmationComponent';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -16,6 +16,7 @@ import styles from './styles';
 import PersonalInfo from './types/PersonalInfo';
 import WorkInfo from './types/WorkInfo';
 import EducationInfo from './types/education/EducationInfo';
+import EditProfileModal from './EditProfileModal';
 
 const tabs = [
   {id: 0, icon: 'person-outline', iconSet: Ionicons},
@@ -23,12 +24,16 @@ const tabs = [
   {id: 2, icon: 'briefcase', iconSet: SimpleLineIcons},
 ];
 
-export default function ProfileScreen() {
-  const handleLogout = LogoutConfirmationComponent();
+export default function ProfileScreen({navigation}) {
   const [activeTab, setActiveTab] = useState(0);
   const [image, setImage] = useState(null);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
     useState(false);
+  const [isEditModal, setIsEditModal] = useState(false);
+
+  const toggleEditModal = () => {
+    setIsEditModal(!isEditModal);
+  };
 
   const toggleImageOptionsModal = () => {
     setIsImagePickerOptionsVisible(!isImagePickerOptionsVisible);
@@ -38,15 +43,27 @@ export default function ProfileScreen() {
     setActiveTab(index);
   };
 
+  const handleDrawerOpen = () => {
+    navigation.openDrawer();
+  };
+
   return (
     <CommonSafeAreaViewComponent>
       <Header
         title="Profile"
-        onRightIconPressed={handleLogout}
-        rightIcon={
+        onLeftIconPressed={handleDrawerOpen}
+        leftIcon={
           <Ionicons
-            name="log-out-outline"
-            size={Constants.SIZE.medIcon}
+            name="menu"
+            size={Constants?.SIZE.medIcon}
+            color={Colors.whiteColor}
+          />
+        }
+        onRightIconPressed={toggleEditModal}
+        rightIcon={
+          <MaterialCommunityIcons
+            name="account-edit-outline"
+            size={Constants?.SIZE.largeIcon}
             color={Colors.whiteColor}
           />
         }
@@ -143,6 +160,10 @@ export default function ProfileScreen() {
         setIsImagePickerOptionsVisible={setIsImagePickerOptionsVisible}
         isImagePickerOptionsVisible={isImagePickerOptionsVisible}
         toggleImageOptionsModal={toggleImageOptionsModal}
+      />
+      <EditProfileModal
+        onClose={toggleEditModal}
+        isModalVisible={isEditModal}
       />
     </CommonSafeAreaViewComponent>
   );

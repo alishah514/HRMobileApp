@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     width: '42%',
     margin: '4%',
     alignItems: 'center',
-    borderColor: Colors.darkBlueColor,
+    borderColor: Colors.drawerColor,
     borderWidth: 2,
     borderRadius: 2,
     paddingVertical: wp('7'),
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     marginBottom: wp('5'),
   },
   imageModalIconText: {
-    color: Colors.darkBlueColor,
+    color: Colors.drawerColor,
     fontWeight: 'bold',
     fontSize: wp('5'),
     alignSelf: 'center',
