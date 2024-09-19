@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {Colors} from '../common/Colors';
-import {hp, wp} from '../common/Dimensions';
+import {Colors} from '../../common/Colors';
+import {hp, wp} from '../../common/Dimensions';
 
 const styles = StyleSheet.create({
   whiteScreenView: {

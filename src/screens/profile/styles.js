@@ -80,5 +80,34 @@ const styles = StyleSheet.create({
     paddingBottom: wp('5'),
     alignItems: 'center',
   },
+
+  // numeric salary
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    width: 100,
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    textAlign: 'center',
+    borderColor: '#ccc',
+    fontSize: 18,
+  },
+  buttonContainer: {
+    justifyContent: 'center',
+  },
+  arrowButton: {
+    width: 40,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  arrowText: {
+    fontSize: 18,
+  },
 });
 export default styles;

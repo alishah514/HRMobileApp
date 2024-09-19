@@ -154,21 +154,21 @@ export const useCustomAlert = () => useContext(CustomAlertContext);
 
 const styles = StyleSheet.create({
   headerView: {
-    minWidth: wp('60%'),
-    height: wp('12%'),
-    borderTopLeftRadius: wp('5%'),
-    borderTopRightRadius: wp('5%'),
+    minWidth: wp('60'),
+    height: wp('12'),
+    borderTopLeftRadius: wp('5'),
+    borderTopRightRadius: wp('5'),
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   modalView: {
-    minWidth: wp('60%'),
-    minHeight: wp('30%'),
-    paddingBottom: wp('5%'),
+    minWidth: wp('60'),
+    minHeight: wp('30'),
+    paddingBottom: wp('5'),
     backgroundColor: Colors.whiteColor,
-    borderRadius: wp('5%'),
+    borderRadius: wp('5'),
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -181,16 +181,16 @@ const styles = StyleSheet.create({
   },
   modalText: {
     textAlign: 'center',
-    fontSize: wp('5%'),
+    fontSize: wp('5'),
     fontWeight: '600',
     color: Colors.whiteColor,
   },
   modalText2: {
     textAlign: 'center',
-    fontSize: wp('4.5%'),
+    fontSize: wp('4.5'),
     color: Colors.blackColor,
-    maxWidth: wp('60%'),
+    maxWidth: wp('60'),
 
-    paddingHorizontal: wp('3%'),
+    paddingHorizontal: wp('3'),
   },
 });

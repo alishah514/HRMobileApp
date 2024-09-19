@@ -109,7 +109,10 @@ export default function LoginScreen({navigation}) {
               <View style={styles.lineContainer}>
                 <View style={styles.line} />
                 <Text
-                  style={[CommonStyles.lessBold3P, CommonStyles.textLightGrey]}>
+                  style={[
+                    CommonStyles.lessBold3P5,
+                    CommonStyles.textLightGrey,
+                  ]}>
                   Or login with
                 </Text>
                 <View style={styles.line} />

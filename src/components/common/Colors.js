@@ -11,6 +11,8 @@ export const Colors = {
 
   //blue color
   blueColor: '#4897E6',
+  drawerColor: '#0D1D30',
+  drawerActiveColor: '#3E8EDE',
 
   greyColor: '#848482',
   lightGrey: '#D3D3D3',

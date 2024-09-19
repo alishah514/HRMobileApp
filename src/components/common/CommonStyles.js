@@ -12,6 +12,7 @@ const CommonStyles = StyleSheet.create({
   flexRow: {flexDirection: 'row'},
   rowBetween: {flexDirection: 'row', justifyContent: 'space-between'},
   centerView: {justifyContent: 'center', alignItems: 'center'},
+  alignStart: {alignSelf: 'flex-start'},
 
   //text
   boldTitle: {fontWeight: '600', fontSize: wp('8')},
@@ -22,12 +23,13 @@ const CommonStyles = StyleSheet.create({
   lessBold4: {fontWeight: '500', fontSize: wp('4')},
   lessBold5: {fontWeight: '500', fontSize: wp('5')},
   font5: {fontSize: wp('5')},
-  fon5p5: {fontSize: wp('5.5')},
+  font5p5: {fontSize: wp('5.5')},
   font6: {fontSize: wp('6')},
   lessBold300: {fontWeight: '300'},
   Bold600: {fontWeight: '600'},
-  lessBold3P: {fontWeight: '500', fontSize: wp('3.5')},
+  lessBold3P5: {fontWeight: '500', fontSize: wp('3.5')},
   lessBold4P: {fontWeight: '500', fontSize: wp('4.5')},
+  bold3p5: {fontWeight: '600', fontSize: wp('3.5')},
 
   //colors
   textWhite: {color: Colors.whiteColor},
@@ -68,11 +70,14 @@ const CommonStyles = StyleSheet.create({
   paddingHor3: {paddingHorizontal: wp('3')},
 
   //bottom
+  paddingBottom1: {paddingBottom: wp('1')},
+  paddingBottom2: {paddingBottom: wp('2')},
   paddingBottom3: {paddingBottom: wp('3')},
   paddingBottom7: {paddingBottom: wp('7')},
   paddingBottom10: {paddingBottom: wp('15')},
   paddingBottom15: {paddingBottom: wp('15')},
   marginBottom3: {marginBottom: wp('3')},
+  marginBottom5: {marginBottom: wp('5')},
   marginBottom7: {marginBottom: wp('7')},
   marginBottom20: {marginBottom: wp('20')},
 
@@ -106,6 +111,8 @@ const CommonStyles = StyleSheet.create({
   // width
   width35: {width: wp('35')},
   width40: {width: wp('40')},
+  width50: {width: wp('50')},
+  width60: {width: wp('60')},
   width80: {width: wp('80')},
   width90: {width: wp('90')},
   width35: {width: wp('35')},
@@ -225,6 +232,86 @@ const CommonStyles = StyleSheet.create({
     height: wp('30%'),
     paddingBottom: wp('1%'),
     fontSize: wp('4%'),
+  },
+
+  //drawer
+  dpView: {
+    width: wp('15'),
+    height: wp('15'),
+    borderRadius: wp('7.5'),
+    backgroundColor: Colors.greyColor,
+    borderWidth: wp('0.5'),
+    borderColor: Colors.whiteColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  nameTitle: {
+    color: Colors.whiteColor,
+    fontWeight: '600',
+    fontSize: wp('3.5'),
+    width: wp('48'),
+  },
+
+  // input field
+  InputField: {
+    color: Colors.blackColor,
+    fontSize: wp('4'),
+    fontWeight: '500',
+    alignSelf: 'flex-start',
+    width: '100%',
+    marginBottom: wp('5'),
+  },
+  // input field
+  InputFieldDate: {
+    fontSize: wp('4'),
+    fontWeight: '500',
+    width: '90%',
+  },
+  InputFieldDateHalf: {
+    fontSize: wp('4'),
+    fontWeight: '500',
+  },
+  inputContainer: {
+    alignItems: 'center',
+    borderBottomWidth: wp('0.15'),
+    borderColor: Colors.greyColor,
+    paddingBottom: Platform.OS === 'ios' ? wp('2') : null,
+  },
+  //multiline input box
+  multilineInput: {
+    alignSelf: 'flex-start',
+    borderWidth: wp('0.15'),
+    borderColor: Colors.greyColor,
+    backgroundColor: Colors.whiteColor,
+    borderRadius: wp('2'),
+    padding: wp('2'),
+    minHeight: wp('30'),
+    maxHeight: wp('70'),
+    textAlignVertical: 'top',
+  },
+
+  //date picker
+  dateView: {
+    borderBottomWidth: wp('0.15'),
+    borderColor: Colors.greyColor,
+    paddingBottom: wp('3'),
+    paddingTop: wp('1.5'),
+  },
+
+  //input picker
+
+  // Style for the text inside the picker
+  InputFieldText: {
+    fontSize: wp('4'),
+    fontWeight: '600',
+  },
+
+  pickerContainer: {
+    borderBottomWidth: wp('0.15'),
+    borderColor: Colors.greyColor,
+    width: '100%',
+    paddingBottom: wp('1'),
   },
 });
 
