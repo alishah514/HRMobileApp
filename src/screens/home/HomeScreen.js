@@ -1,19 +1,31 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonSafeAreaViewComponent';
 import Header from '../../components/ReusableComponents/Header/Header';
 import LogoutConfirmationComponent from '../../components/ReusableComponents/LogoutConfirmationComponent';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Constants from '../../components/common/Constants';
-import {Colors} from '../../components/common/Colors';
-import {Image, Text, View} from 'react-native';
 import styles from './styles';
 import CommonStyles from '../../components/common/CommonStyles';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
-import {wp} from '../../components/common/Dimensions';
+import {useSelector} from 'react-redux';
+import {Colors} from '../../components/common/Colors';
+import PunchInOut from './PunchComponent/PunchInOut';
 
 export default function HomeScreen({navigation}) {
   const handleLogout = LogoutConfirmationComponent();
+
+  // Access values from Redux store
+  const reduxTimer = useSelector(state => state.timer);
+  const reduxPunchInTime = useSelector(state => state.punchInTime);
+  const reduxPunchOutTime = useSelector(state => state.punchOutTime);
+
+  // Local state
+  const [punchInTime, setPunchInTime] = useState(reduxPunchInTime || null);
+  const [punchOutTime, setPunchOutTime] = useState(reduxPunchOutTime || null);
+  const [location, setLocation] = useState(null);
+
   const handleDrawerOpen = () => {
     navigation.openDrawer();
   };
@@ -42,110 +54,163 @@ export default function HomeScreen({navigation}) {
 
       <CustomerBackgroundComponent
         topChild={
-          <View style={styles.rowTitle}>
-            <Image
-              source={require('../../assets/icons/logo-icon.png')}
-              style={styles.logoIcon}
-            />
-            <Text style={[CommonStyles.boldTitle, CommonStyles.textWhite]}>
-              M3Logi HR App
-            </Text>
-          </View>
+          <>
+            <View style={[styles.rowTitle]}>
+              <View style={CommonStyles.width70}>
+                <Text style={[CommonStyles.bold5, CommonStyles.textWhite]}>
+                  Good Morning!
+                </Text>
+                <View style={CommonStyles.paddingTop2}>
+                  <Text style={[CommonStyles.bold5, CommonStyles.textWhite]}>
+                    Syed Ali Sultan Bukhari
+                  </Text>
+                  <Text
+                    style={[
+                      CommonStyles.lessBold4,
+                      CommonStyles.textWhite,
+                      CommonStyles.paddingTop1,
+                    ]}>
+                    Have a good day with full productivity and good vibes!
+                  </Text>
+                </View>
+              </View>
+              <Image
+                source={require('../../assets/images/sun.png')}
+                style={styles.logoIcon}
+              />
+            </View>
+            <View style={[CommonStyles.width95, CommonStyles.flexRow]}>
+              <View
+                style={[
+                  styles.boxViewTime,
+                  CommonStyles.shadow,
+                  CommonStyles.marginHor1,
+                ]}>
+                <Ionicons
+                  name={'time-outline'}
+                  size={Constants.SIZE.xLargeIcon}
+                  color={Colors.blueColor}
+                />
+                <View style={CommonStyles.alignItemsCenter}>
+                  <Text style={[CommonStyles.bold5, CommonStyles.textBlack]}>
+                    40
+                  </Text>
+                  <Text
+                    style={[CommonStyles.lessBold4P, CommonStyles.textBlue]}>
+                    Total Hours
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={[
+                  styles.boxViewTime,
+                  CommonStyles.shadow,
+                  CommonStyles.marginHor1,
+                ]}>
+                <Ionicons
+                  name={'checkmark-circle-outline'}
+                  size={Constants.SIZE.xLargeIcon}
+                  color={Colors.greenColor}
+                />
+
+                <View style={CommonStyles.alignItemsCenter}>
+                  <Text style={[CommonStyles.bold5, CommonStyles.textBlack]}>
+                    2
+                  </Text>
+                  <Text
+                    style={[CommonStyles.lessBold4P, CommonStyles.textGreen]}>
+                    On Time
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={[
+                  styles.boxViewTime,
+                  CommonStyles.shadow,
+                  CommonStyles.marginHor1,
+                ]}>
+                <Ionicons
+                  name={'alert-circle-outline'}
+                  size={Constants.SIZE.xLargeIcon}
+                  color={Colors.redColor}
+                />
+
+                <View style={CommonStyles.alignItemsCenter}>
+                  <Text style={[CommonStyles.bold5, CommonStyles.textBlack]}>
+                    38
+                  </Text>
+                  <Text style={[CommonStyles.lessBold4, CommonStyles.textRed]}>
+                    Late
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </>
         }
         bottomChild={
           <>
-            <View
-              style={[styles.boxView, styles.firstView, CommonStyles.shadow]}>
-              <View style={[styles.circleView, CommonStyles.yellowBorder]}>
-                <Ionicons
-                  name={'document-text-outline'}
-                  size={Constants.SIZE.xLargeIcon}
-                  color={Colors.yellowColor}
-                />
-              </View>
-              <View style={CommonStyles.alignItemsCenter}>
-                <Text
+            <ScrollView contentContainerStyle={[styles.infoStarting]}>
+              <PunchInOut
+                punchInTime={punchInTime}
+                punchOutTime={punchOutTime}
+                setPunchInTime={setPunchInTime}
+                setPunchOutTime={setPunchOutTime}
+                reduxTimer={reduxTimer}
+                setLocation={setLocation}
+              />
+              <View style={[CommonStyles.rowBetween, styles.width80Center]}>
+                <View style={[styles.boxView, CommonStyles.shadow]}>
+                  <View style={[styles.circleView, CommonStyles.yellowBorder]}>
+                    <MaterialCommunityIcons
+                      name={'bag-personal-outline'}
+                      size={Constants.SIZE.xLargeIcon}
+                      color={Colors.yellowColor}
+                    />
+                  </View>
+                  <View style={CommonStyles.alignItemsCenter}>
+                    <Text
+                      style={[
+                        CommonStyles.bold6,
+                        CommonStyles.textBlack,
+                        CommonStyles.marginVertical2,
+                      ]}>
+                      14
+                    </Text>
+                    <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
+                      Tasks
+                    </Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Leave')}
                   style={[
-                    CommonStyles.bold6,
-                    CommonStyles.textBlack,
-                    CommonStyles.marginVertical2,
+                    styles.boxView,
+                    CommonStyles.marginTop10,
+                    CommonStyles.shadow,
                   ]}>
-                  140
-                </Text>
-                <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
-                  Projects
-                </Text>
+                  <View style={[styles.circleView, CommonStyles.blueBorder]}>
+                    <Ionicons
+                      name={'receipt-outline'}
+                      size={Constants.SIZE.xLargeIcon}
+                      color={Colors.blueColor}
+                    />
+                  </View>
+                  <View style={CommonStyles.alignItemsCenter}>
+                    <Text
+                      style={[
+                        CommonStyles.bold6,
+                        CommonStyles.textBlack,
+                        CommonStyles.marginVertical2,
+                      ]}>
+                      140
+                    </Text>
+                    <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
+                      Leaves
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               </View>
-            </View>
-            <View
-              style={[styles.boxView, styles.secondView, CommonStyles.shadow]}>
-              <View style={[styles.circleView, CommonStyles.blueBorder]}>
-                <Ionicons
-                  name={'person-outline'}
-                  size={Constants.SIZE.xLargeIcon}
-                  color={Colors.blueColor}
-                />
-              </View>
-              <View style={CommonStyles.alignItemsCenter}>
-                <Text
-                  style={[
-                    CommonStyles.bold6,
-                    CommonStyles.textBlack,
-                    CommonStyles.marginVertical2,
-                  ]}>
-                  50
-                </Text>
-                <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
-                  Clients
-                </Text>
-              </View>
-            </View>
-            <View
-              style={[styles.boxView, styles.thirdView, CommonStyles.shadow]}>
-              <View style={[styles.circleView, CommonStyles.yellowBorder]}>
-                <MaterialCommunityIcons
-                  name={'bag-personal-outline'}
-                  size={Constants.SIZE.xLargeIcon}
-                  color={Colors.yellowColor}
-                />
-              </View>
-              <View style={CommonStyles.alignItemsCenter}>
-                <Text
-                  style={[
-                    CommonStyles.bold6,
-                    CommonStyles.textBlack,
-                    CommonStyles.marginVertical2,
-                  ]}>
-                  14
-                </Text>
-                <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
-                  Employees
-                </Text>
-              </View>
-            </View>
-            <View
-              style={[styles.boxView, styles.fourthView, CommonStyles.shadow]}>
-              <View style={[styles.circleView, CommonStyles.blueBorder]}>
-                <Ionicons
-                  name={'receipt-outline'}
-                  size={Constants.SIZE.xLargeIcon}
-                  color={Colors.blueColor}
-                />
-              </View>
-              <View style={CommonStyles.alignItemsCenter}>
-                <Text
-                  style={[
-                    CommonStyles.bold6,
-                    CommonStyles.textBlack,
-                    CommonStyles.marginVertical2,
-                  ]}>
-                  140
-                </Text>
-                <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
-                  Invoices
-                </Text>
-              </View>
-            </View>
+            </ScrollView>
           </>
         }
       />

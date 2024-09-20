@@ -2,17 +2,22 @@ import {
   LOGIN_USER,
   SET_USER_ROLE,
   SAVE_USER_DATA_AND_ROLE,
+  SAVE_PUNCH_IN_TIME,
+  SAVE_PUNCH_OUT_TIME,
+  SAVE_TIMER,
 } from '../actions/actionTypes';
 
 const initialState = {
   isAuthenticated: false,
   userRole: null,
   token: null,
-  //
   accessToken: null,
   userId: null,
   isLoggedIn: false,
   role: null,
+  punchInTime: null,
+  punchOutTime: null,
+  timer: '00:00:00',
 };
 
 const userReducer = (state = initialState, action) => {
@@ -35,6 +40,21 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         userRole: action.payload,
+      };
+    case SAVE_PUNCH_IN_TIME:
+      return {
+        ...state,
+        punchInTime: action.payload ? action.payload : state.punchInTime,
+      };
+    case SAVE_PUNCH_OUT_TIME:
+      return {
+        ...state,
+        punchOutTime: action.payload ? action.payload : state.punchOutTime,
+      };
+    case SAVE_TIMER:
+      return {
+        ...state,
+        timer: action.payload,
       };
     default:
       return state;

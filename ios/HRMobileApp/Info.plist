@@ -39,12 +39,12 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We need your location for...</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>We need your location for...</string>
+	<string>We need access to your location even when the app is in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need your location for...</string>
+	<string>We need access to your location to verify punch in/out times.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photo library to select images.</string>
-  <key>UIAppFonts</key>
+ 	 <key>UIAppFonts</key>
     <array>
       <string>SimpleLineIcons.ttf</string>
       <string>Octicons.ttf</string>

@@ -9,8 +9,9 @@
     "start": "react-native start",
     "test": "jest",
     "android-run": "cd android && ./gradlew clean && cd .. && npx react-native run-android",
-    "ios-run": "npx react-native run-ios --simulator='iPhone 15'",
+    "ios-run": "npx react-native run-ios --simulator='iPhone 16 Plus'",
     "release-apk": "cd android && ./gradlew clean && ./gradlew assembleRelease && cd ..",
+    "devices": "npx react-native run-ios --simulator='iPhone 16 Plus' && cd android && ./gradlew clean && cd .. && npx react-native run-android",
     "pod-install": "cd ios && pod install && cd .. "
   },
   "dependencies": {
@@ -29,6 +30,7 @@
     "react": "18.3.1",
     "react-native": "0.75.2",
     "react-native-chart-kit": "^6.12.0",
+    "react-native-geolocation-service": "^5.3.1",
     "react-native-gesture-handler": "^2.19.0",
     "react-native-i18n": "^2.0.15",
     "react-native-image-crop-picker": "^0.41.2",
