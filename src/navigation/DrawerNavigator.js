@@ -8,6 +8,8 @@ import CommonStyles from '../components/common/CommonStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {wp} from '../components/common/Dimensions';
 import ProfileScreen from '../screens/profile/ProfileScreen';
+import HomeScreen from '../screens/home/HomeScreen';
+import SettingScreen from '../screens/settings/SettingScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -36,17 +38,52 @@ const DrawerNavigator = () => {
       }}>
       <Drawer.Screen
         name="Home Main"
-        component={TabNavigator}
+        component={HomeScreen}
         options={{
           drawerLabel: () => (
             <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
-              {/* {I18n.t('home', {locale: currentLanguage})} */}
               Home
             </Text>
           ),
           drawerIcon: ({focused, size}) => (
             <Ionicons
               name={focused ? 'home' : 'home-outline'}
+              size={size}
+              color={Colors.whiteColor}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          drawerLabel: () => (
+            <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
+              Profile
+            </Text>
+          ),
+          drawerIcon: ({focused, size}) => (
+            <Ionicons
+              name={focused ? 'person' : 'person-outline'}
+              size={size}
+              color={Colors.whiteColor}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Settings"
+        component={SettingScreen}
+        options={{
+          drawerLabel: () => (
+            <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
+              Settings
+            </Text>
+          ),
+          drawerIcon: ({focused, size}) => (
+            <Ionicons
+              name={focused ? 'settings' : 'settings-outline'}
               size={size}
               color={Colors.whiteColor}
             />

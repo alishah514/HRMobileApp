@@ -20,6 +20,7 @@ export default InputFieldComponent = ({...rest}) => {
       <View
         style={[
           CommonStyles.alignStart,
+          Platform.OS === 'ios' && CommonStyles.marginBottom2,
           rest.multiline && CommonStyles.paddingBottom1,
         ]}>
         <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>

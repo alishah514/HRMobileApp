@@ -19,6 +19,7 @@ const CommonStyles = StyleSheet.create({
   bold3: {fontWeight: '600', fontSize: wp('3')},
   bold4: {fontWeight: '600', fontSize: wp('4')},
   bold6: {fontWeight: '600', fontSize: wp('6')},
+  bold5: {fontWeight: '600', fontSize: wp('5')},
   lessBold3: {fontWeight: '500', fontSize: wp('3')},
   lessBold4: {fontWeight: '500', fontSize: wp('4')},
   lessBold5: {fontWeight: '500', fontSize: wp('5')},
@@ -36,10 +37,16 @@ const CommonStyles = StyleSheet.create({
   textLightGrey: {color: Colors.lightGrey},
   textGrey: {color: Colors.greyColor},
   textBlack: {color: Colors.blackColor},
+  textGreen: {color: Colors.greenColor},
   textBlue: {color: Colors.blueColor},
+  textRed: {color: Colors.redColor},
   backgroundBlue: {backgroundColor: Colors.blueColor},
+  backgroundYellow: {backgroundColor: Colors.yellowColor},
+
   yellowBorder: {borderColor: Colors.yellowColor},
   blueBorder: {borderColor: Colors.blueColor},
+  redBorder: {borderColor: Colors.redColor},
+  greenBorder: {borderColor: Colors.greenColor},
 
   //others
   underlineText: {textDecorationLine: 'underline'},
@@ -62,12 +69,17 @@ const CommonStyles = StyleSheet.create({
   paddingVertical3: {paddingVertical: wp('3')},
   marginVertical1: {marginVertical: wp('1')},
   marginVertical2: {marginVertical: wp('2')},
+  marginVertical3: {marginVertical: wp('3')},
   marginVertical5: {marginVertical: wp('5')},
   paddingVertical5: {paddingVertical: wp('5')},
 
   //horizontal
   paddingHor5: {paddingHorizontal: wp('5')},
   paddingHor3: {paddingHorizontal: wp('3')},
+  marginHor1: {marginHorizontal: wp('1')},
+  marginHor2: {marginHorizontal: wp('2')},
+  marginHor3: {marginHorizontal: wp('3')},
+  marginHor4: {marginHorizontal: wp('4')},
 
   //bottom
   paddingBottom1: {paddingBottom: wp('1')},
@@ -75,7 +87,8 @@ const CommonStyles = StyleSheet.create({
   paddingBottom3: {paddingBottom: wp('3')},
   paddingBottom7: {paddingBottom: wp('7')},
   paddingBottom10: {paddingBottom: wp('15')},
-  paddingBottom15: {paddingBottom: wp('15')},
+  marginBottom1: {marginBottom: wp('1')},
+  marginBottom2: {marginBottom: wp('2')},
   marginBottom3: {marginBottom: wp('3')},
   marginBottom5: {marginBottom: wp('5')},
   marginBottom7: {marginBottom: wp('7')},
@@ -85,6 +98,7 @@ const CommonStyles = StyleSheet.create({
   marginTop2: {marginTop: wp('2')},
   marginTop3: {marginTop: wp('3')},
   marginTop5: {marginTop: wp('5')},
+  marginTop10: {marginTop: wp('10')},
   paddingTopP5: {paddingTop: wp('0.5')},
   paddingTop1: {paddingTop: wp('1')},
   paddingTop2: {paddingTop: wp('2')},
@@ -105,6 +119,12 @@ const CommonStyles = StyleSheet.create({
   paddingRight2: {paddingRight: wp('2')},
   paddingRight3: {paddingRight: wp('3')},
   paddingRight3p5: {paddingRight: wp('3.5')},
+  marginRight1: {marginRight: wp('1')},
+  marginRight2: {marginRight: wp('2')},
+  marginRight3: {marginRight: wp('3')},
+  marginRight4: {marginRight: wp('4')},
+  marginRight5: {marginRight: wp('5')},
+  marginRight6: {marginRight: wp('6')},
 
   CenterText: {textAlign: 'center'},
 
@@ -115,6 +135,7 @@ const CommonStyles = StyleSheet.create({
   width60: {width: wp('60')},
   width80: {width: wp('80')},
   width90: {width: wp('90')},
+  width95: {width: wp('95')},
   width35: {width: wp('35')},
   width70: {width: wp('70')},
   width30: {width: wp('30')},
@@ -147,15 +168,14 @@ const CommonStyles = StyleSheet.create({
     height: '100%',
   },
   backgroundCurve: {
-    height: Platform.OS === 'android' ? hp(65) : hp(75),
+    height: Platform.OS === 'ios' ? hp(72) : hp(68),
     backgroundColor: Colors.whiteColor,
-    borderTopLeftRadius: wp(20),
-    borderTopRightRadius: wp(20),
+    borderTopLeftRadius: wp(10),
+    borderTopRightRadius: wp(10),
   },
   curveView: {
-    height: hp(30),
+    height: Platform.OS === 'ios' ? hp(28) : hp(32),
     alignItems: 'center',
-
     justifyContent: 'center',
   },
   shadow: {
@@ -179,7 +199,7 @@ const CommonStyles = StyleSheet.create({
   // tab bar styles
   tabBarStyle: {
     backgroundColor: Colors.whiteColor,
-    height: wp('20'),
+    height: wp('17'),
   },
   shadowTabBar: {
     shadowColor: Colors.blackColor,
@@ -304,14 +324,117 @@ const CommonStyles = StyleSheet.create({
   // Style for the text inside the picker
   InputFieldText: {
     fontSize: wp('4'),
-    fontWeight: '600',
+    fontWeight: '500',
   },
-
+  pickerMainContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: Colors.transparent,
+  },
+  pickerMainContainerBox: {
+    backgroundColor: Colors.whiteColor,
+    marginHorizontal: wp('5'),
+    borderRadius: wp('5'),
+    minHeight: wp('60'),
+  },
   pickerContainer: {
     borderBottomWidth: wp('0.15'),
     borderColor: Colors.greyColor,
     width: '100%',
     paddingBottom: wp('1'),
+  },
+  pickerTopHeader: {
+    height: wp('12'),
+    backgroundColor: Colors.blueColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopLeftRadius: wp('5'),
+    borderTopRightRadius: wp('5'),
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    left: 0,
+  },
+  pickerView: {
+    marginTop: Platform.OS === 'android' && wp('15'),
+    borderBottomWidth: wp('0.15'),
+    borderColor: Colors.greyColor,
+    marginHorizontal: wp('2'),
+  },
+  pickerBottomHeader: {
+    height: wp('12'),
+    backgroundColor: Colors.blueColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomLeftRadius: wp('5'),
+    borderBottomRightRadius: wp('5'),
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+
+  //tab change
+  tabChange: {
+    width: wp('85'),
+    height: wp('20'),
+    borderRadius: wp('10'),
+    justifyContent: 'space-between',
+    backgroundColor: Colors.whiteColor,
+    alignSelf: 'center',
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? -30 : -25,
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: wp('7'),
+    zIndex: 1,
+  },
+  activeTabIconCircle: {
+    width: wp('14'),
+    height: wp('14'),
+    borderRadius: wp('7'),
+    backgroundColor: Colors.yellowColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nonActiveTabIconCircle: {
+    width: wp('14'),
+    height: wp('14'),
+    borderRadius: wp('7'),
+    backgroundColor: Colors.whiteColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  //profile header
+  paddingBottom5Align: {
+    paddingBottom: wp('5'),
+    alignItems: 'center',
+  },
+  imageCircle: {
+    width: wp('30'),
+    height: wp('30'),
+    borderRadius: wp('15'),
+    backgroundColor: Colors.whiteColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageView: {
+    width: '100%',
+    height: '100%',
+    borderRadius: wp('15'),
+  },
+  editPenIconCircle: {
+    width: wp('10'),
+    height: wp('10'),
+    borderRadius: wp('5'),
+    backgroundColor: Colors.yellowColor,
+    position: 'absolute',
+    top: -5,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
   },
 });
 

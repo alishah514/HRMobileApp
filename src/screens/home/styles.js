@@ -16,20 +16,31 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
   },
-  logoIcon: {width: wp('15'), height: wp('15'), marginRight: wp('3')},
+  logoIcon: {width: wp('20'), height: wp('20')},
   rowTitle: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: wp('30'),
+    marginBottom: wp('5'),
+  },
+  boxViewTime: {
+    width: wp('30'),
+    height: wp('25'),
+    borderRadius: wp('2'),
+    backgroundColor: Colors.whiteColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: wp('0.15'),
+    borderColor: Colors.greyColor,
   },
   boxView: {
     width: wp('35'),
     height: wp('45'),
     borderRadius: wp('5'),
     backgroundColor: Colors.whiteColor,
-    position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: wp('0.15'),
+    borderColor: Colors.greyColor,
   },
   circleView: {
     width: wp('20'),
@@ -39,9 +50,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  firstView: {top: wp('-30'), left: wp('10')},
-  secondView: {top: wp('-15'), right: wp('10')},
-  thirdView: {top: wp('25'), left: wp('10')},
-  fourthView: {top: wp('40'), right: wp('10')},
+
+  infoStarting: {
+    width: wp('85'),
+    alignSelf: 'center',
+    paddingVertical: wp('5'),
+  },
+
+  width80Center: {
+    width: wp('80'),
+    alignSelf: 'center',
+  },
 });
 export default styles;
