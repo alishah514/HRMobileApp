@@ -12,7 +12,7 @@ const Header = props => {
 
   const renderOnlyTitle = props => (
     <View style={styles.titleCenter}>
-      <Text style={[styles.titleText]}>{truncateTitle(props?.title, 12)}</Text>
+      <Text style={[styles.titleText]}>{truncateTitle(props?.title, 13)}</Text>
     </View>
   );
   const renderTitleWithLeftIcon = props => (
@@ -23,7 +23,7 @@ const Header = props => {
       </TouchableOpacity>
       <View style={styles.titleCenter}>
         <Text style={[styles.titleText]}>
-          {truncateTitle(props?.title, 12)}
+          {truncateTitle(props?.title, 13)}
         </Text>
       </View>
     </View>
@@ -33,7 +33,7 @@ const Header = props => {
     <View style={styles.headerFullView}>
       <View style={styles.titleCenter}>
         <Text style={[styles.titleText]}>
-          {truncateTitle(props?.title, 12)}
+          {truncateTitle(props?.title, 13)}
         </Text>
       </View>
       <TouchableOpacity
@@ -55,7 +55,7 @@ const Header = props => {
       </TouchableOpacity>
       <View style={styles.titleCenter}>
         <Text style={[styles.titleText]}>
-          {truncateTitle(props?.title, 12)}
+          {truncateTitle(props?.title, 13)}
         </Text>
       </View>
 
@@ -74,7 +74,7 @@ const Header = props => {
       </TouchableOpacity>
       <View style={styles.titleContainer}>
         <Text style={[styles.titleText]}>
-          {truncateTitle(props?.title, 12)}
+          {truncateTitle(props?.title, 13)}
         </Text>
       </View>
 

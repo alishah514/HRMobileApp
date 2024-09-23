@@ -2,8 +2,9 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
 import Timeline from './Timeline';
+import {Colors} from '../../../components/common/Colors';
 
-export default function Rejected() {
+export default function Rejected({data, toggleViewLeaveRequestModal}) {
   return (
     <View>
       <Text
@@ -15,7 +16,11 @@ export default function Rejected() {
         Rejected
       </Text>
       <View style={CommonStyles.paddingTop5} />
-      <Timeline />
+      <Timeline
+        data={data}
+        color={Colors.redColor}
+        toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
+      />
     </View>
   );
 }

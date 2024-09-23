@@ -6,7 +6,7 @@ import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
 import Header from '../../components/ReusableComponents/Header/Header';
 import InputFieldComponent from '../../components/ReusableComponents/InputFieldComponent';
-import CommonSafeAreaScrollViewComponent from '../../components/ReusableComponents/CommonSafeAreaScrollViewComponent';
+import CommonSafeAreaScrollViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import DateFromToComponent from '../../components/ReusableComponents/DateFromToComponent';
 import CustomDatePickerComponent from '../../components/ReusableComponents/CustomDatePickerComponent';
 import CustomPickerComponent from '../../components/ReusableComponents/CustomPickerComponent';

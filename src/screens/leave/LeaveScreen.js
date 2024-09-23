@@ -1,6 +1,6 @@
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
-import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonSafeAreaViewComponent';
+
 import Header from '../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -15,6 +15,10 @@ import styles from './styles';
 import Pending from './types/Pending';
 import Approved from './types/Approved';
 import Rejected from './types/Rejected';
+import LeaveRequestModal from './Modal/LeaveRequestModal';
+import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
+import {data} from './types/data';
+import ViewLeaveRequestModal from './Modal/ViewLeaveRequestModal';
 
 const tabs = [
   {
@@ -42,10 +46,25 @@ export default function LeaveScreen({navigation}) {
   const [image, setImage] = useState(null);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
     useState(false);
+  const [isAddLeaveRequestVisible, setIsAddLeaveRequestVisible] =
+    useState(false);
+  const [isViewLeaveRequestVisible, setIsViewLeaveRequestVisible] =
+    useState(false);
+  const [details, setDetails] = useState(null);
 
   const toggleImageOptionsModal = () => {
     setIsImagePickerOptionsVisible(!isImagePickerOptionsVisible);
   };
+
+  const toggleLeaveRequestModal = () => {
+    setIsAddLeaveRequestVisible(!isAddLeaveRequestVisible);
+  };
+
+  const toggleViewLeaveRequestModal = item => {
+    setIsViewLeaveRequestVisible(!isViewLeaveRequestVisible);
+    setDetails(item);
+  };
+
   const handleTabPress = index => {
     setActiveTab(index);
   };
@@ -63,6 +82,14 @@ export default function LeaveScreen({navigation}) {
           <Ionicons
             name="arrow-back"
             size={Constants?.SIZE.medIcon}
+            color={Colors.whiteColor}
+          />
+        }
+        onRightIconPressed={toggleLeaveRequestModal}
+        rightIcon={
+          <Ionicons
+            name="add-outline"
+            size={Constants?.SIZE.largeIcon}
             color={Colors.whiteColor}
           />
         }
@@ -93,11 +120,20 @@ export default function LeaveScreen({navigation}) {
               renderItem={() => (
                 <View>
                   {activeTab === 0 ? (
-                    <Pending />
+                    <Pending
+                      data={data}
+                      toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
+                    />
                   ) : activeTab === 1 ? (
-                    <Approved />
+                    <Approved
+                      data={data}
+                      toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
+                    />
                   ) : activeTab === 2 ? (
-                    <Rejected />
+                    <Rejected
+                      data={data}
+                      toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
+                    />
                   ) : null}
                 </View>
               )}
@@ -111,6 +147,15 @@ export default function LeaveScreen({navigation}) {
         setIsImagePickerOptionsVisible={setIsImagePickerOptionsVisible}
         isImagePickerOptionsVisible={isImagePickerOptionsVisible}
         toggleImageOptionsModal={toggleImageOptionsModal}
+      />
+      <LeaveRequestModal
+        isModalVisible={isAddLeaveRequestVisible}
+        toggleModal={toggleLeaveRequestModal}
+      />
+      <ViewLeaveRequestModal
+        isModalVisible={isViewLeaveRequestVisible}
+        toggleModal={toggleViewLeaveRequestModal}
+        leaveDetails={details}
       />
     </CommonSafeAreaViewComponent>
   );

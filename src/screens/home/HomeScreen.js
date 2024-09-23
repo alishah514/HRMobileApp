@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
-import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonSafeAreaViewComponent';
+
 import Header from '../../components/ReusableComponents/Header/Header';
 import LogoutConfirmationComponent from '../../components/ReusableComponents/LogoutConfirmationComponent';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -12,6 +12,7 @@ import CustomerBackgroundComponent from '../../components/ReusableComponents/Cus
 import {useSelector} from 'react-redux';
 import {Colors} from '../../components/common/Colors';
 import PunchInOut from './PunchComponent/PunchInOut';
+import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 
 export default function HomeScreen({navigation}) {
   const handleLogout = LogoutConfirmationComponent();
