@@ -1,57 +1,19 @@
 import React from 'react';
-import {View, Text, FlatList, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Touchable,
+  TouchableOpacity,
+} from 'react-native';
 import {Colors} from '../../../components/common/Colors';
 import {hp, wp} from '../../../components/common/Dimensions';
 import CommonStyles from '../../../components/common/CommonStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../../components/common/Constants';
 
-const data = [
-  {
-    type: 'Sick Leave',
-    fromDate: '15-01-2024',
-    toDate: '17-01-2024',
-    period: '3 Days',
-    reason: 'Flu and fever, advised bed rest by the doctor',
-  },
-  {
-    type: 'Casual Leave',
-    fromDate: '10-02-2024',
-    toDate: '10-02-2024',
-    period: '1 Day',
-    reason: 'Attending a family function',
-  },
-  {
-    type: 'Plan Leave',
-    fromDate: '05-03-2024',
-    toDate: '07-03-2024',
-    period: '3 Days',
-    reason: 'Vacation with family out of town',
-  },
-  {
-    type: 'Sick Leave',
-    fromDate: '20-02-2024',
-    toDate: '21-02-2024',
-    period: '2 Days',
-    reason: 'Dental surgery recovery',
-  },
-  {
-    type: 'Casual Leave',
-    fromDate: '18-03-2024',
-    toDate: '18-03-2024',
-    period: '1 Day',
-    reason: 'Personal errands and appointments',
-  },
-  {
-    type: 'Emergency Leave',
-    fromDate: '22-02-2024',
-    toDate: '23-02-2024',
-    period: '2 Days',
-    reason: 'Sudden family medical emergency',
-  },
-];
-
-const Timeline = () => {
+const Timeline = ({color, data, toggleViewLeaveRequestModal}) => {
   return (
     <View>
       <View style={styles.verticalLine} />
@@ -61,7 +23,12 @@ const Timeline = () => {
         renderItem={({item}) => (
           <View style={styles.itemContainer}>
             <View style={styles.leftContainer}>
-              <View style={styles.dot} />
+              <View
+                style={[
+                  styles.dot,
+                  {backgroundColor: color ? color : Colors.yellowColor},
+                ]}
+              />
             </View>
             <View style={styles.rightContainer}>
               <View
@@ -76,16 +43,32 @@ const Timeline = () => {
 
                     backgroundColor: Colors.whiteColor,
                     borderWidth: wp('0.2'),
-                    borderColor: Colors.yellowColor,
+                    borderColor: color ? color : Colors.yellowColor,
                     alignItems: 'center',
                     justifyContent: 'center',
                     borderRadius: wp('5'),
                     marginBottom: wp('2'),
-                    alignSelf: 'flex-start', // This allows the view to take the width of its content
+                    alignSelf: 'flex-start',
                   }}>
-                  <Text style={styles.type}>{item.type}</Text>
+                  <Text
+                    style={[
+                      styles.type,
+                      {color: color ? color : Colors.yellowColor},
+                    ]}>
+                    {item.type}
+                  </Text>
                 </View>
-                <Text style={styles.typeSmall}>View Details</Text>
+                <TouchableOpacity
+                  onPress={() => toggleViewLeaveRequestModal(item)}>
+                  <Text
+                    style={[
+                      styles.typeSmall,
+                      CommonStyles.underlineText,
+                      {color: color ? color : Colors.yellowColor},
+                    ]}>
+                    View Details
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View style={CommonStyles.rowBetween}>
                 <View
@@ -93,7 +76,7 @@ const Timeline = () => {
                   <Ionicons
                     name="calendar-outline"
                     size={Constants.SIZE.medIcon}
-                    color={Colors.yellowColor}
+                    color={color ? color : Colors.yellowColor}
                   />
                   <Text
                     style={[
@@ -106,7 +89,7 @@ const Timeline = () => {
                   <Ionicons
                     name="calendar-outline"
                     size={Constants.SIZE.medIcon}
-                    color={Colors.yellowColor}
+                    color={color ? color : Colors.yellowColor}
                   />
                   <Text
                     style={[
@@ -147,7 +130,7 @@ const styles = StyleSheet.create({
     width: wp('3'),
     height: wp('3'),
     borderRadius: wp('2'),
-    backgroundColor: Colors.yellowColor,
+
     zIndex: 2,
   },
   rightContainer: {
@@ -155,11 +138,9 @@ const styles = StyleSheet.create({
   },
   type: {
     fontSize: wp('3.8'),
-    color: Colors.yellowColor,
   },
   typeSmall: {
     fontSize: wp('3.5'),
-    color: Colors.yellowColor,
   },
   title: {
     fontSize: wp('4'),

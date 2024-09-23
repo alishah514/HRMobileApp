@@ -13,6 +13,7 @@ export default function CustomPickerComponent({
   placeholder = `Select ${title}`,
 }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [tempSelectedValue, setTempSelectedValue] = useState(selectedValue); // Temporary state
 
   return (
     <View style={CommonStyles.marginBottom5}>
@@ -53,10 +54,9 @@ export default function CustomPickerComponent({
             </TouchableOpacity>
             <View style={CommonStyles.pickerView}>
               <Picker
-                selectedValue={selectedValue}
+                selectedValue={tempSelectedValue}
                 onValueChange={itemValue => {
-                  setSelectedValue(itemValue);
-                  setModalVisible(false);
+                  setTempSelectedValue(itemValue);
                 }}>
                 <Picker.Item
                   label={placeholder}
@@ -73,13 +73,42 @@ export default function CustomPickerComponent({
                 ))}
               </Picker>
             </View>
-            <TouchableOpacity
-              style={CommonStyles.pickerBottomHeader}
-              onPress={() => setModalVisible(false)}>
-              <Text style={[CommonStyles.bold5, CommonStyles.textWhite]}>
-                Close
-              </Text>
-            </TouchableOpacity>
+            <View
+              style={[CommonStyles.pickerBottomHeader, CommonStyles.flexRow]}>
+              <TouchableOpacity
+                style={{
+                  width: '50%',
+                  backgroundColor: Colors.redColor,
+                  alignSelf: 'flex-start',
+                  height: '100%',
+                  borderBottomLeftRadius: 20,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onPress={() => setModalVisible(false)}>
+                <Text style={[CommonStyles.bold5, CommonStyles.textWhite]}>
+                  Close
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  width: '50%',
+                  backgroundColor: Colors.blueColor,
+                  alignSelf: 'flex-end',
+                  height: '100%',
+                  borderBottomRightRadius: 20,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onPress={() => {
+                  setSelectedValue(tempSelectedValue); // Update the main selected value
+                  setModalVisible(false);
+                }}>
+                <Text style={[CommonStyles.bold5, CommonStyles.textWhite]}>
+                  Done
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonSafeAreaViewComponent';
+
 import Header from '../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -16,6 +16,7 @@ import EducationInfo from './types/education/EducationInfo';
 import EditProfileModal from './EditProfileModal';
 import ProfileHeader from '../../components/ReusableComponents/Header/ProfileHeader';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
+import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 
 const tabs = [
   {id: 0, icon: 'person-outline', iconSet: Ionicons},
