@@ -26,7 +26,7 @@ export default function TabBarHeader({tabs, activeTab, handleTabPress}) {
             key={tab.id}
             style={[
               CommonStyles.activeTabIconCircle,
-              isActive ? activeBackgroundColor : CommonStyles.whiteColor,
+              isActive ? activeBackgroundColor : CommonStyles.whiteBackground,
             ]}
             onPress={() => handleTabPress(tab.id)}>
             <IconComponent

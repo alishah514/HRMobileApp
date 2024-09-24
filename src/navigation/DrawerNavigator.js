@@ -10,6 +10,7 @@ import {wp} from '../components/common/Dimensions';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import HomeScreen from '../screens/home/HomeScreen';
 import SettingScreen from '../screens/settings/SettingScreen';
+import AttendanceScreen from '../screens/attendance/AttendanceScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -25,7 +26,7 @@ const DrawerNavigator = () => {
       screenOptions={{
         headerShown: false,
         drawerStyle: {
-          ...CommonStyles.whiteColor,
+          ...CommonStyles.whiteBackground,
           ...CommonStyles.width60,
         },
         drawerLabelStyle: {
@@ -48,6 +49,24 @@ const DrawerNavigator = () => {
           drawerIcon: ({focused, size}) => (
             <Ionicons
               name={focused ? 'home' : 'home-outline'}
+              size={size}
+              color={Colors.whiteColor}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Attendance"
+        component={AttendanceScreen}
+        options={{
+          drawerLabel: () => (
+            <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
+              Attendance
+            </Text>
+          ),
+          drawerIcon: ({focused, size}) => (
+            <Ionicons
+              name={focused ? 'calendar' : 'calendar-outline'}
               size={size}
               color={Colors.whiteColor}
             />

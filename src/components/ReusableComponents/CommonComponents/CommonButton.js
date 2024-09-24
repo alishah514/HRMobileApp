@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Platform} from 'react-native';
 import React from 'react';
 import CommonStyles from '../../common/CommonStyles';
 import {hp, wp} from '../../common/Dimensions';
@@ -12,6 +12,7 @@ export default function CommonButton({
   style,
   disabled = false,
   onPress,
+  outlined = false, // New prop for outlined button
 }) {
   return (
     <TouchableOpacity
@@ -20,15 +21,20 @@ export default function CommonButton({
         style
           ? [style, disabled && {opacity: 0.5}]
           : [
-              CommonStyles.shadow,
+              Platform.OS === 'ios' && CommonStyles.shadow,
               styles.button,
               {
                 backgroundColor: disabled
                   ? Colors.greyColor
+                  : outlined
+                  ? 'transparent'
                   : backgroundColor
                   ? backgroundColor
                   : Colors.blueColor,
-
+                borderColor: outlined
+                  ? titleColor || Colors.blueColor
+                  : 'transparent',
+                borderWidth: outlined ? 1 : 0,
                 opacity: disabled ? 0.5 : 1,
               },
             ]
@@ -36,8 +42,14 @@ export default function CommonButton({
       onPress={!disabled ? onPress : null}>
       <Text
         style={[
-          CommonStyles.lessBold4P,
-          {color: titleColor ? titleColor : Colors.whiteColor},
+          CommonStyles.lessBold5,
+          {
+            color: titleColor
+              ? titleColor
+              : outlined
+              ? titleColor || Colors.blueColor
+              : Colors.whiteColor,
+          },
         ]}>
         {title}
       </Text>

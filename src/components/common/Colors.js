@@ -27,6 +27,7 @@ export const Colors = {
 
   //yellow color
   yellowColor: '#FF8000',
+  lightYellowColor: '#FFE0B2',
 
   //orange
   orangeColor: '#ee7600',
