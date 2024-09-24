@@ -62,7 +62,7 @@ export default function LeaveScreen({navigation}) {
 
   const toggleViewLeaveRequestModal = item => {
     setIsViewLeaveRequestVisible(!isViewLeaveRequestVisible);
-    setDetails(item);
+    setDetails({...item});
   };
 
   const handleTabPress = index => {

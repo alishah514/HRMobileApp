@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
-    <View style={[CommonStyles.container, CommonStyles.whiteColor]}>
+    <View style={[CommonStyles.container, CommonStyles.whiteBackground]}>
       <Tab.Navigator
         screenOptions={{
           headerShown: false, // This hides the header on each tab screen

@@ -22,15 +22,18 @@ const CommonStyles = StyleSheet.create({
   bold5: {fontWeight: '600', fontSize: wp('5')},
   lessBold3: {fontWeight: '500', fontSize: wp('3')},
   lessBold4: {fontWeight: '500', fontSize: wp('4')},
-  lessBold5: {fontWeight: '500', fontSize: wp('5')},
+  lessBold5: {fontWeight: '400', fontSize: wp('5')},
   font5: {fontSize: wp('5')},
   font5p5: {fontSize: wp('5.5')},
   font6: {fontSize: wp('6')},
   lessBold300: {fontWeight: '300'},
   Bold600: {fontWeight: '600'},
   lessBold3P5: {fontWeight: '500', fontSize: wp('3.5')},
-  lessBold4P: {fontWeight: '500', fontSize: wp('4.5')},
+  lessBold4P: {fontWeight: '400', fontSize: wp('4.5')},
+  bold4P: {fontWeight: '600', fontSize: wp('4.5')},
   bold3p5: {fontWeight: '600', fontSize: wp('3.5')},
+  lessBold5P: {fontWeight: '400', fontSize: wp('5.5')},
+  bold5P: {fontWeight: '600', fontSize: wp('5.5')},
 
   //colors
   textWhite: {color: Colors.whiteColor},
@@ -40,6 +43,7 @@ const CommonStyles = StyleSheet.create({
   textGreen: {color: Colors.greenColor},
   textBlue: {color: Colors.blueColor},
   textRed: {color: Colors.redColor},
+  textYellow: {color: Colors.yellowColor},
   backgroundBlue: {backgroundColor: Colors.blueColor},
   backgroundYellow: {backgroundColor: Colors.yellowColor},
 
@@ -49,6 +53,7 @@ const CommonStyles = StyleSheet.create({
   greenBorder: {borderColor: Colors.greenColor},
 
   //others
+  fullWidth: {width: '100%'},
   underlineText: {textDecorationLine: 'underline'},
   loginField: {
     height: wp('12'),
@@ -79,6 +84,7 @@ const CommonStyles = StyleSheet.create({
   marginHor1: {marginHorizontal: wp('1')},
   marginHor2: {marginHorizontal: wp('2')},
   marginHor3: {marginHorizontal: wp('3')},
+  marginHor3P: {marginHorizontal: wp('3.5')},
   marginHor4: {marginHorizontal: wp('4')},
 
   //bottom
@@ -98,12 +104,14 @@ const CommonStyles = StyleSheet.create({
   marginTop2: {marginTop: wp('2')},
   marginTop3: {marginTop: wp('3')},
   marginTop5: {marginTop: wp('5')},
+  marginTop7: {marginTop: wp('7')},
   marginTop10: {marginTop: wp('10')},
   paddingTopP5: {paddingTop: wp('0.5')},
   paddingTop1: {paddingTop: wp('1')},
   paddingTop2: {paddingTop: wp('2')},
   paddingTop3: {paddingTop: wp('3')},
   paddingTop5: {paddingTop: wp('5')},
+  paddingTop7: {paddingTop: wp('7')},
   paddingTop10: {paddingTop: wp('10')},
   paddingTop16: {paddingTop: wp('16')},
   paddingTop20: {paddingTop: wp('20')},
@@ -144,6 +152,11 @@ const CommonStyles = StyleSheet.create({
   // height
   height30: {height: wp('30')},
   height50: {height: wp('50')},
+  height60: {height: wp('60')},
+  height70: {height: wp('70')},
+  height80: {height: wp('80')},
+  height85: {height: wp('85')},
+  height90: {height: wp('90')},
 
   // colors
   blackBorder: {borderColor: Colors.blackColor},
@@ -151,7 +164,7 @@ const CommonStyles = StyleSheet.create({
   transparentColor: {
     backgroundColor: 'transparent',
   },
-  whiteColor: {
+  whiteBackground: {
     backgroundColor: Colors.whiteColor,
   },
 
@@ -167,17 +180,29 @@ const CommonStyles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  curveView: {
+    height: Platform.OS === 'ios' ? hp(28) : hp(32),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  topShortCurveView: {
+    height: Platform.OS === 'ios' ? hp(20) : hp(24),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   backgroundCurve: {
     height: Platform.OS === 'ios' ? hp(72) : hp(68),
     backgroundColor: Colors.whiteColor,
     borderTopLeftRadius: wp(10),
     borderTopRightRadius: wp(10),
   },
-  curveView: {
-    height: Platform.OS === 'ios' ? hp(28) : hp(32),
-    alignItems: 'center',
-    justifyContent: 'center',
+  topShortBackgroundCurve: {
+    height: Platform.OS === 'ios' ? hp(80) : hp(76),
+    backgroundColor: Colors.whiteColor,
+    borderTopLeftRadius: wp(10),
+    borderTopRightRadius: wp(10),
   },
+
   shadow: {
     shadowColor: Colors.blackColor,
     shadowOffset: {
