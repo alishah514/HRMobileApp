@@ -66,7 +66,7 @@ export default function TimeLine({data}) {
       </View>
       <CommonButton
         title={'08:02:01 Hours'}
-        onPress={() => console.log('jhvbkj')}
+        onPress={() => console.log('abc')}
         outlined={true}
       />
     </>

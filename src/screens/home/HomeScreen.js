@@ -160,7 +160,9 @@ export default function HomeScreen({navigation}) {
                 setLocation={setLocation}
               />
               <View style={[CommonStyles.rowBetween, styles.width80Center]}>
-                <View style={[styles.boxView, CommonStyles.shadow]}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Task')}
+                  style={[styles.boxView, CommonStyles.shadow]}>
                   <View style={[styles.circleView, CommonStyles.yellowBorder]}>
                     <MaterialCommunityIcons
                       name={'bag-personal-outline'}
@@ -181,7 +183,7 @@ export default function HomeScreen({navigation}) {
                       Tasks
                     </Text>
                   </View>
-                </View>
+                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Leave')}
                   style={[

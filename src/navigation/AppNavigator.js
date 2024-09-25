@@ -5,6 +5,7 @@ import SplashScreen from '../screens/splash/SplashScreen';
 import LoginScreen from '../screens/login/LoginScreen';
 import DrawerNavigator from './DrawerNavigator';
 import LeaveScreen from '../screens/leave/LeaveScreen';
+import TaskScreen from '../screens/tasks/TaskScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,7 +20,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Leave" component={LeaveScreen} />
-
+        <Stack.Screen name="Task" component={TaskScreen} />
         <Stack.Screen
           name="Home"
           component={DrawerNavigator}

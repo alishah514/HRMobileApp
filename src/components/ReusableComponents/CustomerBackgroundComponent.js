@@ -7,21 +7,28 @@ export default function CustomerBackgroundComponent({
   topChild,
   bottomChild,
   zParent,
-  topShort,
+  topSmall,
+  topVerySmall,
 }) {
   return (
     <View style={CommonStyles.backgroundBlue}>
       <View
         style={[
-          topShort ? CommonStyles.topShortCurveView : CommonStyles.curveView,
+          topSmall
+            ? CommonStyles.topSmallCurveView
+            : topVerySmall
+            ? CommonStyles.topVerySmallCurveView
+            : CommonStyles.curveView,
           {zIndex: zParent && 1},
         ]}>
         {topChild}
       </View>
       <View
         style={[
-          topShort
-            ? CommonStyles.topShortBackgroundCurve
+          topSmall
+            ? CommonStyles.topSmallBackgroundCurve
+            : topVerySmall
+            ? CommonStyles.topVerySmallBackgroundCurve
             : CommonStyles.backgroundCurve,
         ]}>
         {bottomChild}

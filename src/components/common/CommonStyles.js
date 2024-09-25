@@ -21,11 +21,15 @@ const CommonStyles = StyleSheet.create({
   bold6: {fontWeight: '600', fontSize: wp('6')},
   bold5: {fontWeight: '600', fontSize: wp('5')},
   lessBold3: {fontWeight: '500', fontSize: wp('3')},
-  lessBold4: {fontWeight: '500', fontSize: wp('4')},
+  lessBold4: {fontWeight: '400', fontSize: wp('4')},
   lessBold5: {fontWeight: '400', fontSize: wp('5')},
+  font3P: {fontSize: wp('3.5')},
+  font4: {fontSize: wp('4')},
+  font4P: {fontSize: wp('4.5')},
   font5: {fontSize: wp('5')},
-  font5p5: {fontSize: wp('5.5')},
+  font5P: {fontSize: wp('5.5')},
   font6: {fontSize: wp('6')},
+  lightFont: {fontWeight: '300'},
   lessBold300: {fontWeight: '300'},
   Bold600: {fontWeight: '600'},
   lessBold3P5: {fontWeight: '500', fontSize: wp('3.5')},
@@ -46,6 +50,7 @@ const CommonStyles = StyleSheet.create({
   textYellow: {color: Colors.yellowColor},
   backgroundBlue: {backgroundColor: Colors.blueColor},
   backgroundYellow: {backgroundColor: Colors.yellowColor},
+  backgroundDarkYellow: {backgroundColor: Colors.drawerColor},
 
   yellowBorder: {borderColor: Colors.yellowColor},
   blueBorder: {borderColor: Colors.blueColor},
@@ -146,6 +151,7 @@ const CommonStyles = StyleSheet.create({
   width95: {width: wp('95')},
   width35: {width: wp('35')},
   width70: {width: wp('70')},
+  width75: {width: wp('75')},
   width30: {width: wp('30')},
   width50: {width: wp('50')},
 
@@ -185,8 +191,13 @@ const CommonStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  topShortCurveView: {
+  topSmallCurveView: {
     height: Platform.OS === 'ios' ? hp(20) : hp(24),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  topVerySmallCurveView: {
+    height: Platform.OS === 'ios' ? hp(10) : hp(14),
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -196,8 +207,14 @@ const CommonStyles = StyleSheet.create({
     borderTopLeftRadius: wp(10),
     borderTopRightRadius: wp(10),
   },
-  topShortBackgroundCurve: {
+  topSmallBackgroundCurve: {
     height: Platform.OS === 'ios' ? hp(80) : hp(76),
+    backgroundColor: Colors.whiteColor,
+    borderTopLeftRadius: wp(10),
+    borderTopRightRadius: wp(10),
+  },
+  topVerySmallBackgroundCurve: {
+    height: Platform.OS === 'ios' ? hp(90) : hp(86),
     backgroundColor: Colors.whiteColor,
     borderTopLeftRadius: wp(10),
     borderTopRightRadius: wp(10),
@@ -460,6 +477,15 @@ const CommonStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1,
+  },
+
+  maxHeight: {
+    maxHeight: Platform.OS === 'ios' ? hp('67') : hp('73'),
+    marginTop: wp('15'),
+  },
+  infoStarting: {
+    width: wp('85'),
+    alignSelf: 'center',
   },
 });
 
