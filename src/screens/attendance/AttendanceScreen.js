@@ -21,7 +21,6 @@ export default function AttendanceScreen({navigation}) {
   const [selectedDate, setSelectedDate] = useState(today);
   const [currentWeek, setCurrentWeek] = useState(moment().startOf('week'));
 
-  // Function to generate dates for the current week
   const getWeekDates = weekStart => {
     let weekDates = [];
     for (let i = 0; i < 7; i++) {
@@ -33,17 +32,14 @@ export default function AttendanceScreen({navigation}) {
     return weekDates;
   };
 
-  // Function to navigate to previous week
   const prevWeek = () => {
     setCurrentWeek(moment(currentWeek).subtract(1, 'week'));
   };
 
-  // Function to navigate to next week
   const nextWeek = () => {
     setCurrentWeek(moment(currentWeek).add(1, 'week'));
   };
 
-  // Get the current week dates to display
   const weekDates = getWeekDates(currentWeek);
 
   const handleDrawerOpen = () => {
@@ -64,7 +60,7 @@ export default function AttendanceScreen({navigation}) {
         }
       />
       <CustomerBackgroundComponent
-        topShort
+        topSmall
         topChild={
           <View style={[CommonStyles.alignSelf, CommonStyles.fullWidth]}>
             <View
@@ -90,7 +86,7 @@ export default function AttendanceScreen({navigation}) {
                 horizontal
                 renderItem={({item}) => (
                   <TouchableOpacity onPress={() => setSelectedDate(item.date)}>
-                    <View style={CommonStyles.alignItemsCenter}>
+                    <View style={[CommonStyles.alignItemsCenter]}>
                       <View
                         style={[
                           styles.calendarDateView,
@@ -103,7 +99,7 @@ export default function AttendanceScreen({navigation}) {
                         ]}>
                         <Text
                           style={[
-                            CommonStyles.lessBold4,
+                            CommonStyles.lessBold4P,
                             {
                               color:
                                 selectedDate === item.date
@@ -115,7 +111,7 @@ export default function AttendanceScreen({navigation}) {
                         </Text>
                         <Text
                           style={[
-                            CommonStyles.lessBold4,
+                            CommonStyles.lessBold4P,
                             {
                               color:
                                 selectedDate === item.date

@@ -1,13 +1,10 @@
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import React, {useState} from 'react';
-
 import Header from '../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
-import CommonStyles from '../../components/common/CommonStyles';
 import ProfileHeader from '../../components/ReusableComponents/Header/ProfileHeader';
 import ImagePickerComponent from '../../components/ReusableComponents/ImagePickerComponent';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';

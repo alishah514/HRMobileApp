@@ -1,0 +1,132 @@
+import {View, Text, FlatList} from 'react-native';
+import React, {useState} from 'react';
+import CommonSafeAreaScrollViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
+import Header from '../../components/ReusableComponents/Header/Header';
+import Constants from '../../components/common/Constants';
+import {Colors} from '../../components/common/Colors';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
+import CommonStyles from '../../components/common/CommonStyles';
+import {wp} from '../../components/common/Dimensions';
+import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
+import AllTasks from './status/AllTasks';
+import CompletedTasks from './status/CompletedTasks';
+import PendingTasks from './status/PendingTasks';
+import {data} from './data';
+import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
+
+const tabs = [
+  {
+    id: 0,
+    icon: 'tasks',
+    iconSet: FontAwesome5,
+    color: Colors.yellowColor,
+  },
+  {
+    id: 1,
+    icon: 'tasks',
+    iconSet: FontAwesome5,
+    color: Colors.greenColor,
+  },
+  {
+    id: 2,
+    icon: 'tasks',
+    iconSet: FontAwesome5,
+    color: Colors.redColor,
+  },
+];
+
+export default function TaskScreen({navigation}) {
+  const [activeTab, setActiveTab] = useState(0);
+  const [isViewLeaveRequestVisible, setIsViewLeaveRequestVisible] =
+    useState(false);
+
+  const handleTabPress = index => {
+    setActiveTab(index);
+  };
+
+  const toggleViewLeaveRequestModal = item => {
+    setIsViewLeaveRequestVisible(!isViewLeaveRequestVisible);
+  };
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
+  return (
+    <CommonSafeAreaViewComponent>
+      <Header
+        title="Tasks"
+        onLeftIconPressed={goBack}
+        leftIcon={
+          <Ionicons
+            name="arrow-back"
+            size={Constants?.SIZE.medIcon}
+            color={Colors.whiteColor}
+          />
+        }
+        onRightIconPressed={() => console.log('gfg')}
+        rightIcon={
+          <MaterialIcons
+            name="add-task"
+            size={Constants?.SIZE.medIcon}
+            color={Colors.whiteColor}
+          />
+        }
+      />
+      <CustomerBackgroundComponent
+        topVerySmall
+        topChild={
+          <View
+            style={[
+              CommonStyles.rowBetween,
+              CommonStyles.width90,
+              CommonStyles.alignItemsCenter,
+              CommonStyles.paddingBottom7,
+            ]}>
+            <View>
+              <Text style={[CommonStyles.lessBold5P, CommonStyles.textWhite]}>
+                Task List
+              </Text>
+            </View>
+            <View>
+              <MaterialIcons
+                name="task-alt"
+                size={Constants?.SIZE.largeIcon}
+                color={Colors.whiteColor}
+              />
+            </View>
+          </View>
+        }
+        bottomChild={
+          <>
+            <TabBarHeader
+              tabs={tabs}
+              activeTab={activeTab}
+              handleTabPress={handleTabPress}
+            />
+            <FlatList
+              style={CommonStyles.maxHeight}
+              contentContainerStyle={[CommonStyles.infoStarting]}
+              data={[activeTab]}
+              renderItem={() => (
+                <View>
+                  {activeTab === 0 ? (
+                    <AllTasks data={data} />
+                  ) : activeTab === 1 ? (
+                    <CompletedTasks data={data} />
+                  ) : activeTab === 2 ? (
+                    <PendingTasks data={data} />
+                  ) : null}
+                </View>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </>
+        }
+      />
+    </CommonSafeAreaViewComponent>
+  );
+}

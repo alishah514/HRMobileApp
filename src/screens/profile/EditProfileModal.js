@@ -82,7 +82,7 @@ export default function EditProfileModal({onClose, isModalVisible}) {
           <View style={[CommonStyles.alignSelf, CommonStyles.paddingBottom3]}>
             <Text
               style={[
-                CommonStyles.font5p5,
+                CommonStyles.font5p,
                 CommonStyles.Bold600,
                 CommonStyles.textBlack,
                 CommonStyles.underlineText,
@@ -136,7 +136,7 @@ export default function EditProfileModal({onClose, isModalVisible}) {
           <View style={[CommonStyles.alignSelf, CommonStyles.paddingBottom3]}>
             <Text
               style={[
-                CommonStyles.font5p5,
+                CommonStyles.font5p,
                 CommonStyles.Bold600,
                 CommonStyles.textBlack,
                 CommonStyles.underlineText,
@@ -173,7 +173,7 @@ export default function EditProfileModal({onClose, isModalVisible}) {
           <View style={[CommonStyles.alignSelf, CommonStyles.paddingBottom3]}>
             <Text
               style={[
-                CommonStyles.font5p5,
+                CommonStyles.font5p,
                 CommonStyles.Bold600,
                 CommonStyles.textBlack,
                 CommonStyles.underlineText,
