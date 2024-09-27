@@ -12,6 +12,8 @@ export const data = {
         status: 'Pending',
         description:
           'Implement the appointment screen and write unit tests for it.',
+        assignedBy: 'Project Manager',
+        priority: 'High',
       },
       {
         taskTitle: 'User Authentication System',
@@ -22,6 +24,8 @@ export const data = {
         status: 'In Progress',
         description:
           'Develop the login and registration system with token-based authentication.',
+        assignedBy: 'Lead Developer',
+        priority: 'High',
       },
       {
         taskTitle: 'API Integration for Payments',
@@ -32,6 +36,8 @@ export const data = {
         status: 'Pending',
         description:
           'Integrate Stripe payment gateway and test various payment scenarios.',
+        assignedBy: 'Project Manager',
+        priority: 'Medium',
       },
       {
         taskTitle: 'Dashboard UI Design',
@@ -41,6 +47,8 @@ export const data = {
         storyPoint: 10,
         status: 'Completed',
         description: 'Design the user interface for the admin dashboard.',
+        assignedBy: 'UI/UX Lead',
+        priority: 'Low',
       },
       {
         taskTitle: 'Bug Fix: Order Processing Delay',
@@ -51,6 +59,8 @@ export const data = {
         status: 'In Progress',
         description:
           'Resolve the issue causing a delay in order processing after submission.',
+        assignedBy: 'QA Lead',
+        priority: 'High',
       },
       {
         taskTitle: 'Backend API for User Profile Management',
@@ -61,6 +71,8 @@ export const data = {
         status: 'Pending',
         description:
           'Develop backend services to manage user profile creation and updates.',
+        assignedBy: 'Backend Lead',
+        priority: 'Medium',
       },
       {
         taskTitle: 'Notification System Setup',
@@ -71,6 +83,8 @@ export const data = {
         status: 'Completed',
         description:
           'Implement an email and push notification system for important events.',
+        assignedBy: 'DevOps Lead',
+        priority: 'Low',
       },
     ],
   },

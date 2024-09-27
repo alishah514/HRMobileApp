@@ -14,7 +14,7 @@ export default function CompletedTasks({data}) {
         ]}>
         Completed Tasks
       </Text>
-      <View style={CommonStyles.paddingTop5} />
+
       <TimeLine data={data} />
     </View>
   );

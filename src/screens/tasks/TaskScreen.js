@@ -1,6 +1,5 @@
 import {View, Text, FlatList} from 'react-native';
 import React, {useState} from 'react';
-import CommonSafeAreaScrollViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import Header from '../../components/ReusableComponents/Header/Header';
 import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
@@ -9,13 +8,13 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
 import CommonStyles from '../../components/common/CommonStyles';
-import {wp} from '../../components/common/Dimensions';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
 import AllTasks from './status/AllTasks';
 import CompletedTasks from './status/CompletedTasks';
 import PendingTasks from './status/PendingTasks';
 import {data} from './data';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
+import AddTaskModal from './status/modals/AddTaskModal';
 
 const tabs = [
   {
@@ -40,15 +39,14 @@ const tabs = [
 
 export default function TaskScreen({navigation}) {
   const [activeTab, setActiveTab] = useState(0);
-  const [isViewLeaveRequestVisible, setIsViewLeaveRequestVisible] =
-    useState(false);
+  const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
 
   const handleTabPress = index => {
     setActiveTab(index);
   };
 
-  const toggleViewLeaveRequestModal = item => {
-    setIsViewLeaveRequestVisible(!isViewLeaveRequestVisible);
+  const toggleAddTaskModal = item => {
+    setIsAddTaskModalVisible(!isAddTaskModalVisible);
   };
 
   const goBack = () => {
@@ -67,7 +65,7 @@ export default function TaskScreen({navigation}) {
             color={Colors.whiteColor}
           />
         }
-        onRightIconPressed={() => console.log('gfg')}
+        onRightIconPressed={toggleAddTaskModal}
         rightIcon={
           <MaterialIcons
             name="add-task"
@@ -90,13 +88,6 @@ export default function TaskScreen({navigation}) {
               <Text style={[CommonStyles.lessBold5P, CommonStyles.textWhite]}>
                 Task List
               </Text>
-            </View>
-            <View>
-              <MaterialIcons
-                name="task-alt"
-                size={Constants?.SIZE.largeIcon}
-                color={Colors.whiteColor}
-              />
             </View>
           </View>
         }
@@ -126,6 +117,10 @@ export default function TaskScreen({navigation}) {
             />
           </>
         }
+      />
+      <AddTaskModal
+        isModalVisible={isAddTaskModalVisible}
+        toggleModal={toggleAddTaskModal}
       />
     </CommonSafeAreaViewComponent>
   );
