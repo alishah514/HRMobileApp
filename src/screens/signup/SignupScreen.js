@@ -11,9 +11,12 @@ import styles from './styles';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
-export default function LoginScreen({navigation}) {
+
+export default function SignupScreen({navigation}) {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
     <CommonSafeAreaScrollViewComponent>
@@ -35,7 +38,7 @@ export default function LoginScreen({navigation}) {
         }
         bottomChild={
           <>
-            <TabBarHeader title={'LOGIN'} />
+            <TabBarHeader title={'SIGNUP'} />
             <View
               style={[
                 CommonStyles.width80,
@@ -43,6 +46,17 @@ export default function LoginScreen({navigation}) {
                 {alignItems: 'flex-start'},
                 CommonStyles.paddingTop25,
               ]}>
+              <InputFieldComponent
+                title={'Username'}
+                value={username}
+                onChangeText={setUsername}
+                placeholder={'Enter Your Username'}
+                placeholderColor={Colors.placeholderColorDark}
+                borderColor={Colors.greyColor}
+                textColor={Colors.blackColor}
+              />
+              <View style={CommonStyles.paddingVertical2} />
+
               <InputFieldComponent
                 title={'Email'}
                 value={email}
@@ -64,8 +78,20 @@ export default function LoginScreen({navigation}) {
                 isPassword={true}
               />
               <View style={CommonStyles.paddingVertical2} />
+              <InputFieldComponent
+                title={'Confirm Password'}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                placeholder={'Re-Enter Your Password'}
+                placeholderColor={Colors.placeholderColorDark}
+                borderColor={Colors.greyColor}
+                textColor={Colors.blackColor}
+                isPassword={true}
+              />
+              <View style={CommonStyles.paddingVertical2} />
+
               <CommonButton
-                title={'LOGIN'}
+                title={'REGISTER'}
                 onPress={() => navigation.navigate('Home')}
               />
               <View style={CommonStyles.paddingVertical2} />
@@ -77,25 +103,13 @@ export default function LoginScreen({navigation}) {
                   CommonStyles.alignSelf,
                   CommonStyles.paddingTop5,
                 ]}>
-                Don&apos;t have an account?{' '}
+                Already have account?{' '}
                 <Text
-                  onPress={() => navigation.navigate('Signup')}
+                  onPress={() => navigation.navigate('Login')}
                   style={CommonStyles.textYellow}>
-                  Sign Up
+                  Login
                 </Text>{' '}
                 Now
-              </Text>
-              <View style={CommonStyles.paddingVertical2} />
-              <Text
-                onPress={() => navigation.navigate('Signup')}
-                style={[
-                  CommonStyles.textYellow,
-                  CommonStyles.font4P,
-                  CommonStyles.textCenter,
-                  CommonStyles.alignSelf,
-                  CommonStyles.paddingTop5,
-                ]}>
-                Forgot Password?
               </Text>
             </View>
           </>

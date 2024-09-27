@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {View, TextInput, TouchableOpacity, Platform, Text} from 'react-native';
-
+import {View, TextInput, TouchableOpacity, Text, Platform} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CommonStyles from '../common/CommonStyles';
 import {wp} from '../common/Dimensions';
@@ -15,6 +14,7 @@ export default InputFieldComponent = ({...rest}) => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
   return (
     <View
       style={{
@@ -30,41 +30,52 @@ export default InputFieldComponent = ({...rest}) => {
           {rest.title}
         </Text>
       </View>
-      <TextInput
-        value={rest.value}
-        keyboardType={
-          rest.numeric ? 'numeric' : rest.email ? 'email-address' : 'default'
-        }
-        multiline={rest.multiline}
-        placeholder={rest.placeholder}
-        style={[
-          CommonStyles.InputField,
-          rest.multiline
-            ? CommonStyles.multilineInput
-            : CommonStyles.inputContainer,
-        ]}
-        placeholderTextColor={
-          rest.placeholderColor
-            ? rest.placeholderColor
-            : Colors.placeholderColorDark
-        }
-        secureTextEntry={rest.isPassword && !showPassword}
-        editable={!rest.disabled}
-        {...rest}
-      />
-      {rest.isPassword && (
-        <TouchableOpacity
-          style={CommonStyles.alignSelf}
-          onPress={togglePasswordVisibility}>
-          <MaterialCommunityIcons
-            name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-            size={Constants.SIZE.smallIcon}
-            color={
-              !rest.visibleIconColor ? Colors.whiteColor : rest.visibleIconColor
-            }
-          />
-        </TouchableOpacity>
-      )}
+
+      <View style={{position: 'relative', justifyContent: 'center'}}>
+        <TextInput
+          value={rest.value}
+          keyboardType={
+            rest.numeric ? 'numeric' : rest.email ? 'email-address' : 'default'
+          }
+          multiline={rest.multiline}
+          placeholder={rest.placeholder}
+          style={[
+            CommonStyles.InputField,
+            rest.multiline
+              ? CommonStyles.multilineInput
+              : CommonStyles.inputContainer,
+            {
+              paddingRight: wp('12'),
+            },
+          ]}
+          placeholderTextColor={
+            rest.placeholderColor
+              ? rest.placeholderColor
+              : Colors.placeholderColorDark
+          }
+          secureTextEntry={rest.isPassword && !showPassword}
+          editable={!rest.disabled}
+          {...rest}
+        />
+
+        {rest.isPassword && (
+          <TouchableOpacity
+            style={{
+              position: 'absolute',
+              right: wp('2'),
+              top: Platform.OS === 'ios' ? 0 : 20,
+            }}
+            onPress={togglePasswordVisibility}>
+            <MaterialCommunityIcons
+              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+              size={Constants.SIZE.smallIcon}
+              color={
+                rest.visibleIconColor ? rest.visibleIconColor : Colors.greyColor
+              }
+            />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };

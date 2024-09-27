@@ -6,6 +6,7 @@ import LoginScreen from '../screens/login/LoginScreen';
 import DrawerNavigator from './DrawerNavigator';
 import LeaveScreen from '../screens/leave/LeaveScreen';
 import TaskScreen from '../screens/tasks/TaskScreen';
+import SignupScreen from '../screens/signup/SignupScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ const AppNavigator = () => {
       <Stack.Navigator screenOptions={screenOptions} initialRouteName="Splash">
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="Leave" component={LeaveScreen} />
         <Stack.Screen name="Task" component={TaskScreen} />
         <Stack.Screen

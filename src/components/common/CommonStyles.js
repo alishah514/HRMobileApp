@@ -13,6 +13,7 @@ const CommonStyles = StyleSheet.create({
   rowBetween: {flexDirection: 'row', justifyContent: 'space-between'},
   centerView: {justifyContent: 'center', alignItems: 'center'},
   alignStart: {alignSelf: 'flex-start'},
+  textCenter: {textAlign: 'center'},
 
   //text
   boldTitle: {fontWeight: '600', fontSize: wp('8')},
@@ -29,6 +30,8 @@ const CommonStyles = StyleSheet.create({
   font5: {fontSize: wp('5')},
   font5P: {fontSize: wp('5.5')},
   font6: {fontSize: wp('6')},
+  font7: {fontSize: wp('7')},
+  font8: {fontSize: wp('8')},
   lightFont: {fontWeight: '300'},
   lessBold300: {fontWeight: '300'},
   Bold600: {fontWeight: '600'},
@@ -120,6 +123,8 @@ const CommonStyles = StyleSheet.create({
   paddingTop10: {paddingTop: wp('10')},
   paddingTop16: {paddingTop: wp('16')},
   paddingTop20: {paddingTop: wp('20')},
+  paddingTop25: {paddingTop: wp('25')},
+  paddingTop30: {paddingTop: wp('30')},
 
   // left
   paddingLeft1: {paddingLeft: wp('1')},
