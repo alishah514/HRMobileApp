@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   verticalLineContainer: {
-    width: 20,
     alignItems: 'center',
   },
   verticalLine: {
@@ -26,7 +25,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     paddingTop: wp(5),
-    paddingLeft: wp(2),
   },
   sectionTitle: {
     fontSize: 18,

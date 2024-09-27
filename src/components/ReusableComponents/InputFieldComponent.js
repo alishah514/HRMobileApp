@@ -16,7 +16,10 @@ export default InputFieldComponent = ({...rest}) => {
     setShowPassword(!showPassword);
   };
   return (
-    <>
+    <View
+      style={{
+        width: rest.halfWidth ? '45%' : '100%',
+      }}>
       <View
         style={[
           CommonStyles.alignStart,
@@ -62,6 +65,6 @@ export default InputFieldComponent = ({...rest}) => {
           />
         </TouchableOpacity>
       )}
-    </>
+    </View>
   );
 };
