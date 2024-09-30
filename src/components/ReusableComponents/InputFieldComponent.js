@@ -6,7 +6,7 @@ import {wp} from '../common/Dimensions';
 import {Colors} from '../common/Colors';
 import Constants from '../common/Constants';
 
-export default InputFieldComponent = ({...rest}) => {
+export default InputFieldComponent = ({error, errorMessage, ...rest}) => {
   const [showPassword, setShowPassword] = useState(
     rest.isPassword ? false : undefined,
   );
@@ -16,10 +16,7 @@ export default InputFieldComponent = ({...rest}) => {
   };
 
   return (
-    <View
-      style={{
-        width: rest.halfWidth ? '45%' : '100%',
-      }}>
+    <View style={{width: rest.halfWidth ? '45%' : '100%'}}>
       <View
         style={[
           CommonStyles.alignStart,
@@ -45,7 +42,9 @@ export default InputFieldComponent = ({...rest}) => {
               ? CommonStyles.multilineInput
               : CommonStyles.inputContainer,
             {
+              marginBottom: error ? wp('2') : wp('5'),
               paddingRight: wp('12'),
+              borderColor: error ? Colors.redColor : Colors.greyColor,
             },
           ]}
           placeholderTextColor={
@@ -76,6 +75,12 @@ export default InputFieldComponent = ({...rest}) => {
           </TouchableOpacity>
         )}
       </View>
+
+      {error && errorMessage ? (
+        <Text style={{color: Colors.redColor, paddingBottom: wp('3')}}>
+          {errorMessage}
+        </Text>
+      ) : null}
     </View>
   );
 };
