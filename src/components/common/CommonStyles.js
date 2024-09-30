@@ -121,6 +121,7 @@ const CommonStyles = StyleSheet.create({
   paddingTop5: {paddingTop: wp('5')},
   paddingTop7: {paddingTop: wp('7')},
   paddingTop10: {paddingTop: wp('10')},
+  paddingTop15: {paddingTop: wp('15')},
   paddingTop16: {paddingTop: wp('16')},
   paddingTop20: {paddingTop: wp('20')},
   paddingTop25: {paddingTop: wp('25')},
@@ -327,7 +328,7 @@ const CommonStyles = StyleSheet.create({
     fontWeight: '500',
     alignSelf: 'flex-start',
     width: '100%',
-    marginBottom: wp('5'),
+    //
   },
   // input field
   InputFieldDate: {
@@ -423,8 +424,6 @@ const CommonStyles = StyleSheet.create({
 
   //tab change
   tabChange: {
-    width: wp('85'),
-    height: wp('20'),
     borderRadius: wp('10'),
     justifyContent: 'space-between',
     backgroundColor: Colors.whiteColor,

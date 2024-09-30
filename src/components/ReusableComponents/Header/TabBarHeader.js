@@ -3,6 +3,7 @@ import {View, TouchableOpacity, Text} from 'react-native';
 import {Colors} from '../../../components/common/Colors';
 import Constants from '../../../components/common/Constants';
 import CommonStyles from '../../../components/common/CommonStyles';
+import {wp} from '../../common/Dimensions';
 
 export default function TabBarHeader({
   tabs = [],
@@ -10,13 +11,19 @@ export default function TabBarHeader({
   handleTabPress,
   title,
 }) {
-  // Check if tabs prop is passed and is not empty
   const hasTabs = tabs.length > 0;
 
   return (
-    <View style={[CommonStyles.tabChange, CommonStyles.shadow]}>
+    <View
+      style={[
+        CommonStyles.tabChange,
+        CommonStyles.shadow,
+        {
+          width: wp('85'),
+          height: title ? wp('15') : wp('20'),
+        },
+      ]}>
       {hasTabs ? (
-        // Show tabs if available
         tabs.map(tab => {
           const IconComponent = tab.iconSet;
           const isActive = activeTab === tab.id;
