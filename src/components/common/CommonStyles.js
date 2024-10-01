@@ -34,6 +34,8 @@ const CommonStyles = StyleSheet.create({
   font8: {fontSize: wp('8')},
   lightFont: {fontWeight: '300'},
   lessBold300: {fontWeight: '300'},
+  bold400: {fontWeight: '400'},
+  bold500: {fontWeight: '500'},
   Bold600: {fontWeight: '600'},
   lessBold3P5: {fontWeight: '500', fontSize: wp('3.5')},
   lessBold4P: {fontWeight: '400', fontSize: wp('4.5')},

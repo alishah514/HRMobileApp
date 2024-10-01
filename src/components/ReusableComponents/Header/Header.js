@@ -1,7 +1,6 @@
 import {View, Text, TouchableOpacity, SafeAreaView} from 'react-native';
 import React from 'react';
 import styles from './styles';
-import CommonStyles from '../../common/CommonStyles';
 
 const Header = props => {
   const truncateTitle = (title, maxLength) => {
@@ -23,7 +22,7 @@ const Header = props => {
       </TouchableOpacity>
       <View style={styles.titleCenter}>
         <Text style={[styles.titleText]}>
-          {truncateTitle(props?.title, 13)}
+          {truncateTitle(props?.title, 15)}
         </Text>
       </View>
     </View>
