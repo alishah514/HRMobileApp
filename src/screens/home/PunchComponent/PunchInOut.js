@@ -82,6 +82,7 @@ export default function PunchInOut({
             longitude: position.coords.longitude,
           };
           setLocation(coords);
+          console.log('Geolocation:', coords);
         },
         error => {
           console.log('Error getting location:', error);

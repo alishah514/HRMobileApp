@@ -44,7 +44,7 @@ export default function CustomSectionedMultiSelectComponent({
         uniqueKey="id"
         displayKey="name"
         single={!multiple}
-        hideSearch={hideSearch}
+        hideSearch={options?.length < 20 ? true : hideSearch}
         selectText={multiple && selectedValue?.length > 0 ? '' : placeholder}
         showCancelButton={true}
         onSelectedItemsChange={selectedItems => {
@@ -116,7 +116,8 @@ export default function CustomSectionedMultiSelectComponent({
         }}
         styles={{
           container: {
-            marginVertical: wp('20'),
+            marginVertical: options.length > 20 ? wp('40') : wp('60'),
+            paddingTop: options?.length < 20 && wp('2'),
           },
           selectToggle: {
             borderBottomWidth:

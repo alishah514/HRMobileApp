@@ -11,10 +11,14 @@ import ProfileScreen from '../screens/profile/ProfileScreen';
 import HomeScreen from '../screens/home/HomeScreen';
 import SettingScreen from '../screens/settings/SettingScreen';
 import AttendanceScreen from '../screens/attendance/AttendanceScreen';
+import {useSelector} from 'react-redux';
+import I18n from '../i18n/i18n';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
+  const currentLanguage = useSelector(state => state.language);
+
   return (
     <Drawer.Navigator
       drawerContent={props => (
@@ -43,7 +47,7 @@ const DrawerNavigator = () => {
         options={{
           drawerLabel: () => (
             <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
-              Home
+              {I18n.t('home')}
             </Text>
           ),
           drawerIcon: ({focused, size}) => (
@@ -61,7 +65,7 @@ const DrawerNavigator = () => {
         options={{
           drawerLabel: () => (
             <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
-              Attendance
+              {I18n.t('attendance')}
             </Text>
           ),
           drawerIcon: ({focused, size}) => (
@@ -79,7 +83,7 @@ const DrawerNavigator = () => {
         options={{
           drawerLabel: () => (
             <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
-              Profile
+              {I18n.t('profile')}
             </Text>
           ),
           drawerIcon: ({focused, size}) => (
@@ -97,7 +101,7 @@ const DrawerNavigator = () => {
         options={{
           drawerLabel: () => (
             <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
-              Settings
+              {I18n.t('settings')}
             </Text>
           ),
           drawerIcon: ({focused, size}) => (

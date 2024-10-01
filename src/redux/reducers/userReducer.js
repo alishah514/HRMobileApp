@@ -1,3 +1,4 @@
+import I18n from '../../i18n/i18n';
 import {
   LOGIN_USER,
   SET_USER_ROLE,
@@ -5,6 +6,7 @@ import {
   SAVE_PUNCH_IN_TIME,
   SAVE_PUNCH_OUT_TIME,
   SAVE_TIMER,
+  SET_LANGUAGE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -55,6 +57,12 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         timer: action.payload,
+      };
+    case SET_LANGUAGE:
+      I18n.locale = action.payload; // Update the I18n locale when language is changed
+      return {
+        ...state,
+        language: action.payload,
       };
     default:
       return state;

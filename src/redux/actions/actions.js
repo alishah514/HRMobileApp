@@ -6,6 +6,7 @@ import {
   SAVE_PUNCH_IN_TIME,
   SAVE_PUNCH_OUT_TIME,
   SAVE_TIMER,
+  SET_LANGUAGE,
 } from './actionTypes';
 
 export const loginUser = () => ({
@@ -42,4 +43,9 @@ export const savePunchOutTime = time => ({
 export const saveTimer = time => ({
   type: SAVE_TIMER,
   payload: time,
+});
+
+export const setLanguage = language => ({
+  type: SET_LANGUAGE,
+  payload: language,
 });
