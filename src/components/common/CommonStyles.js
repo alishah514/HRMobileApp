@@ -493,6 +493,55 @@ const CommonStyles = StyleSheet.create({
     width: wp('85'),
     alignSelf: 'center',
   },
+
+  // image picker options modal
+  imageModal: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(64, 147, 239, 0.5)',
+    paddingHorizontal: wp('3'),
+  },
+  imageModalContainer: {
+    height: wp('65'),
+    width: '100%',
+    backgroundColor: Colors.whiteColor,
+    borderRadius: 2,
+    paddingVertical: 30,
+    paddingHorizontal: 20,
+  },
+  imageModalHeading: {
+    color: Colors.blackColor,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+
+  imageModalBtnsContainer: {
+    flexDirection: 'row',
+    bottom: 0,
+    marginBottom: 20,
+  },
+  imageModalBtnView: {
+    width: '42%',
+    margin: '4%',
+    alignItems: 'center',
+    borderColor: Colors.drawerColor,
+    borderWidth: 2,
+    borderRadius: 2,
+    paddingVertical: wp('7'),
+  },
+  imageModalIcon: {
+    height: wp('10'),
+    marginBottom: wp('5'),
+  },
+  imageModalIconText: {
+    color: Colors.drawerColor,
+    fontWeight: 'bold',
+    fontSize: wp('5'),
+    alignSelf: 'center',
+  },
 });
 
 export default CommonStyles;

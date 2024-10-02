@@ -5,6 +5,8 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Colors} from '../common/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../common/Constants';
+import {useSelector} from 'react-redux';
+import I18n from '../../i18n/i18n';
 
 export default function DateFromToComponent({
   dateFrom,
@@ -12,6 +14,7 @@ export default function DateFromToComponent({
   setDateFrom,
   setDateTo,
 }) {
+  const currentLanguage = useSelector(state => state.language);
   const [isDateFromPickerVisible, setDateFromPickerVisible] = useState(false);
   const [isDateToPickerVisible, setDateToPickerVisible] = useState(false);
 
@@ -29,7 +32,7 @@ export default function DateFromToComponent({
       <View style={[CommonStyles.rowBetween, CommonStyles.marginBottom5]}>
         <View>
           <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
-            Degree Start
+            {I18n.t('degreeStart')}
           </Text>
           <TouchableOpacity
             onPress={() => setDateFromPickerVisible(true)}
@@ -45,7 +48,7 @@ export default function DateFromToComponent({
                   color: dateFrom ? Colors.blackColor : Colors.greyColor,
                 },
               ]}>
-              {dateFrom || 'Select Start Date'}
+              {dateFrom || I18n.t('selectStartDate')}
             </Text>
             <Ionicons
               name="calendar-outline"
@@ -56,7 +59,7 @@ export default function DateFromToComponent({
         </View>
         <View>
           <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
-            Degree End
+            {I18n.t('degreeEnd')}
           </Text>
           <TouchableOpacity
             onPress={() => setDateToPickerVisible(true)}
@@ -72,7 +75,7 @@ export default function DateFromToComponent({
                   color: dateTo ? Colors.blackColor : Colors.greyColor,
                 },
               ]}>
-              {dateTo || 'Select End Date'}
+              {dateTo || I18n.t('selectEndDate')}
             </Text>
             <Ionicons
               name="calendar-outline"

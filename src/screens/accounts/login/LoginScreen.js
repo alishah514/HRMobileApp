@@ -7,32 +7,38 @@ import CustomerBackgroundComponent from '../../../components/ReusableComponents/
 import TabBarHeader from '../../../components/ReusableComponents/Header/TabBarHeader';
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
+import {useSelector} from 'react-redux';
+import I18n from '../../../i18n/i18n';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function LoginScreen({navigation}) {
+  const currentLanguage = useSelector(state => state.language);
+
   const [email, setEmail] = useState('ali@yahoo.com');
   const [password, setPassword] = useState('123456');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
   const validateForm = () => {
+    console.log('Current Language:', currentLanguage);
+    console.log('I18n Locale:', I18n.locale);
     let valid = true;
 
     setEmailError('');
     setPasswordError('');
 
     if (email === '') {
-      setEmailError('Email address is required.');
+      setEmailError(I18n.t('emailRequired'));
       valid = false;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('Please enter a valid email.');
+      setEmailError(I18n.t('emailInvalid'));
       valid = false;
     }
 
     if (password === '') {
-      setPasswordError('Password cannot be empty.');
+      setPasswordError(I18n.t('passwordRequired'));
       valid = false;
     }
 
@@ -66,19 +72,18 @@ export default function LoginScreen({navigation}) {
         }
         bottomChild={
           <>
-            <TabBarHeader title={'LOGIN'} />
+            <TabBarHeader title={I18n.t('login')} />
             <View
               style={[
                 CommonStyles.width80,
                 CommonStyles.alignSelf,
-
                 CommonStyles.paddingTop15,
               ]}>
               <InputFieldComponent
-                title={'Email'}
+                title={I18n.t('email')}
                 value={email}
                 onChangeText={text => setState(setEmail, text)}
-                placeholder={'Enter Your Email Address'}
+                placeholder={I18n.t('enterYourEmailAddress')}
                 placeholderColor={Colors.placeholderColorDark}
                 borderColor={Colors.greyColor}
                 textColor={Colors.blackColor}
@@ -87,10 +92,10 @@ export default function LoginScreen({navigation}) {
               />
               <View style={CommonStyles.paddingVertical2} />
               <InputFieldComponent
-                title={'Password'}
+                title={I18n.t('password')}
                 value={password}
                 onChangeText={text => setState(setPassword, text)}
-                placeholder={'Enter Your Password'}
+                placeholder={I18n.t('enterYourPassword')}
                 placeholderColor={Colors.placeholderColorDark}
                 borderColor={Colors.greyColor}
                 textColor={Colors.blackColor}
@@ -99,7 +104,7 @@ export default function LoginScreen({navigation}) {
                 errorMessage={passwordError}
               />
               <View style={CommonStyles.paddingVertical2} />
-              <CommonButton title={'LOGIN'} onPress={validateForm} />
+              <CommonButton title={I18n.t('login')} onPress={validateForm} />
               <View style={CommonStyles.paddingVertical2} />
               <Text
                 style={[
@@ -109,13 +114,13 @@ export default function LoginScreen({navigation}) {
                   CommonStyles.alignSelf,
                   CommonStyles.paddingTop5,
                 ]}>
-                Don&apos;t have an account?{' '}
+                {I18n.t('dontHaveAnAccount')}{' '}
                 <Text
                   onPress={() => navigation.navigate('Signup')}
                   style={CommonStyles.textYellow}>
-                  Sign Up
+                  {I18n.t('signUp')}
                 </Text>{' '}
-                Now
+                {I18n.t('now')}
               </Text>
               <View style={CommonStyles.paddingVertical2} />
               <Text
@@ -127,7 +132,7 @@ export default function LoginScreen({navigation}) {
                   CommonStyles.alignSelf,
                   CommonStyles.paddingTop5,
                 ]}>
-                Forgot Password?
+                {I18n.t('forgotPassword')}
               </Text>
             </View>
           </>

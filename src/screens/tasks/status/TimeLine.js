@@ -8,8 +8,11 @@ import Constants from '../../../components/common/Constants';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import TaskDetailModal from './modals/TaskDetailModal';
 import {wp} from '../../../components/common/Dimensions';
+import {useSelector} from 'react-redux';
+import I18n from '../../../i18n/i18n';
 
 export default function TimeLine({data, status}) {
+  const currentLanguage = useSelector(state => state.language);
   const [isTaskDetailModal, setIsTaskDetailModal] = useState(null);
   const [details, setDetails] = useState(null);
 
@@ -86,7 +89,7 @@ export default function TimeLine({data, status}) {
                   CommonStyles.textBlack,
                   CommonStyles.paddingLeft5,
                 ]}>
-                Report
+                {I18n.t('report')}
               </Text>
               <View
                 style={[
@@ -102,7 +105,7 @@ export default function TimeLine({data, status}) {
                       CommonStyles.textBlack,
                       CommonStyles.paddingLeft1,
                     ]}>
-                    {data.Result.openTasks} open tasks,
+                    {data.Result.openTasks} {I18n.t('pendingTasks')},
                   </Text>
                 </View>
                 <View style={styles.statusItem}>
@@ -119,7 +122,7 @@ export default function TimeLine({data, status}) {
                       CommonStyles.textBlack,
                       CommonStyles.paddingLeft1,
                     ]}>
-                    {data.Result.completedTasks} completed tasks
+                    {data.Result.completedTasks} {I18n.t('completedTasks')}
                   </Text>
                 </View>
               </View>
@@ -135,7 +138,7 @@ export default function TimeLine({data, status}) {
                   CommonStyles.textBlack,
                   CommonStyles.paddingLeft5,
                 ]}>
-                Summary
+                {I18n.t('summary')}
               </Text>
             )}
 

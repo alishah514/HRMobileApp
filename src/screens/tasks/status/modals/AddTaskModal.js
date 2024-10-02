@@ -9,8 +9,11 @@ import InputFieldComponent from '../../../../components/ReusableComponents/Input
 import CommonSafeAreaScrollViewComponent from '../../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import CustomSectionedMultiSelectComponent from '../../../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 import CommonButton from '../../../../components/ReusableComponents/CommonComponents/CommonButton';
+import {useSelector} from 'react-redux';
+import I18n from '../../../../i18n/i18n';
 
 export default function AddTaskModal({isModalVisible, toggleModal}) {
+  const currentLanguage = useSelector(state => state.language);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskCode, setTaskCode] = useState('');
   const [taskCategory, setTaskCategory] = useState(null);
@@ -58,7 +61,7 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
       onRequestClose={toggleModal}>
       <CommonSafeAreaScrollViewComponent>
         <Header
-          title={'Add Task'}
+          title={I18n.t('addTask')}
           onLeftIconPressed={toggleModal}
           leftIcon={
             <Ionicons
@@ -71,25 +74,24 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
 
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
-            title={'Title'}
+            title={I18n.t('title')}
             value={taskTitle}
             onChangeText={text => setTaskTitle(text)}
-            placeholder={'Enter Task Title'}
+            placeholder={I18n.t('enterTaskTitle')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
           />
           <View style={CommonStyles.rowBetween}>
             <CustomSectionedMultiSelectComponent
-              title={'Task Status'}
+              title={I18n.t('taskStatus')}
               selectedValue={taskStatus}
               setSelectedValue={setTaskStatus}
               options={taskStatusOptions}
               halfWidth={true}
             />
-
             <CustomSectionedMultiSelectComponent
-              title={'Task Category'}
+              title={I18n.t('taskCategory')}
               selectedValue={taskCategory}
               setSelectedValue={setTaskCategory}
               options={taskCategoryOptions}
@@ -98,14 +100,14 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
           </View>
           <View style={CommonStyles.rowBetween}>
             <CustomSectionedMultiSelectComponent
-              title={'Priority'}
+              title={I18n.t('priority')}
               selectedValue={taskPriority}
               setSelectedValue={setTaskPriority}
               options={taskPriorityOptions}
               halfWidth={true}
             />
             <CustomSectionedMultiSelectComponent
-              title={'Department'}
+              title={I18n.t('department')}
               selectedValue={department}
               setSelectedValue={setDepartment}
               options={taskDepartmentOptions}
@@ -114,20 +116,20 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
           </View>
           <View style={CommonStyles.rowBetween}>
             <InputFieldComponent
-              title={'Estimated Jobs'}
+              title={I18n.t('estimatedJobs')}
               value={estimatedJobs}
               onChangeText={text => setEstimatedJobs(text)}
-              placeholder={'Enter Estimated Jobs'}
+              placeholder={I18n.t('enterEstimatedJobs')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
               halfWidth={true}
             />
             <InputFieldComponent
-              title={'Task Code'}
+              title={I18n.t('taskCode')}
               value={taskCode}
               onChangeText={text => setTaskCode(text)}
-              placeholder={'Enter Task Code'}
+              placeholder={I18n.t('enterTaskCode')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
@@ -136,23 +138,23 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
           </View>
 
           <CustomSectionedMultiSelectComponent
-            title={'Assigned To'}
+            title={I18n.t('assignedTo')}
             selectedValue={assignedTo}
             setSelectedValue={setAssignedTo}
             options={taskAssigneeOptions}
             multiple={true}
           />
           <InputFieldComponent
-            title={'Description'}
+            title={I18n.t('description')}
             value={description}
             onChangeText={text => setDescription(text)}
-            placeholder={'Enter Task Description'}
+            placeholder={I18n.t('enterTaskDescription')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
             multiline={true}
           />
-          <CommonButton title={'Add Task'} onPress={toggleModal} />
+          <CommonButton title={I18n.t('addTask')} onPress={toggleModal} />
         </View>
       </CommonSafeAreaScrollViewComponent>
     </Modal>

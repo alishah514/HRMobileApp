@@ -5,12 +5,15 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Colors} from '../common/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../common/Constants';
+import I18n from '../../i18n/i18n';
+import {useSelector} from 'react-redux';
 
 export default function CustomDatePickerComponent({
   selectedDate,
   setSelectedDate,
-  label = 'Select Date',
+  label = I18n.t('select date'),
 }) {
+  const currentLanguage = useSelector(state => state.language);
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
 
   const handleConfirmDate = date => {
@@ -38,7 +41,7 @@ export default function CustomDatePickerComponent({
                 color: selectedDate ? Colors.blackColor : Colors.greyColor,
               },
             ]}>
-            {selectedDate || `Enter ${label}`}
+            {selectedDate || `${I18n.t('enter')} ${label}`}
           </Text>
 
           <Ionicons

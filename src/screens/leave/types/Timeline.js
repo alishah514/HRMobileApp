@@ -6,8 +6,12 @@ import CommonStyles from '../../../components/common/CommonStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../../components/common/Constants';
 import styles from './styles';
+import {useSelector} from 'react-redux';
+import I18n from '../../../i18n/i18n';
 
 const Timeline = ({color, data, toggleViewLeaveRequestModal}) => {
+  const currentLanguage = useSelector(state => state.language);
+
   return (
     <View>
       <View style={styles.verticalLine} />
@@ -53,7 +57,7 @@ const Timeline = ({color, data, toggleViewLeaveRequestModal}) => {
                       CommonStyles.underlineText,
                       {color: color ? color : Colors.yellowColor},
                     ]}>
-                    View Details
+                    {I18n.t('view details')}
                   </Text>
                 </TouchableOpacity>
               </View>

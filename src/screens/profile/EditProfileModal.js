@@ -9,11 +9,12 @@ import InputFieldComponent from '../../components/ReusableComponents/InputFieldC
 import CommonSafeAreaScrollViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import DateFromToComponent from '../../components/ReusableComponents/DateFromToComponent';
 import CustomDatePickerComponent from '../../components/ReusableComponents/CustomDatePickerComponent';
-import CustomPickerComponent from '../../components/ReusableComponents/CustomPickerComponent';
-import {useCustomAlert} from '../../components/ReusableComponents/CustomAlertProvider';
+import {useSelector} from 'react-redux';
+import I18n from '../../i18n/i18n';
+import CustomSectionedMultiSelectComponent from '../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 
 export default function EditProfileModal({onClose, isModalVisible}) {
-  const {showAlert} = useCustomAlert();
+  const currentLanguage = useSelector(state => state.language);
 
   //personal
   const [fullName, setFullName] = useState('');
@@ -40,15 +41,7 @@ export default function EditProfileModal({onClose, isModalVisible}) {
   const wageTypeOptions = ['Hourly', 'Salary', 'Commission'];
 
   const onTickPress = () => {
-    showAlert({
-      message: 'Are you sure you want to Logout?',
-      title: 'Logout',
-      button1: 'Yes',
-      button2: 'No',
-      onButton1: () => {
-        onClose();
-      },
-    });
+    onClose();
   };
 
   return (
@@ -59,7 +52,7 @@ export default function EditProfileModal({onClose, isModalVisible}) {
       onRequestClose={onClose}>
       <CommonSafeAreaScrollViewComponent>
         <Header
-          title={'Edit Profile'}
+          title={I18n.t('editProfile')}
           onLeftIconPressed={onClose}
           leftIcon={
             <Ionicons
@@ -82,28 +75,28 @@ export default function EditProfileModal({onClose, isModalVisible}) {
           <View style={[CommonStyles.alignSelf, CommonStyles.paddingBottom3]}>
             <Text
               style={[
-                CommonStyles.font5p,
+                CommonStyles.font5P,
                 CommonStyles.Bold600,
                 CommonStyles.textBlack,
                 CommonStyles.underlineText,
               ]}>
-              Personal Info
+              {I18n.t('personalInfo')}
             </Text>
           </View>
           <>
             <InputFieldComponent
-              title={'Full Name'}
+              title={I18n.t('fullName')}
               value={fullName}
-              placeholder={'Enter Full Name'}
+              placeholder={I18n.t('enterFullName')}
               placeholderColor={Colors.placeholderColorDark}
               onChangeText={text => setFullName(text)}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
             />
             <InputFieldComponent
-              title={'Phone Number'}
+              title={I18n.t('phoneNumber')}
               value={phoneNumber}
-              placeholder={'Enter Phone Number'}
+              placeholder={I18n.t('enterPhoneNumber')}
               placeholderColor={Colors.placeholderColorDark}
               onChangeText={text => setPhoneNumber(text)}
               borderColor={Colors.greyColor}
@@ -111,9 +104,9 @@ export default function EditProfileModal({onClose, isModalVisible}) {
               numeric={true}
             />
             <InputFieldComponent
-              title={'Email Address'}
+              title={I18n.t('emailAddress')}
               value={emailAddress}
-              placeholder={'Enter Email Address'}
+              placeholder={I18n.t('enterEmailAddress')}
               placeholderColor={Colors.placeholderColorDark}
               onChangeText={text => setEmailAddress(text)}
               borderColor={Colors.greyColor}
@@ -124,10 +117,11 @@ export default function EditProfileModal({onClose, isModalVisible}) {
             <CustomDatePickerComponent
               selectedDate={dateOfBirth}
               setSelectedDate={setDateOfBirth}
-              label="Date of Birth"
+              label={I18n.t('dateOfBirth')}
             />
-            <CustomPickerComponent
-              title={'Gender'}
+
+            <CustomSectionedMultiSelectComponent
+              title={I18n.t('gender')}
               selectedValue={gender}
               setSelectedValue={setGender}
               options={genderTypeOptions}
@@ -136,12 +130,12 @@ export default function EditProfileModal({onClose, isModalVisible}) {
           <View style={[CommonStyles.alignSelf, CommonStyles.paddingBottom3]}>
             <Text
               style={[
-                CommonStyles.font5p,
+                CommonStyles.font5P,
                 CommonStyles.Bold600,
                 CommonStyles.textBlack,
                 CommonStyles.underlineText,
               ]}>
-              Latest Educational Info
+              {I18n.t('latestEducationalInfo')}
             </Text>
           </View>
           <>
@@ -152,18 +146,18 @@ export default function EditProfileModal({onClose, isModalVisible}) {
               setDateTo={setDegreeTo}
             />
             <InputFieldComponent
-              title={'Degree Title'}
+              title={I18n.t('degreeTitle')}
               value={degreeTitle}
-              placeholder={'Enter Degree Title'}
+              placeholder={I18n.t('enterDegreeTitle')}
               placeholderColor={Colors.placeholderColorDark}
               onChangeText={text => setDegreeTitle(text)}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
             />
             <InputFieldComponent
-              title={'Institution Name'}
+              title={I18n.t('institutionName')}
               value={institution}
-              placeholder={'Enter Institution Name'}
+              placeholder={I18n.t('enterInstitutionName')}
               placeholderColor={Colors.placeholderColorDark}
               onChangeText={text => setInstitution(text)}
               borderColor={Colors.greyColor}
@@ -173,28 +167,28 @@ export default function EditProfileModal({onClose, isModalVisible}) {
           <View style={[CommonStyles.alignSelf, CommonStyles.paddingBottom3]}>
             <Text
               style={[
-                CommonStyles.font5p,
+                CommonStyles.font5P,
                 CommonStyles.Bold600,
                 CommonStyles.textBlack,
                 CommonStyles.underlineText,
               ]}>
-              Job Info
+              {I18n.t('jobInfo')}
             </Text>
           </View>
           <>
             <InputFieldComponent
-              title={'Designation'}
+              title={I18n.t('designation')}
               value={jobDesignation}
-              placeholder={'Enter Job Designation'}
+              placeholder={I18n.t('enterJobDesignation')}
               placeholderColor={Colors.placeholderColorDark}
               onChangeText={text => setJobDesignation(text)}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
             />
             <InputFieldComponent
-              title={'Department'}
+              title={I18n.t('department')}
               value={jobDepartment}
-              placeholder={'Enter Job Department'}
+              placeholder={I18n.t('enterJobDepartment')}
               placeholderColor={Colors.placeholderColorDark}
               onChangeText={text => setJobDepartment(text)}
               borderColor={Colors.greyColor}
@@ -203,19 +197,19 @@ export default function EditProfileModal({onClose, isModalVisible}) {
             <CustomDatePickerComponent
               selectedDate={joiningDate}
               setSelectedDate={setJoiningDate}
-              label="Joining Date"
+              label={I18n.t('joiningDate')}
             />
 
-            <CustomPickerComponent
-              title={'Employment Type'}
+            <CustomSectionedMultiSelectComponent
+              title={I18n.t('employmentType')}
               selectedValue={employmentType}
               setSelectedValue={setEmploymentType}
               options={employmentTypeOptions}
             />
             <InputFieldComponent
-              title={'Salary'}
+              title={I18n.t('salary')}
               value={salary}
-              placeholder={'Enter Salary'}
+              placeholder={I18n.t('enterSalary')}
               placeholderColor={Colors.placeholderColorDark}
               onChangeText={text => setSalary(text)}
               borderColor={Colors.greyColor}
@@ -223,8 +217,8 @@ export default function EditProfileModal({onClose, isModalVisible}) {
               numeric={true}
             />
 
-            <CustomPickerComponent
-              title={'Wage Type'}
+            <CustomSectionedMultiSelectComponent
+              title={I18n.t('wageType')}
               selectedValue={wageType}
               setSelectedValue={setWageType}
               options={wageTypeOptions}

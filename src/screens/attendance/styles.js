@@ -14,10 +14,10 @@ const styles = StyleSheet.create({
   currentDayDot: {
     width: wp('1.5'),
     height: wp('1.5'),
-    backgroundColor: Colors.drawerColor,
+    backgroundColor: Colors.greyColor,
     borderRadius: wp('0.75'),
     position: 'absolute',
-    top: 55,
+    top: 56,
   },
   calendarDateView: {
     width: wp('10'),

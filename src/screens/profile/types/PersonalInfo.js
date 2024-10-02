@@ -2,8 +2,12 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
 import {TruncateTitle} from '../../../components/utils/TruncateTitle';
+import {useSelector} from 'react-redux';
+import I18n from '../../../i18n/i18n';
 
 export default function PersonalInfo() {
+  const currentLanguage = useSelector(state => state.language);
+
   return (
     <View>
       <Text
@@ -12,7 +16,7 @@ export default function PersonalInfo() {
           CommonStyles.textBlack,
           CommonStyles.marginTop2,
         ]}>
-        Personal Info
+        {I18n.t('personalInfo')}
       </Text>
       <View style={CommonStyles.paddingTop5}>
         <View style={CommonStyles.rowBetween}>
@@ -22,7 +26,7 @@ export default function PersonalInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Employee ID
+            {I18n.t('employeeId')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
@@ -46,7 +50,7 @@ export default function PersonalInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Full Name
+            {I18n.t('fullName')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
@@ -70,7 +74,7 @@ export default function PersonalInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Phone
+            {I18n.t('phone')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
@@ -94,7 +98,7 @@ export default function PersonalInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Email
+            {I18n.t('email')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
@@ -119,7 +123,7 @@ export default function PersonalInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Date of Birth
+            {I18n.t('dateOfBirth')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
@@ -143,7 +147,7 @@ export default function PersonalInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Gender
+            {I18n.t('gender')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text

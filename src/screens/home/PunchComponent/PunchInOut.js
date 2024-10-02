@@ -6,7 +6,7 @@ import {
   PermissionsAndroid,
   TouchableOpacity,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
 import ImagePicker from 'react-native-image-crop-picker';
 import moment from 'moment';
@@ -21,6 +21,7 @@ import {
 import {Colors} from '../../../components/common/Colors';
 import Constants from '../../../components/common/Constants';
 import {check, request, PERMISSIONS} from 'react-native-permissions';
+import I18n from '../../../i18n/i18n';
 
 export default function PunchInOut({
   punchInTime,
@@ -32,6 +33,7 @@ export default function PunchInOut({
   setLocation,
 }) {
   const dispatch = useDispatch();
+  const currentLanguage = useSelector(state => state.language);
   const [timer, setTimer] = useState('00:00:00');
 
   useEffect(() => {
@@ -160,7 +162,7 @@ export default function PunchInOut({
             {punchInTime || '00:00:00'}
           </Text>
           <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
-            Punch In
+            {I18n.t('punchIn')}
           </Text>
         </View>
       </TouchableOpacity>
@@ -184,7 +186,7 @@ export default function PunchInOut({
             {punchOutTime || '00:00:00'}
           </Text>
           <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
-            Punch Out
+            {I18n.t('punchOut')}
           </Text>
         </View>
       </TouchableOpacity>

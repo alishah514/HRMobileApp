@@ -7,12 +7,15 @@ import CustomerBackgroundComponent from '../../../components/ReusableComponents/
 import TabBarHeader from '../../../components/ReusableComponents/Header/TabBarHeader';
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
-import styles from './styles';
+import I18n from '../../../i18n/i18n';
+import {useSelector} from 'react-redux';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function ForgotPasswordScreen({navigation}) {
+  const currentLanguage = useSelector(state => state.language);
+
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
 
@@ -22,10 +25,10 @@ export default function ForgotPasswordScreen({navigation}) {
     setEmailError('');
 
     if (email === '') {
-      setEmailError('Email address is required.');
+      setEmailError(I18n.t('emailRequired'));
       valid = false;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('Please enter a valid email.');
+      setEmailError(I18n.t('emailInvalid'));
       valid = false;
     }
 
@@ -38,6 +41,7 @@ export default function ForgotPasswordScreen({navigation}) {
     setEmailError('');
     stateSetter(text);
   };
+
   return (
     <CommonSafeAreaScrollViewComponent>
       <CustomerBackgroundComponent
@@ -58,7 +62,8 @@ export default function ForgotPasswordScreen({navigation}) {
         }
         bottomChild={
           <>
-            <TabBarHeader title={'FORGOT PASSWORD'} />
+            <TabBarHeader title={I18n.t('forgotPassword')} />
+
             <View
               style={[
                 CommonStyles.width80,
@@ -66,10 +71,10 @@ export default function ForgotPasswordScreen({navigation}) {
                 CommonStyles.paddingTop20,
               ]}>
               <InputFieldComponent
-                title={'Email'}
+                title={I18n.t('email')}
                 value={email}
                 onChangeText={text => setState(setEmail, text)}
-                placeholder={'Enter Your Email Address'}
+                placeholder={I18n.t('enterYourEmailAddress')}
                 placeholderColor={Colors.placeholderColorDark}
                 borderColor={Colors.greyColor}
                 textColor={Colors.blackColor}
@@ -77,7 +82,10 @@ export default function ForgotPasswordScreen({navigation}) {
                 errorMessage={emailError}
               />
               <View style={CommonStyles.paddingVertical2} />
-              <CommonButton title={'RESET PASSWORD'} onPress={validateForm} />
+              <CommonButton
+                title={I18n.t('resetPassword')}
+                onPress={validateForm}
+              />
               <View style={CommonStyles.paddingVertical2} />
               <Text
                 onPress={() => navigation.navigate('Login')}
@@ -88,7 +96,7 @@ export default function ForgotPasswordScreen({navigation}) {
                   CommonStyles.alignSelf,
                   CommonStyles.paddingTop5,
                 ]}>
-                Back To Login
+                {I18n.t('backToLogin')}
               </Text>
             </View>
           </>

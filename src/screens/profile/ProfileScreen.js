@@ -17,6 +17,8 @@ import EditProfileModal from './EditProfileModal';
 import ProfileHeader from '../../components/ReusableComponents/Header/ProfileHeader';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
+import {useSelector} from 'react-redux';
+import I18n from '../../i18n/i18n';
 
 const tabs = [
   {id: 0, icon: 'person-outline', iconSet: Ionicons},
@@ -25,6 +27,7 @@ const tabs = [
 ];
 
 export default function ProfileScreen({navigation}) {
+  const currentLanguage = useSelector(state => state.language);
   const [activeTab, setActiveTab] = useState(0);
   const [image, setImage] = useState(null);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
@@ -50,7 +53,7 @@ export default function ProfileScreen({navigation}) {
   return (
     <CommonSafeAreaViewComponent>
       <Header
-        title="Profile"
+        title={I18n.t('profile')}
         onLeftIconPressed={handleDrawerOpen}
         leftIcon={
           <Ionicons
@@ -74,7 +77,7 @@ export default function ProfileScreen({navigation}) {
             image={image}
             toggleImageOptionsModal={toggleImageOptionsModal}
             name="Syed Ali Sultan Bukhari"
-            role="Mobile App Developer"
+            role={I18n.t('mobile app developer')}
             editable={true}
           />
         }
