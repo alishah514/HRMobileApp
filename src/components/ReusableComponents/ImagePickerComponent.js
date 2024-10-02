@@ -28,7 +28,7 @@ export default function ImagePickerComponent({
         return false;
       }
     }
-    // iOS permissions are handled automatically by the library
+
     return true;
   };
 

@@ -6,17 +6,21 @@ import CommonStyles from '../common/CommonStyles';
 import {Colors} from '../common/Colors';
 import {wp} from '../common/Dimensions';
 import Constants from '../common/Constants';
+import I18n from '../../i18n/i18n';
+import {useSelector} from 'react-redux';
 
 export default function CustomSectionedMultiSelectComponent({
   title,
   selectedValue,
   setSelectedValue,
   options = [],
-  placeholder = `Select ${title}`,
+  placeholder = `${I18n.t('select')} ${title}`,
   hideSearch = false,
   halfWidth,
   multiple = false,
 }) {
+  const currentLanguage = useSelector(state => state.language);
+
   const items = options.map((option, index) => ({
     id: index,
     name: option,
@@ -44,6 +48,7 @@ export default function CustomSectionedMultiSelectComponent({
         uniqueKey="id"
         displayKey="name"
         single={!multiple}
+        confirmText={I18n.t('confirm')}
         hideSearch={options?.length < 20 ? true : hideSearch}
         selectText={multiple && selectedValue?.length > 0 ? '' : placeholder}
         showCancelButton={true}

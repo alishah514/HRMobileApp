@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
-
 import Header from '../../components/ReusableComponents/Header/Header';
 import LogoutConfirmationComponent from '../../components/ReusableComponents/LogoutConfirmationComponent';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,9 +12,11 @@ import {useSelector} from 'react-redux';
 import {Colors} from '../../components/common/Colors';
 import PunchInOut from './PunchComponent/PunchInOut';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
+import I18n from '../../i18n/i18n';
 
 export default function HomeScreen({navigation}) {
   const handleLogout = LogoutConfirmationComponent();
+  const currentLanguage = useSelector(state => state.language);
 
   // Access values from Redux store
   const reduxTimer = useSelector(state => state.timer);
@@ -34,7 +35,7 @@ export default function HomeScreen({navigation}) {
   return (
     <CommonSafeAreaViewComponent>
       <Header
-        title="Home"
+        title={I18n.t('home')}
         onRightIconPressed={handleLogout}
         rightIcon={
           <Ionicons
@@ -59,7 +60,7 @@ export default function HomeScreen({navigation}) {
             <View style={[styles.rowTitle]}>
               <View style={CommonStyles.width70}>
                 <Text style={[CommonStyles.bold5, CommonStyles.textWhite]}>
-                  Good Morning!
+                  {I18n.t('goodMorning')}!
                 </Text>
                 <View style={CommonStyles.paddingTop2}>
                   <Text style={[CommonStyles.bold5, CommonStyles.textWhite]}>
@@ -71,7 +72,7 @@ export default function HomeScreen({navigation}) {
                       CommonStyles.textWhite,
                       CommonStyles.paddingTop1,
                     ]}>
-                    Have a good day with full productivity and good vibes!
+                    {I18n.t('goodMorningPray')}!
                   </Text>
                 </View>
               </View>
@@ -98,7 +99,7 @@ export default function HomeScreen({navigation}) {
                   </Text>
                   <Text
                     style={[CommonStyles.lessBold4P, CommonStyles.textBlue]}>
-                    Total Hours
+                    {I18n.t('totalHours')}
                   </Text>
                 </View>
               </View>
@@ -120,7 +121,7 @@ export default function HomeScreen({navigation}) {
                   </Text>
                   <Text
                     style={[CommonStyles.lessBold4P, CommonStyles.textGreen]}>
-                    On Time
+                    {I18n.t('onTime')}
                   </Text>
                 </View>
               </View>
@@ -141,7 +142,7 @@ export default function HomeScreen({navigation}) {
                     38
                   </Text>
                   <Text style={[CommonStyles.lessBold4, CommonStyles.textRed]}>
-                    Late
+                    {I18n.t('late')}
                   </Text>
                 </View>
               </View>
@@ -180,7 +181,7 @@ export default function HomeScreen({navigation}) {
                       14
                     </Text>
                     <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
-                      Tasks
+                      {I18n.t('tasks')}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -208,7 +209,7 @@ export default function HomeScreen({navigation}) {
                       140
                     </Text>
                     <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
-                      Leaves
+                      {I18n.t('leaves')}
                     </Text>
                   </View>
                 </TouchableOpacity>

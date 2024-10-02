@@ -1,4 +1,3 @@
-// AppWrapper.js
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import Constants from './components/common/Constants';
@@ -19,7 +18,7 @@ const AppWrapper = () => {
       }
     };
     initializeLanguage();
-  }, [dispatch]); // Use dispatch as a dependency
+  }, [dispatch]);
 
   return <AppNavigator />;
 };

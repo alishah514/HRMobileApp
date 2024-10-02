@@ -8,16 +8,19 @@ import Constants from '../../../../components/common/Constants';
 import CommonStyles from '../../../../components/common/CommonStyles';
 import InputFieldComponent from '../../../../components/ReusableComponents/InputFieldComponent';
 import CommonSafeAreaScrollViewComponent from '../../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
+import {useSelector} from 'react-redux';
+import I18n from '../../../../i18n/i18n';
 
 export default function TaskDetailModal({
   isModalVisible,
   toggleModal,
   taskDetails = {},
 }) {
+  const currentLanguage = useSelector(state => state.language);
   const [taskDescription, setTaskDescription] = useState('');
 
   useEffect(() => {
-    setTaskDescription(taskDetails?.description || ''); // Use empty string as fallback
+    setTaskDescription(taskDetails?.description || '');
   }, [taskDetails?.description]);
 
   return (
@@ -28,7 +31,7 @@ export default function TaskDetailModal({
       onRequestClose={toggleModal}>
       <CommonSafeAreaScrollViewComponent>
         <Header
-          title={'Task Details'}
+          title={I18n.t('taskDetails')}
           onLeftIconPressed={toggleModal}
           leftIcon={
             <Ionicons
@@ -41,27 +44,27 @@ export default function TaskDetailModal({
 
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
-            title={'Title'}
+            title={I18n.t('title')}
             value={taskDetails?.taskTitle}
-            placeholder={'Task Title'}
+            placeholder={I18n.t('enterTaskDetails')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
             disabled={true}
           />
           <InputFieldComponent
-            title={'Assigned By'}
+            title={I18n.t('assignedBy')}
             value={taskDetails?.assignedBy}
-            placeholder={'Assigned By'}
+            placeholder={I18n.t('enterAssignedBy')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
             disabled={true}
           />
           <InputFieldComponent
-            title={'Assigned To'}
+            title={I18n.t('assignedTo')}
             value={taskDetails?.assignee}
-            placeholder={'Assigned To'}
+            placeholder={I18n.t('enterAssignedTo')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
@@ -69,9 +72,9 @@ export default function TaskDetailModal({
           />
           <View style={CommonStyles.rowBetween}>
             <InputFieldComponent
-              title={'Department'}
+              title={I18n.t('department')}
               value={taskDetails?.priority}
-              placeholder={'Department'}
+              placeholder={I18n.t('enterDepartment')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
@@ -79,9 +82,9 @@ export default function TaskDetailModal({
               halfWidth={true}
             />
             <InputFieldComponent
-              title={'Task Code'}
+              title={I18n.t('taskCode')}
               value={taskDetails?.priority}
-              placeholder={'Task Code'}
+              placeholder={I18n.t('enterTaskCode')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
@@ -91,9 +94,9 @@ export default function TaskDetailModal({
           </View>
           <View style={CommonStyles.rowBetween}>
             <InputFieldComponent
-              title={'Assigned Date'}
+              title={I18n.t('assignedDate')}
               value={taskDetails?.dateAssigned}
-              placeholder={'Assigned Date'}
+              placeholder={I18n.t('enterAssignedDate')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
@@ -101,9 +104,9 @@ export default function TaskDetailModal({
               halfWidth={true}
             />
             <InputFieldComponent
-              title={'Due Date'}
+              title={I18n.t('dueDate')}
               value={taskDetails?.dueDate}
-              placeholder={'Due Date'}
+              placeholder={I18n.t('enterDueDate')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
@@ -113,11 +116,11 @@ export default function TaskDetailModal({
           </View>
           <View style={CommonStyles.rowBetween}>
             <InputFieldComponent
-              title={'Story Points'}
+              title={I18n.t('storyPoints')}
               value={
                 taskDetails?.storyPoint ? taskDetails.storyPoint.toString() : ''
               }
-              placeholder={'Story Points'}
+              placeholder={I18n.t('enterStoryPoints')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
@@ -125,11 +128,11 @@ export default function TaskDetailModal({
               halfWidth={true}
             />
             <InputFieldComponent
-              title={'Estimated Jobs'}
+              title={I18n.t('estimatedJobs')}
               value={
                 taskDetails?.storyPoint ? taskDetails.storyPoint.toString() : ''
               }
-              placeholder={'Estimated Jobs'}
+              placeholder={I18n.t('enterEstimatedJobs')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
@@ -139,9 +142,9 @@ export default function TaskDetailModal({
           </View>
           <View style={CommonStyles.rowBetween}>
             <InputFieldComponent
-              title={'Priority'}
+              title={I18n.t('priority')}
               value={taskDetails?.priority}
-              placeholder={'Priority'}
+              placeholder={I18n.t('enterPriority')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
@@ -149,9 +152,9 @@ export default function TaskDetailModal({
               halfWidth={true}
             />
             <InputFieldComponent
-              title={'Task Category'}
+              title={I18n.t('taskCategory')}
               value={taskDetails?.priority}
-              placeholder={'Task Category'}
+              placeholder={I18n.t('enterTaskCategory')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
@@ -161,10 +164,10 @@ export default function TaskDetailModal({
           </View>
 
           <InputFieldComponent
-            title={'Description'}
+            title={I18n.t('description')}
             value={taskDescription}
             onChangeText={text => setTaskDescription(text)}
-            placeholder={'Enter Description'}
+            placeholder={I18n.t('enterDescription')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}

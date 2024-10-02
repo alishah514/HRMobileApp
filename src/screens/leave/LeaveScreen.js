@@ -9,13 +9,13 @@ import ProfileHeader from '../../components/ReusableComponents/Header/ProfileHea
 import ImagePickerComponent from '../../components/ReusableComponents/ImagePickerComponent';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
 import styles from './styles';
-import Pending from './types/Pending';
-import Approved from './types/Approved';
-import Rejected from './types/Rejected';
 import LeaveRequestModal from './Modal/LeaveRequestModal';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import {data} from './types/data';
 import ViewLeaveRequestModal from './Modal/ViewLeaveRequestModal';
+import {useSelector} from 'react-redux';
+import I18n from '../../i18n/i18n';
+import StatusComponent from './types/StatusComponent';
 
 const tabs = [
   {
@@ -39,6 +39,7 @@ const tabs = [
 ];
 
 export default function LeaveScreen({navigation}) {
+  const currentLanguage = useSelector(state => state.language);
   const [activeTab, setActiveTab] = useState(0);
   const [image, setImage] = useState(null);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
@@ -73,7 +74,7 @@ export default function LeaveScreen({navigation}) {
   return (
     <CommonSafeAreaViewComponent>
       <Header
-        title="Leaves"
+        title={I18n.t('leaves')}
         onLeftIconPressed={goBack}
         leftIcon={
           <Ionicons
@@ -98,7 +99,7 @@ export default function LeaveScreen({navigation}) {
               image={image}
               toggleImageOptionsModal={toggleImageOptionsModal}
               name="Syed Ali Sultan Bukhari"
-              role="Mobile App Developer"
+              role={I18n.t('mobileAppDeveloper')}
               editable={false}
             />
           </>
@@ -117,17 +118,20 @@ export default function LeaveScreen({navigation}) {
               renderItem={() => (
                 <View>
                   {activeTab === 0 ? (
-                    <Pending
+                    <StatusComponent
+                      status="pending"
                       data={data}
                       toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
                     />
                   ) : activeTab === 1 ? (
-                    <Approved
+                    <StatusComponent
+                      status="approved"
                       data={data}
                       toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
                     />
                   ) : activeTab === 2 ? (
-                    <Rejected
+                    <StatusComponent
+                      status="rejected"
                       data={data}
                       toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
                     />

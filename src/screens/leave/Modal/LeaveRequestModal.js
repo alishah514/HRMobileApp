@@ -11,8 +11,13 @@ import CustomDatePickerComponent from '../../../components/ReusableComponents/Cu
 import CustomPickerComponent from '../../../components/ReusableComponents/CustomPickerComponent';
 import {hp, wp} from '../../../components/common/Dimensions';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
+import {useSelector} from 'react-redux';
+import I18n from '../../../i18n/i18n';
+import CustomSectionedMultiSelectComponent from '../../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 
 export default function LeaveRequestModal({isModalVisible, toggleModal}) {
+  const currentLanguage = useSelector(state => state.language);
+
   const [leaveType, setLeaveType] = useState(null);
   const [leaveFrom, setLeaveFrom] = useState(null);
   const [leaveTo, setLeaveTo] = useState(null);
@@ -27,7 +32,7 @@ export default function LeaveRequestModal({isModalVisible, toggleModal}) {
       onRequestClose={toggleModal}>
       <CommonSafeAreaScrollViewComponent>
         <Header
-          title={'Leave Request'}
+          title={I18n.t('leaveRequest')}
           onLeftIconPressed={toggleModal}
           leftIcon={
             <Ionicons
@@ -42,30 +47,34 @@ export default function LeaveRequestModal({isModalVisible, toggleModal}) {
           <CustomDatePickerComponent
             selectedDate={leaveFrom}
             setSelectedDate={setLeaveFrom}
-            label="Leave From"
+            label={I18n.t('leaveFrom')}
           />
           <CustomDatePickerComponent
             selectedDate={leaveTo}
             setSelectedDate={setLeaveTo}
-            label="Leave To"
+            label={I18n.t('leaveTo')}
           />
-          <CustomPickerComponent
-            title={'Leave Type'}
+
+          <CustomSectionedMultiSelectComponent
+            title={I18n.t('leaveType')}
             selectedValue={leaveType}
             setSelectedValue={setLeaveType}
             options={leaveTypeOptions}
           />
           <InputFieldComponent
-            title={'Reason'}
+            title={I18n.t('reason')}
             value={leaveReason}
-            placeholder={'Enter Leave Reason'}
+            placeholder={I18n.t('enterLeaveReason')}
             placeholderColor={Colors.placeholderColorDark}
             onChangeText={text => setLeaveReason(text)}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
             multiline={true}
           />
-          <CommonButton title={'SEND LEAVE REQUEST'} onPress={toggleModal} />
+          <CommonButton
+            title={I18n.t('sendLeaveRequest')}
+            onPress={toggleModal}
+          />
         </View>
       </CommonSafeAreaScrollViewComponent>
     </Modal>

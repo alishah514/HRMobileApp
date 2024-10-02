@@ -6,18 +6,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
-import {hp, wp} from '../../components/common/Dimensions';
 import moment from 'moment';
 import CommonStyles from '../../components/common/CommonStyles';
-
 import {data} from './AttendaceRecord/data';
 import Record from './AttendaceRecord/Record';
 import styles from './styles';
+import {useSelector} from 'react-redux';
+import I18n from '../../i18n/i18n';
 
 const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 export default function AttendanceScreen({navigation}) {
-  const today = moment().format('YYYY-MM-DD'); // Get today's date in 'YYYY-MM-DD' format
+  const currentLanguage = useSelector(state => state.language);
+  const today = moment().format('YYYY-MM-DD');
   const [selectedDate, setSelectedDate] = useState(today);
   const [currentWeek, setCurrentWeek] = useState(moment().startOf('week'));
 
@@ -49,7 +50,7 @@ export default function AttendanceScreen({navigation}) {
   return (
     <CommonSafeAreaViewComponent>
       <Header
-        title="Attendance"
+        title={I18n.t('attendance')}
         onLeftIconPressed={handleDrawerOpen}
         leftIcon={
           <Ionicons
@@ -153,7 +154,7 @@ export default function AttendanceScreen({navigation}) {
                         CommonStyles.textYellow,
                         CommonStyles.paddingLeft3,
                       ]}>
-                      {'Previous'}
+                      {I18n.t('previous')}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -167,7 +168,7 @@ export default function AttendanceScreen({navigation}) {
                         CommonStyles.textYellow,
                         CommonStyles.paddingRight3,
                       ]}>
-                      {'Next '}
+                      {I18n.t('next')}
                     </Text>
                   </View>
                   <View style={styles.arrowBox}>

@@ -9,12 +9,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
 import CommonStyles from '../../components/common/CommonStyles';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
-import AllTasks from './status/AllTasks';
-import CompletedTasks from './status/CompletedTasks';
-import PendingTasks from './status/PendingTasks';
 import {data} from './data';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import AddTaskModal from './status/modals/AddTaskModal';
+import I18n from '../../i18n/i18n';
+import {useSelector} from 'react-redux';
+import TasksComponent from './status/TaskComponent';
 
 const tabs = [
   {
@@ -38,6 +38,7 @@ const tabs = [
 ];
 
 export default function TaskScreen({navigation}) {
+  const currentLanguage = useSelector(state => state.language);
   const [activeTab, setActiveTab] = useState(0);
   const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
 
@@ -56,7 +57,7 @@ export default function TaskScreen({navigation}) {
   return (
     <CommonSafeAreaViewComponent>
       <Header
-        title="Tasks"
+        title={I18n.t('tasks')}
         onLeftIconPressed={goBack}
         leftIcon={
           <Ionicons
@@ -86,7 +87,7 @@ export default function TaskScreen({navigation}) {
             ]}>
             <View>
               <Text style={[CommonStyles.lessBold5P, CommonStyles.textWhite]}>
-                Task List
+                {I18n.t('taskList')}
               </Text>
             </View>
           </View>
@@ -105,11 +106,11 @@ export default function TaskScreen({navigation}) {
               renderItem={() => (
                 <View>
                   {activeTab === 0 ? (
-                    <AllTasks data={data} />
+                    <TasksComponent taskType="all" data={data} />
                   ) : activeTab === 1 ? (
-                    <CompletedTasks data={data} />
+                    <TasksComponent taskType="completed" data={data} />
                   ) : activeTab === 2 ? (
-                    <PendingTasks data={data} />
+                    <TasksComponent taskType="pending" data={data} />
                   ) : null}
                 </View>
               )}

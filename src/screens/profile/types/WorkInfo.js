@@ -2,11 +2,12 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
 import {TruncateTitle} from '../../../components/utils/TruncateTitle';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Constants from '../../../components/common/Constants';
-import {Colors} from '../../../components/common/Colors';
+import {useSelector} from 'react-redux';
+import I18n from '../../../i18n/i18n';
 
 export default function WorkInfo() {
+  const currentLanguage = useSelector(state => state.language);
+
   return (
     <View>
       <Text
@@ -15,7 +16,7 @@ export default function WorkInfo() {
           CommonStyles.textBlack,
           CommonStyles.marginTop2,
         ]}>
-        Job Info
+        {I18n.t('jobInfo')}
       </Text>
       <View style={CommonStyles.paddingTop5}>
         <View style={CommonStyles.rowBetween}>
@@ -25,7 +26,7 @@ export default function WorkInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Designation
+            {I18n.t('designation')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
@@ -49,7 +50,7 @@ export default function WorkInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Department
+            {I18n.t('department')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
@@ -73,7 +74,7 @@ export default function WorkInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Joining Date
+            {I18n.t('joiningDate')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
@@ -97,7 +98,7 @@ export default function WorkInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Employment Type
+            {I18n.t('employmentType')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
@@ -122,7 +123,7 @@ export default function WorkInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Salary
+            {I18n.t('salary')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
@@ -146,7 +147,7 @@ export default function WorkInfo() {
               CommonStyles.textBlack,
               CommonStyles.lessBold300,
             ]}>
-            Wages Type
+            {I18n.t('wagesType')}
           </Text>
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text

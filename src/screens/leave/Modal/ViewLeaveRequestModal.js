@@ -9,12 +9,16 @@ import CommonStyles from '../../../components/common/CommonStyles';
 import {hp, wp} from '../../../components/common/Dimensions';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
+import {useSelector} from 'react-redux';
+import I18n from '../../../i18n/i18n';
 
 export default function ViewLeaveRequestModal({
   isModalVisible,
   toggleModal,
   leaveDetails = {},
 }) {
+  const currentLanguage = useSelector(state => state.language);
+
   const {type, fromDate, toDate, reason} = leaveDetails || {};
 
   const calculateLeaveDuration = (startDate, endDate) => {
@@ -48,7 +52,7 @@ export default function ViewLeaveRequestModal({
       onRequestClose={toggleModal}>
       <CommonSafeAreaScrollViewComponent>
         <Header
-          title={'Leave Details'}
+          title={I18n.t('leaveDetails')}
           onLeftIconPressed={toggleModal}
           leftIcon={
             <Ionicons
@@ -61,27 +65,27 @@ export default function ViewLeaveRequestModal({
 
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
-            title={'Leave Duration'}
+            title={I18n.t('leaveDuration')}
             value={leaveDuration}
-            placeholder={'Enter Leave Duration'}
+            placeholder={I18n.t('enterLeaveDuration')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
             disabled={true}
           />
           <InputFieldComponent
-            title={'Leave Type'}
+            title={I18n.t('leaveType')}
             value={type}
-            placeholder={'Enter Leave Type'}
+            placeholder={I18n.t('enterLeaveType')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
             disabled={true}
           />
           <InputFieldComponent
-            title={'Leave Reason'}
+            title={I18n.t('leaveReason')}
             value={reason}
-            placeholder={'Enter Leave Reason'}
+            placeholder={I18n.t('enterLeaveReason')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
@@ -90,7 +94,7 @@ export default function ViewLeaveRequestModal({
           />
 
           <CommonButton
-            title={'CANCEL REQUEST'}
+            title={I18n.t('cancelRequest')}
             onPress={toggleModal}
             backgroundColor={Colors.redColor}
           />

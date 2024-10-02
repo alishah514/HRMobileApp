@@ -8,11 +8,15 @@ import TabBarHeader from '../../../components/ReusableComponents/Header/TabBarHe
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import {hp} from '../../../components/common/Dimensions';
+import {useSelector} from 'react-redux';
+import I18n from '../../../i18n/i18n';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function SignupScreen({navigation}) {
+  const currentLanguage = useSelector(state => state.language);
+
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,22 +35,22 @@ export default function SignupScreen({navigation}) {
     setConfirmPasswordError('');
 
     if (username === '') {
-      setUsernameError('Username is required');
+      setUsernameError(I18n.t('usernameRequired'));
       valid = false;
     } else if (email === '') {
-      setEmailError('Email address is required.');
+      setEmailError(I18n.t('emailRequired'));
       valid = false;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('Please enter a valid email.');
+      setEmailError(I18n.t('emailInvalid'));
       valid = false;
     } else if (password === '') {
-      setPasswordError('Password cannot be empty.');
+      setPasswordError(I18n.t('passwordRequired'));
       valid = false;
     } else if (confirmPassword === '') {
-      setConfirmPasswordError('Please Re-enter your password.');
+      setConfirmPasswordError(I18n.t('confirmPasswordRequired'));
       valid = false;
     } else if (confirmPassword !== password) {
-      setConfirmPasswordError('Password must match with Confirm Password.');
+      setConfirmPasswordError(I18n.t('passwordMismatch'));
       valid = false;
     }
 
@@ -89,7 +93,7 @@ export default function SignupScreen({navigation}) {
         }
         bottomChild={
           <>
-            <TabBarHeader title={'SIGNUP'} />
+            <TabBarHeader title={I18n.t('SIGNUP')} />
             <View
               style={[
                 CommonStyles.width80,
@@ -97,26 +101,24 @@ export default function SignupScreen({navigation}) {
                 CommonStyles.paddingTop15,
               ]}>
               <InputFieldComponent
-                title={'Username'}
+                title={I18n.t('username')}
                 value={username}
-                onChangeText={text => setState(setUsername, text, true)}
-                placeholder={'Enter Your Username'}
+                onChangeText={text => setState(setUsername, text)}
+                placeholder={I18n.t('enterYourUsername')}
                 placeholderColor={Colors.placeholderColorDark}
                 borderColor={Colors.greyColor}
                 textColor={Colors.blackColor}
                 error={!!usernameError}
                 errorMessage={usernameError}
               />
-
               {Platform.OS === 'ios' && (
                 <View style={CommonStyles.paddingVertical2} />
               )}
-
               <InputFieldComponent
-                title={'Email'}
+                title={I18n.t('email')}
                 value={email}
-                onChangeText={text => setState(setEmail, text, true)}
-                placeholder={'Enter Your Email Address'}
+                onChangeText={text => setState(setEmail, text)}
+                placeholder={I18n.t('enterYourEmailAddress')}
                 placeholderColor={Colors.placeholderColorDark}
                 borderColor={Colors.greyColor}
                 textColor={Colors.blackColor}
@@ -127,10 +129,10 @@ export default function SignupScreen({navigation}) {
                 <View style={CommonStyles.paddingVertical2} />
               )}
               <InputFieldComponent
-                title={'Password'}
+                title={I18n.t('password')}
                 value={password}
-                onChangeText={text => setState(setPassword, text, true)}
-                placeholder={'Enter Your Password'}
+                onChangeText={text => setState(setPassword, text)}
+                placeholder={I18n.t('enterYourPassword')}
                 placeholderColor={Colors.placeholderColorDark}
                 borderColor={Colors.greyColor}
                 textColor={Colors.blackColor}
@@ -142,10 +144,10 @@ export default function SignupScreen({navigation}) {
                 <View style={CommonStyles.paddingVertical2} />
               )}
               <InputFieldComponent
-                title={'Confirm Password'}
+                title={I18n.t('confirmPassword')}
                 value={confirmPassword}
-                onChangeText={text => setState(setConfirmPassword, text, true)}
-                placeholder={'Re-Enter Your Password'}
+                onChangeText={text => setState(setConfirmPassword, text)}
+                placeholder={I18n.t('reEnterYourPassword')}
                 placeholderColor={Colors.placeholderColorDark}
                 borderColor={Colors.greyColor}
                 textColor={Colors.blackColor}
@@ -154,7 +156,7 @@ export default function SignupScreen({navigation}) {
                 errorMessage={confirmPasswordError}
               />
 
-              <CommonButton title={'REGISTER'} onPress={validateForm} />
+              <CommonButton title={I18n.t('register')} onPress={validateForm} />
 
               <View style={CommonStyles.paddingTop3} />
 
@@ -165,13 +167,13 @@ export default function SignupScreen({navigation}) {
                   CommonStyles.textCenter,
                   CommonStyles.alignSelf,
                 ]}>
-                Already have account?{' '}
+                {I18n.t('alreadyHaveAnAccount')}{' '}
                 <Text
                   onPress={() => navigation.navigate('Login')}
                   style={CommonStyles.textYellow}>
-                  Login
+                  {I18n.t('login')}
                 </Text>{' '}
-                Now
+                {I18n.t('now')}
               </Text>
             </View>
           </>
