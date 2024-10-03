@@ -6,6 +6,7 @@ import {
   ScrollView,
 } from 'react-native';
 import CommonStyles from '../../common/CommonStyles';
+import LogoLoaderComponent from '../LogoLoaderComponent';
 
 export default function CommonSafeAreaScrollViewComponent({children, styling}) {
   return (

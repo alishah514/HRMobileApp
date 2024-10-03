@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {wp} from '../../components/common/Dimensions';
+import {wp} from '../../../components/common/Dimensions';
 
 const styles = StyleSheet.create({
   logoImage: {

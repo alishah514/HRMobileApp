@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import Header from '../../components/ReusableComponents/Header/Header';
 import LogoutConfirmationComponent from '../../components/ReusableComponents/LogoutConfirmationComponent';

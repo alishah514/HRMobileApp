@@ -2,6 +2,7 @@ import {Platform, StyleSheet} from 'react-native';
 
 import {hp, wp} from './Dimensions';
 import {Colors} from './Colors';
+import Constants from './Constants';
 
 const CommonStyles = StyleSheet.create({
   // alignment
@@ -150,6 +151,7 @@ const CommonStyles = StyleSheet.create({
   CenterText: {textAlign: 'center'},
 
   // width
+  width10: {width: wp('10')},
   width35: {width: wp('35')},
   width40: {width: wp('40')},
   width50: {width: wp('50')},
@@ -541,6 +543,35 @@ const CommonStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: wp('5'),
     alignSelf: 'center',
+  },
+
+  //loader style
+  loader: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: Colors.transparent,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
+    flex: 1,
+  },
+  logoContainer: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  logoContainer: {
+    width: 80,
+    height: 80,
   },
 });
 

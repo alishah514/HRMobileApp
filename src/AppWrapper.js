@@ -1,20 +1,18 @@
 import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import Constants from './components/common/Constants';
-import {getData} from './services/StorageService';
+import {useDispatch, useSelector} from 'react-redux';
 import {setLanguage} from './redux/actions/actions';
 import I18n from './i18n/i18n';
 import AppNavigator from './navigation/AppNavigator';
 
 const AppWrapper = () => {
   const dispatch = useDispatch();
+  const currentLanguage = useSelector(state => state.language);
 
   useEffect(() => {
     const initializeLanguage = async () => {
-      const storedLanguage = await getData(Constants.SELECTED_LANGUAGE);
-      if (storedLanguage) {
-        dispatch(setLanguage(storedLanguage));
-        I18n.locale = storedLanguage === 'English' ? 'en' : 'ja';
+      if (currentLanguage) {
+        dispatch(setLanguage(currentLanguage));
+        I18n.locale = currentLanguage === 'Japanese' ? 'ja' : 'en';
       }
     };
     initializeLanguage();

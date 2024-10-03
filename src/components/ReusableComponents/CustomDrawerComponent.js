@@ -1,4 +1,4 @@
-import {View, Text, SafeAreaView, Platform} from 'react-native';
+import {View, Text, Platform} from 'react-native';
 import React from 'react';
 import {
   DrawerContentScrollView,
@@ -8,7 +8,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CommonStyles from '../common/CommonStyles';
 import {Colors} from '../common/Colors';
 import Constants from '../common/Constants';
-import {removeData} from '../../services/StorageService';
 
 export default function CustomDrawerComponent(props) {
   return (

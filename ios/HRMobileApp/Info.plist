@@ -31,6 +31,16 @@
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
+		 <key>NSExceptionDomains</key>
+		<dict>
+			<key>13.230.3.194</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Allow this app to access your camera</string>
