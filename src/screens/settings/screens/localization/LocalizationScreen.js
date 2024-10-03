@@ -1,5 +1,5 @@
-import {View, Text} from 'react-native';
 import React, {useState} from 'react';
+import {View, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import CommonSafeAreaViewComponent from '../../../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import Header from '../../../../components/ReusableComponents/Header/Header';
@@ -12,15 +12,13 @@ import CommonButton from '../../../../components/ReusableComponents/CommonCompon
 import CustomSectionedMultiSelectComponent from '../../../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 import {setLanguage} from '../../../../redux/actions/actions';
 import I18n from '../../../../i18n/i18n';
-import {storeData} from '../../../../services/StorageService';
 
 export default function LocalizationScreen({navigation}) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language);
   const [selectedLanguage, setSelectedLanguage] = useState(
-    currentLanguage || null,
+    currentLanguage || 'English',
   );
-
   const languageOptions = ['English', 'Japanese'];
 
   const goBack = () => {
@@ -29,8 +27,7 @@ export default function LocalizationScreen({navigation}) {
 
   const handleChangeLanguage = async () => {
     dispatch(setLanguage(selectedLanguage));
-    I18n.locale = selectedLanguage === 'English' ? 'en' : 'ja';
-    await storeData(Constants.SELECTED_LANGUAGE, selectedLanguage);
+    I18n.locale = selectedLanguage === 'Japanese' ? 'ja' : 'en';
     goBack();
   };
 
@@ -70,7 +67,6 @@ export default function LocalizationScreen({navigation}) {
               options={languageOptions}
             />
             <View style={CommonStyles.paddingVertical2} />
-
             <CommonButton
               title={I18n.t('changeLanguage')}
               onPress={handleChangeLanguage}

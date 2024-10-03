@@ -12,7 +12,7 @@ const TOGGLE_SWITCH = 'toggleSwitch';
 const FCM_TOKEN = 'fcm_token';
 const ROLE = 'role';
 
-const ROLE_STATUS = ['Transporter', 'Customer', 'Driver', 'Staff'];
+const ROLE_STATUS = ['Admin', 'Staff'];
 
 const SIZE = {
   xxLargeIcon: wp('18'),

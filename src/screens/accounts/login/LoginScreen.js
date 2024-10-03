@@ -7,23 +7,32 @@ import CustomerBackgroundComponent from '../../../components/ReusableComponents/
 import TabBarHeader from '../../../components/ReusableComponents/Header/TabBarHeader';
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
-import {useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import I18n from '../../../i18n/i18n';
+import Constants from '../../../components/common/Constants';
+import {CommonActions} from '@react-navigation/native';
+import {useCustomAlert} from '../../../components/ReusableComponents/CustomAlertProvider';
+import {EndPoints} from '../../../components/common/EndPoints';
+import {loginUser, saveUserDataAndRole} from '../../../redux/actions/actions';
+import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
+import useApi from '../../../services/Api';
+import {handleApiRequest} from '../../../components/common/CommonApi/handleApiRequest';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function LoginScreen({navigation}) {
-  const currentLanguage = useSelector(state => state.language);
-
-  const [email, setEmail] = useState('ali@yahoo.com');
-  const [password, setPassword] = useState('123456');
+  const dispatch = useDispatch();
+  const {request} = useApi();
+  // const {request} = useApi('multipart/form-data'); if image then send this
+  const {showAlert} = useCustomAlert();
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('usmanm3logi@gmail.com');
+  const [password, setPassword] = useState('User@2023');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
   const validateForm = () => {
-    console.log('Current Language:', currentLanguage);
-    console.log('I18n Locale:', I18n.locale);
     let valid = true;
 
     setEmailError('');
@@ -43,8 +52,63 @@ export default function LoginScreen({navigation}) {
     }
 
     if (valid) {
-      navigation.navigate('Home');
+      login();
     }
+  };
+
+  const login = async () => {
+    const data = {
+      Email: email,
+      Password: password,
+    };
+
+    await handleApiRequest(
+      request,
+      'POST',
+      EndPoints.login,
+      data,
+      async (message, statusCode, result) => {
+        onSuccessCall(message, statusCode, result);
+      },
+      (errorMessage, errorCode) => {
+        onErrorCall(errorMessage, errorCode);
+      },
+      setLoading,
+      showAlert,
+      false,
+    );
+  };
+
+  onSuccessCall = async (message, statusCode, result) => {
+    if (result?.Role && Constants.ROLE_STATUS.includes(result?.Role)) {
+      dispatch(
+        saveUserDataAndRole(
+          result?.Token?.access_token,
+          result?.Id,
+          true,
+          result?.Role,
+        ),
+      );
+      dispatch(loginUser());
+
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        }),
+      );
+    } else {
+      showAlert({
+        code: null,
+        message: 'Invalid role. Please contact support.',
+      });
+    }
+  };
+  onErrorCall = async (errorMessage, errorCode) => {
+    showAlert({
+      code: errorCode,
+      message: errorMessage,
+    });
   };
 
   const setState = (stateSetter, text) => {
@@ -54,6 +118,7 @@ export default function LoginScreen({navigation}) {
   };
   return (
     <CommonSafeAreaScrollViewComponent>
+      {loading && <LogoLoaderComponent />}
       <CustomerBackgroundComponent
         topSmall
         topChild={

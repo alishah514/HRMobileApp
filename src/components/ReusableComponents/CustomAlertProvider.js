@@ -90,7 +90,7 @@ export const CustomAlertProvider = ({children}) => {
                     : alertConfig.title
                     ? Colors.blueColor
                     : alertConfig.code === 200
-                    ? Colors.darkGreen
+                    ? Colors.successGreenColor
                     : Colors.redColor,
                 },
               ]}>
@@ -107,7 +107,7 @@ export const CustomAlertProvider = ({children}) => {
                 onPress={hideAlert}>
                 <AntDesign
                   name="close"
-                  size={Constants?.SIZE.largeIcon}
+                  size={Constants?.SIZE.medIcon}
                   color={Colors.whiteColor}
                 />
               </TouchableOpacity>
@@ -156,8 +156,8 @@ const styles = StyleSheet.create({
   headerView: {
     minWidth: wp('60'),
     height: wp('12'),
-    borderTopLeftRadius: wp('5'),
-    borderTopRightRadius: wp('5'),
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     minHeight: wp('30'),
     paddingBottom: wp('5'),
     backgroundColor: Colors.whiteColor,
-    borderRadius: wp('5'),
+    borderRadius: 20,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {

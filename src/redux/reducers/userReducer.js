@@ -1,6 +1,7 @@
 import I18n from '../../i18n/i18n';
 import {
   LOGIN_USER,
+  CLEAR_USER_DATA,
   SET_USER_ROLE,
   SAVE_USER_DATA_AND_ROLE,
   SAVE_PUNCH_IN_TIME,
@@ -23,7 +24,6 @@ const initialState = {
 };
 
 const userReducer = (state = initialState, action) => {
-  console.log('action: ' + JSON.stringify(action));
   switch (action.type) {
     case SAVE_USER_DATA_AND_ROLE:
       return {
@@ -37,6 +37,14 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         isAuthenticated: true,
+      };
+    case CLEAR_USER_DATA:
+      return {
+        ...state,
+        accessToken: null,
+        userId: null,
+        isLoggedIn: false,
+        role: null,
       };
     case SET_USER_ROLE:
       return {
@@ -59,7 +67,7 @@ const userReducer = (state = initialState, action) => {
         timer: action.payload,
       };
     case SET_LANGUAGE:
-      I18n.locale = action.payload; // Update the I18n locale when language is changed
+      I18n.locale = action.payload;
       return {
         ...state,
         language: action.payload,

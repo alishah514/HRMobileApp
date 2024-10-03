@@ -34,6 +34,7 @@ export const Colors = {
 
   //green color
   greenColor: '#64BD63',
+  successGreenColor: '#4BB543',
 
   //purple color
   purpleColor: '#6C3082',
