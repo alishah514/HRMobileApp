@@ -61,7 +61,6 @@ export default function LoginScreen({navigation}) {
       Email: email,
       Password: password,
     };
-
     await handleApiRequest(
       request,
       'POST',

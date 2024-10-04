@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  Platform,
-  PermissionsAndroid,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, Platform, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -51,27 +45,30 @@ export default function PunchInOut({
       const formattedDiff = moment.utc(diffInSeconds * 1000).format('HH:mm:ss');
       setTimer(formattedDiff);
       dispatch(saveTimer(formattedDiff));
+      console.log('Time Difference:', formattedDiff);
     }
   }, [punchInTime, punchOutTime, dispatch]);
 
   const requestLocationPermission = async () => {
+    const LOCATION_PERMISSION = Platform.select({
+      ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+      android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+    });
     try {
-      const granted =
-        Platform.OS === 'android'
-          ? await PermissionsAndroid.request(
-              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            )
-          : await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+      const permissionStatus = await check(LOCATION_PERMISSION);
 
-      if (
-        granted === PermissionsAndroid.RESULTS.GRANTED ||
-        granted === 'granted'
-      ) {
+      if (permissionStatus === 'granted') {
+        return true;
+      }
+      const requestResult = await request(LOCATION_PERMISSION);
+
+      if (requestResult === 'granted') {
         return true;
       }
     } catch (err) {
-      console.warn(err);
+      console.warn('Permission request error:', err);
     }
+
     return false;
   };
 
