@@ -10,7 +10,6 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, userReducer);
 
-// Configure the store with persistedReducer and customize middleware
 const store = configureStore({
   reducer: persistedReducer,
   middleware: getDefaultMiddleware =>

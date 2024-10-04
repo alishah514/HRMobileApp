@@ -1,12 +1,10 @@
 import {View, Text, FlatList} from 'react-native';
 import React from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
-import {Colors} from '../../../components/common/Colors';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import styles from '../styles';
 import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
-import {wp} from '../../../components/common/Dimensions';
 
 export default function TimeLine({data}) {
   const currentLanguage = useSelector(state => state.language);
