@@ -16,7 +16,7 @@ import I18n from '../../i18n/i18n';
 
 export default function HomeScreen({navigation}) {
   const handleLogout = LogoutConfirmationComponent();
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   // Access values from Redux store
   const reduxTimer = useSelector(state => state.timer);

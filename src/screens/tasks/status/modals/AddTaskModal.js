@@ -13,7 +13,7 @@ import {useSelector} from 'react-redux';
 import I18n from '../../../../i18n/i18n';
 
 export default function AddTaskModal({isModalVisible, toggleModal}) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskCode, setTaskCode] = useState('');
   const [taskCategory, setTaskCategory] = useState(null);

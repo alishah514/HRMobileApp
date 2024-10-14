@@ -13,7 +13,7 @@ export default function CustomDatePickerComponent({
   setSelectedDate,
   label = I18n.t('select date'),
 }) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
 
   const handleConfirmDate = date => {

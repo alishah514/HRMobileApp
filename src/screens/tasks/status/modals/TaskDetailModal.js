@@ -16,7 +16,7 @@ export default function TaskDetailModal({
   toggleModal,
   taskDetails = {},
 }) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
   const [taskDescription, setTaskDescription] = useState('');
 
   useEffect(() => {

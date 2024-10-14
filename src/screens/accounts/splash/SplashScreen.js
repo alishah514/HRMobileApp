@@ -5,10 +5,11 @@ import CommonStyles from '../../../components/common/CommonStyles';
 import styles from './styles';
 
 export default function SplashScreen({navigation}) {
-  const isLoggedIn = useSelector(state => state.isLoggedIn);
+  const isLoggedIn = useSelector(state => state.login.isLoggedIn);
 
   useEffect(() => {
     const checkLoginStatus = () => {
+      console.log('isLoggedIn', isLoggedIn);
       if (isLoggedIn) {
         navigation.navigate('Home');
       } else {

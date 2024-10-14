@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setLanguage} from './redux/actions/actions';
+
 import I18n from './i18n/i18n';
 import AppNavigator from './navigation/AppNavigator';
+import {setLanguage} from './redux/language/LanguageActions';
 
 const AppWrapper = () => {
   const dispatch = useDispatch();
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   useEffect(() => {
     const initializeLanguage = async () => {

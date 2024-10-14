@@ -6,7 +6,7 @@ import Constants from '../components/common/Constants';
 
 const useApi = (contentType = 'application/json') => {
   const apiUrl = Constants?.BASE_URL;
-  const accessToken = useSelector(state => state?.accessToken);
+  const accessToken = useSelector(state => state.login?.accessToken);
 
   const service = axios.create({
     headers: {

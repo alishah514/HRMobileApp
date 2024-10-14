@@ -15,7 +15,7 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function SignupScreen({navigation}) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');

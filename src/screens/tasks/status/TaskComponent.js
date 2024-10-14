@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 
 const TasksComponent = ({taskType, data}) => {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   const taskMapping = {
     all: {label: I18n.t('allTasks'), status: 1},

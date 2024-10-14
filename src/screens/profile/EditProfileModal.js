@@ -14,7 +14,7 @@ import I18n from '../../i18n/i18n';
 import CustomSectionedMultiSelectComponent from '../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 
 export default function EditProfileModal({onClose, isModalVisible}) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   //personal
   const [fullName, setFullName] = useState('');

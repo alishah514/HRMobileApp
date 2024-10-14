@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 
 const StatusComponent = ({status, data, toggleViewLeaveRequestModal}) => {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   const statusMapping = {
     pending: {color: Colors.yellowColor, label: I18n.t('pending')},

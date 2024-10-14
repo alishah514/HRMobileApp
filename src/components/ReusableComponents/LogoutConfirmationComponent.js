@@ -7,7 +7,7 @@ import I18n from '../../i18n/i18n';
 
 const LogoutConfirmationComponent = () => {
   const navigation = useNavigation();
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
   const dispatch = useDispatch();
 
   const handleLogout = async () => {

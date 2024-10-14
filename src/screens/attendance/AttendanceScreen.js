@@ -17,7 +17,7 @@ import I18n from '../../i18n/i18n';
 const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 export default function AttendanceScreen({navigation}) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
   const today = moment().format('YYYY-MM-DD');
   const [selectedDate, setSelectedDate] = useState(today);
   const [currentWeek, setCurrentWeek] = useState(moment().startOf('week'));

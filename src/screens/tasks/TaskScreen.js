@@ -38,7 +38,7 @@ const tabs = [
 ];
 
 export default function TaskScreen({navigation}) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
   const [activeTab, setActiveTab] = useState(0);
   const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
 

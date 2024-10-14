@@ -8,9 +8,10 @@ import Constants from '../../../components/common/Constants';
 import styles from './styles';
 import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
+import {formatDate} from '../../../components/utils/dateUtils';
 
 const Timeline = ({color, data, toggleViewLeaveRequestModal}) => {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   return (
     <View>
@@ -73,7 +74,7 @@ const Timeline = ({color, data, toggleViewLeaveRequestModal}) => {
                     style={[
                       styles.title,
                       CommonStyles.paddingLeft2,
-                    ]}>{`${item.fromDate} `}</Text>
+                    ]}>{`${formatDate(item.fromDate)}`}</Text>
                 </View>
                 <View
                   style={[CommonStyles.flexRow, CommonStyles.alignItemsCenter]}>
@@ -86,7 +87,7 @@ const Timeline = ({color, data, toggleViewLeaveRequestModal}) => {
                     style={[
                       styles.title,
                       CommonStyles.paddingLeft2,
-                    ]}>{`${item.toDate}`}</Text>
+                    ]}>{`${formatDate(item.toDate)}`}</Text>
                 </View>
               </View>
             </View>
