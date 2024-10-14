@@ -2,6 +2,11 @@ import {wp} from './Dimensions';
 
 const BASE_URL = 'http://13.230.3.194:51/api'; //qa base url
 // const BASE_URL = 'https://api.m3logi.com/api'; //live base url
+const FIREBASE_URL =
+  'https://firestore.googleapis.com/v1/projects/hr-mobile-app-b0880/databases/(default)/documents';
+const FIREBASE_POST_URL =
+  'https://firestore.googleapis.com/v1/projects/hr-mobile-app-b0880/databases/(default)/documents:runQuery?';
+const FIREBASE_KEY = 'AIzaSyAZMgFWsw1kyKfMcTIcW78YnnQOqoiIQjY';
 const BEARER_TOKEN = 'bearer_token';
 const USER_ID = 'user_id';
 const USER_TYPE_ID = 'user_type_id';
@@ -25,6 +30,9 @@ const SIZE = {
 
 export default Constants = {
   BASE_URL,
+  FIREBASE_URL,
+  FIREBASE_POST_URL,
+  FIREBASE_KEY,
   BEARER_TOKEN,
   USER_ID,
   USER_TYPE_ID,

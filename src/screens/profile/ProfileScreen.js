@@ -27,7 +27,7 @@ const tabs = [
 ];
 
 export default function ProfileScreen({navigation}) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
   const [activeTab, setActiveTab] = useState(0);
   const [image, setImage] = useState(null);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =

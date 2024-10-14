@@ -17,12 +17,11 @@ export default function ViewLeaveRequestModal({
   toggleModal,
   leaveDetails = {},
 }) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   const {type, fromDate, toDate, reason} = leaveDetails || {};
 
   const calculateLeaveDuration = (startDate, endDate) => {
-    console.log('startDate', startDate, ' endDate', endDate);
     if (!startDate || !endDate) return 'N/A';
 
     const [startDay, startMonth, startYear] = startDate.split('-').map(Number);
@@ -42,7 +41,6 @@ export default function ViewLeaveRequestModal({
   };
 
   const leaveDuration = calculateLeaveDuration(fromDate, toDate);
-  console.log(leaveDuration);
 
   return (
     <Modal

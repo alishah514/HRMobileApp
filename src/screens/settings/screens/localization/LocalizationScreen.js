@@ -10,12 +10,13 @@ import CommonStyles from '../../../../components/common/CommonStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CommonButton from '../../../../components/ReusableComponents/CommonComponents/CommonButton';
 import CustomSectionedMultiSelectComponent from '../../../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
-import {setLanguage} from '../../../../redux/actions/actions';
+
 import I18n from '../../../../i18n/i18n';
+import {setLanguage} from '../../../../redux/language/LanguageActions';
 
 export default function LocalizationScreen({navigation}) {
   const dispatch = useDispatch();
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
   const [selectedLanguage, setSelectedLanguage] = useState(
     currentLanguage || 'English',
   );

@@ -1,4 +1,4 @@
-import {clearUserData} from '../../redux/actions/actions';
+import {clearUserData} from '../../redux/login/LoginActions';
 
 const logout = async dispatch => {
   try {

@@ -15,7 +15,7 @@ import I18n from '../i18n/i18n';
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   return (
     <SafeAreaView style={CommonStyles.container}>

@@ -10,7 +10,7 @@ export default function ImagePickerOptionsComponent({
   clickImage,
   pickImage,
 }) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   return (
     <Modal

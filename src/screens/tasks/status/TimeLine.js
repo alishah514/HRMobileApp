@@ -12,7 +12,7 @@ import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 
 export default function TimeLine({data, status}) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
   const [isTaskDetailModal, setIsTaskDetailModal] = useState(null);
   const [details, setDetails] = useState(null);
 

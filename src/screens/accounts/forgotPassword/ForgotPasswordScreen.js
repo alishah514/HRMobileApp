@@ -14,7 +14,7 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function ForgotPasswordScreen({navigation}) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');

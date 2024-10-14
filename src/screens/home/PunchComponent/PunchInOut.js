@@ -7,15 +7,16 @@ import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CommonStyles from '../../../components/common/CommonStyles';
 import styles from '../styles';
-import {
-  savePunchInTime,
-  savePunchOutTime,
-  saveTimer,
-} from '../../../redux/actions/actions';
+
 import {Colors} from '../../../components/common/Colors';
 import Constants from '../../../components/common/Constants';
 import {check, request, PERMISSIONS} from 'react-native-permissions';
 import I18n from '../../../i18n/i18n';
+import {
+  savePunchInTime,
+  savePunchOutTime,
+  saveTimer,
+} from '../../../redux/attendance/AttendaceActions';
 
 export default function PunchInOut({
   punchInTime,
@@ -27,7 +28,7 @@ export default function PunchInOut({
   setLocation,
 }) {
   const dispatch = useDispatch();
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
   const [timer, setTimer] = useState('00:00:00');
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import {View, Text, Image, Dimensions} from 'react-native';
+import {View, Text, Image, Dimensions, Alert} from 'react-native';
 import React, {useState} from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
 import {Colors} from '../../../components/common/Colors';
@@ -13,10 +13,15 @@ import Constants from '../../../components/common/Constants';
 import {CommonActions} from '@react-navigation/native';
 import {useCustomAlert} from '../../../components/ReusableComponents/CustomAlertProvider';
 import {EndPoints} from '../../../components/common/EndPoints';
-import {loginUser, saveUserDataAndRole} from '../../../redux/actions/actions';
+
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 import useApi from '../../../services/Api';
 import {handleApiRequest} from '../../../components/common/CommonApi/handleApiRequest';
+import {loginUserDummy} from '../../../components/dummy/DummyLogin';
+import {
+  loginUser,
+  saveUserDataAndRole,
+} from '../../../redux/login/LoginActions';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -88,7 +93,7 @@ export default function LoginScreen({navigation}) {
           result?.Role,
         ),
       );
-      dispatch(loginUser());
+      dispatch(loginUser(result?.Token?.access_token));
 
       navigation.dispatch(
         CommonActions.reset({

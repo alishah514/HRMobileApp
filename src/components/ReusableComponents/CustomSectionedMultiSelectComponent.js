@@ -19,7 +19,7 @@ export default function CustomSectionedMultiSelectComponent({
   halfWidth,
   multiple = false,
 }) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   const items = options.map((option, index) => ({
     id: index,

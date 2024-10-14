@@ -8,7 +8,7 @@ import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 
 export default function Record({data}) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   return (
     <View style={[CommonStyles.width80, CommonStyles.alignSelf]}>

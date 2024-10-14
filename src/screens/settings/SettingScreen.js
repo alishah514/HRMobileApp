@@ -12,7 +12,7 @@ import I18n from '../../i18n/i18n';
 import {useSelector} from 'react-redux';
 
 export default function SettingScreen({navigation}) {
-  const currentLanguage = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
 
   const handleDrawerOpen = () => {
     navigation.openDrawer();

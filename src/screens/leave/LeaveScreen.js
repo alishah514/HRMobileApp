@@ -1,5 +1,5 @@
 import {FlatList, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from '../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../components/common/Constants';
@@ -11,11 +11,12 @@ import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeade
 import styles from './styles';
 import LeaveRequestModal from './Modal/LeaveRequestModal';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
-import {data} from './types/data';
 import ViewLeaveRequestModal from './Modal/ViewLeaveRequestModal';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import StatusComponent from './types/StatusComponent';
+import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
+import {clearLeavesState, fetchLeaves} from '../../redux/leave/LeaveActions';
 
 const tabs = [
   {
@@ -39,7 +40,11 @@ const tabs = [
 ];
 
 export default function LeaveScreen({navigation}) {
-  const currentLanguage = useSelector(state => state.language);
+  const dispatch = useDispatch();
+  const currentLanguage = useSelector(state => state.language.language);
+  const leaves = useSelector(state => state.leaves.data);
+  const isLoading = useSelector(state => state.leaves.isLoading);
+
   const [activeTab, setActiveTab] = useState(0);
   const [image, setImage] = useState(null);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
@@ -49,6 +54,21 @@ export default function LeaveScreen({navigation}) {
   const [isViewLeaveRequestVisible, setIsViewLeaveRequestVisible] =
     useState(false);
   const [details, setDetails] = useState(null);
+
+  useEffect(() => {
+    getLeaves();
+    return () => {
+      dispatch(clearLeavesState());
+    };
+  }, [dispatch]);
+
+  const getLeaves = () => {
+    dispatch(
+      fetchLeaves({
+        limit: 25,
+      }),
+    );
+  };
 
   const toggleImageOptionsModal = () => {
     setIsImagePickerOptionsVisible(!isImagePickerOptionsVisible);
@@ -73,6 +93,7 @@ export default function LeaveScreen({navigation}) {
 
   return (
     <CommonSafeAreaViewComponent>
+      {isLoading && <LogoLoaderComponent />}
       <Header
         title={I18n.t('leaves')}
         onLeftIconPressed={goBack}
@@ -120,19 +141,19 @@ export default function LeaveScreen({navigation}) {
                   {activeTab === 0 ? (
                     <StatusComponent
                       status="pending"
-                      data={data}
+                      data={leaves.filter(leave => leave.status === 'pending')}
                       toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
                     />
                   ) : activeTab === 1 ? (
                     <StatusComponent
                       status="approved"
-                      data={data}
+                      data={leaves.filter(leave => leave.status === 'approved')}
                       toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
                     />
                   ) : activeTab === 2 ? (
                     <StatusComponent
                       status="rejected"
-                      data={data}
+                      data={leaves.filter(leave => leave.status === 'rejected')}
                       toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
                     />
                   ) : null}
@@ -152,6 +173,7 @@ export default function LeaveScreen({navigation}) {
       <LeaveRequestModal
         isModalVisible={isAddLeaveRequestVisible}
         toggleModal={toggleLeaveRequestModal}
+        apiCall={getLeaves}
       />
       <ViewLeaveRequestModal
         isModalVisible={isViewLeaveRequestVisible}
