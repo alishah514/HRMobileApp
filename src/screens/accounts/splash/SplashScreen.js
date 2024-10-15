@@ -9,7 +9,6 @@ export default function SplashScreen({navigation}) {
 
   useEffect(() => {
     const checkLoginStatus = () => {
-      console.log('isLoggedIn', isLoggedIn);
       if (isLoggedIn) {
         navigation.navigate('Home');
       } else {
