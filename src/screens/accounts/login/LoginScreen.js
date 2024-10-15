@@ -1,4 +1,4 @@
-import {View, Text, Image, Dimensions, Alert} from 'react-native';
+import {View, Text, Image, Dimensions} from 'react-native';
 import React, {useState} from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
 import {Colors} from '../../../components/common/Colors';
@@ -7,18 +7,15 @@ import CustomerBackgroundComponent from '../../../components/ReusableComponents/
 import TabBarHeader from '../../../components/ReusableComponents/Header/TabBarHeader';
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 import Constants from '../../../components/common/Constants';
 import {CommonActions} from '@react-navigation/native';
 import {useCustomAlert} from '../../../components/ReusableComponents/CustomAlertProvider';
-import {EndPoints} from '../../../components/common/EndPoints';
-
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 import useApi from '../../../services/Api';
-import {handleApiRequest} from '../../../components/common/CommonApi/handleApiRequest';
-import {loginUserDummy} from '../../../components/dummy/DummyLogin';
 import {
+  loginAction,
   loginUser,
   saveUserDataAndRole,
 } from '../../../redux/login/LoginActions';
@@ -29,11 +26,12 @@ const screenHeight = Dimensions.get('window').height;
 export default function LoginScreen({navigation}) {
   const dispatch = useDispatch();
   const {request} = useApi();
+  const isLoading = useSelector(state => state.login.isLoading);
   // const {request} = useApi('multipart/form-data'); if image then send this
   const {showAlert} = useCustomAlert();
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('usmanm3logi@gmail.com');
-  const [password, setPassword] = useState('User@2023');
+  // const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('daod@example.com');
+  const [password, setPassword] = useState('daod123');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
@@ -62,26 +60,29 @@ export default function LoginScreen({navigation}) {
   };
 
   const login = async () => {
-    const data = {
-      Email: email,
-      Password: password,
-    };
-    await handleApiRequest(
-      request,
-      'POST',
-      EndPoints.login,
-      data,
-      async (message, statusCode, result) => {
-        onSuccessCall(message, statusCode, result);
-      },
-      (errorMessage, errorCode) => {
-        onErrorCall(errorMessage, errorCode);
-      },
-      setLoading,
-      showAlert,
-      false,
-    );
+    dispatch(loginAction(email, password, navigation));
   };
+  // const login = async () => {
+  //   const data = {
+  //     Email: email,
+  //     Password: password,
+  //   };
+  //   await handleApiRequest(
+  //     request,
+  //     'POST',
+  //     EndPoints.login,
+  //     data,
+  //     async (message, statusCode, result) => {
+  //       onSuccessCall(message, statusCode, result);
+  //     },
+  //     (errorMessage, errorCode) => {
+  //       onErrorCall(errorMessage, errorCode);
+  //     },
+  //     setLoading,
+  //     showAlert,
+  //     false,
+  //   );
+  // };
 
   onSuccessCall = async (message, statusCode, result) => {
     if (result?.Role && Constants.ROLE_STATUS.includes(result?.Role)) {
@@ -122,7 +123,7 @@ export default function LoginScreen({navigation}) {
   };
   return (
     <CommonSafeAreaScrollViewComponent>
-      {loading && <LogoLoaderComponent />}
+      {isLoading && <LogoLoaderComponent />}
       <CustomerBackgroundComponent
         topSmall
         topChild={

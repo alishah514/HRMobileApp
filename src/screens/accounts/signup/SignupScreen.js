@@ -8,13 +8,15 @@ import TabBarHeader from '../../../components/ReusableComponents/Header/TabBarHe
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import {hp} from '../../../components/common/Dimensions';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
+import {signupAction} from '../../../redux/signup/SignupActions';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function SignupScreen({navigation}) {
+  const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
 
   const [username, setUsername] = useState('');
@@ -55,7 +57,7 @@ export default function SignupScreen({navigation}) {
     }
 
     if (valid) {
-      navigation.navigate('Home');
+      signupUser();
     }
   };
 
@@ -71,6 +73,19 @@ export default function SignupScreen({navigation}) {
     if (clearErrors) {
       stateClearErrors();
     }
+  };
+
+  const signupUser = () => {
+    const userData = {
+      name: username,
+      email: email,
+      password: password,
+      token: 'abcd123token',
+      id: 102,
+      role: 'Admin',
+    };
+
+    dispatch(signupAction(userData, navigation));
   };
 
   return (
