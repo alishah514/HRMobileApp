@@ -1,5 +1,5 @@
-import Constants from '../../components/common/Constants';
-import FirestoreApiComponent from './FirestoreApiComponent';
+import Constants from '../../../components/common/Constants';
+import LeaveApiComponent from './LeaveApiComponent';
 
 const LeaveService = {
   fetchLeaves: async () => {
@@ -7,8 +7,7 @@ const LeaveService = {
     const method = 'get';
 
     try {
-      const response = await FirestoreApiComponent(url, method);
-      console.log('Fetch Leaves', response);
+      const response = await LeaveApiComponent(url, method);
       return response;
     } catch (error) {
       throw error;
@@ -42,12 +41,52 @@ const LeaveService = {
     };
 
     try {
-      const response = await FirestoreApiComponent(url, method, body, true);
-
-      console.log('Post Leave:', response);
-      return response;
+      const response = await LeaveApiComponent(url, method, body, true);
+      return {success: true, response};
     } catch (error) {
-      throw error;
+      console.error('Error in LeaveService.postLeaveRequest:', error);
+      return {
+        success: false,
+        error: error.message || 'An unexpected error occurred.',
+      };
+    }
+  },
+
+  patchLeaveStatus: async (leaveId, leaveData) => {
+    const url = `${Constants.FIREBASE_URL}/leaves/${leaveId}?key=${Constants.FIREBASE_KEY}`;
+    const method = 'patch';
+    const body = {
+      fields: {
+        reason: {
+          stringValue: leaveData.reason,
+        },
+        fromDate: {
+          timestampValue: leaveData.fromDate,
+        },
+        type: {
+          stringValue: leaveData.type,
+        },
+        toDate: {
+          timestampValue: leaveData.toDate,
+        },
+        period: {
+          integerValue: leaveData.period.toString(),
+        },
+        status: {
+          stringValue: leaveData.status,
+        },
+      },
+    };
+
+    try {
+      const response = await LeaveApiComponent(url, method, body);
+      return {success: true, response};
+    } catch (error) {
+      console.error('Error in LeaveService.patchLeaveStatus:', error);
+      return {
+        success: false,
+        error: error.message || 'An unexpected error occurred.',
+      };
     }
   },
 
@@ -78,8 +117,8 @@ const LeaveService = {
     };
 
     try {
-      const response = await FirestoreApiComponent(url, method, body);
-      console.log('Fetch Paginated Leaves', response);
+      const response = await LeaveApiComponent(url, method, body);
+      // console.log('Fetch Paginated Leaves', response);
       return response;
     } catch (error) {
       throw error;

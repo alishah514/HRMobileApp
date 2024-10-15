@@ -1,4 +1,4 @@
-import LeaveService from '../../services/api/LeaveService';
+import LeaveService from '../../services/api/leave/LeaveService';
 import {
   FETCH_LEAVES_START,
   FETCH_LEAVES_SUCCESS,
@@ -7,6 +7,9 @@ import {
   POST_LEAVE_START,
   POST_LEAVE_SUCCESS,
   POST_LEAVE_FAILURE,
+  PATCH_LEAVE_STATUS_START,
+  PATCH_LEAVE_STATUS_SUCCESS,
+  PATCH_LEAVE_STATUS_FAILURE,
 } from '../actions/actionTypes';
 
 export const fetchLeavesStart = () => ({
@@ -41,6 +44,20 @@ export const postLeaveFailure = error => ({
   payload: error,
 });
 
+export const patchLeaveStatusStart = () => ({
+  type: PATCH_LEAVE_STATUS_START,
+});
+
+export const patchLeaveStatusSuccess = response => ({
+  type: PATCH_LEAVE_STATUS_SUCCESS,
+  payload: response,
+});
+
+export const patchLeaveStatusFailure = error => ({
+  type: PATCH_LEAVE_STATUS_FAILURE,
+  payload: error,
+});
+
 export const fetchLeaves = () => async dispatch => {
   dispatch(fetchLeavesStart());
   try {
@@ -63,14 +80,28 @@ export const fetchPaginatedLeaves = options => async dispatch => {
 
 export const postLeaveRequest = leaveData => async dispatch => {
   dispatch(postLeaveStart());
-  try {
-    const response = await LeaveService.postLeave(leaveData);
-    dispatch(postLeaveSuccess(response));
 
-    return {success: true, response};
-  } catch (error) {
-    dispatch(postLeaveFailure(error.message));
+  const response = await LeaveService.postLeave(leaveData);
 
-    return {success: false, error: error.message};
+  if (response.success) {
+    dispatch(postLeaveSuccess(response.response));
+  } else {
+    dispatch(postLeaveFailure(response.error));
   }
+
+  return response;
+};
+
+export const patchLeaveStatus = (leaveId, leaveData) => async dispatch => {
+  dispatch(patchLeaveStatusStart());
+
+  const response = await LeaveService.patchLeaveStatus(leaveId, leaveData);
+
+  if (response.success) {
+    dispatch(patchLeaveStatusSuccess(response.response));
+  } else {
+    dispatch(patchLeaveStatusFailure(response.error));
+  }
+
+  return response;
 };

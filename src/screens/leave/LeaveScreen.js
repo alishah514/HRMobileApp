@@ -16,7 +16,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import StatusComponent from './types/StatusComponent';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
-import {clearLeavesState, fetchLeaves} from '../../redux/leave/LeaveActions';
+import {
+  clearLeavesState,
+  fetchPaginatedLeaves,
+} from '../../redux/leave/LeaveActions';
 
 const tabs = [
   {
@@ -64,7 +67,7 @@ export default function LeaveScreen({navigation}) {
 
   const getLeaves = () => {
     dispatch(
-      fetchLeaves({
+      fetchPaginatedLeaves({
         limit: 25,
       }),
     );
@@ -179,6 +182,7 @@ export default function LeaveScreen({navigation}) {
         isModalVisible={isViewLeaveRequestVisible}
         toggleModal={toggleViewLeaveRequestModal}
         leaveDetails={details}
+        apiCall={getLeaves}
       />
     </CommonSafeAreaViewComponent>
   );

@@ -1,4 +1,4 @@
-import {View, Text, Modal} from 'react-native';
+import {View, Text, Modal, Alert} from 'react-native';
 import React from 'react';
 import CommonSafeAreaScrollViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import Header from '../../../components/ReusableComponents/Header/Header';
@@ -6,41 +6,75 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../../components/common/Constants';
 import {Colors} from '../../../components/common/Colors';
 import CommonStyles from '../../../components/common/CommonStyles';
-import {hp, wp} from '../../../components/common/Dimensions';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
+import {patchLeaveStatus} from '../../../redux/leave/LeaveActions';
+import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 
 export default function ViewLeaveRequestModal({
   isModalVisible,
   toggleModal,
   leaveDetails = {},
+  apiCall,
 }) {
+  const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
+  const isLoading = useSelector(state => state.leaves.isLoading);
 
-  const {type, fromDate, toDate, reason} = leaveDetails || {};
+  const {type, reason, period, name, fromDate, toDate} = leaveDetails || {};
 
-  const calculateLeaveDuration = (startDate, endDate) => {
-    if (!startDate || !endDate) return 'N/A';
+  const askForConfirmation = status => {
+    const message =
+      status === 'approved'
+        ? 'Are you sure you want to approve this leave request?'
+        : 'Are you sure you want to reject this leave request?';
 
-    const [startDay, startMonth, startYear] = startDate.split('-').map(Number);
-    const [endDay, endMonth, endYear] = endDate.split('-').map(Number);
-
-    const start = new Date(startYear, startMonth - 1, startDay);
-    const end = new Date(endYear, endMonth - 1, endDay);
-
-    if (isNaN(start.getTime()) || isNaN(end.getTime())) return 'N/A';
-
-    const timeDiff = end - start;
-
-    if (timeDiff < 0) return 'N/A';
-
-    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
-    return `${dayDiff} day(s)`;
+    Alert.alert(
+      'Confirm Action',
+      message,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Action cancelled'),
+          style: 'cancel',
+        },
+        {
+          text: 'Confirm',
+          onPress: async () => submitLeaveRequest(status),
+        },
+      ],
+      {cancelable: false},
+    );
   };
 
-  const leaveDuration = calculateLeaveDuration(fromDate, toDate);
+  const submitLeaveRequest = async status => {
+    const leaveData = {
+      reason,
+      type,
+      fromDate,
+      toDate,
+      period,
+      status,
+    };
+
+    const leaveId = name ? name.split('/').pop() : null;
+
+    const response = await dispatch(patchLeaveStatus(leaveId, leaveData));
+
+    if (response.success === true) {
+      if (status === 'approved') {
+        Alert.alert('Leave request approved successfully');
+      } else {
+        Alert.alert('Leave request rejected successfully');
+      }
+      toggleModal();
+      apiCall();
+    } else {
+      console.error('Failed to post leave request:', response.error);
+    }
+  };
 
   return (
     <Modal
@@ -48,6 +82,7 @@ export default function ViewLeaveRequestModal({
       animationType="fade"
       visible={isModalVisible}
       onRequestClose={toggleModal}>
+      {isLoading && <LogoLoaderComponent />}
       <CommonSafeAreaScrollViewComponent>
         <Header
           title={I18n.t('leaveDetails')}
@@ -64,7 +99,7 @@ export default function ViewLeaveRequestModal({
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
             title={I18n.t('leaveDuration')}
-            value={leaveDuration}
+            value={period}
             placeholder={I18n.t('enterLeaveDuration')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
@@ -90,12 +125,20 @@ export default function ViewLeaveRequestModal({
             disabled={true}
             multiline={true}
           />
-
-          <CommonButton
-            title={I18n.t('cancelRequest')}
-            onPress={toggleModal}
-            backgroundColor={Colors.redColor}
-          />
+          <View style={CommonStyles.rowBetween}>
+            <CommonButton
+              title={I18n.t('approve')}
+              onPress={() => askForConfirmation('approved')}
+              backgroundColor={Colors.blueColor}
+              half={true}
+            />
+            <CommonButton
+              title={I18n.t('cancel')}
+              onPress={() => askForConfirmation('rejected')}
+              backgroundColor={Colors.redColor}
+              half={true}
+            />
+          </View>
         </View>
       </CommonSafeAreaScrollViewComponent>
     </Modal>

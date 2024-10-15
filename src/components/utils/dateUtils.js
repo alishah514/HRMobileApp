@@ -21,7 +21,6 @@ export const formatDate = timestamp => {
  * @returns {string} - ISO timestamp string
  */
 export const convertToTimestamp = dateStr => {
-  console.log('dateStr:', dateStr);
   if (!dateStr) return null;
 
   // Normalize the date string to avoid leading/trailing spaces

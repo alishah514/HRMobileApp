@@ -1,7 +1,7 @@
 import axios from 'axios';
-import ExtractValues from '../../components/utils/ExtractValues';
+import ExtractValues from '../../../components/utils/ExtractValues';
 
-const FirestoreApiComponent = async (
+const LeaveApiComponent = async (
   url,
   method,
   body = null,
@@ -23,6 +23,8 @@ const FirestoreApiComponent = async (
       return handleGetResponse(response);
     } else if (method.toLowerCase() === 'post') {
       return handlePostResponse(response, postLeave);
+    } else if (method.toLowerCase() === 'patch') {
+      return handlePatchResponse(response);
     }
   } catch (error) {
     if (error.response) {
@@ -39,26 +41,65 @@ const FirestoreApiComponent = async (
 };
 
 const handleGetResponse = response => {
+  if (!Array.isArray(response.data.documents)) {
+    console.error(
+      'Expected response.data.documents to be an array',
+      response.data,
+    );
+    return [];
+  }
+
   return response.data.documents
     .map(doc => {
       const fields = doc.fields || {};
-      return ExtractValues(fields);
+      const name = doc.name || null;
+      const createTime = doc.createTime || null;
+      const updateTime = doc.updateTime || null;
+
+      const values = ExtractValues(fields);
+
+      return {
+        name,
+        createTime,
+        updateTime,
+        ...values,
+      };
     })
     .filter(user => user !== null);
 };
 
 const handlePostResponse = (response, postLeave) => {
   if (postLeave) {
-    console.log('response.data', response);
     return response.data;
   }
+
+  if (!Array.isArray(response.data)) {
+    console.error('Expected response.data to be an array', response.data);
+    return [];
+  }
+
   return response.data
     .map(item => {
       const document = item.document || {};
       const fields = document.fields || {};
-      return ExtractValues(fields);
+      const documentName = document.name || null;
+      const createTime = document.createTime || null;
+      const updateTime = document.updateTime || null;
+
+      const values = ExtractValues(fields);
+
+      return {
+        name: documentName,
+        createTime,
+        updateTime,
+        ...values,
+      };
     })
     .filter(user => user !== null);
 };
 
-export default FirestoreApiComponent;
+const handlePatchResponse = response => {
+  return response.data;
+};
+
+export default LeaveApiComponent;
