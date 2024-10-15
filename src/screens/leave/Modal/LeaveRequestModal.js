@@ -1,4 +1,4 @@
-import {View, Text, Modal, TouchableOpacity} from 'react-native';
+import {View, Modal, Alert} from 'react-native';
 import React, {useState} from 'react';
 import CommonSafeAreaScrollViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import Header from '../../../components/ReusableComponents/Header/Header';
@@ -8,8 +8,6 @@ import {Colors} from '../../../components/common/Colors';
 import CommonStyles from '../../../components/common/CommonStyles';
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
 import CustomDatePickerComponent from '../../../components/ReusableComponents/CustomDatePickerComponent';
-import CustomPickerComponent from '../../../components/ReusableComponents/CustomPickerComponent';
-import {hp, wp} from '../../../components/common/Dimensions';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
@@ -17,6 +15,7 @@ import CustomSectionedMultiSelectComponent from '../../../components/ReusableCom
 import {convertToTimestamp} from '../../../components/utils/dateUtils';
 import {postLeaveRequest} from '../../../redux/leave/LeaveActions';
 import {CalculatePeriod} from '../../../components/utils/CalculatePeriod';
+import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 
 export default function LeaveRequestModal({
   isModalVisible,
@@ -26,12 +25,47 @@ export default function LeaveRequestModal({
 }) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
+  const isLoading = useSelector(state => state.leaves.isLoading);
 
   const [leaveType, setLeaveType] = useState(null);
   const [leaveFrom, setLeaveFrom] = useState(null);
   const [leaveTo, setLeaveTo] = useState(null);
   const [leaveReason, setLeaveReason] = useState('');
   const leaveTypeOptions = ['Casual Leave', 'Plan Leave', 'Sick Leave'];
+
+  const askForConfirmation = leaveData => {
+    const message = 'Are you sure you want to add this leave request?';
+
+    Alert.alert(
+      'Confirm Action',
+      message,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Action cancelled'),
+          style: 'cancel',
+        },
+        {
+          text: 'Confirm',
+          onPress: () => submitLeaveRequest(leaveData),
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
+  const submitLeaveRequest = async leaveData => {
+    const response = await dispatch(postLeaveRequest(leaveData));
+
+    if (response.success) {
+      Alert.alert('Leave added successfully! ');
+      clearStates();
+      toggleModal();
+      apiCall();
+    } else {
+      console.error('Failed to post leave request:', response.error);
+    }
+  };
 
   const viewData = async () => {
     const fromDate = new Date(leaveFrom);
@@ -49,22 +83,14 @@ export default function LeaveRequestModal({
       status: 'pending',
     };
 
-    await submitLeaveRequest(leaveData);
+    await askForConfirmation(leaveData);
   };
 
-  const submitLeaveRequest = async leaveData => {
-    try {
-      const response = await dispatch(postLeaveRequest(leaveData));
-
-      if (response.success === true) {
-        toggleModal();
-        apiCall();
-      } else {
-        console.error('Failed to post leave request:', response.error);
-      }
-    } catch (error) {
-      console.error('Error posting leave request:', error);
-    }
+  const clearStates = () => {
+    setLeaveType(null);
+    setLeaveFrom(null);
+    setLeaveTo(null);
+    setLeaveReason('');
   };
 
   return (
@@ -73,6 +99,7 @@ export default function LeaveRequestModal({
       animationType="fade"
       visible={isModalVisible}
       onRequestClose={toggleModal}>
+      {isLoading && <LogoLoaderComponent />}
       <CommonSafeAreaScrollViewComponent>
         <Header
           title={I18n.t('leaveRequest')}

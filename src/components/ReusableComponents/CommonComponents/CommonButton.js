@@ -13,6 +13,7 @@ export default function CommonButton({
   disabled = false,
   onPress,
   outlined = false, // New prop for outlined button
+  half = false,
 }) {
   return (
     <TouchableOpacity
@@ -22,7 +23,7 @@ export default function CommonButton({
           ? [style, disabled && {opacity: 0.5}]
           : [
               Platform.OS === 'ios' && CommonStyles.shadow,
-              styles.button,
+              half ? styles.halfButton : styles.button,
               {
                 backgroundColor: disabled
                   ? Colors.greyColor
