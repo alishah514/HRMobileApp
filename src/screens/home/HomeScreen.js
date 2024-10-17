@@ -18,14 +18,6 @@ export default function HomeScreen({navigation}) {
   const handleLogout = LogoutConfirmationComponent();
   const currentLanguage = useSelector(state => state.language.language);
 
-  // Access values from Redux store
-  const reduxTimer = useSelector(state => state.timer);
-  const reduxPunchInTime = useSelector(state => state.punchInTime);
-  const reduxPunchOutTime = useSelector(state => state.punchOutTime);
-
-  // Local state
-  const [punchInTime, setPunchInTime] = useState(reduxPunchInTime || null);
-  const [punchOutTime, setPunchOutTime] = useState(reduxPunchOutTime || null);
   const [location, setLocation] = useState(null);
 
   const handleDrawerOpen = () => {
@@ -152,14 +144,7 @@ export default function HomeScreen({navigation}) {
         bottomChild={
           <>
             <ScrollView contentContainerStyle={[styles.infoStarting]}>
-              <PunchInOut
-                punchInTime={punchInTime}
-                punchOutTime={punchOutTime}
-                setPunchInTime={setPunchInTime}
-                setPunchOutTime={setPunchOutTime}
-                reduxTimer={reduxTimer}
-                setLocation={setLocation}
-              />
+              <PunchInOut setLocation={setLocation} />
               <View style={[CommonStyles.rowBetween, styles.width80Center]}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Task')}

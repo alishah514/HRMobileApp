@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Platform, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Platform} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -7,46 +7,50 @@ import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CommonStyles from '../../../components/common/CommonStyles';
 import styles from '../styles';
-
 import {Colors} from '../../../components/common/Colors';
 import Constants from '../../../components/common/Constants';
 import {check, request, PERMISSIONS} from 'react-native-permissions';
 import I18n from '../../../i18n/i18n';
 import {
+  saveLocation,
   savePunchInTime,
   savePunchOutTime,
   saveTimer,
+  savePunchInLocation,
+  savePunchOutLocation,
 } from '../../../redux/attendance/AttendaceActions';
 
-export default function PunchInOut({
-  punchInTime,
-  punchOutTime,
-  setPunchInTime,
-  setPunchOutTime,
-  reduxTimer,
-  location,
-  setLocation,
-}) {
+export default function PunchInOut() {
   const dispatch = useDispatch();
-  const currentLanguage = useSelector(state => state.language.language);
-  const [timer, setTimer] = useState('00:00:00');
+
+  const punchInTime = useSelector(state => state.attendance.punchInTime);
+  const punchOutTime = useSelector(state => state.attendance.punchOutTime);
+  const reduxTimer = useSelector(state => state.attendance.timer);
+  const currentLocation = useSelector(state => state.attendance.location);
+  const punchInLocation = useSelector(
+    state => state.attendance.punchInLocation,
+  );
+  const punchOutLocation = useSelector(
+    state => state.attendance.punchOutLocation,
+  );
+
+  const [currentTime, setCurrentTime] = useState(moment().format('HH:mm:ss'));
 
   useEffect(() => {
-    if (reduxTimer) setTimer(reduxTimer);
-    if (punchInTime) setPunchInTime(punchInTime);
-    if (punchOutTime) setPunchOutTime(punchOutTime);
-  }, [reduxTimer, punchInTime, punchOutTime, setPunchInTime, setPunchOutTime]);
+    const intervalId = setInterval(() => {
+      setCurrentTime(moment().format('HH:mm:ss'));
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     if (punchInTime && punchOutTime) {
       const punchInMoment = moment(punchInTime, 'HH:mm:ss');
       const punchOutMoment = moment(punchOutTime, 'HH:mm:ss');
       const diffInSeconds = punchOutMoment.diff(punchInMoment, 'seconds');
-
       const formattedDiff = moment.utc(diffInSeconds * 1000).format('HH:mm:ss');
-      setTimer(formattedDiff);
+
       dispatch(saveTimer(formattedDiff));
-      console.log('Time Difference:', formattedDiff);
     }
   }, [punchInTime, punchOutTime, dispatch]);
 
@@ -57,42 +61,12 @@ export default function PunchInOut({
     });
     try {
       const permissionStatus = await check(LOCATION_PERMISSION);
-
-      if (permissionStatus === 'granted') {
-        return true;
-      }
+      if (permissionStatus === 'granted') return true;
       const requestResult = await request(LOCATION_PERMISSION);
-
-      if (requestResult === 'granted') {
-        return true;
-      }
+      return requestResult === 'granted';
     } catch (err) {
       console.warn('Permission request error:', err);
-    }
-
-    return false;
-  };
-
-  const getLocation = async () => {
-    try {
-      Geolocation.getCurrentPosition(
-        position => {
-          const coords = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          };
-          setLocation(coords);
-          console.log('Geolocation:', coords);
-        },
-        error => {
-          console.log('Error getting location:', error);
-          // Fallback to static coordinates
-          setLocation({latitude: 32.503006, longitude: 74.5009054});
-        },
-        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-      );
-    } catch (err) {
-      console.warn('Error:', err);
+      return false;
     }
   };
 
@@ -110,14 +84,57 @@ export default function PunchInOut({
     }
   };
 
+  const getLocation = async value => {
+    return new Promise(resolve => {
+      try {
+        Geolocation.getCurrentPosition(
+          position => {
+            const coords = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            };
+
+            if (value === 'punch-in') {
+              dispatch(savePunchInLocation(coords));
+            } else {
+              dispatch(savePunchOutLocation(coords));
+            }
+            dispatch(saveLocation(coords));
+            console.log('Geolocation:', coords);
+            resolve(coords);
+          },
+          error => {
+            console.log('Error getting location:', error);
+            const fallbackCoords = {latitude: 32.503006, longitude: 74.5009054};
+
+            if (value === 'punch-in') {
+              dispatch(savePunchInLocation(fallbackCoords));
+            } else {
+              dispatch(savePunchOutLocation(fallbackCoords));
+            }
+            dispatch(saveLocation(fallbackCoords));
+            resolve(fallbackCoords);
+          },
+          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+        );
+      } catch (err) {
+        console.warn('Error fetching location:', err);
+        resolve(null);
+      }
+    });
+  };
+
   const handlePunchIn = async () => {
     const formattedPunchInTime = moment().format('HH:mm:ss');
     try {
       if (await requestLocationPermission()) {
-        await getLocation();
-        await takeSelfie();
-        setPunchInTime(formattedPunchInTime);
-        dispatch(savePunchInTime(formattedPunchInTime));
+        const location = await getLocation('punch-in');
+        if (location) {
+          await takeSelfie();
+          dispatch(savePunchInTime(formattedPunchInTime));
+        } else {
+          console.log('Failed to get valid location during Punch In');
+        }
       }
     } catch (error) {
       console.log('Error during Punch In:', error);
@@ -128,10 +145,13 @@ export default function PunchInOut({
     const formattedPunchOutTime = moment().format('HH:mm:ss');
     try {
       if (await requestLocationPermission()) {
-        await getLocation();
-        await takeSelfie();
-        setPunchOutTime(formattedPunchOutTime);
-        dispatch(savePunchOutTime(formattedPunchOutTime));
+        const location = await getLocation('punch-out');
+        if (location) {
+          await takeSelfie();
+          dispatch(savePunchOutTime(formattedPunchOutTime));
+        } else {
+          console.log('Failed to get valid location during Punch Out');
+        }
       }
     } catch (error) {
       console.log('Error during Punch Out:', error);
@@ -142,10 +162,13 @@ export default function PunchInOut({
     <View style={[CommonStyles.rowBetween]}>
       <TouchableOpacity
         onPress={handlePunchIn}
-        style={[styles.boxView, CommonStyles.shadow]}>
+        style={[styles.boxView, CommonStyles.shadow]}
+        disabled={!!punchInTime}>
         <View style={[styles.circleView, CommonStyles.yellowBorder]}>
           <Ionicons
-            name="finger-print-outline"
+            name={
+              punchInTime ? 'checkmark-circle-outline' : 'finger-print-outline'
+            }
             size={Constants.SIZE.xLargeIcon}
             color={Colors.yellowColor}
           />
@@ -157,19 +180,27 @@ export default function PunchInOut({
               CommonStyles.textBlack,
               CommonStyles.marginVertical2,
             ]}>
-            {punchInTime || '00:00:00'}
+            {punchInTime || currentTime}
           </Text>
-          <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
-            {I18n.t('punchIn')}
+          <Text
+            style={[
+              CommonStyles.font4P,
+              punchInTime ? CommonStyles.textYellow : CommonStyles.textBlack,
+            ]}>
+            {punchInTime ? I18n.t('punchedIn') : I18n.t('punchIn')}
           </Text>
         </View>
       </TouchableOpacity>
+
       <TouchableOpacity
         onPress={handlePunchOut}
-        style={[styles.boxView, CommonStyles.marginTop10, CommonStyles.shadow]}>
+        style={[styles.boxView, CommonStyles.marginTop10, CommonStyles.shadow]}
+        disabled={!!punchOutTime}>
         <View style={[styles.circleView, CommonStyles.blueBorder]}>
           <Ionicons
-            name="finger-print-outline"
+            name={
+              punchOutTime ? 'checkmark-circle-outline' : 'finger-print-outline'
+            }
             size={Constants.SIZE.xLargeIcon}
             color={Colors.blueColor}
           />
@@ -181,10 +212,14 @@ export default function PunchInOut({
               CommonStyles.textBlack,
               CommonStyles.marginVertical2,
             ]}>
-            {punchOutTime || '00:00:00'}
+            {punchOutTime || currentTime}
           </Text>
-          <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
-            {I18n.t('punchOut')}
+          <Text
+            style={[
+              CommonStyles.font4P,
+              punchOutTime ? CommonStyles.textBlue : CommonStyles.textBlack,
+            ]}>
+            {punchOutTime ? I18n.t('punchedOut') : I18n.t('punchOut')}
           </Text>
         </View>
       </TouchableOpacity>
