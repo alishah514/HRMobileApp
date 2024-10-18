@@ -100,7 +100,7 @@ export default function PunchInOut() {
               dispatch(savePunchOutLocation(coords));
             }
             dispatch(saveLocation(coords));
-            console.log('Geolocation:', coords);
+
             resolve(coords);
           },
           error => {

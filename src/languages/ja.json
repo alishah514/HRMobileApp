@@ -50,6 +50,7 @@
   "logout": "ログアウト",
   "logoutConfirmation": "本当にログアウトしますか？",
   "approve": "承認",
+  "reject": "拒否",
   "cancel": "キャンセル",
   "previous": "前へ",
   "next": "次へ",
