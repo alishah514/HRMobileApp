@@ -125,20 +125,22 @@ export default function ViewLeaveRequestModal({
             disabled={true}
             multiline={true}
           />
-          <View style={CommonStyles.rowBetween}>
-            <CommonButton
-              title={I18n.t('approve')}
-              onPress={() => askForConfirmation('approved')}
-              backgroundColor={Colors.blueColor}
-              half={true}
-            />
-            <CommonButton
-              title={I18n.t('cancel')}
-              onPress={() => askForConfirmation('rejected')}
-              backgroundColor={Colors.redColor}
-              half={true}
-            />
-          </View>
+          {leaveDetails.status === 'pending' && (
+            <View style={CommonStyles.rowBetween}>
+              <CommonButton
+                title={I18n.t('approve')}
+                onPress={() => askForConfirmation('approved')}
+                backgroundColor={Colors.blueColor}
+                half={true}
+              />
+              <CommonButton
+                title={I18n.t('reject')}
+                onPress={() => askForConfirmation('rejected')}
+                backgroundColor={Colors.redColor}
+                half={true}
+              />
+            </View>
+          )}
         </View>
       </CommonSafeAreaScrollViewComponent>
     </Modal>

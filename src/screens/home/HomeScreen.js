@@ -18,8 +18,6 @@ export default function HomeScreen({navigation}) {
   const handleLogout = LogoutConfirmationComponent();
   const currentLanguage = useSelector(state => state.language.language);
 
-  const [location, setLocation] = useState(null);
-
   const handleDrawerOpen = () => {
     navigation.openDrawer();
   };
@@ -144,7 +142,7 @@ export default function HomeScreen({navigation}) {
         bottomChild={
           <>
             <ScrollView contentContainerStyle={[styles.infoStarting]}>
-              <PunchInOut setLocation={setLocation} />
+              <PunchInOut />
               <View style={[CommonStyles.rowBetween, styles.width80Center]}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Task')}
