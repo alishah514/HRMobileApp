@@ -1,9 +1,9 @@
-import TaskService from '../../services/api/task/TaskService';
+import TaskService from '../../services/api/tasks/TaskService';
 import {
-  FETCH_TASK_START,
-  FETCH_TASK_SUCCESS,
-  FETCH_TASK_FAILURE,
-  CLEAR_TASK_STATE,
+  FETCH_TASKS_START,
+  FETCH_TASKS_SUCCESS,
+  FETCH_TASKS_FAILURE,
+  CLEAR_TASKS_STATE,
   POST_TASK_START,
   POST_TASK_SUCCESS,
   POST_TASK_FAILURE,
@@ -12,22 +12,22 @@ import {
   PATCH_TASK_STATUS_FAILURE,
 } from '../actions/actionTypes';
 
-export const fetchTaskStart = () => ({
-  type: FETCH_TASK_START,
+export const fetchTasksStart = () => ({
+  type: FETCH_TASKS_START,
 });
 
-export const fetchTaskSuccess = tasks => ({
-  type: FETCH_TASK_SUCCESS,
+export const fetchTasksSuccess = tasks => ({
+  type: FETCH_TASKS_SUCCESS,
   payload: tasks,
 });
 
-export const fetchTaskFailure = error => ({
-  type: FETCH_TASK_FAILURE,
+export const fetchTasksFailure = error => ({
+  type: FETCH_TASKS_FAILURE,
   payload: error,
 });
 
-export const clearTaskState = () => ({
-  type: CLEAR_TASK_STATE,
+export const clearTasksState = () => ({
+  type: CLEAR_TASKS_STATE,
 });
 
 export const postTaskStart = () => ({
@@ -58,23 +58,23 @@ export const patchTaskStatusFailure = error => ({
   payload: error,
 });
 
-export const fetchTask = () => async dispatch => {
-  dispatch(fetchTaskStart());
+export const fetchTasks = () => async dispatch => {
+  dispatch(fetchTasksStart());
   try {
-    const response = await TaskService.fetchTask();
-    dispatch(fetchTaskSuccess(response));
+    const response = await TaskService.fetchTasks();
+    dispatch(fetchTasksSuccess(response));
   } catch (error) {
-    dispatch(fetchTaskFailure(error));
+    dispatch(fetchTasksFailure(error));
   }
 };
 
-export const fetchPaginatedTask = options => async dispatch => {
-  dispatch(fetchTaskStart());
+export const fetchPaginatedTasks = options => async dispatch => {
+  dispatch(fetchTasksStart());
   try {
-    const response = await TaskService.fetchPaginatedTask(options);
-    dispatch(fetchTaskSuccess(response));
+    const response = await TaskService.fetchPaginatedTasks(options);
+    dispatch(fetchTasksSuccess(response));
   } catch (error) {
-    dispatch(fetchTaskFailure(error));
+    dispatch(fetchTasksFailure(error));
   }
 };
 

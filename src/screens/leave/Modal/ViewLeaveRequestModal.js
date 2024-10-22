@@ -23,7 +23,8 @@ export default function ViewLeaveRequestModal({
   const currentLanguage = useSelector(state => state.language.language);
   const isLoading = useSelector(state => state.leaves.isLoading);
 
-  const {type, reason, period, name, fromDate, toDate} = leaveDetails || {};
+  const {type, reason, period, name, fromDate, toDate, status} =
+    leaveDetails || {};
 
   const askForConfirmation = status => {
     const message =
@@ -125,7 +126,7 @@ export default function ViewLeaveRequestModal({
             disabled={true}
             multiline={true}
           />
-          {leaveDetails.status === 'pending' && (
+          {status === 'pending' && (
             <View style={CommonStyles.rowBetween}>
               <CommonButton
                 title={I18n.t('approve')}
