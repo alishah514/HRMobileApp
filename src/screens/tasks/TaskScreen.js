@@ -1,5 +1,5 @@
 import {View, Text, FlatList} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from '../../components/ReusableComponents/Header/Header';
 import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
@@ -9,12 +9,17 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
 import CommonStyles from '../../components/common/CommonStyles';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
-import {data} from './data';
+
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import AddTaskModal from './status/modals/AddTaskModal';
 import I18n from '../../i18n/i18n';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import TasksComponent from './status/TaskComponent';
+import {
+  clearTasksState,
+  fetchPaginatedTasks,
+} from '../../redux/tasks/TaskActions';
+import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 
 const tabs = [
   {
@@ -27,20 +32,41 @@ const tabs = [
     id: 1,
     icon: 'tasks',
     iconSet: FontAwesome5,
-    color: Colors.greenColor,
+    color: Colors.redColor,
   },
   {
     id: 2,
     icon: 'tasks',
     iconSet: FontAwesome5,
-    color: Colors.redColor,
+    color: Colors.greenColor,
   },
 ];
 
 export default function TaskScreen({navigation}) {
+  const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
+  const tasks = useSelector(state => state.tasks.data);
+  const isLoading = useSelector(state => state.tasks.isLoading);
   const [activeTab, setActiveTab] = useState(0);
   const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
+
+  // useEffect(() => {
+  //   getTasks();
+  //   return () => {
+  //     dispatch(clearTasksState());
+  //   };
+  // }, [dispatch]);
+  useEffect(() => {
+    getTasks();
+  }, []);
+
+  const getTasks = () => {
+    dispatch(
+      fetchPaginatedTasks({
+        limit: 25,
+      }),
+    );
+  };
 
   const handleTabPress = index => {
     setActiveTab(index);
@@ -75,6 +101,7 @@ export default function TaskScreen({navigation}) {
           />
         }
       />
+      {isLoading && <LogoLoaderComponent />}
       <CustomerBackgroundComponent
         topVerySmall
         topChild={
@@ -106,11 +133,23 @@ export default function TaskScreen({navigation}) {
               renderItem={() => (
                 <View>
                   {activeTab === 0 ? (
-                    <TasksComponent taskType="all" data={data} />
+                    <TasksComponent
+                      taskType="all"
+                      data={tasks}
+                      apiCall={getTasks}
+                    />
                   ) : activeTab === 1 ? (
-                    <TasksComponent taskType="completed" data={data} />
+                    <TasksComponent
+                      taskType="Pending"
+                      data={tasks.filter(tasks => tasks.status === 'Pending')}
+                      apiCall={getTasks}
+                    />
                   ) : activeTab === 2 ? (
-                    <TasksComponent taskType="pending" data={data} />
+                    <TasksComponent
+                      taskType="Completed"
+                      data={tasks.filter(tasks => tasks.status === 'Completed')}
+                      apiCall={getTasks}
+                    />
                   ) : null}
                 </View>
               )}
@@ -122,6 +161,7 @@ export default function TaskScreen({navigation}) {
       <AddTaskModal
         isModalVisible={isAddTaskModalVisible}
         toggleModal={toggleAddTaskModal}
+        apiCall={getTasks}
       />
     </CommonSafeAreaViewComponent>
   );

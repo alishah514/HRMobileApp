@@ -1,6 +1,5 @@
-import {View, Text, Modal} from 'react-native';
+import {View, Modal, Alert} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import CommonSafeAreaViewComponent from '../../../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import Header from '../../../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../../../components/common/Colors';
@@ -8,20 +7,80 @@ import Constants from '../../../../components/common/Constants';
 import CommonStyles from '../../../../components/common/CommonStyles';
 import InputFieldComponent from '../../../../components/ReusableComponents/InputFieldComponent';
 import CommonSafeAreaScrollViewComponent from '../../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../../i18n/i18n';
+import {formatDate} from '../../../../components/utils/dateUtils';
+import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
+import {patchTaskStatus} from '../../../../redux/tasks/TaskActions';
 
 export default function TaskDetailModal({
   isModalVisible,
   toggleModal,
   taskDetails = {},
+  apiCall,
 }) {
+  const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
+  const isLoading = useSelector(state => state.tasks.isLoading);
   const [taskDescription, setTaskDescription] = useState('');
 
   useEffect(() => {
     setTaskDescription(taskDetails?.description || '');
   }, [taskDetails?.description]);
+
+  const askForConfirmation = () => {
+    const taskData = {
+      title: taskDetails?.title,
+      category: taskDetails?.category,
+      completedTasks: taskDetails?.completedTasks,
+      pendingTasks: taskDetails?.pendingTasks,
+      department: taskDetails?.department,
+      priority: taskDetails?.priority,
+      department: taskDetails?.department,
+      estimatedJobs: taskDetails?.estimatedJobs,
+      dueDate: taskDetails?.dueDate,
+      taskCode: taskDetails?.taskCode,
+      storypoints: taskDetails?.storypoints,
+      assignedTo: taskDetails?.assignedTo,
+      status: 'Completed',
+      description: taskDetails?.description,
+      assignedDate: taskDetails?.assignedDate,
+    };
+    const message = 'Are you sure you have completed this task?';
+
+    Alert.alert(
+      'Task Completed?',
+      message,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Action cancelled'),
+          style: 'cancel',
+        },
+        {
+          text: 'Confirm',
+          onPress: () => changeStatusRequest(taskData),
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
+  const changeStatusRequest = async taskData => {
+    const taskId = taskDetails?.name
+      ? taskDetails?.name.split('/').pop()
+      : null;
+
+    const response = await dispatch(patchTaskStatus(taskId, taskData));
+
+    if (response.success === true) {
+      Alert.alert('Task Status Updated Successfully!');
+      toggleModal();
+      apiCall();
+    } else {
+      console.error('Failed to post leave request:', response.error);
+    }
+  };
 
   return (
     <Modal
@@ -40,13 +99,23 @@ export default function TaskDetailModal({
               color={Colors.whiteColor}
             />
           }
+          onRightIconPressed={askForConfirmation}
+          rightIcon={
+            taskDetails?.status !== 'Completed' && (
+              <Ionicons
+                name="checkmark"
+                size={Constants?.SIZE.largeIcon}
+                color={Colors.whiteColor}
+              />
+            )
+          }
         />
-
+        {isLoading && <LogoLoaderComponent />}
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
             title={I18n.t('title')}
-            value={taskDetails?.taskTitle}
-            placeholder={I18n.t('enterTaskDetails')}
+            value={taskDetails?.title}
+            placeholder={I18n.t('enterTaskTitle')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
@@ -63,7 +132,11 @@ export default function TaskDetailModal({
           />
           <InputFieldComponent
             title={I18n.t('assignedTo')}
-            value={taskDetails?.assignee}
+            value={
+              Array.isArray(taskDetails?.assignedTo)
+                ? taskDetails.assignedTo.join(', ')
+                : taskDetails?.assignedTo
+            }
             placeholder={I18n.t('enterAssignedTo')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
@@ -73,7 +146,7 @@ export default function TaskDetailModal({
           <View style={CommonStyles.rowBetween}>
             <InputFieldComponent
               title={I18n.t('department')}
-              value={taskDetails?.priority}
+              value={taskDetails?.department}
               placeholder={I18n.t('enterDepartment')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
@@ -83,7 +156,7 @@ export default function TaskDetailModal({
             />
             <InputFieldComponent
               title={I18n.t('taskCode')}
-              value={taskDetails?.priority}
+              value={taskDetails?.taskCode}
               placeholder={I18n.t('enterTaskCode')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
@@ -95,7 +168,7 @@ export default function TaskDetailModal({
           <View style={CommonStyles.rowBetween}>
             <InputFieldComponent
               title={I18n.t('assignedDate')}
-              value={taskDetails?.dateAssigned}
+              value={formatDate(taskDetails?.assignedDate)}
               placeholder={I18n.t('enterAssignedDate')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
@@ -105,7 +178,7 @@ export default function TaskDetailModal({
             />
             <InputFieldComponent
               title={I18n.t('dueDate')}
-              value={taskDetails?.dueDate}
+              value={formatDate(taskDetails?.dueDate)}
               placeholder={I18n.t('enterDueDate')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
@@ -117,9 +190,7 @@ export default function TaskDetailModal({
           <View style={CommonStyles.rowBetween}>
             <InputFieldComponent
               title={I18n.t('storyPoints')}
-              value={
-                taskDetails?.storyPoint ? taskDetails.storyPoint.toString() : ''
-              }
+              value={taskDetails?.storypoints}
               placeholder={I18n.t('enterStoryPoints')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
@@ -129,9 +200,7 @@ export default function TaskDetailModal({
             />
             <InputFieldComponent
               title={I18n.t('estimatedJobs')}
-              value={
-                taskDetails?.storyPoint ? taskDetails.storyPoint.toString() : ''
-              }
+              value={taskDetails?.estimatedJobs}
               placeholder={I18n.t('enterEstimatedJobs')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
@@ -153,7 +222,7 @@ export default function TaskDetailModal({
             />
             <InputFieldComponent
               title={I18n.t('taskCategory')}
-              value={taskDetails?.priority}
+              value={taskDetails?.category}
               placeholder={I18n.t('enterTaskCategory')}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}

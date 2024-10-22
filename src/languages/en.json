@@ -101,7 +101,9 @@
   "taskList": "Task List",
   "allTasks": "All Tasks",
   "pendingTasks": "Pending Tasks",
+  "pendingTask": "Pending Task",
   "completedTasks": "Completed Tasks",
+  "completedTask": "Completed Task",
   "report": "Report",
   "summary": "Summary",
   "title": "Task Title",
@@ -150,5 +152,6 @@
   "leaveFrom": "Leave From",
   "leaveTo": "Leave To",
   "reason": "Reason",
-  "sendLeaveRequest": "SEND LEAVE REQUEST"
+  "sendLeaveRequest": "SEND LEAVE REQUEST",
+  "markDone": "Mark Done"
 }

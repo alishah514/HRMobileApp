@@ -101,7 +101,9 @@
   "taskList": "タスクリスト",
   "allTasks": "すべてのタスク",
   "pendingTasks": "保留中のタスク",
+  "pendingTask": "保留中のタスク",
   "completedTasks": "完了したタスク",
+  "completedTask": "完了したタスク",
   "report": "報告書",
   "summary": "概要",
   "title": "タスクタイトル",
@@ -150,5 +152,6 @@
   "leaveFrom": "休暇開始日",
   "leaveTo": "休暇終了日",
   "reason": "理由",
-  "sendLeaveRequest": "休暇リクエストを送信"
+  "sendLeaveRequest": "休暇リクエストを送信",
+  "markDone": "完了にする"
 }

@@ -1,4 +1,4 @@
-import {View, Modal} from 'react-native';
+import {View, Modal, Alert} from 'react-native';
 import React, {useState} from 'react';
 import Header from '../../../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,10 +9,16 @@ import InputFieldComponent from '../../../../components/ReusableComponents/Input
 import CommonSafeAreaScrollViewComponent from '../../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import CustomSectionedMultiSelectComponent from '../../../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 import CommonButton from '../../../../components/ReusableComponents/CommonComponents/CommonButton';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../../i18n/i18n';
+import {postTaskRequest} from '../../../../redux/tasks/TaskActions';
+import {CalculatePeriod} from '../../../../components/utils/CalculatePeriod';
+import {convertToTimestamp} from '../../../../components/utils/dateUtils';
+import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
 
-export default function AddTaskModal({isModalVisible, toggleModal}) {
+export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(state => state.tasks.isLoading);
   const currentLanguage = useSelector(state => state.language.language);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskCode, setTaskCode] = useState('');
@@ -24,7 +30,7 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
   const [assignedTo, setAssignedTo] = useState(null);
   const [description, setDescription] = useState(null);
   const taskPriorityOptions = ['Low', 'Medium', 'High'];
-  const taskStatusOptions = ['Pending', 'In Progress', 'Completed'];
+  const taskStatusOptions = ['Pending', 'Completed'];
   const taskCategoryOptions = [
     'ICD',
     'Sales',
@@ -52,6 +58,80 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
     'Yard Management',
     'Custom',
   ];
+  // Function to format today's date in the format "Mon Oct 21 2024"
+  function getTodayDate() {
+    const today = new Date();
+    const options = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    };
+    return today.toLocaleDateString('en-US', options).replace(/,/g, '');
+  }
+
+  const askForConfirmation = () => {
+    const taskData = {
+      title: taskTitle,
+      category: taskCategory,
+      completedTasks: 7,
+      pendingTasks: 3,
+      department: department,
+      priority: taskPriority,
+      department: department,
+      estimatedJobs: estimatedJobs,
+      dueDate: convertToTimestamp('Fri Oct 18 2024'),
+      taskCode: taskCode,
+      storypoints: 16,
+      assignedTo: assignedTo,
+      status: taskStatus,
+      description: description,
+      assignedDate: convertToTimestamp(getTodayDate()),
+    };
+    const message = 'Are you sure you want to add this task request?';
+
+    Alert.alert(
+      'Confirm Action',
+      message,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Action cancelled'),
+          style: 'cancel',
+        },
+        {
+          text: 'Confirm',
+          onPress: () => submitTaskRequest(taskData),
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
+  const submitTaskRequest = async taskData => {
+    const response = await dispatch(postTaskRequest(taskData));
+
+    if (response.success) {
+      Alert.alert('Task added successfully! ');
+      clearStates();
+      toggleModal();
+      apiCall();
+    } else {
+      console.error('Failed to post task request:', response.error);
+    }
+  };
+
+  const clearStates = () => {
+    setTaskTitle('');
+    setTaskCode('');
+    setTaskCategory(null);
+    setTaskPriority(null);
+    setTaskStatus(null);
+    setEstimatedJobs(0);
+    setDepartment(null);
+    setAssignedTo(null);
+    setDescription(null);
+  };
 
   return (
     <Modal
@@ -71,7 +151,7 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
             />
           }
         />
-
+        {isLoading && <LogoLoaderComponent />}
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
             title={I18n.t('title')}
@@ -154,7 +234,10 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
             textColor={Colors.blackColor}
             multiline={true}
           />
-          <CommonButton title={I18n.t('addTask')} onPress={toggleModal} />
+          <CommonButton
+            title={I18n.t('addTask')}
+            onPress={askForConfirmation}
+          />
         </View>
       </CommonSafeAreaScrollViewComponent>
     </Modal>

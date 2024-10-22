@@ -1,8 +1,8 @@
 import {
-  FETCH_TASK_START,
-  FETCH_TASK_SUCCESS,
-  FETCH_TASK_FAILURE,
-  CLEAR_TASK_STATE,
+  FETCH_TASKS_START,
+  FETCH_TASKS_SUCCESS,
+  FETCH_TASKS_FAILURE,
+  CLEAR_TASKS_STATE,
   POST_TASK_START,
   POST_TASK_SUCCESS,
   POST_TASK_FAILURE,
@@ -21,24 +21,24 @@ const initialState = {
 
 const TaskReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_TASK_START:
+    case FETCH_TASKS_START:
       return {
         ...state,
         isLoading: true,
       };
-    case FETCH_TASK_SUCCESS:
+    case FETCH_TASKS_SUCCESS:
       return {
         ...state,
         isLoading: false,
         data: action.payload,
       };
-    case FETCH_TASK_FAILURE:
+    case FETCH_TASKS_FAILURE:
       return {
         ...state,
         isLoading: false,
         error: action.payload,
       };
-    case CLEAR_TASK_STATE:
+    case CLEAR_TASKS_STATE:
       return initialState;
     case POST_TASK_START:
       return {

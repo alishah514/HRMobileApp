@@ -11,10 +11,14 @@ import {wp} from '../../../components/common/Dimensions';
 import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 
-export default function TimeLine({data, status}) {
+export default function TimeLine({data, status, apiCall}) {
   const currentLanguage = useSelector(state => state.language.language);
+  const tasks = useSelector(state => state.tasks.data);
   const [isTaskDetailModal, setIsTaskDetailModal] = useState(null);
   const [details, setDetails] = useState(null);
+
+  const pendingTasks = tasks.filter(task => task.status === 'Pending');
+  const completedTasks = tasks.filter(task => task.status === 'Completed');
 
   //
   const toggleTaskDetailModal = item => {
@@ -22,14 +26,13 @@ export default function TimeLine({data, status}) {
     setDetails({...item});
   };
 
-  //
   const TaskItem = ({item}) => (
     <TouchableOpacity
       onPress={() => toggleTaskDetailModal(item)}
       style={styles.taskContainer}>
       <View style={styles.iconContainer}>
         <FontAwesome
-          name="check-circle"
+          name={item?.status === 'Pending' ? 'check-circle-o' : 'check-circle'}
           size={Constants.SIZE.xLargeIcon}
           color={Colors.greenColor}
         />
@@ -41,10 +44,12 @@ export default function TimeLine({data, status}) {
           CommonStyles.textBlack,
           CommonStyles.container,
         ]}>
-        {item.taskTitle}
+        {item?.title}
       </Text>
       <View style={styles.userIcon}>
-        <Text style={CommonStyles.textBlack}>{item.storyPoint}</Text>
+        <Text style={CommonStyles.textBlack}>
+          {item?.status === 'Pending' ? 'P' : 'C'}
+        </Text>
       </View>
       <View>
         <MaterialIcons
@@ -55,7 +60,7 @@ export default function TimeLine({data, status}) {
       </View>
     </TouchableOpacity>
   );
-  //
+
   return (
     <>
       <View style={styles.container}>
@@ -105,7 +110,10 @@ export default function TimeLine({data, status}) {
                       CommonStyles.textBlack,
                       CommonStyles.paddingLeft1,
                     ]}>
-                    {data.Result.openTasks} {I18n.t('pendingTasks')},
+                    {pendingTasks?.length}{' '}
+                    {pendingTasks?.length === 1
+                      ? I18n.t('pendingTask')
+                      : I18n.t('pendingTasks')}
                   </Text>
                 </View>
                 <View style={styles.statusItem}>
@@ -122,7 +130,10 @@ export default function TimeLine({data, status}) {
                       CommonStyles.textBlack,
                       CommonStyles.paddingLeft1,
                     ]}>
-                    {data.Result.completedTasks} {I18n.t('completedTasks')}
+                    {completedTasks?.length}{' '}
+                    {completedTasks?.length === 1
+                      ? I18n.t('completedTask')
+                      : I18n.t('completedTasks')}
                   </Text>
                 </View>
               </View>
@@ -143,7 +154,7 @@ export default function TimeLine({data, status}) {
             )}
 
             <FlatList
-              data={data.Result.Data}
+              data={data}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => <TaskItem item={item} />}
             />
@@ -154,6 +165,7 @@ export default function TimeLine({data, status}) {
         isModalVisible={isTaskDetailModal}
         toggleModal={toggleTaskDetailModal}
         taskDetails={details}
+        apiCall={apiCall}
       />
     </>
   );

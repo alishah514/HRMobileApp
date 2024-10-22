@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import Header from '../../components/ReusableComponents/Header/Header';
 import LogoutConfirmationComponent from '../../components/ReusableComponents/LogoutConfirmationComponent';
@@ -8,15 +8,43 @@ import Constants from '../../components/common/Constants';
 import styles from './styles';
 import CommonStyles from '../../components/common/CommonStyles';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Colors} from '../../components/common/Colors';
 import PunchInOut from './PunchComponent/PunchInOut';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import I18n from '../../i18n/i18n';
+import {
+  clearDashboardCountState,
+  fetchDashboardCount,
+} from '../../redux/dashboard/DashboardAction';
+import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
+import {fetchLeaves} from '../../redux/leave/LeaveActions';
+import {fetchTasks} from '../../redux/tasks/TaskActions';
 
 export default function HomeScreen({navigation}) {
+  const dispatch = useDispatch();
   const handleLogout = LogoutConfirmationComponent();
   const currentLanguage = useSelector(state => state.language.language);
+  const tasks = useSelector(state => state.tasks.data);
+  const leaves = useSelector(state => state.leaves.data);
+
+  const {isLoading, count, error} = useSelector(state => state.dashboard);
+
+  useEffect(() => {
+    getDashboardCount();
+    return () => {
+      dispatch(clearDashboardCountState());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchLeaves());
+    dispatch(fetchTasks());
+  }, [dispatch]);
+
+  const getDashboardCount = () => {
+    dispatch(fetchDashboardCount());
+  };
 
   const handleDrawerOpen = () => {
     navigation.openDrawer();
@@ -43,6 +71,7 @@ export default function HomeScreen({navigation}) {
           />
         }
       />
+      {isLoading && <LogoLoaderComponent />}
 
       <CustomerBackgroundComponent
         topChild={
@@ -85,7 +114,7 @@ export default function HomeScreen({navigation}) {
                 />
                 <View style={CommonStyles.alignItemsCenter}>
                   <Text style={[CommonStyles.bold5, CommonStyles.textBlack]}>
-                    40
+                    {count?.totalHours}
                   </Text>
                   <Text
                     style={[CommonStyles.lessBold4P, CommonStyles.textBlue]}>
@@ -107,7 +136,7 @@ export default function HomeScreen({navigation}) {
 
                 <View style={CommonStyles.alignItemsCenter}>
                   <Text style={[CommonStyles.bold5, CommonStyles.textBlack]}>
-                    2
+                    {count?.onTime}
                   </Text>
                   <Text
                     style={[CommonStyles.lessBold4P, CommonStyles.textGreen]}>
@@ -129,7 +158,7 @@ export default function HomeScreen({navigation}) {
 
                 <View style={CommonStyles.alignItemsCenter}>
                   <Text style={[CommonStyles.bold5, CommonStyles.textBlack]}>
-                    38
+                    {count?.late}
                   </Text>
                   <Text style={[CommonStyles.lessBold4, CommonStyles.textRed]}>
                     {I18n.t('late')}
@@ -161,7 +190,7 @@ export default function HomeScreen({navigation}) {
                         CommonStyles.textBlack,
                         CommonStyles.marginVertical2,
                       ]}>
-                      14
+                      {tasks?.length}
                     </Text>
                     <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
                       {I18n.t('tasks')}
@@ -189,7 +218,7 @@ export default function HomeScreen({navigation}) {
                         CommonStyles.textBlack,
                         CommonStyles.marginVertical2,
                       ]}>
-                      140
+                      {leaves?.length}
                     </Text>
                     <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
                       {I18n.t('leaves')}

@@ -58,12 +58,15 @@ export default function LeaveScreen({navigation}) {
     useState(false);
   const [details, setDetails] = useState(null);
 
+  // useEffect(() => {
+  //   getLeaves();
+  //   return () => {
+  //     dispatch(clearLeavesState());
+  //   };
+  // }, [dispatch]);
   useEffect(() => {
     getLeaves();
-    return () => {
-      dispatch(clearLeavesState());
-    };
-  }, [dispatch]);
+  }, []);
 
   const getLeaves = () => {
     dispatch(

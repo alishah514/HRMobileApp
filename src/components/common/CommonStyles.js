@@ -173,6 +173,7 @@ const CommonStyles = StyleSheet.create({
   height80: {height: wp('80')},
   height85: {height: wp('85')},
   height90: {height: wp('90')},
+  height100: {height: wp('100')},
 
   // colors
   blackBorder: {borderColor: Colors.blackColor},
@@ -572,6 +573,20 @@ const CommonStyles = StyleSheet.create({
   logoContainer: {
     width: 80,
     height: 80,
+  },
+
+  //No Record View
+  noRecordMainView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  NoRecordText: {
+    fontSize: wp('5'),
+    color: '#848482',
+    fontWeight: '500',
+    textAlign: 'center',
+    paddingVertical: wp('3'),
   },
 });
 
