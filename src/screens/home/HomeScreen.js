@@ -18,13 +18,12 @@ import {
   fetchDashboardCount,
 } from '../../redux/dashboard/DashboardAction';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
-import {fetchLeaves} from '../../redux/leave/LeaveActions';
-import {fetchTasks} from '../../redux/tasks/TaskActions';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
   const handleLogout = LogoutConfirmationComponent();
   const currentLanguage = useSelector(state => state.language.language);
+
   const tasks = useSelector(state => state.tasks.data);
   const leaves = useSelector(state => state.leaves.data);
 
@@ -37,10 +36,10 @@ export default function HomeScreen({navigation}) {
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(fetchLeaves());
-    dispatch(fetchTasks());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchLeaves());
+  //   dispatch(fetchTasks());
+  // }, [dispatch]);
 
   const getDashboardCount = () => {
     dispatch(fetchDashboardCount());

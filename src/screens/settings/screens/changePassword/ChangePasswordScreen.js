@@ -9,8 +9,15 @@ import CommonStyles from '../../../../components/common/CommonStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import InputFieldComponent from '../../../../components/ReusableComponents/InputFieldComponent';
 import CommonButton from '../../../../components/ReusableComponents/CommonComponents/CommonButton';
+import {useDispatch, useSelector} from 'react-redux';
+import {ChangePasswordAction} from '../../../../redux/changePassword/ChangePasswordActions';
+import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
 
 export default function ChangePasswordScreen({navigation}) {
+  const dispatch = useDispatch();
+  const userId = useSelector(state => state.login.userId);
+  const isLoading = useSelector(state => state.changePassword.isLoading);
+
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -40,8 +47,13 @@ export default function ChangePasswordScreen({navigation}) {
     }
 
     if (valid) {
-      navigation.goBack();
+      handleChangePassword();
     }
+  };
+  const handleChangePassword = async () => {
+    await dispatch(ChangePasswordAction(userId, currentPassword, newPassword));
+
+    stateClearErrors();
   };
 
   const stateClearErrors = () => {
@@ -74,6 +86,7 @@ export default function ChangePasswordScreen({navigation}) {
           />
         }
       />
+      {isLoading && <LogoLoaderComponent />}
       <CustomerBackgroundComponent
         topVerySmall
         topChild={

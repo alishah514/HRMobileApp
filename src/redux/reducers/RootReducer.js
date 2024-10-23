@@ -6,6 +6,7 @@ import LanguageReducer from '../language/LanguageReducer';
 import LeaveReducer from '../leave/LeaveReducer';
 import dashboardCountReducer from '../dashboard/DashboardReducer';
 import TaskReducer from '../tasks/TaskReducer';
+import {ChangePasswordReducer} from '../changePassword/ChangePasswordReducer';
 
 const RootReducer = combineReducers({
   login: LoginReducer,
@@ -15,6 +16,7 @@ const RootReducer = combineReducers({
   leaves: LeaveReducer,
   tasks: TaskReducer,
   dashboard: dashboardCountReducer,
+  changePassword: ChangePasswordReducer,
 });
 
 export default RootReducer;

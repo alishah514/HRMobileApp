@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {wp} from '../../components/common/Dimensions';
 import {Colors} from '../../components/common/Colors';
 
@@ -17,11 +17,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.greyColor,
     borderRadius: wp('0.75'),
     position: 'absolute',
-    top: 56,
+    top: Platform.OS === 'android' ? 60 : 65,
   },
   calendarDateView: {
     width: wp('10'),
-    height: wp('15'),
+    height: wp('18'),
     borderRadius: wp('4'),
     alignItems: 'center',
     justifyContent: 'center',

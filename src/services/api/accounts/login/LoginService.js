@@ -17,14 +17,18 @@ const LoginService = {
         },
       });
 
-      const users = response.data.documents.map(doc => ({
-        id: doc.fields.id.integerValue,
-        name: doc.fields.name.stringValue,
-        email: doc.fields.email.stringValue,
-        password: doc.fields.password.stringValue,
-        token: doc.fields.token.stringValue,
-        role: doc.fields.role.stringValue,
-      }));
+      const users = response.data.documents.map(doc => {
+        const documentId = doc.name.split('/').pop();
+
+        return {
+          id: documentId,
+          name: doc.fields.name.stringValue,
+          email: doc.fields.email.stringValue,
+          password: doc.fields.password.stringValue,
+          token: doc.fields.token.stringValue,
+          role: doc.fields.role.stringValue,
+        };
+      });
 
       const matchedUser = users.find(
         user => user.email === email && user.password === password,
