@@ -18,16 +18,24 @@ import {
   fetchDashboardCount,
 } from '../../redux/dashboard/DashboardAction';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
+import {fetchPaginatedTasks} from '../../redux/tasks/TaskActions';
+import {fetchPaginatedLeaves} from '../../redux/leave/LeaveActions';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
   const handleLogout = LogoutConfirmationComponent();
   const currentLanguage = useSelector(state => state.language.language);
-
+  const {isLoading, count, error} = useSelector(state => state.dashboard);
   const tasks = useSelector(state => state.tasks.data);
   const leaves = useSelector(state => state.leaves.data);
+  const userId = useSelector(state => state.login.userId);
 
-  const {isLoading, count, error} = useSelector(state => state.dashboard);
+  const validTaskCount =
+    tasks?.filter(task => task.name !== null && task.name !== '').length || 0;
+
+  const validLeavesCount =
+    leaves?.filter(leave => leave.name !== null && leave.name !== '').length ||
+    0;
 
   useEffect(() => {
     getDashboardCount();
@@ -36,10 +44,20 @@ export default function HomeScreen({navigation}) {
     };
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(fetchLeaves());
-  //   dispatch(fetchTasks());
-  // }, [dispatch]);
+  useEffect(() => {
+    if (userId) {
+      dispatch(
+        fetchPaginatedLeaves(userId, {
+          limit: 25,
+        }),
+      );
+      dispatch(
+        fetchPaginatedTasks(userId, {
+          limit: 25,
+        }),
+      );
+    }
+  }, [dispatch, userId]);
 
   const getDashboardCount = () => {
     dispatch(fetchDashboardCount());
@@ -189,7 +207,7 @@ export default function HomeScreen({navigation}) {
                         CommonStyles.textBlack,
                         CommonStyles.marginVertical2,
                       ]}>
-                      {tasks?.length}
+                      {validTaskCount}
                     </Text>
                     <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
                       {I18n.t('tasks')}
@@ -217,7 +235,7 @@ export default function HomeScreen({navigation}) {
                         CommonStyles.textBlack,
                         CommonStyles.marginVertical2,
                       ]}>
-                      {leaves?.length}
+                      {validLeavesCount}
                     </Text>
                     <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
                       {I18n.t('leaves')}

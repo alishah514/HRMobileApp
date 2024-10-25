@@ -16,6 +16,7 @@ const SELECTED_LANGUAGE_ITEM = 'selectedLanguageItem';
 const TOGGLE_SWITCH = 'toggleSwitch';
 const FCM_TOKEN = 'fcm_token';
 const ROLE = 'role';
+const TASKS = 'tasks';
 
 const ROLE_STATUS = ['Admin', 'Staff'];
 
@@ -44,4 +45,5 @@ export default Constants = {
   ROLE,
   ROLE_STATUS,
   SIZE,
+  TASKS,
 };

@@ -3,7 +3,7 @@ import TaskApiComponent from './TaskApiComponent';
 
 const TaskService = {
   fetchTasks: async () => {
-    const url = `${Constants.FIREBASE_URL}/tasks?key=${Constants.FIREBASE_KEY}`;
+    const url = `${Constants.FIREBASE_URL}/${Constants.TASKS}?key=${Constants.FIREBASE_KEY}`;
     const method = 'get';
 
     try {
@@ -16,7 +16,7 @@ const TaskService = {
   },
 
   postTask: async taskData => {
-    const url = `${Constants.FIREBASE_URL}/tasks?key=${Constants.FIREBASE_KEY}`;
+    const url = `${Constants.FIREBASE_URL}/${Constants.TASKS}?key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const body = {
       fields: {
@@ -66,11 +66,15 @@ const TaskService = {
         assignedDate: {
           timestampValue: taskData.assignedDate,
         },
+        userId: {
+          stringValue: taskData.userId,
+        },
       },
     };
 
     try {
       const response = await TaskApiComponent(url, method, body, true);
+
       return {success: true, response};
     } catch (error) {
       console.error('Error in TaskService.postTask:', error);
@@ -82,7 +86,7 @@ const TaskService = {
   },
 
   patchTaskStatus: async (taskId, taskData) => {
-    const url = `${Constants.FIREBASE_URL}/tasks/${taskId}?key=${Constants.FIREBASE_KEY}`;
+    const url = `${Constants.FIREBASE_URL}/${Constants.TASKS}/${taskId}?key=${Constants.FIREBASE_KEY}`;
     const method = 'patch';
     const body = {
       fields: {
@@ -132,11 +136,15 @@ const TaskService = {
         assignedDate: {
           timestampValue: taskData.assignedDate,
         },
+        userId: {
+          stringValue: taskData.userId,
+        },
       },
     };
 
     try {
       const response = await TaskApiComponent(url, method, body);
+
       return {success: true, response};
     } catch (error) {
       console.error('Error in TaskService.patchTaskStatus:', error);
@@ -147,20 +155,30 @@ const TaskService = {
     }
   },
 
-  fetchPaginatedTasks: async ({
-    sortBy = 'dueDate',
-    direction = 'ASCENDING',
-    limit = 10,
-  }) => {
+  fetchPaginatedTasks: async (
+    userId,
+    {sortBy = 'dueDate', direction = 'ASCENDING', limit = 10},
+  ) => {
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const body = {
       structuredQuery: {
         from: [
           {
-            collectionId: 'tasks',
+            collectionId: Constants.TASKS,
           },
         ],
+        where: {
+          fieldFilter: {
+            field: {
+              fieldPath: 'userId',
+            },
+            op: 'EQUAL',
+            value: {
+              stringValue: userId,
+            },
+          },
+        },
         orderBy: [
           {
             field: {

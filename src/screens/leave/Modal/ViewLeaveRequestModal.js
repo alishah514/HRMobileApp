@@ -23,7 +23,7 @@ export default function ViewLeaveRequestModal({
   const currentLanguage = useSelector(state => state.language.language);
   const isLoading = useSelector(state => state.leaves.isLoading);
 
-  const {type, reason, period, name, fromDate, toDate, status} =
+  const {type, reason, period, name, fromDate, toDate, status, userId} =
     leaveDetails || {};
 
   const askForConfirmation = status => {
@@ -58,6 +58,7 @@ export default function ViewLeaveRequestModal({
       toDate,
       period,
       status,
+      userId,
     };
 
     const leaveId = name ? name.split('/').pop() : null;

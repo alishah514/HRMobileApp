@@ -37,6 +37,9 @@ const LeaveService = {
         status: {
           stringValue: leaveData.status,
         },
+        userId: {
+          stringValue: leaveData.userId,
+        },
       },
     };
 
@@ -75,6 +78,9 @@ const LeaveService = {
         status: {
           stringValue: leaveData.status,
         },
+        userId: {
+          stringValue: leaveData.userId,
+        },
       },
     };
 
@@ -90,11 +96,10 @@ const LeaveService = {
     }
   },
 
-  fetchPaginatedLeaves: async ({
-    sortBy = 'period',
-    direction = 'ASCENDING',
-    limit = 10,
-  }) => {
+  fetchPaginatedLeaves: async (
+    userId,
+    {sortBy = 'period', direction = 'ASCENDING', limit = 10},
+  ) => {
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const body = {
@@ -104,6 +109,17 @@ const LeaveService = {
             collectionId: 'leaves',
           },
         ],
+        where: {
+          fieldFilter: {
+            field: {
+              fieldPath: 'userId',
+            },
+            op: 'EQUAL',
+            value: {
+              stringValue: userId,
+            },
+          },
+        },
         orderBy: [
           {
             field: {

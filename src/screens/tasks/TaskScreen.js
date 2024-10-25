@@ -15,10 +15,7 @@ import AddTaskModal from './status/modals/AddTaskModal';
 import I18n from '../../i18n/i18n';
 import {useDispatch, useSelector} from 'react-redux';
 import TasksComponent from './status/TaskComponent';
-import {
-  clearTasksState,
-  fetchPaginatedTasks,
-} from '../../redux/tasks/TaskActions';
+import {fetchPaginatedTasks} from '../../redux/tasks/TaskActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 
 const tabs = [
@@ -45,6 +42,7 @@ const tabs = [
 export default function TaskScreen({navigation}) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
+  const userId = useSelector(state => state.login.userId);
   const tasks = useSelector(state => state.tasks.data);
   const isLoading = useSelector(state => state.tasks.isLoading);
   const [activeTab, setActiveTab] = useState(0);
@@ -62,7 +60,7 @@ export default function TaskScreen({navigation}) {
 
   const getTasks = () => {
     dispatch(
-      fetchPaginatedTasks({
+      fetchPaginatedTasks(userId, {
         limit: 25,
       }),
     );

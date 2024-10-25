@@ -47,7 +47,7 @@ export default function LeaveScreen({navigation}) {
   const currentLanguage = useSelector(state => state.language.language);
   const leaves = useSelector(state => state.leaves.data);
   const isLoading = useSelector(state => state.leaves.isLoading);
-
+  const userId = useSelector(state => state.login.userId);
   const [activeTab, setActiveTab] = useState(0);
   const [image, setImage] = useState(null);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
@@ -70,7 +70,7 @@ export default function LeaveScreen({navigation}) {
 
   const getLeaves = () => {
     dispatch(
-      fetchPaginatedLeaves({
+      fetchPaginatedLeaves(userId, {
         limit: 25,
       }),
     );

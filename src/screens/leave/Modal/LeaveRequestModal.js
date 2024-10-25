@@ -26,7 +26,7 @@ export default function LeaveRequestModal({
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
   const isLoading = useSelector(state => state.leaves.isLoading);
-
+  const userId = useSelector(state => state.login.userId);
   const [leaveType, setLeaveType] = useState(null);
   const [leaveFrom, setLeaveFrom] = useState(null);
   const [leaveTo, setLeaveTo] = useState(null);
@@ -81,6 +81,7 @@ export default function LeaveRequestModal({
       toDate: convertToTimestamp(leaveTo),
       period: period.toString(),
       status: 'pending',
+      userId: userId,
     };
 
     await askForConfirmation(leaveData);
