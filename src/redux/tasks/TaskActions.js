@@ -68,10 +68,10 @@ export const fetchTasks = () => async dispatch => {
   }
 };
 
-export const fetchPaginatedTasks = options => async dispatch => {
+export const fetchPaginatedTasks = (userId, options) => async dispatch => {
   dispatch(fetchTasksStart());
   try {
-    const response = await TaskService.fetchPaginatedTasks(options);
+    const response = await TaskService.fetchPaginatedTasks(userId, options);
     dispatch(fetchTasksSuccess(response));
   } catch (error) {
     dispatch(fetchTasksFailure(error));

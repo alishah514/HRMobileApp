@@ -68,10 +68,10 @@ export const fetchLeaves = () => async dispatch => {
   }
 };
 
-export const fetchPaginatedLeaves = options => async dispatch => {
+export const fetchPaginatedLeaves = (userId, options) => async dispatch => {
   dispatch(fetchLeavesStart());
   try {
-    const response = await LeaveService.fetchPaginatedLeaves(options);
+    const response = await LeaveService.fetchPaginatedLeaves(userId, options);
     dispatch(fetchLeavesSuccess(response));
   } catch (error) {
     dispatch(fetchLeavesFailure(error));

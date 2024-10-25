@@ -45,6 +45,7 @@ export default function TaskDetailModal({
       status: 'Completed',
       description: taskDetails?.description,
       assignedDate: taskDetails?.assignedDate,
+      userId: taskDetails?.userId,
     };
     const message = 'Are you sure you have completed this task?';
 

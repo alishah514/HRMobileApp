@@ -17,6 +17,9 @@ const TasksComponent = ({taskType, data, apiCall}) => {
 
   const {label, status} = taskMapping[taskType] || {};
 
+  const isNoData =
+    !data || data?.length === 0 || data?.every(item => !item.name);
+
   return (
     <View>
       <Text
@@ -29,7 +32,7 @@ const TasksComponent = ({taskType, data, apiCall}) => {
       </Text>
       <View style={CommonStyles.paddingTop5} />
 
-      {data?.length === 0 ? (
+      {isNoData ? (
         <View style={CommonStyles.height100}>
           <NoRecordView errorMessage={'No Record Found'} />
         </View>

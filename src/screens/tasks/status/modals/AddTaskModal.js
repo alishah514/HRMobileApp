@@ -19,6 +19,7 @@ import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoL
 export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
   const dispatch = useDispatch();
   const isLoading = useSelector(state => state.tasks.isLoading);
+  const userId = useSelector(state => state.login.userId);
   const currentLanguage = useSelector(state => state.language.language);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskCode, setTaskCode] = useState('');
@@ -87,6 +88,7 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
       status: taskStatus,
       description: description,
       assignedDate: convertToTimestamp(getTodayDate()),
+      userId: userId,
     };
     const message = 'Are you sure you want to add this task request?';
 
