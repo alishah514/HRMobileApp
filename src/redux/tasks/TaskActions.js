@@ -68,15 +68,17 @@ export const fetchTasks = () => async dispatch => {
   }
 };
 
-export const fetchPaginatedTasks = (userId, options) => async dispatch => {
-  dispatch(fetchTasksStart());
-  try {
-    const response = await TaskService.fetchPaginatedTasks(userId, options);
-    dispatch(fetchTasksSuccess(response));
-  } catch (error) {
-    dispatch(fetchTasksFailure(error));
-  }
-};
+export const fetchUserTasks =
+  (userId, options = {}) =>
+  async dispatch => {
+    dispatch(fetchTasksStart());
+    try {
+      const response = await TaskService.fetchUserTasks(userId, options);
+      dispatch(fetchTasksSuccess(response));
+    } catch (error) {
+      dispatch(fetchTasksFailure(error));
+    }
+  };
 
 export const postTaskRequest = taskData => async dispatch => {
   dispatch(postTaskStart());

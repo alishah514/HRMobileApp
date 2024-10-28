@@ -17,6 +17,7 @@ const TOGGLE_SWITCH = 'toggleSwitch';
 const FCM_TOKEN = 'fcm_token';
 const ROLE = 'role';
 const TASKS = 'tasks';
+const LEAVES = 'leaves';
 
 const ROLE_STATUS = ['Admin', 'Staff'];
 
@@ -46,4 +47,5 @@ export default Constants = {
   ROLE_STATUS,
   SIZE,
   TASKS,
+  LEAVES,
 };

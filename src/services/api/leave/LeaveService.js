@@ -3,7 +3,7 @@ import LeaveApiComponent from './LeaveApiComponent';
 
 const LeaveService = {
   fetchLeaves: async () => {
-    const url = `${Constants.FIREBASE_URL}/leaves?key=${Constants.FIREBASE_KEY}`;
+    const url = `${Constants.FIREBASE_URL}/${Constants.LEAVES}?key=${Constants.FIREBASE_KEY}`;
     const method = 'get';
 
     try {
@@ -15,7 +15,7 @@ const LeaveService = {
   },
 
   postLeave: async leaveData => {
-    const url = `${Constants.FIREBASE_URL}/leaves?key=${Constants.FIREBASE_KEY}`;
+    const url = `${Constants.FIREBASE_URL}/${Constants.LEAVES}?key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const body = {
       fields: {
@@ -56,7 +56,7 @@ const LeaveService = {
   },
 
   patchLeaveStatus: async (leaveId, leaveData) => {
-    const url = `${Constants.FIREBASE_URL}/leaves/${leaveId}?key=${Constants.FIREBASE_KEY}`;
+    const url = `${Constants.FIREBASE_URL}/${Constants.LEAVES}/${leaveId}?key=${Constants.FIREBASE_KEY}`;
     const method = 'patch';
     const body = {
       fields: {
@@ -96,9 +96,9 @@ const LeaveService = {
     }
   },
 
-  fetchPaginatedLeaves: async (
+  fetchUserLeaves: async (
     userId,
-    {sortBy = 'period', direction = 'ASCENDING', limit = 10},
+    {sortBy = 'period', direction = 'ASCENDING', limit = null},
   ) => {
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
@@ -106,7 +106,7 @@ const LeaveService = {
       structuredQuery: {
         from: [
           {
-            collectionId: 'leaves',
+            collectionId: Constants.LEAVES,
           },
         ],
         where: {
@@ -128,7 +128,8 @@ const LeaveService = {
             direction: direction.toUpperCase(),
           },
         ],
-        limit: limit,
+
+        ...(limit ? {limit: limit} : {}),
       },
     };
 

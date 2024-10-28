@@ -18,8 +18,8 @@ import {
   fetchDashboardCount,
 } from '../../redux/dashboard/DashboardAction';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
-import {fetchPaginatedTasks} from '../../redux/tasks/TaskActions';
-import {fetchPaginatedLeaves} from '../../redux/leave/LeaveActions';
+import {fetchUserTasks} from '../../redux/tasks/TaskActions';
+import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
@@ -46,16 +46,8 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     if (userId) {
-      dispatch(
-        fetchPaginatedLeaves(userId, {
-          limit: 25,
-        }),
-      );
-      dispatch(
-        fetchPaginatedTasks(userId, {
-          limit: 25,
-        }),
-      );
+      dispatch(fetchUserLeaves(userId));
+      dispatch(fetchUserTasks(userId));
     }
   }, [dispatch, userId]);
 

@@ -155,9 +155,9 @@ const TaskService = {
     }
   },
 
-  fetchPaginatedTasks: async (
+  fetchUserTasks: async (
     userId,
-    {sortBy = 'dueDate', direction = 'ASCENDING', limit = 10},
+    {sortBy = 'dueDate', direction = 'ASCENDING', limit = null},
   ) => {
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
@@ -187,7 +187,7 @@ const TaskService = {
             direction: direction.toUpperCase(),
           },
         ],
-        limit: limit,
+        ...(limit ? {limit: limit} : {}),
       },
     };
 
