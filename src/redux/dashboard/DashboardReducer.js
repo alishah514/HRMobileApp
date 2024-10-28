@@ -11,7 +11,7 @@ const initialState = {
   error: null,
 };
 
-const dashboardCountReducer = (state = initialState, action) => {
+const DashboardCountReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_DASHBOARD_COUNT_START:
       return {
@@ -44,4 +44,4 @@ const dashboardCountReducer = (state = initialState, action) => {
   }
 };
 
-export default dashboardCountReducer;
+export default DashboardCountReducer;

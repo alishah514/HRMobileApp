@@ -4,9 +4,10 @@ import RoleReducer from '../role/RoleReducer';
 import AttendanceReducer from '../attendance/AttendanceReducer';
 import LanguageReducer from '../language/LanguageReducer';
 import LeaveReducer from '../leave/LeaveReducer';
-import dashboardCountReducer from '../dashboard/DashboardReducer';
+import DashboardCountReducer from '../dashboard/DashboardReducer';
 import TaskReducer from '../tasks/TaskReducer';
 import {ChangePasswordReducer} from '../changePassword/ChangePasswordReducer';
+import ProfileReducer from '../profile/ProfileReducer';
 
 const RootReducer = combineReducers({
   login: LoginReducer,
@@ -15,8 +16,9 @@ const RootReducer = combineReducers({
   language: LanguageReducer,
   leaves: LeaveReducer,
   tasks: TaskReducer,
-  dashboard: dashboardCountReducer,
+  dashboard: DashboardCountReducer,
   changePassword: ChangePasswordReducer,
+  profile: ProfileReducer,
 });
 
 export default RootReducer;

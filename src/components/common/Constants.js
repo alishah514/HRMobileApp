@@ -18,6 +18,7 @@ const FCM_TOKEN = 'fcm_token';
 const ROLE = 'role';
 const TASKS = 'tasks';
 const LEAVES = 'leaves';
+const EMPLOYEES = 'employees';
 
 const ROLE_STATUS = ['Admin', 'Staff'];
 
@@ -48,4 +49,5 @@ export default Constants = {
   SIZE,
   TASKS,
   LEAVES,
+  EMPLOYEES,
 };

@@ -4,9 +4,20 @@ import CommonStyles from '../../../components/common/CommonStyles';
 import {TruncateTitle} from '../../../components/utils/TruncateTitle';
 import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
+import {formatDate} from '../../../components/utils/dateUtils';
+import {PaymentRegex} from '../../../components/utils/PaymentRegex';
+import NoRecordView from '../../../components/ReusableComponents/NoRecordView';
 
-export default function WorkInfo() {
+export default function WorkInfo({data}) {
   const currentLanguage = useSelector(state => state.language.language);
+
+  if (!data || Object.keys(data).length === 0) {
+    return (
+      <View style={CommonStyles.height100}>
+        <NoRecordView errorMessage={'No Record Found'} />
+      </View>
+    );
+  }
 
   return (
     <View>
@@ -36,7 +47,7 @@ export default function WorkInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('Mobile App Dev')}
+              {TruncateTitle(data?.Designation || 'null', 20)}
             </Text>
           </View>
         </View>
@@ -60,7 +71,7 @@ export default function WorkInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('IT Department')}
+              {TruncateTitle(data?.Department || 'null', 20)}
             </Text>
           </View>
         </View>
@@ -84,7 +95,7 @@ export default function WorkInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('01-01-2023')}
+              {formatDate(data?.JoiningDate) || 'null'}
             </Text>
           </View>
         </View>
@@ -108,7 +119,7 @@ export default function WorkInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('Permanent')}
+              {TruncateTitle(data?.employmentType || 'null', 20)}
             </Text>
           </View>
         </View>
@@ -133,7 +144,7 @@ export default function WorkInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('20,000 pkr')}
+              {PaymentRegex(data?.salary) + ' pkr' || 'null'}
             </Text>
           </View>
         </View>
@@ -157,7 +168,7 @@ export default function WorkInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('Monthly Based')}
+              {TruncateTitle(data?.wageType || 'null', 20)}
             </Text>
           </View>
         </View>
