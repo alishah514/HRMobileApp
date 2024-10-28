@@ -4,9 +4,19 @@ import CommonStyles from '../../../components/common/CommonStyles';
 import {TruncateTitle} from '../../../components/utils/TruncateTitle';
 import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
+import {formatDate} from '../../../components/utils/dateUtils';
+import NoRecordView from '../../../components/ReusableComponents/NoRecordView';
 
-export default function PersonalInfo() {
+export default function PersonalInfo({data}) {
   const currentLanguage = useSelector(state => state.language.language);
+
+  if (!data || Object.keys(data).length === 0) {
+    return (
+      <View style={CommonStyles.height100}>
+        <NoRecordView errorMessage={'No Record Found'} />
+      </View>
+    );
+  }
 
   return (
     <View>
@@ -36,7 +46,7 @@ export default function PersonalInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('85')}
+              {TruncateTitle(data?.employeeId || 'null', 15)}
             </Text>
           </View>
         </View>
@@ -60,7 +70,7 @@ export default function PersonalInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('Syed Ali Sultan')}
+              {TruncateTitle(data?.fullName || 'null', 18)}
             </Text>
           </View>
         </View>
@@ -84,7 +94,7 @@ export default function PersonalInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('123456789')}
+              +92 {TruncateTitle(data?.phone || 'null', 11)}
             </Text>
           </View>
         </View>
@@ -108,7 +118,7 @@ export default function PersonalInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('ali@yahoo.com')}
+              {TruncateTitle(data?.email || 'null', 20)}
             </Text>
           </View>
         </View>
@@ -133,7 +143,7 @@ export default function PersonalInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('01-01-2012')}
+              {formatDate(data?.birthDate) || 'null'}
             </Text>
           </View>
         </View>
@@ -157,7 +167,7 @@ export default function PersonalInfo() {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle('Male')}
+              {data?.gender || 'null'}
             </Text>
           </View>
         </View>

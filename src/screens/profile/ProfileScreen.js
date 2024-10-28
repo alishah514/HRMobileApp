@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-
+import React, {useEffect, useState} from 'react';
 import Header from '../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -17,8 +16,10 @@ import EditProfileModal from './EditProfileModal';
 import ProfileHeader from '../../components/ReusableComponents/Header/ProfileHeader';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
+import {fetchProfile} from '../../redux/profile/ProfileActions';
+import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 
 const tabs = [
   {id: 0, icon: 'person-outline', iconSet: Ionicons},
@@ -27,12 +28,22 @@ const tabs = [
 ];
 
 export default function ProfileScreen({navigation}) {
+  const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
+  const userId = useSelector(state => state.login.userId);
+  const {data: profile, isLoading} = useSelector(state => state.profile);
+
   const [activeTab, setActiveTab] = useState(0);
   const [image, setImage] = useState(null);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
     useState(false);
   const [isEditModal, setIsEditModal] = useState(false);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchProfile(userId));
+    }
+  }, [dispatch, userId]);
 
   const toggleEditModal = () => {
     setIsEditModal(!isEditModal);
@@ -71,6 +82,7 @@ export default function ProfileScreen({navigation}) {
           />
         }
       />
+      {isLoading && <LogoLoaderComponent />}
       <CustomerBackgroundComponent
         topChild={
           <ProfileHeader
@@ -95,11 +107,11 @@ export default function ProfileScreen({navigation}) {
               renderItem={() => (
                 <View>
                   {activeTab === 0 ? (
-                    <PersonalInfo />
+                    <PersonalInfo data={profile?.personal} />
                   ) : activeTab === 1 ? (
-                    <EducationInfo />
+                    <EducationInfo data={profile?.education} />
                   ) : activeTab === 2 ? (
-                    <WorkInfo />
+                    <WorkInfo data={profile?.job} />
                   ) : null}
                 </View>
               )}
@@ -117,6 +129,7 @@ export default function ProfileScreen({navigation}) {
       <EditProfileModal
         onClose={toggleEditModal}
         isModalVisible={isEditModal}
+        data={profile}
       />
     </CommonSafeAreaViewComponent>
   );

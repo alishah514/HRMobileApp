@@ -1,5 +1,5 @@
 import {View, Text, Modal} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CommonStyles from '../../components/common/CommonStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../components/common/Constants';
@@ -12,8 +12,10 @@ import CustomDatePickerComponent from '../../components/ReusableComponents/Custo
 import {useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import CustomSectionedMultiSelectComponent from '../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
+import {formatDate} from '../../components/utils/dateUtils';
+import {PaymentRegex} from '../../components/utils/PaymentRegex';
 
-export default function EditProfileModal({onClose, isModalVisible}) {
+export default function EditProfileModal({onClose, isModalVisible, data}) {
   const currentLanguage = useSelector(state => state.language.language);
 
   //personal
@@ -37,8 +39,37 @@ export default function EditProfileModal({onClose, isModalVisible}) {
   const [employmentType, setEmploymentType] = useState('');
   const [salary, setSalary] = useState('');
   const [wageType, setWageType] = useState('');
-  const employmentTypeOptions = ['Full-time', 'Part-time', 'Contract'];
-  const wageTypeOptions = ['Hourly', 'Salary', 'Commission'];
+  const employmentTypeOptions = [
+    'Permanent',
+    'Full-time',
+    'Part-time',
+    'Contract',
+  ];
+  const wageTypeOptions = ['Hourly', 'Monthly Based', 'Commission'];
+
+  useEffect(() => {
+    if (data) {
+      setFullName(data?.personal?.fullName || '');
+      setPhoneNumber(data?.personal?.phone || '');
+      setEmailAddress(data?.personal?.email || '');
+      setDateOfBirth(data?.personal?.birthDate || '');
+      setGender(data?.personal?.gender || '');
+
+      const latestEducation = data?.education?.[0] || {};
+      setDegreeFrom(latestEducation?.StartDate || '');
+      setDegreeTo(latestEducation?.EndDate || '');
+      setInstitution(latestEducation?.Institute || '');
+      setDegreeTitle(latestEducation?.Degree || '');
+
+      // Set job details
+      setJobDesignation(data?.job?.Designation || '');
+      setJobDepartment(data?.job?.Department || '');
+      setJoiningDate(data?.job?.JoiningDate || '');
+      setEmploymentType(data?.job?.employmentType || '');
+      setSalary(data?.job?.salary || '');
+      setWageType(data?.job?.wageType || '');
+    }
+  }, [data]);
 
   const onTickPress = () => {
     onClose();
@@ -115,7 +146,7 @@ export default function EditProfileModal({onClose, isModalVisible}) {
             />
 
             <CustomDatePickerComponent
-              selectedDate={dateOfBirth}
+              selectedDate={formatDate(dateOfBirth)}
               setSelectedDate={setDateOfBirth}
               label={I18n.t('dateOfBirth')}
             />
@@ -140,11 +171,12 @@ export default function EditProfileModal({onClose, isModalVisible}) {
           </View>
           <>
             <DateFromToComponent
-              dateFrom={degreeFrom}
+              dateFrom={formatDate(degreeFrom)}
               setDateFrom={setDegreeFrom}
-              dateTo={degreeTo}
+              dateTo={formatDate(degreeTo)}
               setDateTo={setDegreeTo}
             />
+
             <InputFieldComponent
               title={I18n.t('degreeTitle')}
               value={degreeTitle}
@@ -164,6 +196,7 @@ export default function EditProfileModal({onClose, isModalVisible}) {
               textColor={Colors.blackColor}
             />
           </>
+
           <View style={[CommonStyles.alignSelf, CommonStyles.paddingBottom3]}>
             <Text
               style={[
@@ -195,7 +228,7 @@ export default function EditProfileModal({onClose, isModalVisible}) {
               textColor={Colors.blackColor}
             />
             <CustomDatePickerComponent
-              selectedDate={joiningDate}
+              selectedDate={formatDate(joiningDate)}
               setSelectedDate={setJoiningDate}
               label={I18n.t('joiningDate')}
             />
@@ -208,7 +241,7 @@ export default function EditProfileModal({onClose, isModalVisible}) {
             />
             <InputFieldComponent
               title={I18n.t('salary')}
-              value={salary}
+              value={PaymentRegex(salary)}
               placeholder={I18n.t('enterSalary')}
               placeholderColor={Colors.placeholderColorDark}
               onChangeText={text => setSalary(text)}

@@ -15,8 +15,8 @@ const initialState = {
   data: [],
   isLoading: false,
   error: null,
-  leaveData: null, // For post request data
-  patchSuccess: false, // To track the patch status success/failure
+  leaveData: null,
+  patchSuccess: false,
 };
 
 const LeaveReducer = (state = initialState, action) => {
