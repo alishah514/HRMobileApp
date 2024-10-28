@@ -18,7 +18,7 @@ import StatusComponent from './types/StatusComponent';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {
   clearLeavesState,
-  fetchPaginatedLeaves,
+  fetchUserLeaves,
 } from '../../redux/leave/LeaveActions';
 
 const tabs = [
@@ -70,7 +70,7 @@ export default function LeaveScreen({navigation}) {
 
   const getLeaves = () => {
     dispatch(
-      fetchPaginatedLeaves(userId, {
+      fetchUserLeaves(userId, {
         limit: 25,
       }),
     );

@@ -15,7 +15,7 @@ import AddTaskModal from './status/modals/AddTaskModal';
 import I18n from '../../i18n/i18n';
 import {useDispatch, useSelector} from 'react-redux';
 import TasksComponent from './status/TaskComponent';
-import {fetchPaginatedTasks} from '../../redux/tasks/TaskActions';
+import {fetchUserTasks} from '../../redux/tasks/TaskActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 
 const tabs = [
@@ -60,7 +60,7 @@ export default function TaskScreen({navigation}) {
 
   const getTasks = () => {
     dispatch(
-      fetchPaginatedTasks(userId, {
+      fetchUserTasks(userId, {
         limit: 25,
       }),
     );
