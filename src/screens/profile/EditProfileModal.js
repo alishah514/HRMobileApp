@@ -1,4 +1,4 @@
-import {View, Text, Modal} from 'react-native';
+import {View, Text, Modal, Alert} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CommonStyles from '../../components/common/CommonStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,15 +9,24 @@ import InputFieldComponent from '../../components/ReusableComponents/InputFieldC
 import CommonSafeAreaScrollViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import DateFromToComponent from '../../components/ReusableComponents/DateFromToComponent';
 import CustomDatePickerComponent from '../../components/ReusableComponents/CustomDatePickerComponent';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import CustomSectionedMultiSelectComponent from '../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 import {formatDate} from '../../components/utils/dateUtils';
 import {PaymentRegex} from '../../components/utils/PaymentRegex';
+import {patchProfile} from '../../redux/profile/ProfileActions';
+import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 
-export default function EditProfileModal({onClose, isModalVisible, data}) {
+export default function EditProfileModal({
+  onClose,
+  onSuccess,
+  isModalVisible,
+  data,
+}) {
+  const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
-
+  const isLoading = useSelector(state => state.profile.isPatching);
+  const userId = useSelector(state => state.login.userId);
   //personal
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -61,7 +70,6 @@ export default function EditProfileModal({onClose, isModalVisible, data}) {
       setInstitution(latestEducation?.Institute || '');
       setDegreeTitle(latestEducation?.Degree || '');
 
-      // Set job details
       setJobDesignation(data?.job?.Designation || '');
       setJobDepartment(data?.job?.Department || '');
       setJoiningDate(data?.job?.JoiningDate || '');
@@ -72,7 +80,60 @@ export default function EditProfileModal({onClose, isModalVisible, data}) {
   }, [data]);
 
   const onTickPress = () => {
-    onClose();
+    const profileId = data?.name ? data?.name.split('/').pop() : null;
+    const interEducation = data?.education?.[1] || {};
+    const matricEducation = data?.education?.[2] || {};
+    const profileData = {
+      job: {
+        Designation: jobDesignation,
+        Department: jobDepartment,
+        JoiningDate: joiningDate,
+        employmentType,
+        salary,
+        wageType,
+      },
+      personal: {
+        fullName,
+        phone: phoneNumber,
+        email: emailAddress,
+        birthDate: dateOfBirth,
+        gender,
+      },
+      userId: userId,
+      education: [
+        {
+          startDate: degreeFrom,
+          endDate: degreeTo,
+          Institute: institution,
+          Degree: degreeTitle,
+        },
+        {
+          startDate: interEducation?.StartDate || '',
+          endDate: interEducation?.EndDate || '',
+          Institute: interEducation?.Institute || '',
+          Degree: interEducation?.Degree || '',
+        },
+        {
+          startDate: matricEducation?.StartDate || '',
+          endDate: matricEducation?.EndDate || '',
+          Institute: matricEducation?.Institute || '',
+          Degree: matricEducation?.Degree || '',
+        },
+      ],
+    };
+
+    handleUpdateProfile(profileId, profileData);
+  };
+
+  const handleUpdateProfile = async (profileId, profileData) => {
+    const response = await dispatch(patchProfile(profileId, profileData));
+    if (response.success === true) {
+      Alert.alert('Profile is updated successfully!');
+      onSuccess();
+    } else {
+      Alert.alert('Some error occurred while updating profile!');
+      console.error('Failed to post leave request:', response.error);
+    }
   };
 
   return (
@@ -81,6 +142,7 @@ export default function EditProfileModal({onClose, isModalVisible, data}) {
       animationType="fade"
       visible={isModalVisible}
       onRequestClose={onClose}>
+      {isLoading && <LogoLoaderComponent />}
       <CommonSafeAreaScrollViewComponent>
         <Header
           title={I18n.t('editProfile')}

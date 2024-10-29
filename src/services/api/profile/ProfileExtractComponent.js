@@ -9,8 +9,7 @@ export const ExtractValues = fields => {
       educationArray.push({
         Institute: eduFields.Institute?.stringValue,
         Degree: eduFields.Degree?.stringValue,
-        StartYear: eduFields.startYear?.integerValue,
-        EndYear: eduFields.endYear?.integerValue,
+
         StartDate: eduFields.startDate?.timestampValue,
         EndDate: eduFields.endDate?.timestampValue,
       });
@@ -31,7 +30,7 @@ export const ExtractValues = fields => {
   // Extract personal
   if (fields.personal?.mapValue?.fields) {
     const personalFields = fields.personal.mapValue.fields;
-    personalObject.employeeId = personalFields.employeeId?.integerValue;
+    personalObject.employeeId = personalFields.employeeId?.stringValue;
     personalObject.fullName = personalFields.fullName?.stringValue;
     personalObject.phone = personalFields.phone?.integerValue;
     personalObject.email = personalFields.email?.stringValue;

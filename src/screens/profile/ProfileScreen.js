@@ -41,9 +41,13 @@ export default function ProfileScreen({navigation}) {
 
   useEffect(() => {
     if (userId) {
-      dispatch(fetchProfile(userId));
+      fetchUserProfile();
     }
   }, [dispatch, userId]);
+
+  const fetchUserProfile = () => {
+    dispatch(fetchProfile(userId));
+  };
 
   const toggleEditModal = () => {
     setIsEditModal(!isEditModal);
@@ -59,6 +63,11 @@ export default function ProfileScreen({navigation}) {
 
   const handleDrawerOpen = () => {
     navigation.openDrawer();
+  };
+
+  const onSuccess = () => {
+    fetchUserProfile();
+    toggleEditModal();
   };
 
   return (
@@ -128,6 +137,7 @@ export default function ProfileScreen({navigation}) {
       />
       <EditProfileModal
         onClose={toggleEditModal}
+        onSuccess={onSuccess}
         isModalVisible={isEditModal}
         data={profile}
       />
