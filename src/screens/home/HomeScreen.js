@@ -1,5 +1,12 @@
 import React, {useEffect} from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Header from '../../components/ReusableComponents/Header/Header';
 import LogoutConfirmationComponent from '../../components/ReusableComponents/LogoutConfirmationComponent';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -20,6 +27,7 @@ import {
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {fetchUserTasks} from '../../redux/tasks/TaskActions';
 import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
+import {postAttendance} from '../../redux/attendance/AttendaceActions';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Platform} from 'react-native';
+import {View, Text, TouchableOpacity, Platform, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -18,6 +18,8 @@ import {
   saveTimer,
   savePunchInLocation,
   savePunchOutLocation,
+  postAttendance,
+  clearAttendanceState,
 } from '../../../redux/attendance/AttendaceActions';
 
 export default function PunchInOut() {
@@ -25,6 +27,7 @@ export default function PunchInOut() {
 
   const punchInTime = useSelector(state => state.attendance.punchInTime);
   const punchOutTime = useSelector(state => state.attendance.punchOutTime);
+  const userId = useSelector(state => state.login.userId);
   const reduxTimer = useSelector(state => state.attendance.timer);
   const currentLocation = useSelector(state => state.attendance.location);
   const punchInLocation = useSelector(
@@ -35,6 +38,35 @@ export default function PunchInOut() {
   );
 
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm:ss'));
+  const [imageUrl, setImageUrl] = useState('');
+
+  const submitAttendance = async type => {
+    const timestamp = moment().format('MMMM D, YYYY [at] h:mm:ss A [UTC]Z');
+    const attendanceData = {
+      creationDate: timestamp,
+      latitude: currentLocation?.latitude || 32.503006,
+      longitude: currentLocation?.longitude || 74.5009054,
+      type,
+      userId,
+      imageUrl,
+    };
+
+    const response = await dispatch(postAttendance(attendanceData));
+
+    if (response.success) {
+      let isType = '';
+
+      if (type === 'PunchIn') {
+        isType = 'Punched In';
+      } else {
+        isType = 'Punched Out';
+      }
+
+      Alert.alert(`${isType} successfully`);
+    } else {
+      console.error('Failed to post attendance:', response.error);
+    }
+  };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -78,6 +110,7 @@ export default function PunchInOut() {
         cropping: true,
       });
       console.log('Selfie taken:', image);
+      setImageUrl(image.path);
       return image;
     } catch (err) {
       console.log('Error taking selfie:', err);
@@ -132,6 +165,7 @@ export default function PunchInOut() {
         if (location) {
           await takeSelfie();
           dispatch(savePunchInTime(formattedPunchInTime));
+          submitAttendance('PunchIn');
         } else {
           console.log('Failed to get valid location during Punch In');
         }
@@ -149,6 +183,7 @@ export default function PunchInOut() {
         if (location) {
           await takeSelfie();
           dispatch(savePunchOutTime(formattedPunchOutTime));
+          submitAttendance('PunchOut');
         } else {
           console.log('Failed to get valid location during Punch Out');
         }
@@ -156,6 +191,17 @@ export default function PunchInOut() {
     } catch (error) {
       console.log('Error during Punch Out:', error);
     }
+  };
+
+  useEffect(() => {
+    if (punchInTime && punchOutTime) {
+      setTimeout(resetPunchTimes, 2000);
+    }
+  }, [punchInTime, punchOutTime]);
+
+  const resetPunchTimes = () => {
+    dispatch(clearAttendanceState());
+    setCurrentTime(moment().format('HH:mm:ss'));
   };
 
   return (
@@ -195,7 +241,8 @@ export default function PunchInOut() {
       <TouchableOpacity
         onPress={handlePunchOut}
         style={[styles.boxView, CommonStyles.marginTop10, CommonStyles.shadow]}
-        disabled={!!punchOutTime}>
+        disabled={!punchInTime || !!punchOutTime} // Disable if not punched in or already punched out
+      >
         <View style={[styles.circleView, CommonStyles.blueBorder]}>
           <Ionicons
             name={
