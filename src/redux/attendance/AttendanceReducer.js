@@ -5,6 +5,13 @@ import {
   SAVE_PUNCH_IN_LOCATION,
   SAVE_PUNCH_OUT_LOCATION,
   SAVE_LOCATION,
+  FETCH_ATTENDANCE_START,
+  FETCH_ATTENDANCE_SUCCESS,
+  FETCH_ATTENDANCE_FAILURE,
+  POST_ATTENDANCE_START,
+  POST_ATTENDANCE_SUCCESS,
+  POST_ATTENDANCE_FAILURE,
+  CLEAR_ATTENDANCE_STATE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -13,6 +20,11 @@ const initialState = {
   timer: '00:00:00',
   punchInLocation: null,
   punchOutLocation: null,
+  location: null,
+  attendanceData: null,
+  isLoading: false,
+  error: null,
+  postResponse: null,
 };
 
 const AttendanceReducer = (state = initialState, action) => {
@@ -32,11 +44,6 @@ const AttendanceReducer = (state = initialState, action) => {
         ...state,
         timer: action.payload,
       };
-    case SAVE_PUNCH_IN_LOCATION:
-      return {
-        ...state,
-        punchInLocation: action.payload,
-      };
     case SAVE_LOCATION:
       return {
         ...state,
@@ -52,6 +59,53 @@ const AttendanceReducer = (state = initialState, action) => {
         ...state,
         punchOutLocation: action.payload,
       };
+
+    // Fetch Attendance Actions
+    case FETCH_ATTENDANCE_START:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    case FETCH_ATTENDANCE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        attendanceData: action.payload,
+      };
+    case FETCH_ATTENDANCE_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
+
+    // Post Attendance Actions
+    case POST_ATTENDANCE_START:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    case POST_ATTENDANCE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        postResponse: action.payload,
+      };
+    case POST_ATTENDANCE_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
+
+    // Clear State
+    case CLEAR_ATTENDANCE_STATE:
+      return {
+        ...initialState,
+      };
+
     default:
       return state;
   }
