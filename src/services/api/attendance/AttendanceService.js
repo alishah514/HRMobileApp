@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Constants from '../../../components/common/Constants';
 import ExtractValues from '../../../components/utils/ExtractValues';
+import moment from 'moment';
 
 const AttendanceService = {
   fetchUserAttendance: async userId => {
@@ -56,17 +57,16 @@ const AttendanceService = {
 
   postAttendance: async data => {
     const url = `${Constants.FIREBASE_URL}/${Constants.ATTENDANCE}?key=${Constants.FIREBASE_KEY}`;
-    const method = 'post';
     const body = {
       fields: {
         creationDate: {
-          timestampValue: data.creationDate,
+          timestampValue: moment().toISOString(),
         },
         latitude: {
-          integerValue: data.latitude,
+          doubleValue: data.latitude,
         },
         longitude: {
-          integerValue: data.longitude,
+          doubleValue: data.longitude,
         },
         type: {
           stringValue: data.type,
@@ -75,17 +75,20 @@ const AttendanceService = {
           stringValue: data.userId,
         },
         imageUrl: {
-          referenceValue: data.image,
+          stringValue: data.imageUrl, // Change to stringValue for URLs
         },
       },
     };
 
     try {
       const response = await axios.post(url, body);
-      console.log('Response: ' + response);
-      return {success: true, response};
+      console.log('Response: ', response.data);
+      return {success: true, response: response.data};
     } catch (error) {
-      console.error('Error in AttendanceService.postAttendanceRequest:', error);
+      console.error(
+        'Error in AttendanceService.postAttendanceRequest:',
+        error.response?.data || error,
+      );
       return {
         success: false,
         error: error.message || 'An unexpected error occurred.',

@@ -36,7 +36,7 @@ export default function AttendanceScreen({navigation}) {
   };
 
   const setDate = date => {
-    const filteredData = attendanceData.filter(item => {
+    const filteredData = attendanceData?.filter(item => {
       const creationDate = new Date(item.creationDate);
       const selected = new Date(date);
       return (
@@ -46,14 +46,14 @@ export default function AttendanceScreen({navigation}) {
       );
     });
 
-    filteredData.sort(
+    filteredData?.sort(
       (a, b) => new Date(a.creationDate) - new Date(b.creationDate),
     );
 
     const attendanceRecords = [];
     let currentRecord = {punchIn: null, punchOut: null};
 
-    filteredData.forEach(item => {
+    filteredData?.forEach(item => {
       const time = new Date(item.creationDate).toLocaleTimeString('en-GB', {
         hour: '2-digit',
         minute: '2-digit',
@@ -85,7 +85,7 @@ export default function AttendanceScreen({navigation}) {
   const calculateTotalTimeWorked = filteredData => {
     let totalMilliseconds = 0;
 
-    for (let i = 0; i < filteredData.length - 1; i++) {
+    for (let i = 0; i < filteredData?.length - 1; i++) {
       const currentRecord = filteredData[i];
       const nextRecord = filteredData[i + 1];
 
