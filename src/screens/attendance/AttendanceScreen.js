@@ -1,5 +1,5 @@
 import {View, Text, FlatList, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import Header from '../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,19 +8,106 @@ import {Colors} from '../../components/common/Colors';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
 import moment from 'moment';
 import CommonStyles from '../../components/common/CommonStyles';
-import {data} from './AttendaceRecord/data';
 import Record from './AttendaceRecord/Record';
 import styles from './styles';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
+import {fetchAttendance} from '../../redux/attendance/AttendaceActions';
 
 const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 export default function AttendanceScreen({navigation}) {
+  const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
+  const userId = useSelector(state => state.login.userId);
+  const attendanceData = useSelector(state => state.attendance.attendanceData);
   const today = moment().format('YYYY-MM-DD');
   const [selectedDate, setSelectedDate] = useState(today);
   const [currentWeek, setCurrentWeek] = useState(moment().startOf('week'));
+  const [filteredAttendance, setFilteredAttendance] = useState([]);
+  const [totalTimeWorked, setTotalTimeWorked] = useState('00:00:00');
+
+  useEffect(() => {
+    getAttendance();
+  }, []);
+
+  const getAttendance = () => {
+    dispatch(fetchAttendance(userId));
+  };
+
+  const setDate = date => {
+    const filteredData = attendanceData.filter(item => {
+      const creationDate = new Date(item.creationDate);
+      const selected = new Date(date);
+      return (
+        creationDate.getFullYear() === selected.getFullYear() &&
+        creationDate.getMonth() === selected.getMonth() &&
+        creationDate.getDate() === selected.getDate()
+      );
+    });
+
+    filteredData.sort(
+      (a, b) => new Date(a.creationDate) - new Date(b.creationDate),
+    );
+
+    const attendanceRecords = [];
+    let currentRecord = {punchIn: null, punchOut: null};
+
+    filteredData.forEach(item => {
+      const time = new Date(item.creationDate).toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+
+      if (item.type === 'PunchIn') {
+        if (currentRecord.punchIn && !currentRecord.punchOut) {
+          attendanceRecords.push({...currentRecord});
+        }
+        currentRecord = {punchIn: time, punchOut: null};
+      } else if (item.type === 'PunchOut' && currentRecord.punchIn) {
+        currentRecord.punchOut = time;
+        attendanceRecords.push({...currentRecord});
+        currentRecord = {punchIn: null, punchOut: null};
+      }
+    });
+
+    if (currentRecord.punchIn && !currentRecord.punchOut) {
+      attendanceRecords.push(currentRecord);
+    }
+
+    const totalTimeWorked = calculateTotalTimeWorked(filteredData);
+    setSelectedDate(date);
+    setFilteredAttendance(attendanceRecords);
+    setTotalTimeWorked(totalTimeWorked);
+  };
+
+  const calculateTotalTimeWorked = filteredData => {
+    let totalMilliseconds = 0;
+
+    for (let i = 0; i < filteredData.length - 1; i++) {
+      const currentRecord = filteredData[i];
+      const nextRecord = filteredData[i + 1];
+
+      if (currentRecord.type === 'PunchIn' && nextRecord.type === 'PunchOut') {
+        const punchInTime = new Date(currentRecord.creationDate);
+        const punchOutTime = new Date(nextRecord.creationDate);
+        totalMilliseconds += punchOutTime - punchInTime;
+        i++;
+      }
+    }
+
+    const hours = Math.floor(totalMilliseconds / (1000 * 60 * 60));
+    const minutes = Math.floor(
+      (totalMilliseconds % (1000 * 60 * 60)) / (1000 * 60),
+    );
+    const seconds = Math.floor((totalMilliseconds % (1000 * 60)) / 1000);
+
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
+      2,
+      '0',
+    )}:${String(seconds).padStart(2, '0')}`;
+  };
 
   const getWeekDates = weekStart => {
     let weekDates = [];
@@ -86,7 +173,7 @@ export default function AttendanceScreen({navigation}) {
                 keyExtractor={item => item.date}
                 horizontal
                 renderItem={({item}) => (
-                  <TouchableOpacity onPress={() => setSelectedDate(item.date)}>
+                  <TouchableOpacity onPress={() => setDate(item.date)}>
                     <View style={[CommonStyles.alignItemsCenter]}>
                       <View
                         style={[
@@ -181,7 +268,7 @@ export default function AttendanceScreen({navigation}) {
                 </TouchableOpacity>
               </View>
             </View>
-            <Record data={data} />
+            <Record data={filteredAttendance} time={totalTimeWorked} />
           </>
         }
       />

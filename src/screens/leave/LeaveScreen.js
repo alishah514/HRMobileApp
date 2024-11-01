@@ -16,10 +16,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import StatusComponent from './types/StatusComponent';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
-import {
-  clearLeavesState,
-  fetchUserLeaves,
-} from '../../redux/leave/LeaveActions';
+import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
 
 const tabs = [
   {

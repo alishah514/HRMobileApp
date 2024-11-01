@@ -6,7 +6,7 @@ import styles from '../styles';
 import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 
-export default function TimeLine({data}) {
+export default function TimeLine({data, time}) {
   const currentLanguage = useSelector(state => state.language.language);
 
   return (
@@ -44,7 +44,7 @@ export default function TimeLine({data}) {
                         CommonStyles.textBlack,
                         CommonStyles.paddingTop2,
                       ]}>
-                      {item.punchIn}
+                      {item.punchIn || '---'}
                     </Text>
                   </View>
                   <View style={[CommonStyles.alignItemsCenter]}>
@@ -58,7 +58,7 @@ export default function TimeLine({data}) {
                         CommonStyles.textBlack,
                         CommonStyles.paddingTop2,
                       ]}>
-                      {item.punchOut}
+                      {item.punchOut || '---'}
                     </Text>
                   </View>
                 </View>
@@ -68,7 +68,10 @@ export default function TimeLine({data}) {
         />
       </View>
 
-      <CommonButton title={`08:02:01 ${I18n.t('hours')}`} outlined={true} />
+      <CommonButton
+        title={time ? `${time} ${I18n.t('hours')}` : 'Pending'}
+        outlined={true}
+      />
     </>
   );
 }

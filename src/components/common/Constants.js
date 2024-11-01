@@ -19,6 +19,7 @@ const ROLE = 'role';
 const TASKS = 'tasks';
 const LEAVES = 'leaves';
 const EMPLOYEES = 'employees';
+const ATTENDANCE = 'attendance';
 
 const ROLE_STATUS = ['Admin', 'Staff'];
 
@@ -50,4 +51,5 @@ export default Constants = {
   TASKS,
   LEAVES,
   EMPLOYEES,
+  ATTENDANCE,
 };

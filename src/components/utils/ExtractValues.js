@@ -41,6 +41,8 @@ const ExtractValues = fields => {
         result[key] = ExtractValues(value.mapValue.fields);
       } else if (value.timestampValue) {
         result[key] = value.timestampValue; // Handle timestamp
+      } else if (value.referenceValue) {
+        result[key] = value.referenceValue; // Handle Firestore document reference
       } else {
         console.warn(`Unknown field type for key ${key}:`, value);
         result[key] = null; // Handle unexpected types with a default null
