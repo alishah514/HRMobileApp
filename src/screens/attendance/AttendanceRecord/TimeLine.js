@@ -9,13 +9,15 @@ import I18n from '../../../i18n/i18n';
 export default function TimeLine({data, time}) {
   const currentLanguage = useSelector(state => state.language.language);
 
+  const reversedData = [...data].reverse();
+
   return (
     <>
       <View style={CommonStyles.height80}>
         <View style={styles.verticalLine} />
 
         <FlatList
-          data={data}
+          data={reversedData}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) => (
             <View style={[styles.itemContainer, CommonStyles.alignItemsCenter]}>
