@@ -27,7 +27,7 @@ import {
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {fetchUserTasks} from '../../redux/tasks/TaskActions';
 import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
-import {postAttendance} from '../../redux/attendance/AttendaceActions';
+import {postAttendance} from '../../redux/attendance/AttendanceActions';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();

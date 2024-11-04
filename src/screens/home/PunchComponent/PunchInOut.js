@@ -20,7 +20,7 @@ import {
   savePunchOutLocation,
   postAttendance,
   clearAttendanceState,
-} from '../../../redux/attendance/AttendaceActions';
+} from '../../../redux/attendance/AttendanceActions';
 
 export default function PunchInOut() {
   const dispatch = useDispatch();
