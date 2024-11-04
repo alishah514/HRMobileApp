@@ -20,32 +20,31 @@ import {
   savePunchOutLocation,
   postAttendance,
   clearAttendanceState,
+  saveLastPunchInTime,
+  saveLastPunchOutTime,
 } from '../../../redux/attendance/AttendanceActions';
 
 export default function PunchInOut() {
   const dispatch = useDispatch();
-
   const punchInTime = useSelector(state => state.attendance.punchInTime);
   const punchOutTime = useSelector(state => state.attendance.punchOutTime);
+  const lastPunchInTime = useSelector(
+    state => state.attendance.lastPunchInTime,
+  );
+  const lastPunchOutTime = useSelector(
+    state => state.attendance.lastPunchOutTime,
+  );
   const userId = useSelector(state => state.login.userId);
-  const reduxTimer = useSelector(state => state.attendance.timer);
-  const currentLocation = useSelector(state => state.attendance.location);
-  const punchInLocation = useSelector(
-    state => state.attendance.punchInLocation,
-  );
-  const punchOutLocation = useSelector(
-    state => state.attendance.punchOutLocation,
-  );
-
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm:ss'));
+
   const [imageUrl, setImageUrl] = useState('');
 
-  const submitAttendance = async type => {
+  const submitAttendance = async (type, location) => {
     const timestamp = moment().format('MMMM D, YYYY [at] h:mm:ss A [UTC]Z');
     const attendanceData = {
       creationDate: timestamp,
-      latitude: currentLocation?.latitude || 32.503006,
-      longitude: currentLocation?.longitude || 74.5009054,
+      latitude: location?.latitude,
+      longitude: location?.longitude,
       type,
       userId,
       imageUrl,
@@ -55,11 +54,14 @@ export default function PunchInOut() {
 
     if (response.success) {
       let isType = '';
+      console.log('currentTime', currentTime);
 
       if (type === 'PunchIn') {
         isType = 'Punched In';
+        dispatch(saveLastPunchInTime(currentTime));
       } else {
         isType = 'Punched Out';
+        dispatch(saveLastPunchOutTime(currentTime));
       }
 
       Alert.alert(`${isType} successfully`);
@@ -165,7 +167,7 @@ export default function PunchInOut() {
         if (location) {
           await takeSelfie();
           dispatch(savePunchInTime(formattedPunchInTime));
-          submitAttendance('PunchIn');
+          submitAttendance('PunchIn', location);
         } else {
           console.log('Failed to get valid location during Punch In');
         }
@@ -183,7 +185,7 @@ export default function PunchInOut() {
         if (location) {
           await takeSelfie();
           dispatch(savePunchOutTime(formattedPunchOutTime));
-          submitAttendance('PunchOut');
+          submitAttendance('PunchOut', location);
         } else {
           console.log('Failed to get valid location during Punch Out');
         }
@@ -235,14 +237,16 @@ export default function PunchInOut() {
             ]}>
             {punchInTime ? I18n.t('punchedIn') : I18n.t('punchIn')}
           </Text>
+          {lastPunchInTime && (
+            <Text style={styles.lastTime}>Last: {lastPunchInTime}</Text>
+          )}
         </View>
       </TouchableOpacity>
 
       <TouchableOpacity
         onPress={handlePunchOut}
         style={[styles.boxView, CommonStyles.marginTop10, CommonStyles.shadow]}
-        disabled={!punchInTime || !!punchOutTime} // Disable if not punched in or already punched out
-      >
+        disabled={!punchInTime || !!punchOutTime}>
         <View style={[styles.circleView, CommonStyles.blueBorder]}>
           <Ionicons
             name={
@@ -268,6 +272,9 @@ export default function PunchInOut() {
             ]}>
             {punchOutTime ? I18n.t('punchedOut') : I18n.t('punchOut')}
           </Text>
+          {lastPunchOutTime && (
+            <Text style={styles.lastTime}>Last: {lastPunchOutTime}</Text>
+          )}
         </View>
       </TouchableOpacity>
     </View>

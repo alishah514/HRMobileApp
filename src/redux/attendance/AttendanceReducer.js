@@ -12,11 +12,15 @@ import {
   POST_ATTENDANCE_SUCCESS,
   POST_ATTENDANCE_FAILURE,
   CLEAR_ATTENDANCE_STATE,
+  SAVE_LAST_PUNCH_IN_TIME,
+  SAVE_LAST_PUNCH_OUT_TIME,
 } from '../actions/actionTypes';
 
 const initialState = {
   punchInTime: null,
   punchOutTime: null,
+  lastPunchInTime: null,
+  lastPunchOutTime: null,
   timer: '00:00:00',
   punchInLocation: null,
   punchOutLocation: null,
@@ -38,6 +42,16 @@ const AttendanceReducer = (state = initialState, action) => {
       return {
         ...state,
         punchOutTime: action.payload || state.punchOutTime,
+      };
+    case SAVE_LAST_PUNCH_IN_TIME:
+      return {
+        ...state,
+        lastPunchInTime: action.payload || state.lastPunchInTime,
+      };
+    case SAVE_LAST_PUNCH_OUT_TIME:
+      return {
+        ...state,
+        lastPunchOutTime: action.payload || state.lastPunchOutTime,
       };
     case SAVE_TIMER:
       return {
@@ -103,7 +117,9 @@ const AttendanceReducer = (state = initialState, action) => {
     // Clear State
     case CLEAR_ATTENDANCE_STATE:
       return {
-        ...initialState,
+        ...state,
+        punchInTime: null,
+        punchOutTime: null,
       };
 
     default:
