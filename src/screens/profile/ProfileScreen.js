@@ -97,8 +97,8 @@ export default function ProfileScreen({navigation}) {
           <ProfileHeader
             image={image}
             toggleImageOptionsModal={toggleImageOptionsModal}
-            name="Syed Ali Sultan Bukhari"
-            role={I18n.t('mobile app developer')}
+            name={profile?.personal?.fullName}
+            role={profile?.job?.Designation}
             editable={true}
           />
         }

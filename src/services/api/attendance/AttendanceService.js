@@ -29,6 +29,7 @@ const AttendanceService = {
 
     try {
       const response = await axios.post(url, body);
+
       const finalResponse = response.data
         .map(item => {
           const document = item.document || {};
@@ -75,7 +76,7 @@ const AttendanceService = {
           stringValue: data.userId,
         },
         imageUrl: {
-          stringValue: data.imageUrl, // Change to stringValue for URLs
+          stringValue: data.imageUrl,
         },
       },
     };
