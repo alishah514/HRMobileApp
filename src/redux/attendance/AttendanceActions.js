@@ -13,6 +13,8 @@ import {
   POST_ATTENDANCE_SUCCESS,
   POST_ATTENDANCE_FAILURE,
   CLEAR_ATTENDANCE_STATE,
+  SAVE_LAST_PUNCH_IN_TIME,
+  SAVE_LAST_PUNCH_OUT_TIME,
 } from '../actions/actionTypes';
 
 export const savePunchInTime = time => ({
@@ -22,6 +24,16 @@ export const savePunchInTime = time => ({
 
 export const savePunchOutTime = time => ({
   type: SAVE_PUNCH_OUT_TIME,
+  payload: time,
+});
+
+export const saveLastPunchInTime = time => ({
+  type: SAVE_LAST_PUNCH_IN_TIME,
+  payload: time,
+});
+
+export const saveLastPunchOutTime = time => ({
+  type: SAVE_LAST_PUNCH_OUT_TIME,
   payload: time,
 });
 
