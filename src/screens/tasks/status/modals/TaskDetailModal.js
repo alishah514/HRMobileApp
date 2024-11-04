@@ -122,7 +122,7 @@ export default function TaskDetailModal({
             textColor={Colors.blackColor}
             disabled={true}
           />
-          <InputFieldComponent
+          {/* <InputFieldComponent
             title={I18n.t('assignedBy')}
             value={taskDetails?.assignedBy}
             placeholder={I18n.t('enterAssignedBy')}
@@ -130,7 +130,7 @@ export default function TaskDetailModal({
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
             disabled={true}
-          />
+          /> */}
           <InputFieldComponent
             title={I18n.t('assignedTo')}
             value={

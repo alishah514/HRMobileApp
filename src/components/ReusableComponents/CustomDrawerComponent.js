@@ -8,8 +8,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CommonStyles from '../common/CommonStyles';
 import {Colors} from '../common/Colors';
 import Constants from '../common/Constants';
+import {useSelector} from 'react-redux';
+import {TruncateTitle} from '../utils/TruncateTitle';
 
 export default function CustomDrawerComponent(props) {
+  const {data: profile} = useSelector(state => state.profile);
+
   return (
     <DrawerContentScrollView
       {...props}
@@ -35,17 +39,17 @@ export default function CustomDrawerComponent(props) {
           <View style={CommonStyles.padding3}>
             <View>
               <Text style={[CommonStyles.bold3p5, CommonStyles.textWhite]}>
-                Ali Sultan Bukhari
+                {TruncateTitle(profile?.personal?.fullName, 22)}
               </Text>
             </View>
             <View style={CommonStyles.paddingTop1}>
               <Text style={[CommonStyles.lessBold3, CommonStyles.textWhite]}>
-                ali@yahoo.com
+                {TruncateTitle(profile?.personal?.email, 22)}
               </Text>
             </View>
             <View style={CommonStyles.paddingTop1}>
               <Text style={[CommonStyles.lessBold3, CommonStyles.textWhite]}>
-                Mobile App Developer
+                {TruncateTitle(profile?.job?.Designation, 22)}
               </Text>
             </View>
           </View>

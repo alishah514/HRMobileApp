@@ -1,12 +1,5 @@
-import React, {useEffect} from 'react';
-import {
-  Alert,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import Header from '../../components/ReusableComponents/Header/Header';
 import LogoutConfirmationComponent from '../../components/ReusableComponents/LogoutConfirmationComponent';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -27,16 +20,40 @@ import {
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {fetchUserTasks} from '../../redux/tasks/TaskActions';
 import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
-import {postAttendance} from '../../redux/attendance/AttendanceActions';
+import {fetchProfile} from '../../redux/profile/ProfileActions';
+
+const getGreetingMessage = () => {
+  const currentHour = new Date().getHours();
+  let greetingMessage;
+  let wishMessage;
+
+  if (currentHour < 12) {
+    greetingMessage = I18n.t('goodMorning');
+    wishMessage = I18n.t('goodMorningPray');
+  } else if (currentHour < 18) {
+    greetingMessage = I18n.t('goodAfternoon');
+    wishMessage = I18n.t('goodAfternoonPray');
+  } else {
+    greetingMessage = I18n.t('goodEvening');
+    wishMessage = I18n.t('goodEveningPray');
+  }
+
+  return {
+    greeting: `${greetingMessage}!`,
+    wish: wishMessage,
+  };
+};
 
 export default function HomeScreen({navigation}) {
+  const {greeting, wish} = getGreetingMessage();
   const dispatch = useDispatch();
   const handleLogout = LogoutConfirmationComponent();
   const currentLanguage = useSelector(state => state.language.language);
   const {isLoading, count, error} = useSelector(state => state.dashboard);
+  const userId = useSelector(state => state.login.userId);
+  const {data: profile} = useSelector(state => state.profile);
   const tasks = useSelector(state => state.tasks.data);
   const leaves = useSelector(state => state.leaves.data);
-  const userId = useSelector(state => state.login.userId);
 
   const validTaskCount =
     tasks?.filter(task => task.name !== null && task.name !== '').length || 0;
@@ -56,8 +73,13 @@ export default function HomeScreen({navigation}) {
     if (userId) {
       dispatch(fetchUserLeaves(userId));
       dispatch(fetchUserTasks(userId));
+      fetchUserProfile(userId);
     }
   }, [dispatch, userId]);
+
+  const fetchUserProfile = userId => {
+    dispatch(fetchProfile(userId));
+  };
 
   const getDashboardCount = () => {
     dispatch(fetchDashboardCount());
@@ -96,11 +118,11 @@ export default function HomeScreen({navigation}) {
             <View style={[styles.rowTitle]}>
               <View style={CommonStyles.width70}>
                 <Text style={[CommonStyles.bold5, CommonStyles.textWhite]}>
-                  {I18n.t('goodMorning')}!
+                  {greeting}
                 </Text>
                 <View style={CommonStyles.paddingTop2}>
                   <Text style={[CommonStyles.bold5, CommonStyles.textWhite]}>
-                    Syed Ali Sultan Bukhari
+                    {profile?.personal?.fullName}
                   </Text>
                   <Text
                     style={[
@@ -108,7 +130,7 @@ export default function HomeScreen({navigation}) {
                       CommonStyles.textWhite,
                       CommonStyles.paddingTop1,
                     ]}>
-                    {I18n.t('goodMorningPray')}!
+                    {wish}
                   </Text>
                 </View>
               </View>

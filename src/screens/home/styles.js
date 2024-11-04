@@ -61,5 +61,10 @@ const styles = StyleSheet.create({
     width: wp('80'),
     alignSelf: 'center',
   },
+  lastTime: {
+    color: Colors.greyColor,
+    fontSize: wp('2.5'),
+    paddingTop: wp('1'),
+  },
 });
 export default styles;
