@@ -8,11 +8,11 @@ import {Colors} from '../../components/common/Colors';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
 import moment from 'moment';
 import CommonStyles from '../../components/common/CommonStyles';
-import Record from './AttendaceRecord/Record';
+import Record from './AttendanceRecord/Record';
 import styles from './styles';
 import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
-import {fetchAttendance} from '../../redux/attendance/AttendaceActions';
+import {fetchAttendance} from '../../redux/attendance/AttendanceActions';
 
 const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
@@ -30,6 +30,10 @@ export default function AttendanceScreen({navigation}) {
   useEffect(() => {
     getAttendance();
   }, []);
+
+  useEffect(() => {
+    setDate(today);
+  }, [attendanceData]);
 
   const getAttendance = () => {
     dispatch(fetchAttendance(userId));
