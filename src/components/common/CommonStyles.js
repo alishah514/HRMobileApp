@@ -560,16 +560,7 @@ const CommonStyles = StyleSheet.create({
     zIndex: 1,
     flex: 1,
   },
-  logoContainer: {
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    bottom: 0,
-    top: 0,
-    left: 0,
-    right: 0,
-  },
+
   logoContainer: {
     width: 80,
     height: 80,
