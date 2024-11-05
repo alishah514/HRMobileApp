@@ -10,6 +10,7 @@ import SignupScreen from '../screens/accounts/signup/SignupScreen';
 import ForgotPasswordScreen from '../screens/accounts/forgotPassword/ForgotPasswordScreen';
 import ChangePasswordScreen from '../screens/settings/screens/changePassword/ChangePasswordScreen';
 import LocalizationScreen from '../screens/settings/screens/localization/LocalizationScreen';
+import AttendanceDetails from '../screens/attendance/AttendanceRecord/AttendanceDetails';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Task" component={TaskScreen} />
         <Stack.Screen name="Change Password" component={ChangePasswordScreen} />
         <Stack.Screen name="Localization" component={LocalizationScreen} />
+        <Stack.Screen name="Attendance Details" component={AttendanceDetails} />
         <Stack.Screen
           name="Home"
           component={DrawerNavigator}

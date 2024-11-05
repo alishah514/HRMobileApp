@@ -93,5 +93,58 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('5'),
     marginTop: wp('5'),
   },
+
+  mapContainer: {
+    flex: 1,
+  },
+  map: {
+    width: '100%',
+    height: '50%',
+  },
+  calloutContainer: {
+    width: wp('40'), // Adjust width as needed
+    padding: wp('2'),
+    backgroundColor: 'white', // Background color of the tooltip
+    borderRadius: wp('2'), // Rounded corners
+    shadowColor: '#000', // Shadow color for Android
+    shadowOpacity: 0.2, // Shadow opacity for Android
+    shadowRadius: 4, // Shadow radius for Android
+    shadowOffset: {width: 0, height: 2}, // Shadow offset for Android
+    elevation: 3, // Elevation for Android
+  },
+  calloutTitle: {
+    fontWeight: 'bold',
+    color: Colors.blueColor, // Change as per your color scheme
+    marginBottom: 4,
+  },
+  calloutText: {
+    color: Colors.black, // Change as per your color scheme
+    marginBottom: 8,
+  },
+  calloutTitleBelow: {
+    fontWeight: 'bold',
+    color: Colors.blueColor, // Change as per your color scheme
+    marginBottom: wp('1'),
+    marginTop: wp('3'),
+
+    fontSize: wp('4'),
+  },
+  calloutTextBelow: {
+    color: Colors.black, // Change as per your color scheme
+    marginBottom: 8,
+    fontSize: wp('4'),
+  },
+  imageStyle: {
+    width: wp('35'),
+    height: wp('35'),
+    backgroundColor: 'grey',
+    overflow: 'hidden',
+    borderRadius: 10,
+    marginTop: wp('5'),
+  },
+  imageFull: {
+    width: '100%',
+    height: '100%',
+  },
 });
 export default styles;
