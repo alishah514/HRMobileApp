@@ -41,12 +41,12 @@ export default function PersonalInfo({data}) {
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
               style={[
-                CommonStyles.font5,
+                CommonStyles.font4,
                 CommonStyles.textBlack,
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle(data?.employeeId || 'null', 15)}
+              {TruncateTitle(data?.employeeId || 'null', 20)}
             </Text>
           </View>
         </View>
