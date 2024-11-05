@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 import {patchLeaveStatus} from '../../../redux/leave/LeaveActions';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
+import {formatDate} from '../../../components/utils/dateUtils';
 
 export default function ViewLeaveRequestModal({
   isModalVisible,
@@ -25,6 +26,14 @@ export default function ViewLeaveRequestModal({
 
   const {type, reason, period, name, fromDate, toDate, status, userId} =
     leaveDetails || {};
+
+  console.log('leaveDetails', leaveDetails);
+
+  const leaveDuration = `${formatDate(fromDate)} - ${formatDate(
+    toDate,
+  )} (${period} Days)`;
+
+  console.log('leaveDuration', leaveDuration);
 
   const askForConfirmation = status => {
     const message =
@@ -101,7 +110,7 @@ export default function ViewLeaveRequestModal({
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
             title={I18n.t('leaveDuration')}
-            value={period}
+            value={leaveDuration}
             placeholder={I18n.t('enterLeaveDuration')}
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
