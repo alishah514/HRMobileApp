@@ -55,7 +55,7 @@ export default function AttendanceScreen({navigation}) {
     );
 
     const attendanceRecords = [];
-    let currentRecord = {punchIn: null, punchOut: null};
+    let currentRecord = null;
 
     filteredData?.forEach(item => {
       const time = new Date(item.creationDate).toLocaleTimeString('en-GB', {
@@ -65,18 +65,27 @@ export default function AttendanceScreen({navigation}) {
       });
 
       if (item.type === 'PunchIn') {
-        if (currentRecord.punchIn && !currentRecord.punchOut) {
+        // If there's an incomplete record without a punch out, push it first
+        if (currentRecord && !currentRecord.punchOut) {
           attendanceRecords.push({...currentRecord});
         }
-        currentRecord = {punchIn: time, punchOut: null};
-      } else if (item.type === 'PunchOut' && currentRecord.punchIn) {
+        // Initialize a new record with all data
+        currentRecord = {...item, punchIn: time, punchOut: null};
+      } else if (
+        item.type === 'PunchOut' &&
+        currentRecord &&
+        currentRecord.punchIn
+      ) {
+        // Complete the current record with punch out data
         currentRecord.punchOut = time;
+        currentRecord.punchOutData = {...item}; // Add all data for punchOut
         attendanceRecords.push({...currentRecord});
-        currentRecord = {punchIn: null, punchOut: null};
+        currentRecord = null; // Reset currentRecord after a complete pair is added
       }
     });
 
-    if (currentRecord.punchIn && !currentRecord.punchOut) {
+    // Push any remaining punch-in record without a punch-out
+    if (currentRecord && !currentRecord.punchOut) {
       attendanceRecords.push(currentRecord);
     }
 
