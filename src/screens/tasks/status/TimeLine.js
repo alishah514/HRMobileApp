@@ -20,7 +20,19 @@ export default function TimeLine({data, status, apiCall}) {
   const pendingTasks = tasks.filter(task => task.status === 'Pending');
   const completedTasks = tasks.filter(task => task.status === 'Completed');
 
-  //
+  const sortedData = [...data].sort((a, b) => {
+    if (a.status === 'Pending' && b.status === 'Completed') {
+      return -1;
+    } else if (a.status === 'Completed' && b.status === 'Pending') {
+      return 1;
+    }
+
+    const aCreateTime = new Date(a.createTime);
+    const bCreateTime = new Date(b.createTime);
+
+    return aCreateTime - bCreateTime;
+  });
+
   const toggleTaskDetailModal = item => {
     setIsTaskDetailModal(!isTaskDetailModal);
     setDetails({...item});
@@ -154,7 +166,7 @@ export default function TimeLine({data, status, apiCall}) {
             )}
 
             <FlatList
-              data={data}
+              data={sortedData}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => <TaskItem item={item} />}
             />
