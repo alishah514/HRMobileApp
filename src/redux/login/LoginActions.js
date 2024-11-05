@@ -1,4 +1,3 @@
-import {Alert} from 'react-native';
 import LoginService from '../../services/api/accounts/login/LoginService';
 import {
   LOGIN_USER,
