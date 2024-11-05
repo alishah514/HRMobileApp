@@ -20,6 +20,7 @@ export default function LocalizationScreen({navigation}) {
   const [selectedLanguage, setSelectedLanguage] = useState(
     currentLanguage || 'English',
   );
+
   const languageOptions = ['English', 'Japanese'];
 
   const goBack = () => {
@@ -63,11 +64,14 @@ export default function LocalizationScreen({navigation}) {
             ]}>
             <CustomSectionedMultiSelectComponent
               title={I18n.t('language')}
-              selectedValue={selectedLanguage}
+              selectedValue={
+                selectedLanguage === 'Japanese' ? 'Japanese' : 'English'
+              }
               setSelectedValue={setSelectedLanguage}
               options={languageOptions}
             />
             <View style={CommonStyles.paddingVertical2} />
+
             <CommonButton
               title={I18n.t('changeLanguage')}
               onPress={handleChangeLanguage}
