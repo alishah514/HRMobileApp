@@ -13,6 +13,7 @@ import {TruncateTitle} from '../utils/TruncateTitle';
 
 export default function CustomDrawerComponent(props) {
   const {data: profile} = useSelector(state => state.profile);
+  const role = useSelector(state => state.login.role);
 
   return (
     <DrawerContentScrollView
@@ -42,14 +43,10 @@ export default function CustomDrawerComponent(props) {
                 {TruncateTitle(profile?.personal?.fullName, 22)}
               </Text>
             </View>
+
             <View style={CommonStyles.paddingTop1}>
               <Text style={[CommonStyles.lessBold3, CommonStyles.textWhite]}>
-                {TruncateTitle(profile?.personal?.email, 22)}
-              </Text>
-            </View>
-            <View style={CommonStyles.paddingTop1}>
-              <Text style={[CommonStyles.lessBold3, CommonStyles.textWhite]}>
-                {TruncateTitle(profile?.job?.Designation, 22)}
+                {TruncateTitle(role, 22)}
               </Text>
             </View>
           </View>
