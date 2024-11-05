@@ -96,6 +96,27 @@ const LeaveService = {
     }
   },
 
+  deleteLeave: async leaveId => {
+    const url = `${Constants.FIREBASE_URL}/${Constants.LEAVES}/${leaveId}?key=${Constants.FIREBASE_KEY}`;
+    const method = 'DELETE';
+
+    try {
+      const response = await LeaveApiComponent(url, method);
+
+      if (response) {
+        return {success: true, message: 'Leave deleted successfully'};
+      } else {
+        return {success: false, error: 'Failed to delete leave'};
+      }
+    } catch (error) {
+      console.error('Error in LeaveService.deleteLeave:', error);
+      return {
+        success: false,
+        error: error.message || 'An unexpected error occurred.',
+      };
+    }
+  },
+
   fetchUserLeaves: async (
     userId,
     {sortBy = 'period', direction = 'ASCENDING', limit = null},
