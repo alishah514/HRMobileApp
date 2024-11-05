@@ -30,9 +30,7 @@ export default function SplashScreen({navigation}) {
     <SafeAreaView style={styles.container}>
       <View style={styles.mainContent}>
         <View style={styles.loaderWrapper}>
-          <View style={styles.loaderWrapperSmall}>
-            <LogoLoaderComponent splash={true} />
-          </View>
+          <LogoLoaderComponent />
         </View>
 
         <View style={styles.logoContainer}>

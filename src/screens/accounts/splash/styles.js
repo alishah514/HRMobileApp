@@ -20,13 +20,11 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
   },
-  loaderContainer: {},
-  loaderWrapper: {
-    height: wp('25'),
-    width: wp('25'),
-    borderRadius: wp('12.5'),
 
-    backgroundColor: Colors.blueColor,
+  loaderWrapper: {
+    marginVertical: wp(15),
+    alignSelf: 'center',
+    backgroundColor: 'grey',
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -546,7 +546,22 @@ const CommonStyles = StyleSheet.create({
     alignSelf: 'center',
   },
 
-  //loader style
+  //No Record View
+  noRecordMainView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  NoRecordText: {
+    fontSize: wp('5'),
+    color: '#848482',
+    fontWeight: '500',
+    textAlign: 'center',
+    paddingVertical: wp('3'),
+  },
+
+  //logo loader
+
   loader: {
     position: 'absolute',
     top: 0,
@@ -566,18 +581,22 @@ const CommonStyles = StyleSheet.create({
     height: 80,
   },
 
-  //No Record View
-  noRecordMainView: {
-    flex: 1,
-    justifyContent: 'center',
+  loaderWrapper: {
+    width: wp('28'),
+    height: wp('28'),
+    borderRadius: wp('14'),
+    backgroundColor: Colors.blueColor,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  NoRecordText: {
-    fontSize: wp('5'),
-    color: '#848482',
-    fontWeight: '500',
-    textAlign: 'center',
-    paddingVertical: wp('3'),
+
+  loaderWrapperSmall: {
+    width: wp('23'),
+    height: wp('23'),
+    borderRadius: wp('11.5'),
+    backgroundColor: Colors.whiteColor,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

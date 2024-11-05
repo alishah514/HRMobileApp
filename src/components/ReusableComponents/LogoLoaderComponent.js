@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {Animated, Easing, View} from 'react-native';
 import CommonStyles from '../common/CommonStyles';
 
-const LogoLoaderComponent = ({splash}) => {
+const LogoLoaderComponent = () => {
   const rotation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -22,11 +22,15 @@ const LogoLoaderComponent = ({splash}) => {
   });
 
   return (
-    <View style={splash ? CommonStyles.logoContainer : CommonStyles.loader}>
-      <Animated.Image
-        source={require('../../assets/icons/logo-icon.png')}
-        style={[CommonStyles.logoContainer, {transform: [{rotate: spin}]}]}
-      />
+    <View style={CommonStyles.loader}>
+      <View style={CommonStyles.loaderWrapper}>
+        <View style={CommonStyles.loaderWrapperSmall}>
+          <Animated.Image
+            source={require('../../assets/icons/logo-icon.png')}
+            style={[CommonStyles.logoContainer, {transform: [{rotate: spin}]}]}
+          />
+        </View>
+      </View>
     </View>
   );
 };
