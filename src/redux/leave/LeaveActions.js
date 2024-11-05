@@ -10,6 +10,9 @@ import {
   PATCH_LEAVE_STATUS_START,
   PATCH_LEAVE_STATUS_SUCCESS,
   PATCH_LEAVE_STATUS_FAILURE,
+  DELETE_LEAVE_START,
+  DELETE_LEAVE_SUCCESS,
+  DELETE_LEAVE_FAILURE,
 } from '../actions/actionTypes';
 
 export const fetchLeavesStart = () => ({
@@ -55,6 +58,20 @@ export const patchLeaveStatusSuccess = response => ({
 
 export const patchLeaveStatusFailure = error => ({
   type: PATCH_LEAVE_STATUS_FAILURE,
+  payload: error,
+});
+
+export const deleteLeaveStart = () => ({
+  type: DELETE_LEAVE_START,
+});
+
+export const deleteLeaveSuccess = leaveId => ({
+  type: DELETE_LEAVE_SUCCESS,
+  payload: leaveId,
+});
+
+export const deleteLeaveFailure = error => ({
+  type: DELETE_LEAVE_FAILURE,
   payload: error,
 });
 
@@ -106,4 +123,22 @@ export const patchLeaveStatus = (leaveId, leaveData) => async dispatch => {
   }
 
   return response;
+};
+
+export const deleteLeave = leaveId => async dispatch => {
+  dispatch(deleteLeaveStart());
+
+  try {
+    const response = await LeaveService.deleteLeave(leaveId);
+
+    if (response.success) {
+      dispatch(deleteLeaveSuccess(leaveId));
+    } else {
+      dispatch(deleteLeaveFailure(response.error));
+    }
+
+    return response;
+  } catch (error) {
+    dispatch(deleteLeaveFailure(error));
+  }
 };

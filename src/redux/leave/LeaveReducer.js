@@ -9,6 +9,9 @@ import {
   PATCH_LEAVE_STATUS_START,
   PATCH_LEAVE_STATUS_SUCCESS,
   PATCH_LEAVE_STATUS_FAILURE,
+  DELETE_LEAVE_START,
+  DELETE_LEAVE_SUCCESS,
+  DELETE_LEAVE_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -58,7 +61,6 @@ const LeaveReducer = (state = initialState, action) => {
         isLoading: false,
         error: action.payload,
       };
-
     case PATCH_LEAVE_STATUS_START:
       return {
         ...state,
@@ -82,7 +84,24 @@ const LeaveReducer = (state = initialState, action) => {
         patchSuccess: false,
         error: action.payload,
       };
-
+    case DELETE_LEAVE_START:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    case DELETE_LEAVE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        data: state.data.filter(leave => leave.id !== action.payload),
+      };
+    case DELETE_LEAVE_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
     default:
       return state;
   }

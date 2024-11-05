@@ -25,6 +25,8 @@ const LeaveApiComponent = async (
       return handlePostResponse(response, postLeave);
     } else if (method.toLowerCase() === 'patch') {
       return handlePatchResponse(response);
+    } else if (method.toLowerCase() === 'delete') {
+      return handleDeleteResponse(response); // New handling for DELETE
     }
   } catch (error) {
     if (error.response) {
@@ -40,6 +42,7 @@ const LeaveApiComponent = async (
   }
 };
 
+// Existing response handlers remain unchanged
 const handleGetResponse = response => {
   if (!Array.isArray(response.data.documents)) {
     console.error(
@@ -100,6 +103,12 @@ const handlePostResponse = (response, postLeave) => {
 
 const handlePatchResponse = response => {
   return response.data;
+};
+
+// New response handler for DELETE requests
+const handleDeleteResponse = response => {
+  // Typically, DELETE responses do not contain a body
+  return {success: true, message: 'Resource deleted successfully'};
 };
 
 export default LeaveApiComponent;

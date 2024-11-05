@@ -10,7 +10,7 @@ import CommonButton from '../../../components/ReusableComponents/CommonComponent
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
 import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
-import {patchLeaveStatus} from '../../../redux/leave/LeaveActions';
+import {deleteLeave, patchLeaveStatus} from '../../../redux/leave/LeaveActions';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 import {formatDate} from '../../../components/utils/dateUtils';
 
@@ -27,19 +27,21 @@ export default function ViewLeaveRequestModal({
   const {type, reason, period, name, fromDate, toDate, status, userId} =
     leaveDetails || {};
 
-  console.log('leaveDetails', leaveDetails);
-
   const leaveDuration = `${formatDate(fromDate)} - ${formatDate(
     toDate,
   )} (${period} Days)`;
 
-  console.log('leaveDuration', leaveDuration);
-
   const askForConfirmation = status => {
-    const message =
-      status === 'approved'
-        ? 'Are you sure you want to approve this leave request?'
-        : 'Are you sure you want to reject this leave request?';
+    const leaveId = name ? name.split('/').pop() : null;
+    let message;
+
+    if (status === 'approved') {
+      message = 'Are you sure you want to approve this leave request?';
+    } else if (status === 'delete') {
+      message = 'Are you sure you want to delete this leave request?';
+    } else {
+      message = 'Are you sure you want to reject this leave request?';
+    }
 
     Alert.alert(
       'Confirm Action',
@@ -52,14 +54,20 @@ export default function ViewLeaveRequestModal({
         },
         {
           text: 'Confirm',
-          onPress: async () => submitLeaveRequest(status),
+          onPress: async () => {
+            if (status === 'delete') {
+              await submitDeleteRequest(leaveId);
+            } else {
+              await submitLeaveRequest(status, leaveId);
+            }
+          },
         },
       ],
       {cancelable: false},
     );
   };
 
-  const submitLeaveRequest = async status => {
+  const submitLeaveRequest = async (status, leaveId) => {
     const leaveData = {
       reason,
       type,
@@ -69,8 +77,6 @@ export default function ViewLeaveRequestModal({
       status,
       userId,
     };
-
-    const leaveId = name ? name.split('/').pop() : null;
 
     const response = await dispatch(patchLeaveStatus(leaveId, leaveData));
 
@@ -84,6 +90,19 @@ export default function ViewLeaveRequestModal({
       apiCall();
     } else {
       console.error('Failed to post leave request:', response.error);
+    }
+  };
+
+  const submitDeleteRequest = async leaveId => {
+    const response = await dispatch(deleteLeave(leaveId));
+
+    if (response.success) {
+      Alert.alert(response.message);
+      toggleModal();
+      apiCall();
+    } else {
+      console.error('Failed to delete leave request:', response.error);
+      Alert.alert('Error', response.error);
     }
   };
 
@@ -137,20 +156,11 @@ export default function ViewLeaveRequestModal({
             multiline={true}
           />
           {status === 'pending' && (
-            <View style={CommonStyles.rowBetween}>
-              <CommonButton
-                title={I18n.t('approve')}
-                onPress={() => askForConfirmation('approved')}
-                backgroundColor={Colors.blueColor}
-                half={true}
-              />
-              <CommonButton
-                title={I18n.t('reject')}
-                onPress={() => askForConfirmation('rejected')}
-                backgroundColor={Colors.redColor}
-                half={true}
-              />
-            </View>
+            <CommonButton
+              title={I18n.t('cancel')}
+              onPress={() => askForConfirmation('delete')}
+              backgroundColor={Colors.redColor}
+            />
           )}
         </View>
       </CommonSafeAreaScrollViewComponent>
