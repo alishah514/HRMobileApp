@@ -48,12 +48,6 @@ export default function TaskScreen({navigation}) {
   const [activeTab, setActiveTab] = useState(0);
   const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
 
-  // useEffect(() => {
-  //   getTasks();
-  //   return () => {
-  //     dispatch(clearTasksState());
-  //   };
-  // }, [dispatch]);
   useEffect(() => {
     getTasks();
   }, []);
