@@ -41,10 +41,7 @@ export default function AttendanceDetails({navigation}) {
           />
         }
       />
-      {/* <Text>Attendance Details</Text>
-      <Text>Punch In: {punchIn}</Text>
-      <Text>Punch Out: {punchOut}</Text>
-      <Text>Additional Info: {JSON.stringify(otherData, null, 2)}</Text> */}
+
       <AttendanceMap
         punchInLocation={punchInLocation}
         punchOutLocation={punchOutLocation}

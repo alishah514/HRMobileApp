@@ -42,13 +42,16 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
-        onPress={() => setSelectedMarker(null)}>
+        onPress={() => {
+          setSelectedMarker(null);
+        }}>
         <Marker
           coordinate={punchInLocation}
           pinColor={Colors.blueColor}
           onPress={e => {
             e.stopPropagation();
             setSelectedMarker('punchIn');
+            console.log(selectedMarker);
           }}>
           <Ionicons
             name="person"
@@ -113,7 +116,6 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
           CommonStyles.rowBetween,
           CommonStyles.alignItemsCenter,
         ]}>
-        {console.log('data', data)}
         <View style={{width: wp('40')}}>
           <View>
             <Text style={styles.calloutTitleBelow}>Punch In: </Text>

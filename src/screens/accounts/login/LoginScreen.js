@@ -123,6 +123,7 @@ export default function LoginScreen({navigation}) {
   return (
     <CommonSafeAreaScrollViewComponent>
       {isLoading && <LogoLoaderComponent />}
+
       <CustomerBackgroundComponent
         topSmall
         topChild={

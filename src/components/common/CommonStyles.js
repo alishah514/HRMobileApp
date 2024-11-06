@@ -582,18 +582,18 @@ const CommonStyles = StyleSheet.create({
   },
 
   loaderWrapper: {
-    width: wp('28'),
-    height: wp('28'),
-    borderRadius: wp('14'),
+    width: Platform.OS === 'ios' ? wp('28') : wp('30'),
+    height: Platform.OS === 'ios' ? wp('28') : wp('30'),
+    borderRadius: Platform.OS === 'ios' ? wp('14') : wp('15'),
     backgroundColor: Colors.blueColor,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   loaderWrapperSmall: {
-    width: wp('23'),
-    height: wp('23'),
-    borderRadius: wp('11.5'),
+    width: Platform.OS === 'ios' ? wp('23') : wp('25.5'),
+    height: Platform.OS === 'ios' ? wp('23') : wp('25.5'),
+    borderRadius: Platform.OS === 'ios' ? wp('11.5') : wp('12.75'),
     backgroundColor: Colors.whiteColor,
     alignItems: 'center',
     justifyContent: 'center',

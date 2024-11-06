@@ -1,10 +1,7 @@
-import {SafeAreaView, ImageBackground, Image, View} from 'react-native';
+import {SafeAreaView, Image, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import CommonStyles from '../../../components/common/CommonStyles';
 import styles from './styles';
-import {Colors} from '../../../components/common/Colors';
-import {wp} from '../../../components/common/Dimensions';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 
 export default function SplashScreen({navigation}) {

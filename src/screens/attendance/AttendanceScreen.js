@@ -13,6 +13,8 @@ import styles from './styles';
 import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import {fetchAttendance} from '../../redux/attendance/AttendanceActions';
+import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
+import {useFocusEffect} from '@react-navigation/native';
 
 const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
@@ -20,16 +22,20 @@ export default function AttendanceScreen({navigation}) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
   const userId = useSelector(state => state.login.userId);
-  const attendanceData = useSelector(state => state.attendance.attendanceData);
+
+  const {attendanceData, isLoading} = useSelector(state => state.attendance);
+
   const today = moment().format('YYYY-MM-DD');
   const [selectedDate, setSelectedDate] = useState(today);
   const [currentWeek, setCurrentWeek] = useState(moment().startOf('week'));
   const [filteredAttendance, setFilteredAttendance] = useState([]);
   const [totalTimeWorked, setTotalTimeWorked] = useState('00:00:00');
 
-  useEffect(() => {
-    getAttendance();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getAttendance();
+    }, []),
+  );
 
   useEffect(() => {
     setDate(today);
@@ -65,26 +71,23 @@ export default function AttendanceScreen({navigation}) {
       });
 
       if (item.type === 'PunchIn') {
-        // If there's an incomplete record without a punch out, push it first
         if (currentRecord && !currentRecord.punchOut) {
           attendanceRecords.push({...currentRecord});
         }
-        // Initialize a new record with all data
+
         currentRecord = {...item, punchIn: time, punchOut: null};
       } else if (
         item.type === 'PunchOut' &&
         currentRecord &&
         currentRecord.punchIn
       ) {
-        // Complete the current record with punch out data
         currentRecord.punchOut = time;
-        currentRecord.punchOutData = {...item}; // Add all data for punchOut
+        currentRecord.punchOutData = {...item};
         attendanceRecords.push({...currentRecord});
-        currentRecord = null; // Reset currentRecord after a complete pair is added
+        currentRecord = null;
       }
     });
 
-    // Push any remaining punch-in record without a punch-out
     if (currentRecord && !currentRecord.punchOut) {
       attendanceRecords.push(currentRecord);
     }
@@ -149,6 +152,7 @@ export default function AttendanceScreen({navigation}) {
 
   return (
     <CommonSafeAreaViewComponent>
+      {isLoading && <LogoLoaderComponent />}
       <Header
         title={I18n.t('attendance')}
         onLeftIconPressed={handleDrawerOpen}

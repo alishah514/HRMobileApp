@@ -23,6 +23,7 @@ import {
   saveLastPunchInTime,
   saveLastPunchOutTime,
 } from '../../../redux/attendance/AttendanceActions';
+import {convertTime} from '../../../components/ReusableComponents/ConvertTime';
 
 export default function PunchInOut() {
   const dispatch = useDispatch();
@@ -37,9 +38,7 @@ export default function PunchInOut() {
   const userId = useSelector(state => state.login.userId);
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm:ss'));
 
-  const [imageUrl, setImageUrl] = useState('');
-
-  const submitAttendance = async (type, location) => {
+  const submitAttendance = async (type, location, imagePath) => {
     const timestamp = moment().format('MMMM D, YYYY [at] h:mm:ss A [UTC]Z');
     const attendanceData = {
       creationDate: timestamp,
@@ -47,21 +46,22 @@ export default function PunchInOut() {
       longitude: location?.longitude,
       type,
       userId,
-      imageUrl,
+      imageUrl: imagePath,
     };
 
     const response = await dispatch(postAttendance(attendanceData));
 
     if (response.success) {
       let isType = '';
-      console.log('currentTime', currentTime);
 
       if (type === 'PunchIn') {
         isType = 'Punched In';
-        dispatch(saveLastPunchInTime(currentTime));
+        dispatch(saveLastPunchInTime(timestamp));
+        dispatch(savePunchInTime(timestamp));
       } else {
         isType = 'Punched Out';
-        dispatch(saveLastPunchOutTime(currentTime));
+        dispatch(saveLastPunchOutTime(timestamp));
+        dispatch(savePunchOutTime(timestamp));
       }
 
       Alert.alert(`${isType} successfully`);
@@ -111,8 +111,7 @@ export default function PunchInOut() {
         height: 400,
         cropping: true,
       });
-      console.log('Selfie taken:', image);
-      setImageUrl(image.path);
+
       return image;
     } catch (err) {
       console.log('Error taking selfie:', err);
@@ -161,13 +160,17 @@ export default function PunchInOut() {
 
   const handlePunchIn = async () => {
     const formattedPunchInTime = moment().format('HH:mm:ss');
+
     try {
       if (await requestLocationPermission()) {
         const location = await getLocation('punch-in');
         if (location) {
-          await takeSelfie();
-          dispatch(savePunchInTime(formattedPunchInTime));
-          submitAttendance('PunchIn', location);
+          const image = await takeSelfie();
+          if (image) {
+            submitAttendance('PunchIn', location, image.path);
+          } else {
+            Alert.alert('Failed to take a selfie');
+          }
         } else {
           console.log('Failed to get valid location during Punch In');
         }
@@ -179,13 +182,17 @@ export default function PunchInOut() {
 
   const handlePunchOut = async () => {
     const formattedPunchOutTime = moment().format('HH:mm:ss');
+
     try {
       if (await requestLocationPermission()) {
         const location = await getLocation('punch-out');
         if (location) {
-          await takeSelfie();
-          dispatch(savePunchOutTime(formattedPunchOutTime));
-          submitAttendance('PunchOut', location);
+          const image = await takeSelfie();
+          if (image) {
+            submitAttendance('PunchOut', location, image.path);
+          } else {
+            console.log('Failed to take a selfie');
+          }
         } else {
           console.log('Failed to get valid location during Punch Out');
         }
@@ -228,7 +235,7 @@ export default function PunchInOut() {
               CommonStyles.textBlack,
               CommonStyles.marginVertical2,
             ]}>
-            {punchInTime || currentTime}
+            {punchInTime ? convertTime(punchInTime) : currentTime}
           </Text>
           <Text
             style={[
@@ -238,7 +245,9 @@ export default function PunchInOut() {
             {punchInTime ? I18n.t('punchedIn') : I18n.t('punchIn')}
           </Text>
           {lastPunchInTime && (
-            <Text style={styles.lastTime}>Last: {lastPunchInTime}</Text>
+            <Text style={styles.lastTime}>
+              Last: {convertTime(lastPunchInTime)}
+            </Text>
           )}
         </View>
       </TouchableOpacity>
@@ -263,7 +272,7 @@ export default function PunchInOut() {
               CommonStyles.textBlack,
               CommonStyles.marginVertical2,
             ]}>
-            {punchOutTime || currentTime}
+            {punchOutTime ? convertTime(punchOutTime) : currentTime}
           </Text>
           <Text
             style={[
@@ -273,7 +282,9 @@ export default function PunchInOut() {
             {punchOutTime ? I18n.t('punchedOut') : I18n.t('punchOut')}
           </Text>
           {lastPunchOutTime && (
-            <Text style={styles.lastTime}>Last: {lastPunchOutTime}</Text>
+            <Text style={styles.lastTime}>
+              Last: {convertTime(lastPunchOutTime)}
+            </Text>
           )}
         </View>
       </TouchableOpacity>

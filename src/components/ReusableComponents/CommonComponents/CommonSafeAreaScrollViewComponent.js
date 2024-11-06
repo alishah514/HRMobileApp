@@ -14,7 +14,9 @@ export default function CommonSafeAreaScrollViewComponent({children, styling}) {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={CommonStyles.container}>
-        <ScrollView>{children}</ScrollView>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+          {children}
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
