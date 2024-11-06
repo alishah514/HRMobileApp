@@ -93,6 +93,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file("hr_app_bukhari.keystore")
+            storePassword "hrappbukhari"
+            keyAlias "hrAppAlias"
+            keyPassword "hrappbukhari"
+        }
     }
     buildTypes {
         debug {
@@ -122,6 +128,7 @@ dependencies {
 
     // Add the Firebase Analytics library (or any other Firebase libraries you want to use)
     implementation("com.google.firebase:firebase-analytics")
+    implementation 'com.google.android.gms:play-services-location:21.0.1' 
 
     // Add any other desired Firebase libraries
     // For example: implementation("com.google.firebase:firebase-auth")
