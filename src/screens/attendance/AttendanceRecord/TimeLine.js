@@ -15,7 +15,11 @@ export default function TimeLine({data, time}) {
 
   const renderItem = ({item, index}) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate('Attendance Details', item)}
+      onPress={
+        item?.punchOutData
+          ? () => navigation.navigate('Attendance Details', item)
+          : null
+      }
       style={[styles.itemContainer, CommonStyles.alignItemsCenter]}>
       <View style={styles.leftContainer}>
         <View style={[styles.dot, CommonStyles.backgroundYellow]} />

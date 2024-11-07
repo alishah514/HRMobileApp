@@ -18,10 +18,6 @@ const store = configureStore({
         ignoredActions: ['persist/PERSIST'],
         ignoredPaths: ['register'],
       },
-      immutableCheck: {
-        // Disable ImmutableStateInvariantMiddleware in development mode
-        enabled: process.env.NODE_ENV !== 'production',
-      },
     }),
 });
 

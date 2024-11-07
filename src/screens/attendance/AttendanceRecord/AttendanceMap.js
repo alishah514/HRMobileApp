@@ -7,7 +7,6 @@ import {Colors} from '../../../components/common/Colors';
 import styles from '../styles';
 import CommonStyles from '../../../components/common/CommonStyles';
 import {wp} from '../../../components/common/Dimensions';
-import {he} from 'date-fns/locale';
 
 const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
   const [selectedMarker, setSelectedMarker] = useState(null);
