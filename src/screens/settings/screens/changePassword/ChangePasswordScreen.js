@@ -51,15 +51,24 @@ export default function ChangePasswordScreen({navigation}) {
     }
   };
   const handleChangePassword = async () => {
-    await dispatch(ChangePasswordAction(userId, currentPassword, newPassword));
-
-    stateClearErrors();
+    const result = await dispatch(
+      ChangePasswordAction(userId, currentPassword, newPassword),
+    );
+    if (result.success) {
+      stateClear();
+    }
   };
 
   const stateClearErrors = () => {
     setCurrentPasswordError('');
     setNewPasswordError('');
     setConfirmPasswordError('');
+  };
+
+  const stateClear = () => {
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
   };
 
   const setState = (stateSetter, text, clearErrors = false) => {
