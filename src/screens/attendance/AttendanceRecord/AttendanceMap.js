@@ -28,6 +28,10 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
     };
   }
 
+  const isValidUrl = uri => {
+    return uri && (uri.startsWith('http://') || uri.startsWith('https://'));
+  };
+
   return (
     <View style={styles.mapContainer}>
       <MapView
@@ -49,8 +53,8 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
           pinColor={Colors.blueColor}
           onPress={e => {
             e.stopPropagation();
+
             setSelectedMarker('punchIn');
-            console.log(selectedMarker);
           }}>
           <Ionicons
             name="person"
@@ -58,20 +62,18 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
             color={Colors.blueColor}
           />
           {selectedMarker === 'punchIn' && (
-            <View>
-              <Callout>
-                <View style={styles.calloutContainer}>
-                  <Text style={styles.calloutTitle}>Punch In Time:</Text>
-                  <Text style={styles.calloutText}>{data?.punchIn}</Text>
-                  <Text style={styles.calloutTitle}>User ID:</Text>
-                  <Text style={styles.calloutText}>{data?.userId}</Text>
-                  <Text style={styles.calloutTitle}>Location:</Text>
-                  <Text style={styles.calloutText}>
-                    {`${data?.latitude}, ${data?.longitude}`}
-                  </Text>
-                </View>
-              </Callout>
+            // <Callout>
+            <View style={styles.calloutContainer}>
+              <Text style={styles.calloutTitle}>Punch In Time:</Text>
+              <Text style={styles.calloutText}>{data?.punchIn}</Text>
+              <Text style={styles.calloutTitle}>User ID:</Text>
+              <Text style={styles.calloutText}>{data?.userId}</Text>
+              <Text style={styles.calloutTitle}>Location:</Text>
+              <Text style={styles.calloutText}>
+                {`${data?.latitude}, ${data?.longitude}`}
+              </Text>
             </View>
+            // </Callout>
           )}
         </Marker>
 
@@ -80,7 +82,9 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
           pinColor={Colors.redColor}
           onPress={e => {
             e.stopPropagation();
-            setSelectedMarker('punchOut');
+            setSelectedMarker(prev =>
+              prev === 'punchOut' ? null : 'punchOut',
+            );
           }}>
           <Ionicons
             name="person"
@@ -89,21 +93,17 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
           />
 
           {selectedMarker === 'punchOut' && (
-            <View>
-              <Callout>
-                <View style={styles.calloutContainer}>
-                  <Text style={styles.calloutTitle}>Punch Out Time:</Text>
-                  <Text style={styles.calloutText}>{data?.punchOut}</Text>
-                  <Text style={styles.calloutTitle}>User ID:</Text>
-                  <Text style={styles.calloutText}>
-                    {data?.punchOutData?.userId}
-                  </Text>
-                  <Text style={styles.calloutTitle}>Location:</Text>
-                  <Text style={styles.calloutText}>
-                    {`${data?.punchOutData?.latitude}, ${data?.punchOutData?.longitude}`}
-                  </Text>
-                </View>
-              </Callout>
+            <View style={styles.calloutContainer}>
+              <Text style={styles.calloutTitle}>Punch Out Time:</Text>
+              <Text style={styles.calloutText}>{data?.punchOut}</Text>
+              <Text style={styles.calloutTitle}>User ID:</Text>
+              <Text style={styles.calloutText}>
+                {data?.punchOutData?.userId}
+              </Text>
+              <Text style={styles.calloutTitle}>Location:</Text>
+              <Text style={styles.calloutText}>
+                {`${data?.punchOutData?.latitude}, ${data?.punchOutData?.longitude}`}
+              </Text>
             </View>
           )}
         </Marker>
@@ -115,42 +115,49 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
           CommonStyles.rowBetween,
           CommonStyles.alignItemsCenter,
         ]}>
-        <View style={{width: wp('40')}}>
+        <View style={CommonStyles.width40}>
           <View>
             <Text style={styles.calloutTitleBelow}>Punch In: </Text>
             <Text style={styles.calloutTextBelow}>{data?.punchIn}</Text>
           </View>
 
           <View style={styles.imageStyle}>
-            <Image
-              source={{
-                uri:
-                  data?.imageUrl === ''
-                    ? 'https://www.pngfind.com/pngs/m/304-3045489_png-file-svg-blank-person-transparent-png.png'
-                    : data?.imageUrl,
-              }}
-              style={styles.imageFull}
-              resizeMode="cover"
-            />
+            {data?.imageUrl === '' || !isValidUrl(data?.imageUrl) ? (
+              <Ionicons
+                name={'person'}
+                size={Constants.SIZE.xxLargeIcon}
+                color={Colors.silverColor}
+              />
+            ) : (
+              <Image
+                source={{uri: data?.imageUrl}}
+                style={styles.imageFull}
+                resizeMode="cover"
+              />
+            )}
           </View>
         </View>
-        <View style={{width: wp('40')}}>
+        <View style={CommonStyles.width40}>
           <View>
             <Text style={styles.calloutTitleBelow}>Punch Out: </Text>
             <Text style={styles.calloutTextBelow}>{data?.punchOut}</Text>
           </View>
 
           <View style={styles.imageStyle}>
-            <Image
-              source={{
-                uri:
-                  data?.punchOutData?.imageUrl === ''
-                    ? 'https://www.pngfind.com/pngs/m/304-3045489_png-file-svg-blank-person-transparent-png.png'
-                    : data?.punchOutData?.imageUrl,
-              }}
-              style={styles.imageFull}
-              resizeMode="cover"
-            />
+            {data?.punchOutData?.imageUrl === '' ||
+            !isValidUrl(data?.punchOutData?.imageUrl) ? (
+              <Ionicons
+                name={'person'}
+                size={Constants.SIZE.xxLargeIcon}
+                color={Colors.silverColor}
+              />
+            ) : (
+              <Image
+                source={{uri: data?.punchOutData?.imageUrl}}
+                style={styles.imageFull}
+                resizeMode="cover"
+              />
+            )}
           </View>
         </View>
       </View>
