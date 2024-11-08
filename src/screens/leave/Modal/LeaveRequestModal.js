@@ -87,6 +87,15 @@ export default function LeaveRequestModal({
     await askForConfirmation(leaveData);
   };
 
+  const isLeaveFormValid = () => {
+    return (
+      leaveType !== null &&
+      leaveFrom !== null &&
+      leaveTo !== null &&
+      leaveReason.trim() !== ''
+    );
+  };
+
   const clearStates = () => {
     setLeaveType(null);
     setLeaveFrom(null);
@@ -142,7 +151,11 @@ export default function LeaveRequestModal({
             textColor={Colors.blackColor}
             multiline={true}
           />
-          <CommonButton title={I18n.t('sendLeaveRequest')} onPress={viewData} />
+          <CommonButton
+            title={I18n.t('sendLeaveRequest')}
+            onPress={viewData}
+            disabled={!isLeaveFormValid()}
+          />
         </View>
       </CommonSafeAreaScrollViewComponent>
     </Modal>

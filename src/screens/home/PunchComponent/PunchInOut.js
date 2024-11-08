@@ -159,8 +159,6 @@ export default function PunchInOut() {
   };
 
   const handlePunchIn = async () => {
-    const formattedPunchInTime = moment().format('HH:mm:ss');
-
     try {
       if (await requestLocationPermission()) {
         const location = await getLocation('punch-in');
@@ -181,8 +179,6 @@ export default function PunchInOut() {
   };
 
   const handlePunchOut = async () => {
-    const formattedPunchOutTime = moment().format('HH:mm:ss');
-
     try {
       if (await requestLocationPermission()) {
         const location = await getLocation('punch-out');

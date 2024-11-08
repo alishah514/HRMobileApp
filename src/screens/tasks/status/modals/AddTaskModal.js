@@ -59,7 +59,7 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
     'Yard Management',
     'Custom',
   ];
-  // Function to format today's date in the format "Mon Oct 21 2024"
+
   function getTodayDate() {
     const today = new Date();
     const options = {
@@ -121,6 +121,20 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
     } else {
       console.error('Failed to post task request:', response.error);
     }
+  };
+
+  const isFormValid = () => {
+    return (
+      taskTitle !== '' &&
+      taskCode !== '' &&
+      taskCategory !== null &&
+      taskPriority !== null &&
+      taskStatus !== null &&
+      estimatedJobs > 0 &&
+      department !== null &&
+      assignedTo !== null &&
+      description !== null
+    );
   };
 
   const clearStates = () => {
@@ -239,6 +253,7 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
           <CommonButton
             title={I18n.t('addTask')}
             onPress={askForConfirmation}
+            disabled={!isFormValid()}
           />
         </View>
       </CommonSafeAreaScrollViewComponent>

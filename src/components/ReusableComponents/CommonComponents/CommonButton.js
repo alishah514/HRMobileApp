@@ -12,7 +12,7 @@ export default function CommonButton({
   style,
   disabled = false,
   onPress,
-  outlined = false, // New prop for outlined button
+  outlined = false,
   half = false,
 }) {
   return (

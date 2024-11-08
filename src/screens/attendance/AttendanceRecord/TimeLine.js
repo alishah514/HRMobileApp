@@ -6,6 +6,8 @@ import styles from '../styles';
 import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 import {useNavigation} from '@react-navigation/native';
+import {wp} from '../../../components/common/Dimensions';
+import {Colors} from '../../../components/common/Colors';
 
 export default function TimeLine({data, time}) {
   const navigation = useNavigation();

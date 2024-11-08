@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4, // Shadow radius for Android
     shadowOffset: {width: 0, height: 2}, // Shadow offset for Android
     elevation: 3, // Elevation for Android
+    ...(Platform.OS === 'ios' ? {position: 'absolute', top: 30, left: 30} : {}),
   },
   calloutTitle: {
     fontWeight: 'bold',
@@ -137,10 +138,12 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: wp('35'),
     height: wp('35'),
-    backgroundColor: 'grey',
+    backgroundColor: Colors.whiteColor,
     overflow: 'hidden',
-    borderRadius: 10,
+    borderRadius: wp('17'),
     marginTop: wp('5'),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   imageFull: {
     width: '100%',
