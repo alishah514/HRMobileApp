@@ -102,38 +102,41 @@ const styles = StyleSheet.create({
     height: '50%',
   },
   calloutContainer: {
-    width: wp('40'), // Adjust width as needed
+    width: wp('40'),
     padding: wp('2'),
-    backgroundColor: 'white', // Background color of the tooltip
-    borderRadius: wp('2'), // Rounded corners
-    shadowColor: '#000', // Shadow color for Android
-    shadowOpacity: 0.2, // Shadow opacity for Android
-    shadowRadius: 4, // Shadow radius for Android
-    shadowOffset: {width: 0, height: 2}, // Shadow offset for Android
-    elevation: 3, // Elevation for Android
+    backgroundColor: 'white',
+    borderRadius: wp('2'),
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    shadowOffset: {width: 0, height: 2},
+    elevation: 3,
     ...(Platform.OS === 'ios' ? {position: 'absolute', top: 30, left: 30} : {}),
   },
   calloutTitle: {
     fontWeight: 'bold',
-    color: Colors.blueColor, // Change as per your color scheme
+    color: Colors.blueColor,
     marginBottom: 4,
   },
   calloutText: {
-    color: Colors.black, // Change as per your color scheme
-    marginBottom: 8,
+    color: Colors.black,
+    marginBottom: wp('2'),
   },
   calloutTitleBelow: {
     fontWeight: 'bold',
-    color: Colors.blueColor, // Change as per your color scheme
+    color: Colors.blueColor,
     marginBottom: wp('1'),
     marginTop: wp('3'),
 
     fontSize: wp('4'),
+    textAlign: 'center',
   },
   calloutTextBelow: {
-    color: Colors.black, // Change as per your color scheme
-    marginBottom: 8,
-    fontSize: wp('4'),
+    color: Colors.blackColor,
+    marginBottom: wp('2'),
+    fontSize: wp('4.5'),
+    textAlign: 'center',
+    fontWeight: '500',
   },
   imageStyle: {
     width: wp('35'),
