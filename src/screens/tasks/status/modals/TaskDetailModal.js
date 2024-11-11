@@ -242,6 +242,7 @@ export default function TaskDetailModal({
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
             multiline={true}
+            disabled={true}
           />
         </View>
       </CommonSafeAreaScrollViewComponent>

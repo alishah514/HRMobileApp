@@ -37,13 +37,13 @@ export default function AttendanceScreen({navigation}) {
     }, []),
   );
 
-  useEffect(() => {
-    setDate(today);
-  }, [attendanceData]);
-
   const getAttendance = () => {
     dispatch(fetchAttendance(userId));
   };
+
+  useEffect(() => {
+    setDate(today);
+  }, [attendanceData]);
 
   const setDate = date => {
     const filteredData = attendanceData?.filter(item => {
