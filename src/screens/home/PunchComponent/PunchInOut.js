@@ -22,8 +22,10 @@ import {
   clearAttendanceState,
   saveLastPunchInTime,
   saveLastPunchOutTime,
+  fetchCurrentAttendance,
 } from '../../../redux/attendance/AttendanceActions';
 import {convertTime} from '../../../components/ReusableComponents/ConvertTime';
+import {useFocusEffect} from '@react-navigation/native';
 
 export default function PunchInOut() {
   const dispatch = useDispatch();
@@ -37,6 +39,201 @@ export default function PunchInOut() {
   );
   const userId = useSelector(state => state.login.userId);
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm:ss'));
+  const {currentAttendance} = useSelector(state => state.attendance);
+  const [lastPunchInTimeState, setLastPunchInTimeState] = useState(null);
+  const [lastPunchOutTimeState, setLastPunchOutTimeState] = useState(null);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getCurrentAttendance();
+    }, []),
+  );
+
+  const getCurrentAttendance = () => {
+    const currentDate = new Date();
+    currentDate.setUTCHours(0, 0, 0, 0);
+
+    const timestamp = currentDate.toISOString();
+    return {userId, timestamp};
+  };
+
+  useEffect(() => {
+    const {userId, timestamp} = getCurrentAttendance();
+    if (userId && timestamp) {
+      dispatch(fetchCurrentAttendance(userId, timestamp));
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (currentAttendance && currentAttendance.length > 0) {
+      const punchInArray = currentAttendance.filter(
+        item => item.type === 'PunchIn',
+      );
+      const punchOutArray = currentAttendance.filter(
+        item => item.type === 'PunchOut',
+      );
+
+      const latestPunchIn = punchInArray.sort(
+        (a, b) => new Date(b.creationDate) - new Date(a.creationDate),
+      )[0];
+      const latestPunchOut = punchOutArray.sort(
+        (a, b) => new Date(b.creationDate) - new Date(a.creationDate),
+      )[0];
+
+      if (latestPunchIn) {
+        setLastPunchInTimeState(latestPunchIn?.creationDate);
+      }
+
+      if (latestPunchOut) {
+        setLastPunchOutTimeState(latestPunchOut?.creationDate);
+      }
+
+      if (
+        new Date(latestPunchIn?.creationDate) >
+        new Date(latestPunchOut?.creationDate)
+      ) {
+        dispatch(savePunchInTime(latestPunchIn?.creationDate));
+      } else {
+        dispatch(savePunchOutTime(latestPunchOut?.creationDate));
+
+        setTimeout(resetPunchTimes, 2000);
+      }
+    } else {
+      console.log('No attendance data available');
+    }
+  }, [
+    currentAttendance,
+    punchInTime,
+    punchOutTime,
+    lastPunchInTime,
+    lastPunchOutTime,
+    lastPunchOutTimeState,
+  ]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(moment().format('HH:mm:ss'));
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    if (punchInTime && punchOutTime) {
+      const punchInMoment = moment(punchInTime, 'HH:mm:ss');
+      const punchOutMoment = moment(punchOutTime, 'HH:mm:ss');
+      const diffInSeconds = punchOutMoment.diff(punchInMoment, 'seconds');
+      const formattedDiff = moment.utc(diffInSeconds * 1000).format('HH:mm:ss');
+
+      dispatch(saveTimer(formattedDiff));
+    }
+  }, [punchInTime, punchOutTime, dispatch]);
+
+  useEffect(() => {
+    console.log('punchInTime----------->', punchInTime);
+    console.log('punchOutTime------------>', punchOutTime);
+
+    if (punchInTime && punchOutTime) {
+      setTimeout(resetPunchTimes, 2000);
+    }
+  }, [punchInTime, punchOutTime]);
+
+  const resetPunchTimes = () => {
+    dispatch(clearAttendanceState());
+    setCurrentTime(moment().format('HH:mm:ss'));
+  };
+
+  const handlePunch = async punchType => {
+    try {
+      if (await requestLocationPermission()) {
+        const location = await getLocation(punchType);
+        if (location) {
+          const image = await takeSelfie();
+          if (image) {
+            submitAttendance(punchType, location, image.path);
+          } else {
+            Alert.alert('Failed to take a selfie');
+          }
+        } else {
+          console.log(`Failed to get valid location during ${punchType}`);
+        }
+      }
+    } catch (error) {
+      console.log(`Error during ${punchType}:`, error);
+    }
+  };
+
+  const requestLocationPermission = async () => {
+    const LOCATION_PERMISSION = Platform.select({
+      ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+      android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+    });
+    try {
+      const permissionStatus = await check(LOCATION_PERMISSION);
+      if (permissionStatus === 'granted') return true;
+      const requestResult = await request(LOCATION_PERMISSION);
+      return requestResult === 'granted';
+    } catch (err) {
+      console.warn('Permission request error:', err);
+      return false;
+    }
+  };
+
+  const getLocation = async value => {
+    return new Promise(resolve => {
+      try {
+        Geolocation.getCurrentPosition(
+          position => {
+            const coords = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            };
+
+            if (value === 'PunchIn') {
+              dispatch(savePunchInLocation(coords));
+            } else {
+              dispatch(savePunchOutLocation(coords));
+            }
+            dispatch(saveLocation(coords));
+
+            resolve(coords);
+          },
+          error => {
+            console.log('Error getting location:', error);
+            const fallbackCoords = {
+              latitude: 32.503006,
+              longitude: 74.5009054,
+            };
+
+            if (value === 'PunchIn') {
+              dispatch(savePunchInLocation(fallbackCoords));
+            } else {
+              dispatch(savePunchOutLocation(fallbackCoords));
+            }
+            dispatch(saveLocation(fallbackCoords));
+            resolve(fallbackCoords);
+          },
+          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+        );
+      } catch (err) {
+        console.warn('Error fetching location:', err);
+        resolve(null);
+      }
+    });
+  };
+
+  const takeSelfie = async () => {
+    try {
+      const image = await ImagePicker.openCamera({
+        width: 300,
+        height: 400,
+        cropping: true,
+      });
+
+      return image;
+    } catch (err) {
+      console.log('Error taking selfie:', err);
+    }
+  };
 
   const submitAttendance = async (type, location, imagePath) => {
     const timestamp = moment().format('MMMM D, YYYY [at] h:mm:ss A [UTC]Z');
@@ -70,149 +267,10 @@ export default function PunchInOut() {
     }
   };
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTime(moment().format('HH:mm:ss'));
-    }, 1000);
-    return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
-    if (punchInTime && punchOutTime) {
-      const punchInMoment = moment(punchInTime, 'HH:mm:ss');
-      const punchOutMoment = moment(punchOutTime, 'HH:mm:ss');
-      const diffInSeconds = punchOutMoment.diff(punchInMoment, 'seconds');
-      const formattedDiff = moment.utc(diffInSeconds * 1000).format('HH:mm:ss');
-
-      dispatch(saveTimer(formattedDiff));
-    }
-  }, [punchInTime, punchOutTime, dispatch]);
-
-  const requestLocationPermission = async () => {
-    const LOCATION_PERMISSION = Platform.select({
-      ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-      android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-    });
-    try {
-      const permissionStatus = await check(LOCATION_PERMISSION);
-      if (permissionStatus === 'granted') return true;
-      const requestResult = await request(LOCATION_PERMISSION);
-      return requestResult === 'granted';
-    } catch (err) {
-      console.warn('Permission request error:', err);
-      return false;
-    }
-  };
-
-  const takeSelfie = async () => {
-    try {
-      const image = await ImagePicker.openCamera({
-        width: 300,
-        height: 400,
-        cropping: true,
-      });
-
-      return image;
-    } catch (err) {
-      console.log('Error taking selfie:', err);
-    }
-  };
-
-  const getLocation = async value => {
-    return new Promise(resolve => {
-      try {
-        Geolocation.getCurrentPosition(
-          position => {
-            const coords = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            };
-
-            if (value === 'punch-in') {
-              dispatch(savePunchInLocation(coords));
-            } else {
-              dispatch(savePunchOutLocation(coords));
-            }
-            dispatch(saveLocation(coords));
-
-            resolve(coords);
-          },
-          error => {
-            console.log('Error getting location:', error);
-            const fallbackCoords = {latitude: 32.503006, longitude: 74.5009054};
-
-            if (value === 'punch-in') {
-              dispatch(savePunchInLocation(fallbackCoords));
-            } else {
-              dispatch(savePunchOutLocation(fallbackCoords));
-            }
-            dispatch(saveLocation(fallbackCoords));
-            resolve(fallbackCoords);
-          },
-          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-        );
-      } catch (err) {
-        console.warn('Error fetching location:', err);
-        resolve(null);
-      }
-    });
-  };
-
-  const handlePunchIn = async () => {
-    try {
-      if (await requestLocationPermission()) {
-        const location = await getLocation('punch-in');
-        if (location) {
-          const image = await takeSelfie();
-          if (image) {
-            submitAttendance('PunchIn', location, image.path);
-          } else {
-            Alert.alert('Failed to take a selfie');
-          }
-        } else {
-          console.log('Failed to get valid location during Punch In');
-        }
-      }
-    } catch (error) {
-      console.log('Error during Punch In:', error);
-    }
-  };
-
-  const handlePunchOut = async () => {
-    try {
-      if (await requestLocationPermission()) {
-        const location = await getLocation('punch-out');
-        if (location) {
-          const image = await takeSelfie();
-          if (image) {
-            submitAttendance('PunchOut', location, image.path);
-          } else {
-            console.log('Failed to take a selfie');
-          }
-        } else {
-          console.log('Failed to get valid location during Punch Out');
-        }
-      }
-    } catch (error) {
-      console.log('Error during Punch Out:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (punchInTime && punchOutTime) {
-      setTimeout(resetPunchTimes, 2000);
-    }
-  }, [punchInTime, punchOutTime]);
-
-  const resetPunchTimes = () => {
-    dispatch(clearAttendanceState());
-    setCurrentTime(moment().format('HH:mm:ss'));
-  };
-
   return (
     <View style={[CommonStyles.rowBetween]}>
       <TouchableOpacity
-        onPress={handlePunchIn}
+        onPress={() => handlePunch('PunchIn')}
         style={[styles.boxView, CommonStyles.shadow]}
         disabled={!!punchInTime}>
         <View style={[styles.circleView, CommonStyles.yellowBorder]}>
@@ -240,16 +298,18 @@ export default function PunchInOut() {
             ]}>
             {punchInTime ? I18n.t('punchedIn') : I18n.t('punchIn')}
           </Text>
-          {lastPunchInTime && (
+          {lastPunchInTimeState && (
             <Text style={styles.lastTime}>
-              Last: {convertTime(lastPunchInTime)}
+              Last:{' '}
+              {convertTime(lastPunchInTime) ||
+                convertTime(lastPunchInTimeState)}
             </Text>
           )}
         </View>
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={handlePunchOut}
+        onPress={() => handlePunch('PunchOut')}
         style={[styles.boxView, CommonStyles.marginTop10, CommonStyles.shadow]}
         disabled={!punchInTime || !!punchOutTime}>
         <View style={[styles.circleView, CommonStyles.blueBorder]}>
@@ -277,9 +337,11 @@ export default function PunchInOut() {
             ]}>
             {punchOutTime ? I18n.t('punchedOut') : I18n.t('punchOut')}
           </Text>
-          {lastPunchOutTime && (
+          {lastPunchOutTimeState && (
             <Text style={styles.lastTime}>
-              Last: {convertTime(lastPunchOutTime)}
+              Last:{' '}
+              {convertTime(lastPunchOutTime) ||
+                convertTime(lastPunchOutTimeState)}
             </Text>
           )}
         </View>

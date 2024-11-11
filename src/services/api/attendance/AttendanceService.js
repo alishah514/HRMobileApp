@@ -96,6 +96,76 @@ const AttendanceService = {
       };
     }
   },
+
+  fetchCurrentUserAttendance: async (userId, currentDate) => {
+    const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
+    const body = {
+      structuredQuery: {
+        from: [
+          {
+            collectionId: Constants.ATTENDANCE,
+          },
+        ],
+        where: {
+          compositeFilter: {
+            op: 'AND',
+            filters: [
+              {
+                fieldFilter: {
+                  field: {
+                    fieldPath: 'userId',
+                  },
+                  op: 'EQUAL',
+                  value: {
+                    stringValue: userId,
+                  },
+                },
+              },
+              {
+                fieldFilter: {
+                  field: {
+                    fieldPath: 'creationDate',
+                  },
+                  op: 'GREATER_THAN_OR_EQUAL',
+                  value: {
+                    timestampValue: currentDate,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    try {
+      const response = await axios.post(url, body);
+
+      const finalResponse = response.data
+        .map(item => {
+          const document = item.document || {};
+          const fields = document.fields || {};
+          const documentName = document.name || null;
+          const createTime = document.createTime || null;
+          const updateTime = document.updateTime || null;
+
+          const values = ExtractValues(fields);
+
+          return {
+            name: documentName,
+            createTime,
+            updateTime,
+            ...values,
+          };
+        })
+        .filter(user => user !== null);
+
+      return finalResponse;
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      throw error;
+    }
+  },
 };
 
 export default AttendanceService;
