@@ -115,7 +115,7 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
           CommonStyles.rowBetween,
           CommonStyles.alignItemsCenter,
         ]}>
-        <View style={CommonStyles.width40}>
+        <View style={[CommonStyles.width40, CommonStyles.alignItemsCenter]}>
           <View>
             <Text style={styles.calloutTitleBelow}>Punch In: </Text>
             <Text style={styles.calloutTextBelow}>{data?.punchIn}</Text>
@@ -137,7 +137,7 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
             )}
           </View>
         </View>
-        <View style={CommonStyles.width40}>
+        <View style={[CommonStyles.width40, CommonStyles.alignItemsCenter]}>
           <View>
             <Text style={styles.calloutTitleBelow}>Punch Out: </Text>
             <Text style={styles.calloutTextBelow}>{data?.punchOut}</Text>
