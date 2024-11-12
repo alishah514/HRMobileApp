@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, Platform, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
@@ -26,6 +26,7 @@ import {
 } from '../../../redux/attendance/AttendanceActions';
 import {convertTime} from '../../../components/ReusableComponents/ConvertTime';
 import {useFocusEffect} from '@react-navigation/native';
+import {wp} from '../../../components/common/Dimensions';
 
 export default function PunchInOut() {
   const dispatch = useDispatch();
@@ -40,13 +41,17 @@ export default function PunchInOut() {
   const userId = useSelector(state => state.login.userId);
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm:ss'));
   const {currentAttendance} = useSelector(state => state.attendance);
-  const [lastPunchInTimeState, setLastPunchInTimeState] = useState(null);
-  const [lastPunchOutTimeState, setLastPunchOutTimeState] = useState(null);
+  const [isPunchInDisabled, setIsPunchInDisabled] = useState(false);
+  const [isPunchOutDisabled, setIsPunchOutDisabled] = useState(false);
+  const [isButtonPressed, setIsButtonPressed] = useState(false);
 
   useFocusEffect(
-    React.useCallback(() => {
-      getCurrentAttendance();
-    }, []),
+    useCallback(() => {
+      const {userId, timestamp} = getCurrentAttendance();
+      if (userId && timestamp) {
+        dispatch(fetchCurrentAttendance(userId, timestamp));
+      }
+    }, [dispatch, punchInTime, punchOutTime]),
   );
 
   const getCurrentAttendance = () => {
@@ -62,44 +67,72 @@ export default function PunchInOut() {
     if (userId && timestamp) {
       dispatch(fetchCurrentAttendance(userId, timestamp));
     }
-  }, [userId]);
+  }, [userId, dispatch]);
 
   useEffect(() => {
-    if (currentAttendance && currentAttendance.length > 0) {
-      const punchInArray = currentAttendance.filter(
-        item => item.type === 'PunchIn',
+    const validAttendance = currentAttendance?.filter(
+      item => item.creationDate && item.type,
+    );
+
+    if (!validAttendance || validAttendance?.length === 0) {
+      console.log('No valid attendance records found');
+      return;
+    }
+
+    console.log('validAttendance', validAttendance);
+
+    validAttendance.sort(
+      (a, b) => new Date(a.creationDate) - new Date(b.creationDate),
+    );
+
+    let lastPunchIn = null;
+    let secondToLastPunchIn = null;
+    let lastPunchOut = null;
+    let secondToLastPunchOut = null;
+
+    const dispatchPunchIn = punchInDate => {
+      dispatch(savePunchInTime(punchInDate));
+    };
+
+    const dispatchPunchOut = punchOutDate => {
+      dispatch(savePunchOutTime(punchOutDate));
+    };
+
+    for (const record of validAttendance) {
+      console.log('record', record);
+
+      if (record.type === 'PunchIn') {
+        secondToLastPunchIn = lastPunchIn;
+        lastPunchIn = record;
+
+        dispatchPunchIn(record.creationDate);
+        setIsPunchInDisabled(true);
+        setIsPunchOutDisabled(false);
+      } else if (record.type === 'PunchOut') {
+        secondToLastPunchOut = lastPunchOut;
+        lastPunchOut = record;
+
+        dispatchPunchOut(record.creationDate);
+        setIsPunchOutDisabled(true);
+        setIsPunchInDisabled(false);
+      }
+    }
+
+    if (secondToLastPunchIn) {
+      console.log('Second-to-last Punch In:', secondToLastPunchIn.creationDate);
+      dispatch(saveLastPunchInTime(secondToLastPunchIn.creationDate));
+    }
+
+    if (secondToLastPunchOut) {
+      console.log(
+        'Second-to-last Punch Out:',
+        secondToLastPunchOut.creationDate,
       );
-      const punchOutArray = currentAttendance.filter(
-        item => item.type === 'PunchOut',
-      );
+      dispatch(saveLastPunchOutTime(secondToLastPunchOut.creationDate));
+    }
 
-      const latestPunchIn = punchInArray.sort(
-        (a, b) => new Date(b.creationDate) - new Date(a.creationDate),
-      )[0];
-      const latestPunchOut = punchOutArray.sort(
-        (a, b) => new Date(b.creationDate) - new Date(a.creationDate),
-      )[0];
-
-      if (latestPunchIn) {
-        setLastPunchInTimeState(latestPunchIn?.creationDate);
-      }
-
-      if (latestPunchOut) {
-        setLastPunchOutTimeState(latestPunchOut?.creationDate);
-      }
-
-      if (
-        new Date(latestPunchIn?.creationDate) >
-        new Date(latestPunchOut?.creationDate)
-      ) {
-        dispatch(savePunchInTime(latestPunchIn?.creationDate));
-      } else {
-        dispatch(savePunchOutTime(latestPunchOut?.creationDate));
-
-        setTimeout(resetPunchTimes, 2000);
-      }
-    } else {
-      console.log('No attendance data available');
+    if (lastPunchIn && !lastPunchOut) {
+      dispatchPunchIn(lastPunchIn.creationDate);
     }
   }, [
     currentAttendance,
@@ -107,7 +140,6 @@ export default function PunchInOut() {
     punchOutTime,
     lastPunchInTime,
     lastPunchOutTime,
-    lastPunchOutTimeState,
   ]);
 
   useEffect(() => {
@@ -128,21 +160,10 @@ export default function PunchInOut() {
     }
   }, [punchInTime, punchOutTime, dispatch]);
 
-  useEffect(() => {
-    console.log('punchInTime----------->', punchInTime);
-    console.log('punchOutTime------------>', punchOutTime);
-
-    if (punchInTime && punchOutTime) {
-      setTimeout(resetPunchTimes, 2000);
-    }
-  }, [punchInTime, punchOutTime]);
-
-  const resetPunchTimes = () => {
-    dispatch(clearAttendanceState());
-    setCurrentTime(moment().format('HH:mm:ss'));
-  };
-
   const handlePunch = async punchType => {
+    if (isButtonPressed) return;
+
+    setIsButtonPressed(true);
     try {
       if (await requestLocationPermission()) {
         const location = await getLocation(punchType);
@@ -151,7 +172,8 @@ export default function PunchInOut() {
           if (image) {
             submitAttendance(punchType, location, image.path);
           } else {
-            Alert.alert('Failed to take a selfie');
+            // Alert.alert('Failed to take a selfie');
+            console.log('Failed to take a selfie');
           }
         } else {
           console.log(`Failed to get valid location during ${punchType}`);
@@ -159,6 +181,8 @@ export default function PunchInOut() {
       }
     } catch (error) {
       console.log(`Error during ${punchType}:`, error);
+    } finally {
+      setIsButtonPressed(false);
     }
   };
 
@@ -253,12 +277,16 @@ export default function PunchInOut() {
 
       if (type === 'PunchIn') {
         isType = 'Punched In';
-        dispatch(saveLastPunchInTime(timestamp));
+
         dispatch(savePunchInTime(timestamp));
+        setIsPunchOutDisabled(false);
+        setIsPunchInDisabled(true);
       } else {
         isType = 'Punched Out';
-        dispatch(saveLastPunchOutTime(timestamp));
+
         dispatch(savePunchOutTime(timestamp));
+        setIsPunchOutDisabled(true);
+        setIsPunchInDisabled(false);
       }
 
       Alert.alert(`${isType} successfully`);
@@ -271,12 +299,14 @@ export default function PunchInOut() {
     <View style={[CommonStyles.rowBetween]}>
       <TouchableOpacity
         onPress={() => handlePunch('PunchIn')}
-        style={[styles.boxView, CommonStyles.shadow]}
-        disabled={!!punchInTime}>
+        style={[styles.boxView, CommonStyles.shadow, CommonStyles.height48]}
+        disabled={isPunchInDisabled || isButtonPressed}>
         <View style={[styles.circleView, CommonStyles.yellowBorder]}>
           <Ionicons
             name={
-              punchInTime ? 'checkmark-circle-outline' : 'finger-print-outline'
+              isPunchInDisabled
+                ? 'checkmark-circle-outline'
+                : 'finger-print-outline'
             }
             size={Constants.SIZE.xLargeIcon}
             color={Colors.yellowColor}
@@ -289,20 +319,20 @@ export default function PunchInOut() {
               CommonStyles.textBlack,
               CommonStyles.marginVertical2,
             ]}>
-            {punchInTime ? convertTime(punchInTime) : currentTime}
+            {isPunchInDisabled ? convertTime(punchInTime) : currentTime}
           </Text>
           <Text
             style={[
               CommonStyles.font4P,
-              punchInTime ? CommonStyles.textYellow : CommonStyles.textBlack,
+              isPunchInDisabled
+                ? CommonStyles.textYellow
+                : CommonStyles.textBlack,
             ]}>
-            {punchInTime ? I18n.t('punchedIn') : I18n.t('punchIn')}
+            {isPunchInDisabled ? I18n.t('punchedIn') : I18n.t('punchIn')}
           </Text>
-          {lastPunchInTimeState && (
+          {lastPunchInTime && (
             <Text style={styles.lastTime}>
-              Last:{' '}
-              {convertTime(lastPunchInTime) ||
-                convertTime(lastPunchInTimeState)}
+              Last: {convertTime(lastPunchInTime)}
             </Text>
           )}
         </View>
@@ -310,12 +340,23 @@ export default function PunchInOut() {
 
       <TouchableOpacity
         onPress={() => handlePunch('PunchOut')}
-        style={[styles.boxView, CommonStyles.marginTop10, CommonStyles.shadow]}
-        disabled={!punchInTime || !!punchOutTime}>
+        style={[
+          styles.boxView,
+          CommonStyles.marginTop8,
+          CommonStyles.shadow,
+          CommonStyles.height48,
+        ]}
+        disabled={
+          isPunchOutDisabled ||
+          (!isPunchOutDisabled && !isPunchInDisabled) ||
+          isButtonPressed
+        }>
         <View style={[styles.circleView, CommonStyles.blueBorder]}>
           <Ionicons
             name={
-              punchOutTime ? 'checkmark-circle-outline' : 'finger-print-outline'
+              isPunchOutDisabled
+                ? 'checkmark-circle-outline'
+                : 'finger-print-outline'
             }
             size={Constants.SIZE.xLargeIcon}
             color={Colors.blueColor}
@@ -328,20 +369,20 @@ export default function PunchInOut() {
               CommonStyles.textBlack,
               CommonStyles.marginVertical2,
             ]}>
-            {punchOutTime ? convertTime(punchOutTime) : currentTime}
+            {isPunchOutDisabled ? convertTime(punchOutTime) : currentTime}
           </Text>
           <Text
             style={[
               CommonStyles.font4P,
-              punchOutTime ? CommonStyles.textBlue : CommonStyles.textBlack,
+              isPunchOutDisabled
+                ? CommonStyles.textBlue
+                : CommonStyles.textBlack,
             ]}>
-            {punchOutTime ? I18n.t('punchedOut') : I18n.t('punchOut')}
+            {isPunchOutDisabled ? I18n.t('punchedOut') : I18n.t('punchOut')}
           </Text>
-          {lastPunchOutTimeState && (
+          {lastPunchOutTime && (
             <Text style={styles.lastTime}>
-              Last:{' '}
-              {convertTime(lastPunchOutTime) ||
-                convertTime(lastPunchOutTimeState)}
+              Last: {convertTime(lastPunchOutTime)}
             </Text>
           )}
         </View>

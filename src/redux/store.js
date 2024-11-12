@@ -14,10 +14,12 @@ const store = configureStore({
   reducer: persistedReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['persist/PERSIST'],
-        ignoredPaths: ['register'],
-      },
+      // serializableCheck: {
+      //   ignoredActions: ['persist/PERSIST'],
+      //   ignoredPaths: ['register'],
+      // },
+      immutableCheck: false,
+      serializableCheck: false,
     }),
 });
 

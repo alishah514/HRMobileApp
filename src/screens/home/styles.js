@@ -58,13 +58,13 @@ const styles = StyleSheet.create({
   },
 
   width80Center: {
-    width: wp('80'),
+    width: wp('85'),
     alignSelf: 'center',
   },
   lastTime: {
     color: Colors.greyColor,
     fontSize: wp('2.5'),
-    paddingTop: wp('1'),
+    paddingTop: wp('3'),
   },
 });
 export default styles;
