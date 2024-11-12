@@ -240,7 +240,7 @@ export default function HomeScreen({navigation}) {
                   onPress={() => navigation.navigate('Leave')}
                   style={[
                     styles.boxView,
-                    CommonStyles.marginTop10,
+                    CommonStyles.marginTop8,
                     CommonStyles.shadow,
                   ]}>
                   <View style={[styles.circleView, CommonStyles.blueBorder]}>

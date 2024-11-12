@@ -116,6 +116,7 @@ const CommonStyles = StyleSheet.create({
   marginTop3: {marginTop: wp('3')},
   marginTop5: {marginTop: wp('5')},
   marginTop7: {marginTop: wp('7')},
+  marginTop8: {marginTop: wp('8')},
   marginTop10: {marginTop: wp('10')},
   paddingTopP5: {paddingTop: wp('0.5')},
   paddingTop1: {paddingTop: wp('1')},
@@ -167,6 +168,7 @@ const CommonStyles = StyleSheet.create({
 
   // height
   height30: {height: wp('30')},
+  height48: {height: wp('48')},
   height50: {height: wp('50')},
   height60: {height: wp('60')},
   height70: {height: wp('70')},
