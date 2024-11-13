@@ -39,7 +39,8 @@ const tabs = [
   },
 ];
 
-export default function TaskScreen({navigation}) {
+export default function TaskScreen({navigation, route}) {
+  const source = route.params?.source || 'default';
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
   const userId = useSelector(state => state.login.userId);
@@ -72,14 +73,18 @@ export default function TaskScreen({navigation}) {
     navigation.goBack();
   };
 
+  const handleDrawerOpen = () => {
+    navigation.openDrawer();
+  };
+
   return (
     <CommonSafeAreaViewComponent>
       <Header
         title={I18n.t('tasks')}
-        onLeftIconPressed={goBack}
+        onLeftIconPressed={source === 'drawer' ? handleDrawerOpen : goBack}
         leftIcon={
           <Ionicons
-            name="arrow-back"
+            name={source === 'drawer' ? 'menu' : 'arrow-back'}
             size={Constants?.SIZE.medIcon}
             color={Colors.whiteColor}
           />

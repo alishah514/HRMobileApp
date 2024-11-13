@@ -39,7 +39,8 @@ const tabs = [
   },
 ];
 
-export default function LeaveScreen({navigation}) {
+export default function LeaveScreen({navigation, route}) {
+  const source = route.params?.source || 'default';
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
   const leaves = useSelector(state => state.leaves.data);
@@ -55,12 +56,6 @@ export default function LeaveScreen({navigation}) {
     useState(false);
   const [details, setDetails] = useState(null);
 
-  // useEffect(() => {
-  //   getLeaves();
-  //   return () => {
-  //     dispatch(clearLeavesState());
-  //   };
-  // }, [dispatch]);
   useEffect(() => {
     getLeaves();
   }, []);
@@ -94,15 +89,19 @@ export default function LeaveScreen({navigation}) {
     navigation.goBack();
   };
 
+  const handleDrawerOpen = () => {
+    navigation.openDrawer();
+  };
+
   return (
     <CommonSafeAreaViewComponent>
       {isLoading && <LogoLoaderComponent />}
       <Header
         title={I18n.t('leaves')}
-        onLeftIconPressed={goBack}
+        onLeftIconPressed={source === 'drawer' ? handleDrawerOpen : goBack}
         leftIcon={
           <Ionicons
-            name="arrow-back"
+            name={source === 'drawer' ? 'menu' : 'arrow-back'}
             size={Constants?.SIZE.medIcon}
             color={Colors.whiteColor}
           />
@@ -118,15 +117,13 @@ export default function LeaveScreen({navigation}) {
       />
       <CustomerBackgroundComponent
         topChild={
-          <>
-            <ProfileHeader
-              image={image}
-              toggleImageOptionsModal={toggleImageOptionsModal}
-              name="Syed Ali Sultan Bukhari"
-              role={I18n.t('mobileAppDeveloper')}
-              editable={false}
-            />
-          </>
+          <ProfileHeader
+            image={image}
+            toggleImageOptionsModal={toggleImageOptionsModal}
+            name="Syed Ali Sultan Bukhari"
+            role={I18n.t('mobileAppDeveloper')}
+            editable={false}
+          />
         }
         bottomChild={
           <>
