@@ -5,12 +5,15 @@ import CustomDrawerComponent from '../components/ReusableComponents/CustomDrawer
 import {Colors} from '../components/common/Colors';
 import CommonStyles from '../components/common/CommonStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import HomeScreen from '../screens/home/HomeScreen';
 import SettingScreen from '../screens/settings/SettingScreen';
 import AttendanceScreen from '../screens/attendance/AttendanceScreen';
 import {useSelector} from 'react-redux';
 import I18n from '../i18n/i18n';
+import TaskScreen from '../screens/tasks/TaskScreen';
+import LeaveScreen from '../screens/leave/LeaveScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -88,6 +91,44 @@ const DrawerNavigator = () => {
             drawerIcon: ({focused, size}) => (
               <Ionicons
                 name={focused ? 'person' : 'person-outline'}
+                size={size}
+                color={Colors.whiteColor}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Tasks"
+          component={TaskScreen}
+          initialParams={{source: 'drawer'}}
+          options={{
+            drawerLabel: () => (
+              <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
+                {I18n.t('tasks')}
+              </Text>
+            ),
+            drawerIcon: ({focused, size}) => (
+              <MaterialCommunityIcons
+                name={focused ? 'bag-personal' : 'bag-personal-outline'}
+                size={size}
+                color={Colors.whiteColor}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Leaves"
+          component={LeaveScreen}
+          initialParams={{source: 'drawer'}}
+          options={{
+            drawerLabel: () => (
+              <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
+                {I18n.t('leaves')}
+              </Text>
+            ),
+            drawerIcon: ({focused, size}) => (
+              <Ionicons
+                name={focused ? 'receipt' : 'receipt-outline'}
                 size={size}
                 color={Colors.whiteColor}
               />

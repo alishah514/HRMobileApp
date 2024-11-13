@@ -54,6 +54,19 @@ export default function PunchInOut() {
     }, [dispatch, punchInTime, punchOutTime]),
   );
 
+  useEffect(() => {
+    const isInvalidAttendance =
+      !currentAttendance ||
+      currentAttendance.length === 0 ||
+      currentAttendance.every(
+        item => !item.creationDate || item.creationDate === null,
+      );
+
+    if (isInvalidAttendance) {
+      dispatch(clearAttendanceState());
+    }
+  }, [currentAttendance, dispatch]);
+
   const getCurrentAttendance = () => {
     const currentDate = new Date();
     currentDate.setUTCHours(0, 0, 0, 0);
@@ -75,11 +88,9 @@ export default function PunchInOut() {
     );
 
     if (!validAttendance || validAttendance?.length === 0) {
-      console.log('No valid attendance records found');
+      // console.log('No valid attendance records found');
       return;
     }
-
-    console.log('validAttendance', validAttendance);
 
     validAttendance.sort(
       (a, b) => new Date(a.creationDate) - new Date(b.creationDate),
@@ -99,8 +110,6 @@ export default function PunchInOut() {
     };
 
     for (const record of validAttendance) {
-      console.log('record', record);
-
       if (record.type === 'PunchIn') {
         secondToLastPunchIn = lastPunchIn;
         lastPunchIn = record;
@@ -119,15 +128,10 @@ export default function PunchInOut() {
     }
 
     if (secondToLastPunchIn) {
-      console.log('Second-to-last Punch In:', secondToLastPunchIn.creationDate);
       dispatch(saveLastPunchInTime(secondToLastPunchIn.creationDate));
     }
 
     if (secondToLastPunchOut) {
-      console.log(
-        'Second-to-last Punch Out:',
-        secondToLastPunchOut.creationDate,
-      );
       dispatch(saveLastPunchOutTime(secondToLastPunchOut.creationDate));
     }
 

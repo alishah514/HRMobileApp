@@ -43,7 +43,7 @@ export default function TaskDetailModal({
       storypoints: taskDetails?.storypoints,
       assignedTo: taskDetails?.assignedTo,
       status: 'Completed',
-      description: taskDetails?.description,
+      description: taskDescription,
       assignedDate: taskDetails?.assignedDate,
       userId: taskDetails?.userId,
     };
@@ -242,7 +242,7 @@ export default function TaskDetailModal({
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
             multiline={true}
-            disabled={true}
+            // disabled={true}
           />
         </View>
       </CommonSafeAreaScrollViewComponent>
