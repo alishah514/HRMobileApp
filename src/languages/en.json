@@ -157,5 +157,7 @@
   "leaveTo": "Leave To",
   "reason": "Reason",
   "sendLeaveRequest": "SEND LEAVE REQUEST",
-  "markDone": "Mark Done"
+  "markDone": "Mark Done",
+  "totalEmployees": "Total Employees",
+  "employees": "Employees"
 }

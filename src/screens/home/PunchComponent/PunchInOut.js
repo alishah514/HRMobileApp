@@ -54,18 +54,20 @@ export default function PunchInOut() {
     }, [dispatch, punchInTime, punchOutTime]),
   );
 
-  useEffect(() => {
-    const isInvalidAttendance =
-      !currentAttendance ||
-      currentAttendance.length === 0 ||
-      currentAttendance.every(
-        item => !item.creationDate || item.creationDate === null,
-      );
+  // useEffect(() => {
+  //   const isInvalidAttendance =
+  //     !currentAttendance ||
+  //     currentAttendance.length === 0 ||
+  //     currentAttendance.every(
+  //       item => !item.creationDate || item.creationDate === null,
+  //     );
 
-    if (isInvalidAttendance) {
-      dispatch(clearAttendanceState());
-    }
-  }, [currentAttendance, dispatch]);
+  //   if (isInvalidAttendance) {
+  //     setIsPunchInDisabled(false);
+  //     setIsPunchOutDisabled(false);
+  //     dispatch(clearAttendanceState());
+  //   }
+  // }, [currentAttendance, dispatch]);
 
   const getCurrentAttendance = () => {
     const currentDate = new Date();
@@ -88,7 +90,10 @@ export default function PunchInOut() {
     );
 
     if (!validAttendance || validAttendance?.length === 0) {
-      // console.log('No valid attendance records found');
+      setIsPunchInDisabled(false);
+      setIsPunchOutDisabled(false);
+      dispatch(clearAttendanceState());
+
       return;
     }
 

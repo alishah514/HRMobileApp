@@ -50,7 +50,8 @@ export default function HomeScreen({navigation}) {
   const handleLogout = LogoutConfirmationComponent();
   const currentLanguage = useSelector(state => state.language.language);
   const {isLoading, count, error} = useSelector(state => state.dashboard);
-  const userId = useSelector(state => state.login.userId);
+  const {userId, role} = useSelector(state => state.login);
+
   const {data: profile} = useSelector(state => state.profile);
   const tasks = useSelector(state => state.tasks.data);
   const leaves = useSelector(state => state.leaves.data);
@@ -147,17 +148,24 @@ export default function HomeScreen({navigation}) {
                   CommonStyles.marginHor1,
                 ]}>
                 <Ionicons
-                  name={'time-outline'}
+                  name={role === 'Employee' ? 'time-outline' : 'person-outline'}
                   size={Constants.SIZE.xLargeIcon}
                   color={Colors.blueColor}
                 />
                 <View style={CommonStyles.alignItemsCenter}>
-                  <Text style={[CommonStyles.bold5, CommonStyles.textBlack]}>
+                  <Text
+                    style={[
+                      CommonStyles.bold5,
+                      CommonStyles.textBlack,
+                      role !== 'Employee' && CommonStyles.paddingTop1,
+                    ]}>
                     {count?.totalHours}
                   </Text>
                   <Text
                     style={[CommonStyles.lessBold4P, CommonStyles.textBlue]}>
-                    {I18n.t('totalHours')}
+                    {role === 'Employee'
+                      ? I18n.t('totalHours')
+                      : I18n.t('employees')}
                   </Text>
                 </View>
               </View>
