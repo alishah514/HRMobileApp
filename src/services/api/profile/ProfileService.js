@@ -118,9 +118,6 @@ const ProfileService = {
               profileData.education?.map(edu => ({
                 mapValue: {
                   fields: {
-                    startYear: {
-                      integerValue: edu.startYear || '0',
-                    },
                     startDate: {
                       timestampValue: edu.startDate || '',
                     },
@@ -130,9 +127,7 @@ const ProfileService = {
                     Degree: {
                       stringValue: edu.Degree || '',
                     },
-                    endYear: {
-                      integerValue: edu.endYear || '0',
-                    },
+
                     endDate: {
                       timestampValue: edu.endDate || '',
                     },

@@ -157,5 +157,7 @@
   "leaveTo": "休暇終了日",
   "reason": "理由",
   "sendLeaveRequest": "休暇リクエストを送信",
-  "markDone": "完了にする"
+  "markDone": "完了にする",
+  "totalEmployees": "総従業員数",
+  "employees": "従業員"
 }
