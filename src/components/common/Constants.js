@@ -20,7 +20,7 @@ const TASKS = 'tasks';
 const LEAVES = 'leaves';
 const EMPLOYEES = 'employees';
 const ATTENDANCE = 'attendance';
-
+const DASHBOARD = 'dashboard';
 const ROLE_STATUS = ['Admin', 'Staff'];
 
 const SIZE = {
@@ -52,4 +52,5 @@ export default Constants = {
   LEAVES,
   EMPLOYEES,
   ATTENDANCE,
+  DASHBOARD,
 };

@@ -34,3 +34,14 @@ export const fetchDashboardCount = () => async dispatch => {
     dispatch(fetchDashboardCountFailure(errorMessage));
   }
 };
+
+export const fetchUserDashboardCount = userId => async dispatch => {
+  dispatch(fetchDashboardCountStart());
+  try {
+    const response = await DashboardService.fetchUserDashboardCount(userId);
+    dispatch(fetchDashboardCountSuccess(response));
+  } catch (error) {
+    const errorMessage = error.response ? error.response.data : 'Network error';
+    dispatch(fetchDashboardCountFailure(errorMessage));
+  }
+};
