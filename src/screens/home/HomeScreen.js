@@ -16,11 +16,14 @@ import I18n from '../../i18n/i18n';
 import {
   clearDashboardCountState,
   fetchDashboardCount,
+  fetchUserDashboardCount,
 } from '../../redux/dashboard/DashboardAction';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {fetchUserTasks} from '../../redux/tasks/TaskActions';
 import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
 import {fetchProfile} from '../../redux/profile/ProfileActions';
+import EmployeeCounts from './Admin/EmployeeCounts';
+import EmployeeHours from './Employee/EmployeeHours';
 
 const getGreetingMessage = () => {
   const currentHour = new Date().getHours();
@@ -49,13 +52,19 @@ export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
   const handleLogout = LogoutConfirmationComponent();
   const currentLanguage = useSelector(state => state.language.language);
-  const {isLoading, count, error} = useSelector(state => state.dashboard);
+  const {isLoading: dashboardLoading, count} = useSelector(
+    state => state.dashboard,
+  );
   const {userId, role} = useSelector(state => state.login);
-
-  const {data: profile} = useSelector(state => state.profile);
-  const tasks = useSelector(state => state.tasks.data);
-  const leaves = useSelector(state => state.leaves.data);
-
+  const {data: profile, isLoading: profileLoading} = useSelector(
+    state => state.profile,
+  );
+  const {data: tasks, isLoading: tasksLoading} = useSelector(
+    state => state.tasks,
+  );
+  const {data: leaves, isLoading: leavesLoading} = useSelector(
+    state => state.leaves,
+  );
   const validTaskCount =
     tasks?.filter(task => task.name !== null && task.name !== '').length || 0;
 
@@ -65,6 +74,7 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     getDashboardCount();
+
     return () => {
       dispatch(clearDashboardCountState());
     };
@@ -75,6 +85,7 @@ export default function HomeScreen({navigation}) {
       dispatch(fetchUserLeaves(userId));
       dispatch(fetchUserTasks(userId));
       fetchUserProfile(userId);
+      getDashboardCount(userId);
     }
   }, [dispatch, userId]);
 
@@ -82,8 +93,8 @@ export default function HomeScreen({navigation}) {
     dispatch(fetchProfile(userId));
   };
 
-  const getDashboardCount = () => {
-    dispatch(fetchDashboardCount());
+  const getDashboardCount = userId => {
+    dispatch(fetchUserDashboardCount(userId));
   };
 
   const handleDrawerOpen = () => {
@@ -111,7 +122,10 @@ export default function HomeScreen({navigation}) {
           />
         }
       />
-      {isLoading && <LogoLoaderComponent />}
+      {(dashboardLoading ||
+        profileLoading ||
+        tasksLoading ||
+        leavesLoading) && <LogoLoaderComponent />}
 
       <CustomerBackgroundComponent
         topChild={
@@ -140,79 +154,12 @@ export default function HomeScreen({navigation}) {
                 style={styles.logoIcon}
               />
             </View>
-            <View style={[CommonStyles.width95, CommonStyles.flexRow]}>
-              <View
-                style={[
-                  styles.boxViewTime,
-                  CommonStyles.shadow,
-                  CommonStyles.marginHor1,
-                ]}>
-                <Ionicons
-                  name={role === 'Employee' ? 'time-outline' : 'person-outline'}
-                  size={Constants.SIZE.xLargeIcon}
-                  color={Colors.blueColor}
-                />
-                <View style={CommonStyles.alignItemsCenter}>
-                  <Text
-                    style={[
-                      CommonStyles.bold5,
-                      CommonStyles.textBlack,
-                      role !== 'Employee' && CommonStyles.paddingTop1,
-                    ]}>
-                    {count?.totalHours}
-                  </Text>
-                  <Text
-                    style={[CommonStyles.lessBold4P, CommonStyles.textBlue]}>
-                    {role === 'Employee'
-                      ? I18n.t('totalHours')
-                      : I18n.t('employees')}
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={[
-                  styles.boxViewTime,
-                  CommonStyles.shadow,
-                  CommonStyles.marginHor1,
-                ]}>
-                <Ionicons
-                  name={'checkmark-circle-outline'}
-                  size={Constants.SIZE.xLargeIcon}
-                  color={Colors.greenColor}
-                />
 
-                <View style={CommonStyles.alignItemsCenter}>
-                  <Text style={[CommonStyles.bold5, CommonStyles.textBlack]}>
-                    {count?.onTime}
-                  </Text>
-                  <Text
-                    style={[CommonStyles.lessBold4P, CommonStyles.textGreen]}>
-                    {I18n.t('onTime')}
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={[
-                  styles.boxViewTime,
-                  CommonStyles.shadow,
-                  CommonStyles.marginHor1,
-                ]}>
-                <Ionicons
-                  name={'alert-circle-outline'}
-                  size={Constants.SIZE.xLargeIcon}
-                  color={Colors.redColor}
-                />
-
-                <View style={CommonStyles.alignItemsCenter}>
-                  <Text style={[CommonStyles.bold5, CommonStyles.textBlack]}>
-                    {count?.late}
-                  </Text>
-                  <Text style={[CommonStyles.lessBold4, CommonStyles.textRed]}>
-                    {I18n.t('late')}
-                  </Text>
-                </View>
-              </View>
-            </View>
+            {role === 'Admin' ? (
+              <EmployeeCounts data={count} />
+            ) : (
+              <EmployeeHours data={count} />
+            )}
           </>
         }
         bottomChild={

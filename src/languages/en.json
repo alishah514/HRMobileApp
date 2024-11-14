@@ -159,5 +159,7 @@
   "sendLeaveRequest": "SEND LEAVE REQUEST",
   "markDone": "Mark Done",
   "totalEmployees": "Total Employees",
-  "employees": "Employees"
+  "employees": "Employees",
+  "present": "Present",
+  "absent": "Absent"
 }

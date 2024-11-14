@@ -159,5 +159,7 @@
   "sendLeaveRequest": "休暇リクエストを送信",
   "markDone": "完了にする",
   "totalEmployees": "総従業員数",
-  "employees": "従業員"
+  "employees": "従業員",
+  "present": "出席",
+  "absent": "欠席"
 }
