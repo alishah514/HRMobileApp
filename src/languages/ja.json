@@ -161,5 +161,6 @@
   "totalEmployees": "総従業員数",
   "employees": "従業員",
   "present": "出席",
-  "absent": "欠席"
+  "absent": "欠席",
+  "events": "イベント"
 }

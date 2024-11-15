@@ -29,8 +29,8 @@ export default function LoginScreen({navigation}) {
   const isLoading = useSelector(state => state.login.isLoading);
   // const {request} = useApi('multipart/form-data'); if image then send this
   const {showAlert} = useCustomAlert();
-  const [email, setEmail] = useState('Boy@gmail.com');
-  const [password, setPassword] = useState('boy1234');
+  const [email, setEmail] = useState('Shah@gmail.com');
+  const [password, setPassword] = useState('shah@123');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 

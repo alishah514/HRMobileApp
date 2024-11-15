@@ -102,7 +102,7 @@ export default function LeaveScreen({navigation, route}) {
         leftIcon={
           <Ionicons
             name={source === 'drawer' ? 'menu' : 'arrow-back'}
-            size={Constants?.SIZE.medIcon}
+            size={Constants.SIZE.medIcon}
             color={Colors.whiteColor}
           />
         }
@@ -110,7 +110,7 @@ export default function LeaveScreen({navigation, route}) {
         rightIcon={
           <Ionicons
             name="add-outline"
-            size={Constants?.SIZE.largeIcon}
+            size={Constants.SIZE.largeIcon}
             color={Colors.whiteColor}
           />
         }

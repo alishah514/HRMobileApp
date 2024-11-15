@@ -107,7 +107,7 @@ export const CustomAlertProvider = ({children}) => {
                 onPress={hideAlert}>
                 <AntDesign
                   name="close"
-                  size={Constants?.SIZE.medIcon}
+                  size={Constants.SIZE.medIcon}
                   color={Colors.whiteColor}
                 />
               </TouchableOpacity>

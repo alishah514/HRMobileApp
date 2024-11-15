@@ -161,5 +161,6 @@
   "totalEmployees": "Total Employees",
   "employees": "Employees",
   "present": "Present",
-  "absent": "Absent"
+  "absent": "Absent",
+  "events": "Events"
 }

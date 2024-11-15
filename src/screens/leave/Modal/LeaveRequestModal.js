@@ -117,7 +117,7 @@ export default function LeaveRequestModal({
           leftIcon={
             <Ionicons
               name="close"
-              size={Constants?.SIZE.largeIcon}
+              size={Constants.SIZE.largeIcon}
               color={Colors.whiteColor}
             />
           }

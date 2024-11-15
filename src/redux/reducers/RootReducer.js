@@ -8,6 +8,7 @@ import DashboardCountReducer from '../dashboard/DashboardReducer';
 import TaskReducer from '../tasks/TaskReducer';
 import {ChangePasswordReducer} from '../changePassword/ChangePasswordReducer';
 import ProfileReducer from '../profile/ProfileReducer';
+import EventReducer from '../events/EventReducer';
 
 const RootReducer = combineReducers({
   login: LoginReducer,
@@ -19,6 +20,7 @@ const RootReducer = combineReducers({
   dashboard: DashboardCountReducer,
   changePassword: ChangePasswordReducer,
   profile: ProfileReducer,
+  events: EventReducer,
 });
 
 export default RootReducer;
