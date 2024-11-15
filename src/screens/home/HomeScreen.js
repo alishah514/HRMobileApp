@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import Header from '../../components/ReusableComponents/Header/Header';
 import LogoutConfirmationComponent from '../../components/ReusableComponents/LogoutConfirmationComponent';
@@ -15,7 +15,6 @@ import CommonSafeAreaViewComponent from '../../components/ReusableComponents/Com
 import I18n from '../../i18n/i18n';
 import {
   clearDashboardCountState,
-  fetchDashboardCount,
   fetchUserDashboardCount,
 } from '../../redux/dashboard/DashboardAction';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
@@ -117,7 +116,7 @@ export default function HomeScreen({navigation}) {
         leftIcon={
           <Ionicons
             name="menu"
-            size={Constants?.SIZE.medIcon}
+            size={Constants.SIZE.medIcon}
             color={Colors.whiteColor}
           />
         }

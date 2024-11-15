@@ -78,7 +78,7 @@ export default function ProfileScreen({navigation}) {
         leftIcon={
           <Ionicons
             name="menu"
-            size={Constants?.SIZE.medIcon}
+            size={Constants.SIZE.medIcon}
             color={Colors.whiteColor}
           />
         }
@@ -86,7 +86,7 @@ export default function ProfileScreen({navigation}) {
         rightIcon={
           <MaterialCommunityIcons
             name="account-edit-outline"
-            size={Constants?.SIZE.largeIcon}
+            size={Constants.SIZE.largeIcon}
             color={Colors.whiteColor}
           />
         }

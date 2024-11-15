@@ -26,7 +26,7 @@ export default function SettingScreen({navigation}) {
         leftIcon={
           <Ionicons
             name="menu"
-            size={Constants?.SIZE.medIcon}
+            size={Constants.SIZE.medIcon}
             color={Colors.whiteColor}
           />
         }

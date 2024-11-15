@@ -150,7 +150,7 @@ export default function EditProfileModal({
           leftIcon={
             <Ionicons
               name="close"
-              size={Constants?.SIZE.largeIcon}
+              size={Constants.SIZE.largeIcon}
               color={Colors.whiteColor}
             />
           }
@@ -158,7 +158,7 @@ export default function EditProfileModal({
           rightIcon={
             <Ionicons
               name="checkmark"
-              size={Constants?.SIZE.largeIcon}
+              size={Constants.SIZE.largeIcon}
               color={Colors.whiteColor}
             />
           }

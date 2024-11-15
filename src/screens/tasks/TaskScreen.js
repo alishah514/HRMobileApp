@@ -85,7 +85,7 @@ export default function TaskScreen({navigation, route}) {
         leftIcon={
           <Ionicons
             name={source === 'drawer' ? 'menu' : 'arrow-back'}
-            size={Constants?.SIZE.medIcon}
+            size={Constants.SIZE.medIcon}
             color={Colors.whiteColor}
           />
         }
@@ -93,7 +93,7 @@ export default function TaskScreen({navigation, route}) {
         rightIcon={
           <MaterialIcons
             name="add-task"
-            size={Constants?.SIZE.medIcon}
+            size={Constants.SIZE.medIcon}
             color={Colors.whiteColor}
           />
         }

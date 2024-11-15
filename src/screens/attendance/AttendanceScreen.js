@@ -159,7 +159,7 @@ export default function AttendanceScreen({navigation}) {
         leftIcon={
           <Ionicons
             name="menu"
-            size={Constants?.SIZE.medIcon}
+            size={Constants.SIZE.medIcon}
             color={Colors.whiteColor}
           />
         }
@@ -179,7 +179,7 @@ export default function AttendanceScreen({navigation}) {
               </Text>
               <Ionicons
                 name="calendar-outline"
-                size={Constants?.SIZE.largeIcon}
+                size={Constants.SIZE.largeIcon}
                 color={Colors.whiteColor}
               />
             </View>
@@ -247,7 +247,7 @@ export default function AttendanceScreen({navigation}) {
                   <View style={styles.arrowBox}>
                     <Ionicons
                       name="arrow-back"
-                      size={Constants?.SIZE.medIcon}
+                      size={Constants.SIZE.medIcon}
                       color={Colors.yellowColor}
                     />
                   </View>
@@ -278,7 +278,7 @@ export default function AttendanceScreen({navigation}) {
                   <View style={styles.arrowBox}>
                     <Ionicons
                       name="arrow-forward"
-                      size={Constants?.SIZE.medIcon}
+                      size={Constants.SIZE.medIcon}
                       color={Colors.yellowColor}
                     />
                   </View>

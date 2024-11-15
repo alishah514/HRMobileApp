@@ -96,7 +96,7 @@ export default function TaskDetailModal({
           leftIcon={
             <Ionicons
               name="close"
-              size={Constants?.SIZE.largeIcon}
+              size={Constants.SIZE.largeIcon}
               color={Colors.whiteColor}
             />
           }
@@ -105,7 +105,7 @@ export default function TaskDetailModal({
             taskDetails?.status !== 'Completed' && (
               <Ionicons
                 name="checkmark"
-                size={Constants?.SIZE.largeIcon}
+                size={Constants.SIZE.largeIcon}
                 color={Colors.whiteColor}
               />
             )

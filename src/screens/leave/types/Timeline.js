@@ -13,11 +13,18 @@ import {formatDate} from '../../../components/utils/dateUtils';
 const Timeline = ({color, data, toggleViewLeaveRequestModal}) => {
   const currentLanguage = useSelector(state => state.language.language);
 
+  const sortedData = [...data].sort((a, b) => {
+    const aCreateTime = new Date(a.createTime);
+    const bCreateTime = new Date(b.createTime);
+
+    return bCreateTime - aCreateTime;
+  });
+
   return (
     <View>
       <View style={styles.verticalLine} />
       <FlatList
-        data={data}
+        data={sortedData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <View style={styles.itemContainer}>
