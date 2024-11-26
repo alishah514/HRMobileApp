@@ -23,6 +23,11 @@ const ATTENDANCE = 'attendance';
 const DASHBOARD = 'dashboard';
 const EVENTS = 'events';
 const ROLE_STATUS = ['Admin', 'Staff'];
+const ENCR_PASS = 'M3LOGI512';
+const ENCR_SALT = 'XYZ';
+const ENCR_COST = 5000;
+const ENCR_LENGTH = 256;
+const STRING_BYTE = 'CodeDecode@512';
 
 const SIZE = {
   xxLargeIcon: wp('18'),
@@ -55,4 +60,9 @@ export default Constants = {
   ATTENDANCE,
   DASHBOARD,
   EVENTS,
+  ENCR_PASS,
+  ENCR_SALT,
+  ENCR_COST,
+  ENCR_LENGTH,
+  STRING_BYTE,
 };

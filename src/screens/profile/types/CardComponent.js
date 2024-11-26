@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {View, Text, ImageBackground, Image, Alert} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import ViewShot from 'react-native-view-shot';
@@ -12,9 +12,11 @@ import {formatDate} from '../../../components/utils/dateUtils';
 import CommonStyles from '../../../components/common/CommonStyles';
 import styles from '../styles';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
+import Security from '../../../components/ReusableComponents/Security';
 
 export default function CardComponent({data}) {
   const viewShotRef = useRef();
+  const [encryptedData, setEncryptedData] = useState(null);
 
   const calculateExpiryDate = dateString => {
     let date = new Date(dateString);
@@ -33,15 +35,25 @@ export default function CardComponent({data}) {
     expiryDate: calculateExpiryDate(data?.createTime),
   });
 
+  const handleEncryptedData = cipher => {
+    setEncryptedData(cipher);
+  };
+
   const handleShare = async () => {
     try {
+      if (!encryptedData) {
+        Alert.alert('Error', 'Encryption failed, no data to share.');
+        return;
+      }
+
       const uri = await viewShotRef.current.capture({
         format: 'png',
         quality: 1.0,
       });
+
       const shareOptions = {
-        title: 'Share Card',
-        message: 'Here is my card information.',
+        title: 'M3Logi HRApp',
+        message: 'Here is my encrypted card information.',
         url: uri,
         type: 'image/png',
       };
@@ -49,12 +61,13 @@ export default function CardComponent({data}) {
       await Share.open(shareOptions);
     } catch (error) {
       console.error('Error sharing image:', error);
-      Alert.alert('Error', 'Failed to share the card.');
     }
   };
 
   return (
     <>
+      <Security data={qrCodeData} onEncrypted={handleEncryptedData} />
+
       <ViewShot
         ref={viewShotRef}
         options={{
@@ -83,8 +96,8 @@ export default function CardComponent({data}) {
             <View style={styles.details}>
               <Text style={styles.label}>
                 ID No.{' '}
-                <Text style={styles.value}>
-                  {TruncateTitle(data?.personal?.employeeId, 17)}
+                <Text style={[styles.value, {fontSize: wp(3.5)}]}>
+                  {TruncateTitle(data?.personal?.employeeId, 20)}
                 </Text>
               </Text>
 
@@ -110,7 +123,7 @@ export default function CardComponent({data}) {
 
             <View style={styles.iconContainer}>
               <QRCode
-                value={qrCodeData}
+                value={encryptedData || qrCodeData}
                 size={wp(25)}
                 color={Colors.blackColor}
                 backgroundColor={Colors.whiteColor}
