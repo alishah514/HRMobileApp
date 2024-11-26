@@ -20,11 +20,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import {fetchProfile} from '../../redux/profile/ProfileActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
+import CardComponent from './types/CardComponent';
 
 const tabs = [
   {id: 0, icon: 'person-outline', iconSet: Ionicons},
   {id: 1, icon: 'graduation', iconSet: SimpleLineIcons},
   {id: 2, icon: 'briefcase', iconSet: SimpleLineIcons},
+  {id: 3, icon: 'card-outline', iconSet: Ionicons},
 ];
 
 export default function ProfileScreen({navigation}) {
@@ -121,6 +123,8 @@ export default function ProfileScreen({navigation}) {
                     <EducationInfo data={profile?.education} />
                   ) : activeTab === 2 ? (
                     <WorkInfo data={profile?.job} />
+                  ) : activeTab === 3 ? (
+                    <CardComponent data={profile} />
                   ) : null}
                 </View>
               )}
