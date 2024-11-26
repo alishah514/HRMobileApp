@@ -54,21 +54,6 @@ export default function PunchInOut() {
     }, [dispatch, punchInTime, punchOutTime]),
   );
 
-  // useEffect(() => {
-  //   const isInvalidAttendance =
-  //     !currentAttendance ||
-  //     currentAttendance.length === 0 ||
-  //     currentAttendance.every(
-  //       item => !item.creationDate || item.creationDate === null,
-  //     );
-
-  //   if (isInvalidAttendance) {
-  //     setIsPunchInDisabled(false);
-  //     setIsPunchOutDisabled(false);
-  //     dispatch(clearAttendanceState());
-  //   }
-  // }, [currentAttendance, dispatch]);
-
   const getCurrentAttendance = () => {
     const currentDate = new Date();
     currentDate.setUTCHours(0, 0, 0, 0);
