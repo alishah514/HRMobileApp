@@ -162,5 +162,8 @@
   "employees": "Employees",
   "present": "Present",
   "absent": "Absent",
-  "events": "Events"
+  "events": "Events",
+  "punchInTime": "Punch In Time",
+  "punchOutTime": "Punch Out Time",
+  "totalWorkHours": "Total Work Hours"
 }
