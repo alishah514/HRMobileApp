@@ -83,7 +83,7 @@ const AttendanceService = {
 
     try {
       const response = await axios.post(url, body);
-      console.log('Response: ', response.data);
+
       return {success: true, response: response.data};
     } catch (error) {
       console.error(

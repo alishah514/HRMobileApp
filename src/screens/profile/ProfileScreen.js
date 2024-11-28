@@ -84,14 +84,14 @@ export default function ProfileScreen({navigation}) {
             color={Colors.whiteColor}
           />
         }
-        onRightIconPressed={toggleEditModal}
-        rightIcon={
-          <MaterialCommunityIcons
-            name="account-edit-outline"
-            size={Constants.SIZE.largeIcon}
-            color={Colors.whiteColor}
-          />
-        }
+        // onRightIconPressed={toggleEditModal}
+        // rightIcon={
+        //   <MaterialCommunityIcons
+        //     name="account-edit-outline"
+        //     size={Constants.SIZE.largeIcon}
+        //     color={Colors.whiteColor}
+        //   />
+        // }
       />
       {isLoading && <LogoLoaderComponent />}
       <CustomerBackgroundComponent

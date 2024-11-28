@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import Header from '../../components/ReusableComponents/Header/Header';
 import LogoutConfirmationComponent from '../../components/ReusableComponents/LogoutConfirmationComponent';
@@ -23,6 +23,7 @@ import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
 import {fetchProfile} from '../../redux/profile/ProfileActions';
 import EmployeeCounts from './Admin/EmployeeCounts';
 import EmployeeHours from './Employee/EmployeeHours';
+import {fetchAttendance} from '../../redux/attendance/AttendanceActions';
 
 const getGreetingMessage = () => {
   const currentHour = new Date().getHours();
@@ -50,7 +51,10 @@ export default function HomeScreen({navigation}) {
   const {greeting, wish} = getGreetingMessage();
   const dispatch = useDispatch();
   const handleLogout = LogoutConfirmationComponent();
+
+  const [isLoading, setIsLoading] = useState(false);
   const currentLanguage = useSelector(state => state.language.language);
+
   const {isLoading: dashboardLoading, count} = useSelector(
     state => state.dashboard,
   );
@@ -73,7 +77,6 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     getDashboardCount();
-
     return () => {
       dispatch(clearDashboardCountState());
     };
@@ -83,6 +86,7 @@ export default function HomeScreen({navigation}) {
     if (userId) {
       dispatch(fetchUserLeaves(userId));
       dispatch(fetchUserTasks(userId));
+      dispatch(fetchAttendance(userId));
       fetchUserProfile(userId);
       getDashboardCount(userId);
     }
@@ -124,7 +128,8 @@ export default function HomeScreen({navigation}) {
       {(dashboardLoading ||
         profileLoading ||
         tasksLoading ||
-        leavesLoading) && <LogoLoaderComponent />}
+        leavesLoading ||
+        isLoading) && <LogoLoaderComponent />}
 
       <CustomerBackgroundComponent
         topChild={
@@ -164,7 +169,7 @@ export default function HomeScreen({navigation}) {
         bottomChild={
           <>
             <ScrollView contentContainerStyle={[styles.infoStarting]}>
-              <PunchInOut />
+              <PunchInOut setIsLoading={setIsLoading} />
               <View style={[CommonStyles.rowBetween, styles.width80Center]}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Task')}
