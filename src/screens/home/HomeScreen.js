@@ -162,7 +162,7 @@ export default function HomeScreen({navigation}) {
             {role === 'Admin' ? (
               <EmployeeCounts data={count} />
             ) : (
-              <EmployeeHours data={count} profile={profile} />
+              <EmployeeHours data={profile} />
             )}
           </>
         }
