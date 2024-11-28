@@ -2,18 +2,18 @@ import moment from 'moment';
 
 export const CalculateTotalHours = attendanceData => {
   const today = moment();
-  const weekStart = today.clone().startOf('isoWeek');
-  const weekEnd = today.clone().endOf('isoWeek');
+  const monthStart = today.clone().startOf('month');
+  const monthEnd = today.clone().endOf('month');
 
-  const currentWeekRecords = attendanceData?.filter(record => {
+  const currentMonthRecords = attendanceData?.filter(record => {
     const creationDate = moment(record.creationDate);
-    return creationDate.isBetween(weekStart, weekEnd, 'day', '[]');
+    return creationDate.isBetween(monthStart, monthEnd, 'day', '[]');
   });
 
-  const recordsByDay = Array.from({length: 7}, () => []);
+  const recordsByDay = Array.from({length: monthEnd.date()}, () => []);
 
-  currentWeekRecords?.forEach(record => {
-    const dayIndex = moment(record.creationDate).isoWeekday() - 1;
+  currentMonthRecords?.forEach(record => {
+    const dayIndex = moment(record.creationDate).date() - 1;
     recordsByDay[dayIndex].push(record);
   });
 
@@ -43,17 +43,19 @@ export const CalculateTotalHours = attendanceData => {
     }, 0);
   };
 
-  const dailyDurations = recordsByDay.map((dayRecords, index) => {
+  const dailyDurations = recordsByDay.map(dayRecords => {
     const duration = calculateDayDuration(dayRecords);
-
     return duration;
   });
 
-  const weeklyTotal = dailyDurations.reduce((total, daily) => total + daily, 0);
+  const monthlyTotal = dailyDurations.reduce(
+    (total, daily) => total + daily,
+    0,
+  );
 
-  const hours = Math.floor(weeklyTotal / 3600);
-  const minutes = Math.floor((weeklyTotal % 3600) / 60);
-  const seconds = weeklyTotal % 60;
+  const hours = Math.floor(monthlyTotal / 3600);
+  const minutes = Math.floor((monthlyTotal % 3600) / 60);
+  const seconds = monthlyTotal % 60;
 
   return {hours, minutes, seconds};
 };
