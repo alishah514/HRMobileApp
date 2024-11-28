@@ -25,6 +25,8 @@ export const ExtractValues = fields => {
     jobObject.employmentType = jobFields.employmentType?.stringValue;
     jobObject.salary = jobFields.salary?.stringValue;
     jobObject.wageType = jobFields.wageType?.stringValue;
+    jobObject.punchInTime = jobFields.punchInTime?.integerValue;
+    jobObject.punchOutTime = jobFields.punchOutTime?.integerValue;
   }
 
   // Extract personal
