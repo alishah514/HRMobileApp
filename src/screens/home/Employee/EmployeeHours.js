@@ -10,7 +10,7 @@ import {CalculateTotalHours} from '../../../components/utils/CalculateTotalHours
 import {useSelector} from 'react-redux';
 import {CalculateAttendanceStatus} from '../../../components/utils/CalculateAttendanceStatus';
 
-export default function EmployeeHours({data, profile}) {
+export default function EmployeeHours({data}) {
   const attendanceData = useSelector(state => state.attendance.attendanceData);
   const [attendanceSummary, setAttendanceSummary] = useState({
     onTime: 0,
@@ -24,19 +24,10 @@ export default function EmployeeHours({data, profile}) {
   });
 
   useEffect(() => {
-    if (profile?.job?.punchInTime) {
-      const punchInHour = profile.job.punchInTime;
-
-      const formattedHour = punchInHour % 12 || 12;
-      const period = punchInHour < 12 ? 'AM' : 'PM';
-
-      const thresholdTime = `${formattedHour
-        .toString()
-        .padStart(2, '0')}:00:00 ${period}`;
-
+    if (data?.job?.punchInTime) {
       const {onTimeCount, lateCount} = CalculateAttendanceStatus(
         attendanceData,
-        thresholdTime,
+        data?.job?.punchInTime,
       );
 
       setAttendanceSummary({
@@ -44,7 +35,7 @@ export default function EmployeeHours({data, profile}) {
         late: lateCount,
       });
     }
-  }, [attendanceData, profile]);
+  }, [attendanceData, data]);
 
   useEffect(() => {
     const totalHours = CalculateTotalHours(attendanceData);

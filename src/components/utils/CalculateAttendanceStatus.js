@@ -1,6 +1,14 @@
 import moment from 'moment';
 
-export const CalculateAttendanceStatus = (attendanceData, thresholdTimeStr) => {
+export const CalculateAttendanceStatus = (attendanceData, punchInHour) => {
+  const formattedHour = punchInHour % 12 || 12;
+  const period = punchInHour < 12 ? 'AM' : 'PM';
+  const thresholdTimeStr = `${formattedHour
+    .toString()
+    .padStart(2, '0')}:00:00 ${period}`;
+
+  const thresholdTime = moment(thresholdTimeStr, 'hh:mm:ss A');
+
   const today = moment();
   const monthStart = today.clone().startOf('month');
   const monthEnd = today.clone().endOf('month');
@@ -17,7 +25,7 @@ export const CalculateAttendanceStatus = (attendanceData, thresholdTimeStr) => {
     recordsByDay[dayIndex].push(record);
   });
 
-  const getFirstPunchPair = (dayRecords, dayIndex, thresholdTime) => {
+  const getFirstPunchPair = dayRecords => {
     const sortedRecords = dayRecords.sort(
       (a, b) => new Date(a.creationDate) - new Date(b.creationDate),
     );
@@ -33,38 +41,25 @@ export const CalculateAttendanceStatus = (attendanceData, thresholdTimeStr) => {
       const punchInTime = moment(firstPunchIn.creationDate);
       const punchOutTime = moment(firstPunchOut.creationDate);
 
-      // Set threshold to the same date as the punch-in
       const threshold = punchInTime
         .clone()
         .hour(thresholdTime.hour())
         .minute(thresholdTime.minute())
         .second(thresholdTime.second());
 
-      console.log(`Day ${dayIndex + 1}:`);
-      console.log('Threshold Time:', threshold.format('hh:mm:ss A'));
-      console.log('First PunchIn:', punchInTime.format('hh:mm:ss A'));
-      console.log('First PunchOut:', punchOutTime.format('hh:mm:ss A'));
-
       const status = punchInTime.isAfter(threshold) ? 'Late' : 'On Time';
-      console.log(`Status: ${status}`);
-
       return {punchInTime, punchOutTime, status};
     } else {
-      console.log(`Day ${dayIndex + 1}: PunchIn or PunchOut missing`);
       return null;
     }
   };
 
-  const thresholdTime = moment(thresholdTimeStr, 'hh:mm:ss A');
-
   let onTimeCount = 0;
   let lateCount = 0;
 
-  recordsByDay.forEach((dayRecords, index) => {
+  recordsByDay.forEach(dayRecords => {
     if (dayRecords.length > 0) {
-      console.log(`\nAnalyzing Day ${index + 1}:`);
-      const firstPair = getFirstPunchPair(dayRecords, index, thresholdTime);
-
+      const firstPair = getFirstPunchPair(dayRecords);
       if (firstPair) {
         if (firstPair.status === 'On Time') {
           onTimeCount += 1;
