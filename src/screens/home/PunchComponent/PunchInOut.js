@@ -23,12 +23,12 @@ import {
   saveLastPunchInTime,
   saveLastPunchOutTime,
   fetchCurrentAttendance,
+  fetchAttendance,
 } from '../../../redux/attendance/AttendanceActions';
 import {convertTime} from '../../../components/ReusableComponents/ConvertTime';
 import {useFocusEffect} from '@react-navigation/native';
-import {wp} from '../../../components/common/Dimensions';
 
-export default function PunchInOut() {
+export default function PunchInOut({setIsLoading}) {
   const dispatch = useDispatch();
   const punchInTime = useSelector(state => state.attendance.punchInTime);
   const punchOutTime = useSelector(state => state.attendance.punchOutTime);
@@ -155,6 +155,7 @@ export default function PunchInOut() {
   }, [punchInTime, punchOutTime, dispatch]);
 
   const handlePunch = async punchType => {
+    setIsLoading(true);
     if (isButtonPressed) return;
 
     setIsButtonPressed(true);
@@ -177,6 +178,7 @@ export default function PunchInOut() {
       console.log(`Error during ${punchType}:`, error);
     } finally {
       setIsButtonPressed(false);
+      setIsLoading(false);
     }
   };
 
@@ -281,6 +283,7 @@ export default function PunchInOut() {
         dispatch(savePunchOutTime(timestamp));
         setIsPunchOutDisabled(true);
         setIsPunchInDisabled(false);
+        dispatch(fetchAttendance(userId));
       }
 
       Alert.alert(`${isType} successfully`);

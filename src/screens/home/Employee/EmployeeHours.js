@@ -1,13 +1,32 @@
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from '../styles';
 import CommonStyles from '../../../components/common/CommonStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../../components/common/Constants';
 import {Colors} from '../../../components/common/Colors';
 import I18n from '../../../i18n/i18n';
+import {CalculateTotalHours} from '../../../components/utils/CalculateTotalHoursComponent';
+import {useSelector} from 'react-redux';
 
 export default function EmployeeHours({data}) {
+  const attendanceData = useSelector(state => state.attendance.attendanceData);
+  const [workHours, setWorkHours] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
+  useEffect(() => {
+    updateWorkHours();
+  }, [attendanceData]);
+
+  const updateWorkHours = () => {
+    const totalHours = CalculateTotalHours(attendanceData);
+
+    setWorkHours(totalHours);
+  };
+
   return (
     <View style={[CommonStyles.width95, CommonStyles.flexRow]}>
       <View
@@ -23,7 +42,9 @@ export default function EmployeeHours({data}) {
         />
         <View style={CommonStyles.alignItemsCenter}>
           <Text style={[CommonStyles.bold5, CommonStyles.textBlack]}>
-            {data?.totalHours}
+            {`${String(workHours?.hours).padStart(2, '0')}:${String(
+              workHours?.minutes,
+            ).padStart(2, '0')}:${String(workHours?.seconds).padStart(2, '0')}`}
           </Text>
           <Text style={[CommonStyles.lessBold4P, CommonStyles.textBlue]}>
             {I18n.t('totalHours')}
