@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {Colors} from '../../components/common/Colors';
-import {wp} from '../../components/common/Dimensions';
 import CommonStyles from '../../components/common/CommonStyles';
+import styles from './styles';
 
-// Configure the locale
+// Ensure LocaleConfig is correctly defined
 LocaleConfig.locales['en'] = {
   monthNames: [
     'January',
@@ -44,15 +44,65 @@ LocaleConfig.locales['en'] = {
     'Friday',
     'Saturday',
   ],
-  dayNamesShort: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+  dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], // Ensure this is correctly defined
+  today: 'Today', // Add this field to avoid potential issues
 };
-LocaleConfig.defaultLocale = 'en';
+LocaleConfig.defaultLocale = 'en'; // Ensure this matches the defined locale
 
-const EventCalendarComponent = () => {
-  const [selectedDate, setSelectedDate] = useState('2019-01-01');
+export default function EventCalendarComponent({data}) {
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split('T')[0],
+  );
+  const [eventDetails, setEventDetails] = useState(null);
+  const [markedDates, setMarkedDates] = useState({});
+
+  useEffect(() => {
+    if (!data || data.length === 0) return;
+
+    const dates = {};
+    data.forEach(event => {
+      if (event.startDate && event.endDate) {
+        const startDate = event.startDate.split('T')[0];
+        const endDate = event.endDate.split('T')[0];
+
+        if (startDate === endDate) {
+          dates[startDate] = {marked: true, dotColor: Colors.orangeColor};
+        } else {
+          let currentDate = new Date(startDate);
+          const end = new Date(endDate);
+
+          while (currentDate <= end) {
+            const formattedDate = currentDate.toISOString().split('T')[0];
+            dates[formattedDate] = {marked: true, dotColor: Colors.orangeColor};
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+        }
+      }
+    });
+
+    // Add selected date styling
+    if (selectedDate) {
+      dates[selectedDate] = {
+        ...dates[selectedDate], // Preserve existing marking if any
+        selected: true,
+        selectedColor: Colors.orangeColor,
+        disableTouchEvent: true,
+      };
+    }
+
+    setMarkedDates(dates);
+  }, [data, selectedDate]);
 
   const handleDayPress = day => {
     setSelectedDate(day.dateString);
+
+    const event = data.find(event => {
+      const startDate = event.startDate.split('T')[0];
+      const endDate = event.endDate.split('T')[0];
+      return day.dateString >= startDate && day.dateString <= endDate;
+    });
+
+    setEventDetails(event || null); // Reset if no event found
   };
 
   return (
@@ -61,59 +111,35 @@ const EventCalendarComponent = () => {
         current={selectedDate}
         style={styles.parentStyle}
         onDayPress={handleDayPress}
-        markedDates={{
-          [selectedDate]: {
-            selected: true,
-            selectedColor: Colors.orangeColor,
-            disableTouchEvent: true,
-          },
-          // '2019-01-08': {
-          //   marked: true,
-          //   dotColor: Colors.orangeColor,
-          // },
-          // '2019-01-15': {marked: true, dotColor: Colors.orangeColor},
-          // '2019-01-22': {marked: true, dotColor: Colors.orangeColor},
-          // '2019-01-25': {marked: true, dotColor: Colors.orangeColor},
-        }}
+        markedDates={markedDates}
       />
-      <View style={styles.eventDetails}>
-        <Text style={styles.eventTitle}>New event</Text>
-        <View style={[CommonStyles.rowBetween, CommonStyles.paddingTop3]}>
-          <Text style={styles.eventDate}>Start Date: Jan 1, 2024</Text>
-          <Text style={styles.eventDate}>End Date: Jan 8, 2024</Text>
+      {eventDetails ? (
+        <View style={styles.eventDetails}>
+          <Text style={styles.eventTitle}>{eventDetails.title}</Text>
+          <View
+            style={[
+              CommonStyles.rowBetween,
+              CommonStyles.paddingVertical3,
+              CommonStyles.paddingRight3,
+            ]}>
+            <Text style={styles.eventDate}>
+              Start Date:{' '}
+              {new Date(eventDetails.startDate).toLocaleDateString()}
+            </Text>
+            <Text style={styles.eventDate}>
+              End Date: {new Date(eventDetails.endDate).toLocaleDateString()}
+            </Text>
+          </View>
+          <Text style={styles.eventDescription}>
+            {eventDetails.description || eventDetails.decription}{' '}
+            {/* Handle typo */}
+          </Text>
         </View>
-      </View>
+      ) : (
+        <View style={[styles.eventDetails]}>
+          <Text style={styles.eventDate}>No Event on this Date</Text>
+        </View>
+      )}
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  parentStyle: {
-    borderWidth: wp(0.5),
-    borderTopLeftRadius: wp(5),
-    borderTopRightRadius: wp(5),
-    borderBottomRightRadius: wp(2.5),
-    borderBottomLeftRadius: wp(2.5),
-    borderColor: Colors.orangeColor,
-  },
-  container: {
-    flex: 1,
-    padding: wp(4),
-    backgroundColor: Colors.whiteColor,
-  },
-  eventDetails: {
-    paddingVertical: wp(3.5),
-  },
-  eventTitle: {
-    fontSize: wp(5),
-    fontWeight: '600',
-    paddingTop: wp(2),
-  },
-  eventDate: {
-    fontSize: wp(3.5),
-    fontWeight: '500',
-    color: Colors.blackColor,
-  },
-});
-
-export default EventCalendarComponent;
+}

@@ -28,10 +28,6 @@ export default function EventScreen({navigation}) {
     dispatch(fetchEvents());
   };
 
-  useEffect(() => {
-    console.log('event:', events);
-  }, [events]);
-
   return (
     <SafeAreaView style={CommonStyles.container}>
       <Header
@@ -68,7 +64,7 @@ export default function EventScreen({navigation}) {
         bottomChild={
           <>
             <View style={CommonStyles.paddingTop10} />
-            <EventCalendarComponent />
+            <EventCalendarComponent data={events} />
           </>
         }
       />
