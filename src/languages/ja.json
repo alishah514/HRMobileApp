@@ -165,5 +165,7 @@
   "events": "イベント",
   "punchInTime": "出勤時間",
   "punchOutTime": "退勤時間",
-  "totalWorkHours": "総労働時間"
+  "totalWorkHours": "総労働時間",
+  "calendar": "カレンダー",
+  "google calendar": "Googleカレンダー"
 }

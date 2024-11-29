@@ -15,6 +15,7 @@ import I18n from '../i18n/i18n';
 import TaskScreen from '../screens/tasks/TaskScreen';
 import LeaveScreen from '../screens/leave/LeaveScreen';
 import EventScreen from '../screens/events/EventScreen';
+import CalendarScreen from '../screens/calendar/CalendarScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -143,6 +144,24 @@ const DrawerNavigator = () => {
             drawerLabel: () => (
               <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
                 {I18n.t('events')}
+              </Text>
+            ),
+            drawerIcon: ({focused, size}) => (
+              <Ionicons
+                name={focused ? 'calendar-number' : 'calendar-number-outline'}
+                size={size}
+                color={Colors.whiteColor}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Calendar"
+          component={CalendarScreen}
+          options={{
+            drawerLabel: () => (
+              <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
+                {I18n.t('google calendar')}
               </Text>
             ),
             drawerIcon: ({focused, size}) => (
