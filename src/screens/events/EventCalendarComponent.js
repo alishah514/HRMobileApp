@@ -44,10 +44,10 @@ LocaleConfig.locales['en'] = {
     'Friday',
     'Saturday',
   ],
-  dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], // Ensure this is correctly defined
-  today: 'Today', // Add this field to avoid potential issues
+  dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  today: 'Today',
 };
-LocaleConfig.defaultLocale = 'en'; // Ensure this matches the defined locale
+LocaleConfig.defaultLocale = 'en';
 
 export default function EventCalendarComponent({data}) {
   const [selectedDate, setSelectedDate] = useState(
@@ -80,10 +80,9 @@ export default function EventCalendarComponent({data}) {
       }
     });
 
-    // Add selected date styling
     if (selectedDate) {
       dates[selectedDate] = {
-        ...dates[selectedDate], // Preserve existing marking if any
+        ...dates[selectedDate],
         selected: true,
         selectedColor: Colors.orangeColor,
         disableTouchEvent: true,
@@ -102,7 +101,7 @@ export default function EventCalendarComponent({data}) {
       return day.dateString >= startDate && day.dateString <= endDate;
     });
 
-    setEventDetails(event || null); // Reset if no event found
+    setEventDetails(event || null);
   };
 
   return (
@@ -132,7 +131,6 @@ export default function EventCalendarComponent({data}) {
           </View>
           <Text style={styles.eventDescription}>
             {eventDetails.description || eventDetails.decription}{' '}
-            {/* Handle typo */}
           </Text>
         </View>
       ) : (

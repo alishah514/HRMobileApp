@@ -23,8 +23,14 @@ const styles = StyleSheet.create({
     fontSize: wp(5),
     fontWeight: '600',
     paddingTop: wp(2),
+    color: Colors.blackColor,
   },
   eventDate: {
+    fontSize: wp(3.5),
+    fontWeight: '500',
+    color: Colors.blackColor,
+  },
+  eventDescription: {
     fontSize: wp(3.5),
     fontWeight: '500',
     color: Colors.blackColor,

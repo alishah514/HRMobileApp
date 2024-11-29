@@ -165,5 +165,7 @@
   "events": "Events",
   "punchInTime": "Punch In Time",
   "punchOutTime": "Punch Out Time",
-  "totalWorkHours": "Total Work Hours"
+  "totalWorkHours": "Total Work Hours",
+  "calendar": "Calendar",
+  "google calendar": "Google Calendar"
 }
