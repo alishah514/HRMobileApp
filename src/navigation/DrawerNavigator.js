@@ -5,6 +5,7 @@ import CustomDrawerComponent from '../components/ReusableComponents/CustomDrawer
 import {Colors} from '../components/common/Colors';
 import CommonStyles from '../components/common/CommonStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import HomeScreen from '../screens/home/HomeScreen';
@@ -161,12 +162,12 @@ const DrawerNavigator = () => {
           options={{
             drawerLabel: () => (
               <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
-                {I18n.t('google calendar')}
+                {I18n.t('googleCalendar')}
               </Text>
             ),
             drawerIcon: ({focused, size}) => (
-              <Ionicons
-                name={focused ? 'calendar-number' : 'calendar-number-outline'}
+              <Entypo
+                name={focused ? 'google-' : 'google-'}
                 size={size}
                 color={Colors.whiteColor}
               />

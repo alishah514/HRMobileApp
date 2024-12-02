@@ -24,6 +24,7 @@ import {fetchProfile} from '../../redux/profile/ProfileActions';
 import EmployeeCounts from './Admin/EmployeeCounts';
 import EmployeeHours from './Employee/EmployeeHours';
 import {fetchAttendance} from '../../redux/attendance/AttendanceActions';
+import {fetchSettings} from '../../redux/settings/SettingsAction';
 
 const getGreetingMessage = () => {
   const currentHour = new Date().getHours();
@@ -77,6 +78,7 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     getDashboardCount();
+
     return () => {
       dispatch(clearDashboardCountState());
     };

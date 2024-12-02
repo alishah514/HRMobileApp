@@ -1,30 +1,22 @@
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import {WebView} from 'react-native-webview';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
+import CommonStyles from '../../components/common/CommonStyles';
 
 export default function GoogleCalendar({calendarId, timezone}) {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const calendarUri = `https://calendar.google.com/calendar/embed?src=${calendarId}&ctz=${timezone}`;
 
   return (
-    <View style={styles.container}>
-      {loading && <LogoLoaderComponent />}
+    <View style={CommonStyles.container}>
+      {isLoading && <LogoLoaderComponent />}
       <WebView
         source={{uri: calendarUri}}
-        style={styles.webview}
-        onLoadStart={() => setLoading(true)}
-        onLoadEnd={() => setLoading(false)}
+        style={CommonStyles.container}
+        onLoadStart={() => setIsLoading(true)}
+        onLoadEnd={() => setIsLoading(false)}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  webview: {
-    flex: 1,
-  },
-});
