@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Alert, Platform, PermissionsAndroid} from 'react-native';
+import {Alert, Platform, PermissionsAndroid} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImagePickerOptionsComponent from './ImagePickerOptionsComponent';
+import {handleImageUploadAWS} from '../utils/HandleImageUploadAWS';
 
 export default function ImagePickerComponent({
   setImage,
@@ -50,6 +51,8 @@ export default function ImagePickerComponent({
       });
       console.log('Gallery image: ', image.path);
       setImage(image);
+
+      await handleImageUploadAWS(image, setImage);
       setIsImagePickerOptionsVisible(false);
     } catch (error) {
       console.log('Gallery picker error: ', error);
@@ -75,6 +78,8 @@ export default function ImagePickerComponent({
       });
       console.log('Camera image: ', image.path);
       setImage(image);
+
+      await handleImageUploadAWS(image, setImage);
       setIsImagePickerOptionsVisible(false);
     } catch (error) {
       console.log('Camera error: ', error);
