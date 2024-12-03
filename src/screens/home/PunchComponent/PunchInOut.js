@@ -264,19 +264,13 @@ export default function PunchInOut({setIsLoading, username}) {
       const year = currentDate.format('YYYY');
       const month = currentDate.format('MM');
       const day = currentDate.format('DD');
-      const time = currentDate.format('HH:mm:ss:SSS');
+      const time = currentDate.format('HHmmssSSS');
 
-      let formattedUsername = username.includes(' ')
-        ? username.replace(/ /g, '_')
-        : username;
-
-      if (formattedUsername.endsWith('_')) {
-        formattedUsername = formattedUsername.slice(0, -1);
-      }
+      let formattedUsername = username.replace(/ /g, '');
 
       const userIdLast4 = userId.slice(-4);
 
-      const path = `Attendance/${punchType}/${year}/${month}/${day}/${userIdLast4}-${formattedUsername}-${time}`;
+      const path = `Attendance/${punchType}/${year}/${month}/${day}/${userIdLast4}_${formattedUsername}/${time}`;
 
       const uploadedUrl = await handleImageUploadAWS(image, null, null, path);
       return uploadedUrl;

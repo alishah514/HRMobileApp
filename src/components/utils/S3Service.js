@@ -22,7 +22,8 @@ export const uploadToS3 = async (file, folder, path) => {
   }
 
   if (path) {
-    key = `${path}/_${file.name}`;
+    const fileExtension = file.name.substring(file.name.lastIndexOf('.'));
+    key = `${path}${fileExtension}`;
   }
 
   const params = {

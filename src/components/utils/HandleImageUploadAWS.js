@@ -30,7 +30,6 @@ export const handleImageUploadAWS = async (
       setImage({...image, uploadedUrl});
     }
 
-    Alert.alert('Success', 'Image uploaded successfully!');
     return uploadedUrl;
   } catch (error) {
     console.error('Error uploading image to S3:', error);
