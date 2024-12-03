@@ -31,7 +31,6 @@ const tabs = [
 
 export default function ProfileScreen({navigation}) {
   const dispatch = useDispatch();
-  const currentLanguage = useSelector(state => state.language.language);
   const userId = useSelector(state => state.login.userId);
   const {data: profile, isLoading} = useSelector(state => state.profile);
 
@@ -39,7 +38,6 @@ export default function ProfileScreen({navigation}) {
   const [image, setImage] = useState(null);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
     useState(false);
-  const [isEditModal, setIsEditModal] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -47,12 +45,15 @@ export default function ProfileScreen({navigation}) {
     }
   }, [dispatch, userId]);
 
+  useEffect(() => {
+    const imageUrl = profile?.personal?.imageUrl;
+    if (imageUrl && imageUrl !== 'null') {
+      setImage(imageUrl);
+    }
+  }, [profile]);
+
   const fetchUserProfile = () => {
     dispatch(fetchProfile(userId));
-  };
-
-  const toggleEditModal = () => {
-    setIsEditModal(!isEditModal);
   };
 
   const toggleImageOptionsModal = () => {
@@ -67,11 +68,6 @@ export default function ProfileScreen({navigation}) {
     navigation.openDrawer();
   };
 
-  const onSuccess = () => {
-    fetchUserProfile();
-    toggleEditModal();
-  };
-
   return (
     <CommonSafeAreaViewComponent>
       <Header
@@ -84,14 +80,6 @@ export default function ProfileScreen({navigation}) {
             color={Colors.whiteColor}
           />
         }
-        // onRightIconPressed={toggleEditModal}
-        // rightIcon={
-        //   <MaterialCommunityIcons
-        //     name="account-edit-outline"
-        //     size={Constants.SIZE.largeIcon}
-        //     color={Colors.whiteColor}
-        //   />
-        // }
       />
       {isLoading && <LogoLoaderComponent />}
       <CustomerBackgroundComponent
@@ -101,7 +89,7 @@ export default function ProfileScreen({navigation}) {
             toggleImageOptionsModal={toggleImageOptionsModal}
             name={profile?.personal?.fullName}
             role={profile?.job?.Designation}
-            editable={true}
+            editable={false}
           />
         }
         bottomChild={
@@ -138,12 +126,7 @@ export default function ProfileScreen({navigation}) {
         setIsImagePickerOptionsVisible={setIsImagePickerOptionsVisible}
         isImagePickerOptionsVisible={isImagePickerOptionsVisible}
         toggleImageOptionsModal={toggleImageOptionsModal}
-      />
-      <EditProfileModal
-        onClose={toggleEditModal}
-        onSuccess={onSuccess}
-        isModalVisible={isEditModal}
-        data={profile}
+        folder={'profile'}
       />
     </CommonSafeAreaViewComponent>
   );

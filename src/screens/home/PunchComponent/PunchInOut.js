@@ -27,8 +27,9 @@ import {
 } from '../../../redux/attendance/AttendanceActions';
 import {convertTime} from '../../../components/ReusableComponents/ConvertTime';
 import {useFocusEffect} from '@react-navigation/native';
+import {handleImageUploadAWS} from '../../../components/utils/HandleImageUploadAWS';
 
-export default function PunchInOut({setIsLoading}) {
+export default function PunchInOut({setIsLoading, username}) {
   const dispatch = useDispatch();
   const punchInTime = useSelector(state => state.attendance.punchInTime);
   const punchOutTime = useSelector(state => state.attendance.punchOutTime);
@@ -163,11 +164,10 @@ export default function PunchInOut({setIsLoading}) {
       if (await requestLocationPermission()) {
         const location = await getLocation(punchType);
         if (location) {
-          const image = await takeSelfie();
+          const image = await takeSelfie(punchType);
           if (image) {
-            submitAttendance(punchType, location, image.path);
+            submitAttendance(punchType, location, image);
           } else {
-            // Alert.alert('Failed to take a selfie');
             console.log('Failed to take a selfie');
           }
         } else {
@@ -241,17 +241,47 @@ export default function PunchInOut({setIsLoading}) {
     });
   };
 
-  const takeSelfie = async () => {
+  const takeSelfie = async punchType => {
     try {
       const image = await ImagePicker.openCamera({
         width: 300,
         height: 400,
-        cropping: true,
+        cropping: false,
       });
 
-      return image;
+      if (image) {
+        const uploadedUrl = await generatePathAndUploadImage(image, punchType);
+        return uploadedUrl;
+      }
     } catch (err) {
       console.log('Error taking selfie:', err);
+    }
+  };
+
+  const generatePathAndUploadImage = async (image, punchType) => {
+    try {
+      const currentDate = moment();
+      const year = currentDate.format('YYYY');
+      const month = currentDate.format('MM');
+      const day = currentDate.format('DD');
+      const time = currentDate.format('HH:mm:ss:SSS');
+
+      let formattedUsername = username.includes(' ')
+        ? username.replace(/ /g, '_')
+        : username;
+
+      if (formattedUsername.endsWith('_')) {
+        formattedUsername = formattedUsername.slice(0, -1);
+      }
+
+      const userIdLast4 = userId.slice(-4);
+
+      const path = `Attendance/${punchType}/${year}/${month}/${day}/${userIdLast4}-${formattedUsername}-${time}`;
+
+      const uploadedUrl = await handleImageUploadAWS(image, null, null, path);
+      return uploadedUrl;
+    } catch (err) {
+      console.log('Error uploading image:', err);
     }
   };
 

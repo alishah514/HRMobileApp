@@ -14,10 +14,20 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-export const uploadToS3 = async file => {
+export const uploadToS3 = async (file, folder, path) => {
+  let key = `hrmobileapp/${Date.now()}_${file.name}`;
+
+  if (folder) {
+    key = `hrmobileapp/${folder}/${Date.now()}_${file.name}`;
+  }
+
+  if (path) {
+    key = `${path}/_${file.name}`;
+  }
+
   const params = {
     Bucket: 'm3logi-test-bucket',
-    Key: `hrmobileapp/pictures/${Date.now()}_${file.name}`,
+    Key: key,
     Body: file.body,
     ContentType: file.type,
     ACL: 'public-read',

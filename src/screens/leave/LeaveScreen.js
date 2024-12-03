@@ -169,6 +169,7 @@ export default function LeaveScreen({navigation, route}) {
         setIsImagePickerOptionsVisible={setIsImagePickerOptionsVisible}
         isImagePickerOptionsVisible={isImagePickerOptionsVisible}
         toggleImageOptionsModal={toggleImageOptionsModal}
+        folder={'leaves'}
       />
       <LeaveRequestModal
         isModalVisible={isAddLeaveRequestVisible}

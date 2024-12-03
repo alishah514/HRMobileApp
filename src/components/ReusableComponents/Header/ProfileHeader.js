@@ -28,7 +28,7 @@ export default function ProfileHeader({
           </View>
           {image ? (
             <Image
-              source={{uri: image.path}}
+              source={{uri: image}}
               resizeMode="cover"
               style={CommonStyles.imageView}
             />
@@ -44,7 +44,7 @@ export default function ProfileHeader({
         <View style={CommonStyles.imageCircle}>
           {image ? (
             <Image
-              source={{uri: image.path}}
+              source={{uri: image}}
               resizeMode="cover"
               style={CommonStyles.imageView}
             />

@@ -9,6 +9,7 @@ export default function ImagePickerComponent({
   setIsImagePickerOptionsVisible,
   isImagePickerOptionsVisible,
   toggleImageOptionsModal,
+  folder,
 }) {
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
@@ -47,12 +48,12 @@ export default function ImagePickerComponent({
       const image = await ImagePicker.openPicker({
         width: 300,
         height: 400,
-        cropping: true,
+        cropping: false,
       });
       console.log('Gallery image: ', image.path);
-      setImage(image);
+      setImage(image.path);
 
-      await handleImageUploadAWS(image, setImage);
+      await handleImageUploadAWS(image, setImage, folder);
       setIsImagePickerOptionsVisible(false);
     } catch (error) {
       console.log('Gallery picker error: ', error);
@@ -77,9 +78,9 @@ export default function ImagePickerComponent({
         cropping: true,
       });
       console.log('Camera image: ', image.path);
-      setImage(image);
+      setImage(image.path);
 
-      await handleImageUploadAWS(image, setImage);
+      await handleImageUploadAWS(image, setImage, folder);
       setIsImagePickerOptionsVisible(false);
     } catch (error) {
       console.log('Camera error: ', error);

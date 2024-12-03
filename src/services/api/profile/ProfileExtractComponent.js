@@ -38,6 +38,7 @@ export const ExtractValues = fields => {
     personalObject.email = personalFields.email?.stringValue;
     personalObject.birthDate = personalFields.birthDate?.timestampValue;
     personalObject.gender = personalFields.gender?.stringValue;
+    personalObject.imageUrl = personalFields.imageUrl?.stringValue;
   }
 
   return {

@@ -3,7 +3,12 @@ import {Alert} from 'react-native';
 import {DecodeBase64} from './DecodeBase64';
 import {uploadToS3} from './S3Service';
 
-export const handleImageUploadAWS = async (image, setImage) => {
+export const handleImageUploadAWS = async (
+  image,
+  setImage = null,
+  folder = null,
+  path,
+) => {
   try {
     const filePath = image.path;
 
@@ -18,11 +23,15 @@ export const handleImageUploadAWS = async (image, setImage) => {
       body: binaryData,
     };
 
-    const uploadedUrl = await uploadToS3(file);
+    const uploadedUrl = await uploadToS3(file, folder, path);
     console.log('Uploaded Image URL:', uploadedUrl);
 
-    setImage({...image, uploadedUrl});
+    if (setImage) {
+      setImage({...image, uploadedUrl});
+    }
+
     Alert.alert('Success', 'Image uploaded successfully!');
+    return uploadedUrl;
   } catch (error) {
     console.error('Error uploading image to S3:', error);
     Alert.alert('Error', 'Failed to upload image. Please try again.');

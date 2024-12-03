@@ -171,7 +171,10 @@ export default function HomeScreen({navigation}) {
         bottomChild={
           <>
             <ScrollView contentContainerStyle={[styles.infoStarting]}>
-              <PunchInOut setIsLoading={setIsLoading} />
+              <PunchInOut
+                username={profile?.personal?.fullName}
+                setIsLoading={setIsLoading}
+              />
               <View style={[CommonStyles.rowBetween, styles.width80Center]}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Task')}

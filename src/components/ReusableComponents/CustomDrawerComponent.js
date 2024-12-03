@@ -1,4 +1,4 @@
-import {View, Text, Platform} from 'react-native';
+import {View, Text, Platform, Image} from 'react-native';
 import React from 'react';
 import {
   DrawerContentScrollView,
@@ -31,11 +31,19 @@ export default function CustomDrawerComponent(props) {
         ]}>
         <View style={CommonStyles.flexRow}>
           <View style={CommonStyles.dpView}>
-            <Ionicons
-              name="person"
-              size={Constants.SIZE.xLargeIcon}
-              color={Colors.whiteColor}
-            />
+            {profile?.personal?.imageUrl &&
+            profile?.personal?.imageUrl !== 'null' ? (
+              <Image
+                source={{uri: profile.personal.imageUrl}}
+                style={CommonStyles.dpView}
+              />
+            ) : (
+              <Ionicons
+                name="person"
+                size={Constants.SIZE.xLargeIcon}
+                color={Colors.whiteColor}
+              />
+            )}
           </View>
           <View style={CommonStyles.padding3}>
             <View>
