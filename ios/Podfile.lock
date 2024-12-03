@@ -1534,8 +1534,11 @@ PODS:
     - React-Core
   - RNDateTimePicker (8.2.0):
     - React-Core
+<<<<<<< HEAD
   - RNFS (2.20.0):
     - React-Core
+=======
+>>>>>>> 302f3c41842252f18f7701df6aeb1d7ff45ccdad
   - RNGestureHandler (2.19.0):
     - DoubleConversion
     - glog
@@ -1757,7 +1760,10 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+<<<<<<< HEAD
   - RNFS (from `../node_modules/react-native-fs`)
+=======
+>>>>>>> 302f3c41842252f18f7701df6aeb1d7ff45ccdad
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNI18n (from `../node_modules/react-native-i18n`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
@@ -1915,8 +1921,11 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+<<<<<<< HEAD
   RNFS:
     :path: "../node_modules/react-native-fs"
+=======
+>>>>>>> 302f3c41842252f18f7701df6aeb1d7ff45ccdad
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNI18n:
@@ -2007,7 +2016,10 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
   RNCPicker: 0173dedc74776227ec6dcc61bb85cd9f07bbb2ac
   RNDateTimePicker: 40ffda97d071a98a10fdca4fa97e3977102ccd14
+<<<<<<< HEAD
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
+=======
+>>>>>>> 302f3c41842252f18f7701df6aeb1d7ff45ccdad
   RNGestureHandler: 3b6fa2bfa341c413d3d08444b838515b58e48ee7
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
   RNImageCropPicker: 771e2ca319d2cf92e04ebf334ece892ee9a6728f
