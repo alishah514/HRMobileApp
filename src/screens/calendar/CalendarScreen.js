@@ -13,13 +13,9 @@ import {fetchSettings} from '../../redux/settings/SettingsAction';
 export default function CalendarScreen({navigation}) {
   const dispatch = useDispatch();
 
-<<<<<<< HEAD
   const {settings, isLoading: calendarLoading} = useSelector(
     state => state.settings,
   );
-=======
-  const {settings} = useSelector(state => state.settings);
->>>>>>> 302f3c41842252f18f7701df6aeb1d7ff45ccdad
 
   useEffect(() => {
     dispatch(fetchSettings());
@@ -46,10 +42,7 @@ export default function CalendarScreen({navigation}) {
       <GoogleCalendar
         calendarId={settings[0]?.calendarId}
         timezone={settings[0]?.timezone}
-<<<<<<< HEAD
         calendarLoading={calendarLoading}
-=======
->>>>>>> 302f3c41842252f18f7701df6aeb1d7ff45ccdad
       />
     </SafeAreaView>
   );

@@ -101,11 +101,7 @@ export default function ProfileScreen({navigation}) {
             toggleImageOptionsModal={toggleImageOptionsModal}
             name={profile?.personal?.fullName}
             role={profile?.job?.Designation}
-<<<<<<< HEAD
             editable={true}
-=======
-            // editable={true}
->>>>>>> 302f3c41842252f18f7701df6aeb1d7ff45ccdad
           />
         }
         bottomChild={

@@ -23,10 +23,7 @@
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
     "@reduxjs/toolkit": "^2.2.7",
-<<<<<<< HEAD
     "aws-sdk": "^2.1692.0",
-=======
->>>>>>> 302f3c41842252f18f7701df6aeb1d7ff45ccdad
     "axios": "^1.7.7",
     "axios-retry": "^4.5.0",
     "date-fns": "^3.6.0",
@@ -36,10 +33,7 @@
     "react-native-aes-crypto": "^3.0.3",
     "react-native-calendars": "^1.1307.0",
     "react-native-chart-kit": "^6.12.0",
-<<<<<<< HEAD
     "react-native-fs": "^2.20.0",
-=======
->>>>>>> 302f3c41842252f18f7701df6aeb1d7ff45ccdad
     "react-native-geolocation-service": "^5.3.1",
     "react-native-gesture-handler": "^2.19.0",
     "react-native-i18n": "^2.0.15",
