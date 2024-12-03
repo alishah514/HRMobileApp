@@ -1,10 +1,15 @@
 import AWS from 'aws-sdk';
-import Constants from '../common/Constants';
+import {
+  AWS_BASE_URL,
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_REGION,
+} from '@env';
 
 AWS.config.update({
-  accessKeyId: Constants.AWS_ACCESS_KEY_ID,
-  secretAccessKey: Constants.AWS_SECRET_ACCESS_KEY,
-  region: Constants.AWS_REGION,
+  accessKeyId: AWS_ACCESS_KEY_ID,
+  secretAccessKey: AWS_SECRET_ACCESS_KEY,
+  region: AWS_REGION,
 });
 
 const s3 = new AWS.S3();
@@ -20,7 +25,7 @@ export const uploadToS3 = async file => {
 
   try {
     const data = await s3.upload(params).promise();
-    const formattedURL = `${Constants.AWS_BASE_URL}/${params.Key}`;
+    const formattedURL = `${AWS_BASE_URL}/${params.Key}`;
     console.log('File uploaded successfully:', formattedURL);
     return formattedURL;
   } catch (err) {
