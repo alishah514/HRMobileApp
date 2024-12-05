@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../../components/common/Constants';
@@ -28,7 +28,8 @@ export default function EmployeeCounts({totalEmployees, navigation}) {
 
   return (
     <View style={[CommonStyles.width95, CommonStyles.flexRow]}>
-      <View
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Admin Attendance', {status: 1})}
         style={[
           styles.boxViewTime,
           CommonStyles.shadow,
@@ -52,8 +53,9 @@ export default function EmployeeCounts({totalEmployees, navigation}) {
             {I18n.t('employees')}
           </Text>
         </View>
-      </View>
-      <View
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Admin Attendance', {status: 2})}
         style={[
           styles.boxViewTime,
           CommonStyles.shadow,
@@ -77,8 +79,9 @@ export default function EmployeeCounts({totalEmployees, navigation}) {
             {I18n.t('present')}
           </Text>
         </View>
-      </View>
-      <View
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Admin Attendance', {status: 3})}
         style={[
           styles.boxViewTime,
           CommonStyles.shadow,
@@ -102,7 +105,7 @@ export default function EmployeeCounts({totalEmployees, navigation}) {
             {I18n.t('absent')}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }

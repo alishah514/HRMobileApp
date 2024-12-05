@@ -157,6 +157,7 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
       visible={isModalVisible}
       onRequestClose={toggleModal}>
       <CommonSafeAreaScrollViewComponent>
+        {tasksLoading && <LogoLoaderComponent />}
         <Header
           title={I18n.t('addTask')}
           onLeftIconPressed={toggleModal}
@@ -168,7 +169,7 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
             />
           }
         />
-        {tasksLoading && <LogoLoaderComponent />}
+
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
             title={I18n.t('title')}

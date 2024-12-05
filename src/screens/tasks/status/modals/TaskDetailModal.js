@@ -91,6 +91,7 @@ export default function TaskDetailModal({
       visible={isModalVisible}
       onRequestClose={toggleModal}>
       <CommonSafeAreaScrollViewComponent>
+        {tasksLoading && <LogoLoaderComponent />}
         <Header
           title={I18n.t('taskDetails')}
           onLeftIconPressed={toggleModal}
@@ -112,7 +113,7 @@ export default function TaskDetailModal({
             )
           }
         />
-        {tasksLoading && <LogoLoaderComponent />}
+
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
             title={I18n.t('title')}

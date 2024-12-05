@@ -71,6 +71,7 @@ export default function ProfileScreen({navigation}) {
 
   return (
     <CommonSafeAreaViewComponent>
+      {isLoading && <LogoLoaderComponent />}
       <Header
         title={I18n.t('profile')}
         onLeftIconPressed={handleDrawerOpen}
@@ -82,7 +83,7 @@ export default function ProfileScreen({navigation}) {
           />
         }
       />
-      {isLoading && <LogoLoaderComponent />}
+
       <CustomerBackgroundComponent
         topChild={
           <ProfileHeader

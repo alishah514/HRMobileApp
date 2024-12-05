@@ -78,6 +78,7 @@ const CommonStyles = StyleSheet.create({
   margin5: {margin: wp('5')},
   mainPadding: {padding: wp('5')},
   padding3: {padding: wp('3')},
+  padding5: {padding: wp('5')},
 
   //vertical
   paddingVertical1: {paddingVertical: wp('1')},

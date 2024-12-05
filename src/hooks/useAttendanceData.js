@@ -16,6 +16,7 @@ export const useAttendanceData = () => {
   const adminCurrentAttendanceData = useSelector(
     state => state.attendance.adminAttendanceData,
   );
+  const isLoading = useSelector(state => state.attendance.isLoading);
 
   return {
     punchInTime,
@@ -25,5 +26,6 @@ export const useAttendanceData = () => {
     currentAttendance,
     attendanceData,
     adminCurrentAttendanceData,
+    attendanceLoading: isLoading,
   };
 };

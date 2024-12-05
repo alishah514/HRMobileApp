@@ -81,6 +81,7 @@ export default function TaskScreen({navigation, route}) {
 
   return (
     <CommonSafeAreaViewComponent>
+      {tasksLoading && <LogoLoaderComponent />}
       <Header
         title={I18n.t('tasks')}
         onLeftIconPressed={source === 'drawer' ? handleDrawerOpen : goBack}
@@ -100,7 +101,7 @@ export default function TaskScreen({navigation, route}) {
           />
         }
       />
-      {tasksLoading && <LogoLoaderComponent />}
+
       <CustomerBackgroundComponent
         topVerySmall
         topChild={

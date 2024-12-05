@@ -85,6 +85,7 @@ export default function ChangePasswordScreen({navigation}) {
 
   return (
     <CommonSafeAreaViewComponent>
+      {isLoading && <LogoLoaderComponent />}
       <Header
         title="Change Password"
         onLeftIconPressed={goBack}
@@ -96,7 +97,7 @@ export default function ChangePasswordScreen({navigation}) {
           />
         }
       />
-      {isLoading && <LogoLoaderComponent />}
+
       <CustomerBackgroundComponent
         topVerySmall
         topChild={
