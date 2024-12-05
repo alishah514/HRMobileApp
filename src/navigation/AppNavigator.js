@@ -11,6 +11,7 @@ import ForgotPasswordScreen from '../screens/accounts/forgotPassword/ForgotPassw
 import ChangePasswordScreen from '../screens/settings/screens/changePassword/ChangePasswordScreen';
 import LocalizationScreen from '../screens/settings/screens/localization/LocalizationScreen';
 import AttendanceDetails from '../screens/attendance/AttendanceRecord/AttendanceDetails';
+import AdminAttendanceScreen from '../screens/attendance/Admin/AdminAttendanceScreen';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,11 @@ const AppNavigator = () => {
         <Stack.Screen name="Change Password" component={ChangePasswordScreen} />
         <Stack.Screen name="Localization" component={LocalizationScreen} />
         <Stack.Screen name="Attendance Details" component={AttendanceDetails} />
+        <Stack.Screen
+          name="Admin Attendance"
+          component={AdminAttendanceScreen}
+        />
+
         <Stack.Screen
           name="Home"
           component={DrawerNavigator}

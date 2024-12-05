@@ -15,13 +15,14 @@ import I18n from '../../i18n/i18n';
 import {fetchAttendance} from '../../redux/attendance/AttendanceActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {useFocusEffect} from '@react-navigation/native';
+import {useLoginData} from '../../hooks/useLoginData';
 
 const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 export default function AttendanceScreen({navigation}) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
-  const userId = useSelector(state => state.login.userId);
+  const {userId} = useLoginData();
 
   const {attendanceData, isLoading} = useSelector(state => state.attendance);
 

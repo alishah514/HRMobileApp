@@ -3,6 +3,59 @@ import Constants from '../../../components/common/Constants';
 import {ExtractValues} from './ProfileExtractComponent';
 
 const ProfileService = {
+  fetchAllProfile: async () => {
+    const url = `${Constants.FIREBASE_URL}/${Constants.EMPLOYEES}?key=${Constants.FIREBASE_KEY}`;
+
+    try {
+      const response = await axios.get(url);
+      const documents = response.data.documents || [];
+
+      const ExtractValues = fields => {
+        const parsedValues = {};
+
+        Object.entries(fields).forEach(([key, value]) => {
+          if (value.stringValue !== undefined) {
+            parsedValues[key] = value.stringValue;
+          } else if (value.integerValue !== undefined) {
+            parsedValues[key] = parseInt(value.integerValue, 10);
+          } else if (value.timestampValue !== undefined) {
+            parsedValues[key] = new Date(value.timestampValue).toISOString();
+          } else if (value.mapValue !== undefined) {
+            parsedValues[key] = ExtractValues(value.mapValue.fields || {});
+          } else if (value.arrayValue !== undefined) {
+            parsedValues[key] =
+              value.arrayValue.values?.map(arrayItem =>
+                ExtractValues(arrayItem.mapValue.fields || {}),
+              ) || [];
+          }
+        });
+
+        return parsedValues;
+      };
+
+      const formattedData = documents.map(document => {
+        const fields = document.fields || {};
+        const documentName = document.name || null;
+        const createTime = document.createTime || null;
+        const updateTime = document.updateTime || null;
+
+        const values = ExtractValues(fields);
+
+        return {
+          name: documentName,
+          createTime,
+          updateTime,
+          ...values,
+        };
+      });
+
+      return formattedData;
+    } catch (error) {
+      console.error('Error fetching profiles:', error);
+      throw error;
+    }
+  },
+
   fetchUserProfile: async userId => {
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const body = {

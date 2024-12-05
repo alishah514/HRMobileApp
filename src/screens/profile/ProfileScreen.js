@@ -21,6 +21,7 @@ import I18n from '../../i18n/i18n';
 import {fetchProfile} from '../../redux/profile/ProfileActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import CardComponent from './types/CardComponent';
+import {useLoginData} from '../../hooks/useLoginData';
 
 const tabs = [
   {id: 0, icon: 'person-outline', iconSet: Ionicons},
@@ -31,7 +32,7 @@ const tabs = [
 
 export default function ProfileScreen({navigation}) {
   const dispatch = useDispatch();
-  const userId = useSelector(state => state.login.userId);
+  const {userId} = useLoginData();
   const {data: profile, isLoading} = useSelector(state => state.profile);
 
   const [activeTab, setActiveTab] = useState(0);

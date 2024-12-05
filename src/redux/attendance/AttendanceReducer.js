@@ -16,6 +16,9 @@ import {
   SAVE_LAST_PUNCH_OUT_TIME,
   FETCH_CURRENT_ATTENDANCE_SUCCESS,
   FETCH_CURRENT_ATTENDANCE_FAILURE,
+  FETCH_ADMIN_CURRENT_ATTENDANCE_START,
+  FETCH_ADMIN_CURRENT_ATTENDANCE_SUCCESS,
+  FETCH_ADMIN_CURRENT_ATTENDANCE_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -28,6 +31,7 @@ const initialState = {
   punchOutLocation: null,
   location: null,
   attendanceData: null,
+  adminAttendanceData: null,
   currentAttendance: null,
   isLoading: false,
   error: null,
@@ -103,6 +107,25 @@ const AttendanceReducer = (state = initialState, action) => {
         currentAttendance: action.payload,
       };
     case FETCH_CURRENT_ATTENDANCE_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
+
+    case FETCH_ADMIN_CURRENT_ATTENDANCE_START:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    case FETCH_ADMIN_CURRENT_ATTENDANCE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        adminAttendanceData: action.payload,
+      };
+    case FETCH_ADMIN_CURRENT_ATTENDANCE_FAILURE:
       return {
         ...state,
         isLoading: false,

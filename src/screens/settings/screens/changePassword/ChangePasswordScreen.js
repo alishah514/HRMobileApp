@@ -12,10 +12,11 @@ import CommonButton from '../../../../components/ReusableComponents/CommonCompon
 import {useDispatch, useSelector} from 'react-redux';
 import {ChangePasswordAction} from '../../../../redux/changePassword/ChangePasswordActions';
 import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
+import {useLoginData} from '../../../../hooks/useLoginData';
 
 export default function ChangePasswordScreen({navigation}) {
   const dispatch = useDispatch();
-  const userId = useSelector(state => state.login.userId);
+  const {userId} = useLoginData();
   const isLoading = useSelector(state => state.changePassword.isLoading);
 
   const [currentPassword, setCurrentPassword] = useState('');

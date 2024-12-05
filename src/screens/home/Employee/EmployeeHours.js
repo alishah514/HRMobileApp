@@ -9,9 +9,10 @@ import I18n from '../../../i18n/i18n';
 import {CalculateTotalHours} from '../../../components/utils/CalculateTotalHoursComponent';
 import {useSelector} from 'react-redux';
 import {CalculateAttendanceStatus} from '../../../components/utils/CalculateAttendanceStatus';
+import {useAttendanceData} from '../../../hooks/useAttendanceData';
 
 export default function EmployeeHours({data}) {
-  const attendanceData = useSelector(state => state.attendance.attendanceData);
+  const {attendanceData} = useAttendanceData();
   const [attendanceSummary, setAttendanceSummary] = useState({
     onTime: 0,
     late: 0,

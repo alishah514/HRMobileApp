@@ -24,24 +24,25 @@ import {
   saveLastPunchOutTime,
   fetchCurrentAttendance,
   fetchAttendance,
+  fetchAdminCurrentAttendance,
 } from '../../../redux/attendance/AttendanceActions';
 import {convertTime} from '../../../components/ReusableComponents/ConvertTime';
 import {useFocusEffect} from '@react-navigation/native';
 import {handleImageUploadAWS} from '../../../components/utils/HandleImageUploadAWS';
+import {useAttendanceData} from '../../../hooks/useAttendanceData';
+import {useLoginData} from '../../../hooks/useLoginData';
 
 export default function PunchInOut({setIsLoading, username}) {
   const dispatch = useDispatch();
-  const punchInTime = useSelector(state => state.attendance.punchInTime);
-  const punchOutTime = useSelector(state => state.attendance.punchOutTime);
-  const lastPunchInTime = useSelector(
-    state => state.attendance.lastPunchInTime,
-  );
-  const lastPunchOutTime = useSelector(
-    state => state.attendance.lastPunchOutTime,
-  );
-  const userId = useSelector(state => state.login.userId);
+  const {
+    punchInTime,
+    punchOutTime,
+    lastPunchInTime,
+    lastPunchOutTime,
+    currentAttendance,
+  } = useAttendanceData();
+  const {userId, role} = useLoginData();
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm:ss'));
-  const {currentAttendance} = useSelector(state => state.attendance);
   const [isPunchInDisabled, setIsPunchInDisabled] = useState(false);
   const [isPunchOutDisabled, setIsPunchOutDisabled] = useState(false);
   const [isButtonPressed, setIsButtonPressed] = useState(false);
@@ -49,8 +50,12 @@ export default function PunchInOut({setIsLoading, username}) {
   useFocusEffect(
     useCallback(() => {
       const {userId, timestamp} = getCurrentAttendance();
+
       if (userId && timestamp) {
         dispatch(fetchCurrentAttendance(userId, timestamp));
+      }
+      if (role === 'Admin') {
+        dispatch(fetchAdminCurrentAttendance(timestamp));
       }
     }, [dispatch, punchInTime, punchOutTime]),
   );

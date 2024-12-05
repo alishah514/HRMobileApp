@@ -6,8 +6,26 @@ import {Colors} from '../../../components/common/Colors';
 import CommonStyles from '../../../components/common/CommonStyles';
 import styles from '../styles';
 import I18n from '../../../i18n/i18n';
+import {useAttendanceData} from '../../../hooks/useAttendanceData';
+import {useDispatch} from 'react-redux';
 
-export default function EmployeeCounts({data}) {
+export default function EmployeeCounts({totalEmployees, navigation}) {
+  const {adminCurrentAttendanceData} = useAttendanceData();
+
+  const getUniqueUsersCount = attendanceData => {
+    const userIds = new Set();
+    attendanceData?.forEach(item => {
+      if (item.userId) {
+        userIds.add(item.userId);
+      }
+    });
+
+    return userIds.size;
+  };
+
+  const absentCount =
+    totalEmployees - getUniqueUsersCount(adminCurrentAttendanceData);
+
   return (
     <View style={[CommonStyles.width95, CommonStyles.flexRow]}>
       <View
@@ -28,7 +46,7 @@ export default function EmployeeCounts({data}) {
               CommonStyles.textBlack,
               CommonStyles.paddingTop1,
             ]}>
-            {data?.totalEmployees}
+            {totalEmployees || 0}
           </Text>
           <Text style={[CommonStyles.lessBold4P, CommonStyles.textBlue]}>
             {I18n.t('employees')}
@@ -46,7 +64,6 @@ export default function EmployeeCounts({data}) {
           size={Constants.SIZE.largeIcon}
           color={Colors.greenColor}
         />
-
         <View style={CommonStyles.alignItemsCenter}>
           <Text
             style={[
@@ -54,7 +71,7 @@ export default function EmployeeCounts({data}) {
               CommonStyles.textBlack,
               CommonStyles.paddingTop1,
             ]}>
-            {data?.onTime}
+            {getUniqueUsersCount(adminCurrentAttendanceData) || 0}
           </Text>
           <Text style={[CommonStyles.lessBold4P, CommonStyles.textGreen]}>
             {I18n.t('present')}
@@ -72,7 +89,6 @@ export default function EmployeeCounts({data}) {
           size={Constants.SIZE.largeIcon}
           color={Colors.redColor}
         />
-
         <View style={CommonStyles.alignItemsCenter}>
           <Text
             style={[
@@ -80,7 +96,7 @@ export default function EmployeeCounts({data}) {
               CommonStyles.textBlack,
               CommonStyles.paddingTop1,
             ]}>
-            {data?.late}
+            {absentCount || 0}
           </Text>
           <Text style={[CommonStyles.lessBold4, CommonStyles.textRed]}>
             {I18n.t('absent')}

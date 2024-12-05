@@ -17,6 +17,8 @@ import I18n from '../../i18n/i18n';
 import StatusComponent from './types/StatusComponent';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
+import {useLoginData} from '../../hooks/useLoginData';
+import useLeaveData from '../../hooks/useLeaveData';
 
 const tabs = [
   {
@@ -43,9 +45,8 @@ export default function LeaveScreen({navigation, route}) {
   const source = route.params?.source || 'default';
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
-  const leaves = useSelector(state => state.leaves.data);
-  const isLoading = useSelector(state => state.leaves.isLoading);
-  const userId = useSelector(state => state.login.userId);
+  const {leaves, leavesLoading} = useLeaveData();
+  const {userId} = useLoginData();
   const [activeTab, setActiveTab] = useState(0);
   const [image, setImage] = useState(null);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
@@ -95,7 +96,7 @@ export default function LeaveScreen({navigation, route}) {
 
   return (
     <CommonSafeAreaViewComponent>
-      {isLoading && <LogoLoaderComponent />}
+      {leavesLoading && <LogoLoaderComponent />}
       <Header
         title={I18n.t('leaves')}
         onLeftIconPressed={source === 'drawer' ? handleDrawerOpen : goBack}

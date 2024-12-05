@@ -7,6 +7,9 @@ import {
   PATCH_PROFILE_START,
   PATCH_PROFILE_SUCCESS,
   PATCH_PROFILE_FAILURE,
+  FETCH_ALL_PROFILE_START,
+  FETCH_ALL_PROFILE_SUCCESS,
+  FETCH_ALL_PROFILE_FAILURE,
 } from '../actions/actionTypes';
 
 export const fetchProfileStart = () => ({
@@ -20,6 +23,20 @@ export const fetchProfileSuccess = profile => ({
 
 export const fetchProfileFailure = error => ({
   type: FETCH_PROFILE_FAILURE,
+  payload: error,
+});
+
+export const fetchAllProfileStart = () => ({
+  type: FETCH_ALL_PROFILE_START,
+});
+
+export const fetchAllProfileSuccess = profile => ({
+  type: FETCH_ALL_PROFILE_SUCCESS,
+  payload: profile,
+});
+
+export const fetchAllProfileFailure = error => ({
+  type: FETCH_ALL_PROFILE_FAILURE,
   payload: error,
 });
 
@@ -40,6 +57,16 @@ export const patchProfileFailure = error => ({
   type: PATCH_PROFILE_FAILURE,
   payload: error,
 });
+
+export const fetchAllProfile = () => async dispatch => {
+  dispatch(fetchAllProfileStart());
+  try {
+    const response = await ProfileService.fetchAllProfile();
+    dispatch(fetchAllProfileSuccess(response));
+  } catch (error) {
+    dispatch(fetchAllProfileFailure(error));
+  }
+};
 
 export const fetchProfile = userId => async dispatch => {
   dispatch(fetchProfileStart());

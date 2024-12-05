@@ -13,6 +13,7 @@ import I18n from '../../../i18n/i18n';
 import {deleteLeave, patchLeaveStatus} from '../../../redux/leave/LeaveActions';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 import {formatDate} from '../../../components/utils/dateUtils';
+import useLeaveData from '../../../hooks/useLeaveData';
 
 export default function ViewLeaveRequestModal({
   isModalVisible,
@@ -22,7 +23,7 @@ export default function ViewLeaveRequestModal({
 }) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
-  const isLoading = useSelector(state => state.leaves.isLoading);
+  const {leavesLoading} = useLeaveData();
 
   const {type, reason, period, name, fromDate, toDate, status, userId} =
     leaveDetails || {};
@@ -112,7 +113,7 @@ export default function ViewLeaveRequestModal({
       animationType="fade"
       visible={isModalVisible}
       onRequestClose={toggleModal}>
-      {isLoading && <LogoLoaderComponent />}
+      {leavesLoading && <LogoLoaderComponent />}
       <CommonSafeAreaScrollViewComponent>
         <Header
           title={I18n.t('leaveDetails')}

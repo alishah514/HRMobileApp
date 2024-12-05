@@ -15,12 +15,13 @@ import {postTaskRequest} from '../../../../redux/tasks/TaskActions';
 import {CalculatePeriod} from '../../../../components/utils/CalculatePeriod';
 import {convertToTimestamp} from '../../../../components/utils/dateUtils';
 import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
+import {useLoginData} from '../../../../hooks/useLoginData';
+import useTaskData from '../../../../hooks/useTaskData';
 
 export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
   const dispatch = useDispatch();
-  const isLoading = useSelector(state => state.tasks.isLoading);
-  const userId = useSelector(state => state.login.userId);
-  const currentLanguage = useSelector(state => state.language.language);
+  const {tasksLoading} = useTaskData();
+  const {userId} = useLoginData();
   const [taskTitle, setTaskTitle] = useState('');
   const [taskCode, setTaskCode] = useState('');
   const [taskCategory, setTaskCategory] = useState(null);
@@ -167,7 +168,7 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
             />
           }
         />
-        {isLoading && <LogoLoaderComponent />}
+        {tasksLoading && <LogoLoaderComponent />}
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
             title={I18n.t('title')}

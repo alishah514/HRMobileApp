@@ -17,6 +17,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import TasksComponent from './status/TaskComponent';
 import {fetchUserTasks} from '../../redux/tasks/TaskActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
+import {useLoginData} from '../../hooks/useLoginData';
+import useTaskData from '../../hooks/useTaskData';
 
 const tabs = [
   {
@@ -43,9 +45,9 @@ export default function TaskScreen({navigation, route}) {
   const source = route.params?.source || 'default';
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
-  const userId = useSelector(state => state.login.userId);
+  const {userId, role} = useLoginData();
   const tasks = useSelector(state => state.tasks.data);
-  const isLoading = useSelector(state => state.tasks.isLoading);
+  const {tasksLoading} = useTaskData();
   const [activeTab, setActiveTab] = useState(0);
   const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
 
@@ -98,7 +100,7 @@ export default function TaskScreen({navigation, route}) {
           />
         }
       />
-      {isLoading && <LogoLoaderComponent />}
+      {tasksLoading && <LogoLoaderComponent />}
       <CustomerBackgroundComponent
         topVerySmall
         topChild={

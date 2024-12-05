@@ -6,9 +6,13 @@ import {
   PATCH_PROFILE_START,
   PATCH_PROFILE_SUCCESS,
   PATCH_PROFILE_FAILURE,
+  FETCH_ALL_PROFILE_START,
+  FETCH_ALL_PROFILE_SUCCESS,
+  FETCH_ALL_PROFILE_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
+  allProfileData: null,
   data: null,
   isLoading: false,
   error: null,
@@ -19,6 +23,25 @@ const initialState = {
 
 const ProfileReducer = (state = initialState, action) => {
   switch (action.type) {
+    case FETCH_ALL_PROFILE_START:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    case FETCH_ALL_PROFILE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        allProfileData: action.payload,
+        error: null,
+      };
+    case FETCH_ALL_PROFILE_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
     case FETCH_PROFILE_START:
       return {
         ...state,

@@ -16,6 +16,8 @@ import {convertToTimestamp} from '../../../components/utils/dateUtils';
 import {postLeaveRequest} from '../../../redux/leave/LeaveActions';
 import {CalculatePeriod} from '../../../components/utils/CalculatePeriod';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
+import {useLoginData} from '../../../hooks/useLoginData';
+import useLeaveData from '../../../hooks/useLeaveData';
 
 export default function LeaveRequestModal({
   isModalVisible,
@@ -25,8 +27,8 @@ export default function LeaveRequestModal({
 }) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
-  const isLoading = useSelector(state => state.leaves.isLoading);
-  const userId = useSelector(state => state.login.userId);
+  const {leavesLoading} = useLeaveData();
+  const {userId} = useLoginData();
   const [leaveType, setLeaveType] = useState(null);
   const [leaveFrom, setLeaveFrom] = useState(null);
   const [leaveTo, setLeaveTo] = useState(null);
@@ -109,7 +111,7 @@ export default function LeaveRequestModal({
       animationType="fade"
       visible={isModalVisible}
       onRequestClose={toggleModal}>
-      {isLoading && <LogoLoaderComponent />}
+      {leavesLoading && <LogoLoaderComponent />}
       <CommonSafeAreaScrollViewComponent>
         <Header
           title={I18n.t('leaveRequest')}

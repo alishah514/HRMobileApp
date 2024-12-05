@@ -12,6 +12,7 @@ import I18n from '../../../../i18n/i18n';
 import {formatDate} from '../../../../components/utils/dateUtils';
 import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
 import {patchTaskStatus} from '../../../../redux/tasks/TaskActions';
+import useTaskData from '../../../../hooks/useTaskData';
 
 export default function TaskDetailModal({
   isModalVisible,
@@ -21,7 +22,7 @@ export default function TaskDetailModal({
 }) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
-  const isLoading = useSelector(state => state.tasks.isLoading);
+  const {tasksLoading} = useTaskData();
   const [taskDescription, setTaskDescription] = useState('');
 
   useEffect(() => {
@@ -111,7 +112,7 @@ export default function TaskDetailModal({
             )
           }
         />
-        {isLoading && <LogoLoaderComponent />}
+        {tasksLoading && <LogoLoaderComponent />}
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
             title={I18n.t('title')}

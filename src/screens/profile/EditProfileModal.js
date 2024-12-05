@@ -16,6 +16,7 @@ import {formatDate} from '../../components/utils/dateUtils';
 import {PaymentRegex} from '../../components/utils/PaymentRegex';
 import {patchProfile} from '../../redux/profile/ProfileActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
+import {useLoginData} from '../../hooks/useLoginData';
 
 export default function EditProfileModal({
   onClose,
@@ -26,7 +27,8 @@ export default function EditProfileModal({
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
   const isLoading = useSelector(state => state.profile.isPatching);
-  const userId = useSelector(state => state.login.userId);
+
+  const {userId} = useLoginData();
   //personal
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');

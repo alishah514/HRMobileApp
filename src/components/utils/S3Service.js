@@ -37,7 +37,6 @@ export const uploadToS3 = async (file, folder, path) => {
   try {
     const data = await s3.upload(params).promise();
     const formattedURL = `${AWS_BASE_URL}/${params.Key}`;
-    console.log('File uploaded successfully:', formattedURL);
     return formattedURL;
   } catch (err) {
     console.error('Error uploading file:', err);
