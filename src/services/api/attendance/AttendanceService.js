@@ -2,8 +2,24 @@ import axios from 'axios';
 import Constants from '../../../components/common/Constants';
 import ExtractValues from '../../../components/utils/ExtractValues';
 import moment from 'moment';
+import {ExtractAttendanceData} from './AttendanceExtractComponent';
 
 const AttendanceService = {
+  fetchAllAttendance: async () => {
+    const url = `${Constants.FIREBASE_URL}/${Constants.ATTENDANCE}?key=${Constants.FIREBASE_KEY}`;
+
+    try {
+      const response = await axios.get(url);
+
+      const attendanceData = ExtractAttendanceData(response);
+
+      return attendanceData;
+    } catch (error) {
+      console.error('Error fetching profiles:', error);
+      throw error;
+    }
+  },
+
   fetchUserAttendance: async userId => {
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const body = {

@@ -9,8 +9,77 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../../components/common/Constants';
 import {TruncateTitle} from '../../../components/utils/TruncateTitle';
 
+const staticData = [
+  {
+    userId: '12345',
+    personal: {
+      fullName: 'John Doe',
+      imageUrl: null, // Use a valid URL for testing image rendering
+    },
+    isPresent: true,
+  },
+  {
+    userId: '67890',
+    personal: {
+      fullName: 'Jane Smith',
+      imageUrl: 'https://via.placeholder.com/150', // Example image URL
+    },
+    isPresent: false,
+  },
+  {
+    userId: '54321',
+    personal: {
+      fullName: 'Alice Johnson',
+      imageUrl: 'https://via.placeholder.com/150',
+    },
+    isPresent: true,
+  },
+  {
+    userId: '09876',
+    personal: {
+      fullName: 'Bob Brown',
+      imageUrl: null,
+    },
+    isPresent: false,
+  },
+  {
+    userId: '11223',
+    personal: {
+      fullName: 'Chris Green',
+      imageUrl: 'https://via.placeholder.com/150',
+    },
+    isPresent: true,
+  },
+  {
+    userId: '44556',
+    personal: {
+      fullName: 'Diana King',
+      imageUrl: null,
+    },
+    isPresent: false,
+  },
+  {
+    userId: '77889',
+    personal: {
+      fullName: 'Edward Hill',
+      imageUrl: 'https://via.placeholder.com/150',
+    },
+    isPresent: true,
+  },
+  {
+    userId: '99000',
+    personal: {
+      fullName: 'Fiona White',
+      imageUrl: null,
+    },
+    isPresent: false,
+  },
+];
+
 export default function AttendanceList({data, status}) {
   const isNoData = !data || data?.length === 0;
+
+  // console.log('data', data);
 
   const renderItem = ({item}) => {
     const userIdLast4 = item?.userId?.slice(-5);

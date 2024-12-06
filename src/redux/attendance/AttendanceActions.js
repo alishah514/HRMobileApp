@@ -20,6 +20,9 @@ import {
   FETCH_ADMIN_CURRENT_ATTENDANCE_START,
   FETCH_ADMIN_CURRENT_ATTENDANCE_SUCCESS,
   FETCH_ADMIN_CURRENT_ATTENDANCE_FAILURE,
+  FETCH_ALL_ATTENDANCE_START,
+  FETCH_ALL_ATTENDANCE_SUCCESS,
+  FETCH_ALL_ATTENDANCE_FAILURE,
 } from '../actions/actionTypes';
 
 export const savePunchInTime = time => ({
@@ -62,6 +65,20 @@ export const savePunchOutLocation = location => ({
   payload: location,
 });
 
+export const fetchAllAttendanceStart = () => ({
+  type: FETCH_ALL_ATTENDANCE_START,
+});
+
+export const fetchAllAttendanceSuccess = attendance => ({
+  type: FETCH_ALL_ATTENDANCE_SUCCESS,
+  payload: attendance,
+});
+
+export const fetchAllAttendanceFailure = error => ({
+  type: FETCH_ALL_ATTENDANCE_FAILURE,
+  payload: error,
+});
+
 export const fetchAttendanceStart = () => ({
   type: FETCH_ATTENDANCE_START,
 });
@@ -94,9 +111,9 @@ export const fetchAdminCurrentAttendanceStart = () => ({
   type: FETCH_ADMIN_CURRENT_ATTENDANCE_START,
 });
 
-export const fetchAdminCurrentAttendanceSuccess = currentAttendance => ({
+export const fetchAdminCurrentAttendanceSuccess = currentAdminAttendance => ({
   type: FETCH_ADMIN_CURRENT_ATTENDANCE_SUCCESS,
-  payload: currentAttendance,
+  payload: currentAdminAttendance,
 });
 
 export const fetchAdminCurrentAttendanceFailure = error => ({
@@ -121,6 +138,16 @@ export const postAttendanceFailure = error => ({
   type: POST_ATTENDANCE_FAILURE,
   payload: error,
 });
+
+export const fetchAllAttendance = () => async dispatch => {
+  dispatch(fetchAllAttendanceStart());
+  try {
+    const response = await AttendanceService.fetchAllAttendance();
+    dispatch(fetchAllAttendanceSuccess(response));
+  } catch (error) {
+    dispatch(fetchAllAttendanceFailure(error));
+  }
+};
 
 export const fetchAttendance = userId => async dispatch => {
   dispatch(fetchAttendanceStart());

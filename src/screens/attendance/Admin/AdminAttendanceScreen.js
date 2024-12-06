@@ -11,19 +11,29 @@ import {useAttendanceData} from '../../../hooks/useAttendanceData';
 import useProfileData from '../../../hooks/useProfileData';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 import {useRoute} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {fetchAllAttendance} from '../../../redux/attendance/AttendanceActions';
 
 export default function AdminAttendanceScreen({navigation}) {
+  const dispatch = useDispatch();
+
   const today = moment().format('YYYY-MM-DD');
   const route = useRoute();
   const {status} = route.params;
   const [selectedDate, setSelectedDate] = useState(today);
   const [employeeList, setEmployeeList] = useState([]);
-  const {attendanceData, attendanceLoading} = useAttendanceData();
+  const {attendanceLoading, allAttendanceData, punchInTime, punchOutTime} =
+    useAttendanceData();
+
   const {allProfile, profileLoading} = useProfileData();
 
   useEffect(() => {
+    dispatch(fetchAllAttendance());
+  }, [dispatch, punchInTime, punchOutTime]);
+
+  useEffect(() => {
     setDate(today);
-  }, [attendanceData]);
+  }, [allAttendanceData]);
 
   const handleBackIconPress = () => {
     navigation.goBack();
@@ -32,7 +42,7 @@ export default function AdminAttendanceScreen({navigation}) {
   const setDate = date => {
     setSelectedDate(date);
 
-    const filteredData = attendanceData?.filter(item => {
+    const filteredData = allAttendanceData?.filter(item => {
       const itemDate = moment(item.creationDate).format('YYYY-MM-DD');
       return itemDate === date;
     });
@@ -47,6 +57,8 @@ export default function AdminAttendanceScreen({navigation}) {
       };
     });
     setEmployeeList(updatedProfile);
+
+    console.log('updatedProfile', updatedProfile);
   };
 
   return (

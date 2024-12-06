@@ -24,13 +24,17 @@ import {
 } from '../../redux/profile/ProfileActions';
 import EmployeeCounts from './Admin/EmployeeCounts';
 import EmployeeHours from './Employee/EmployeeHours';
-import {fetchAttendance} from '../../redux/attendance/AttendanceActions';
+import {
+  fetchAllAttendance,
+  fetchAttendance,
+} from '../../redux/attendance/AttendanceActions';
 import useProfileData from '../../hooks/useProfileData';
 import useTaskData from '../../hooks/useTaskData';
 import useLeaveData from '../../hooks/useLeaveData';
 import {useLoginData} from '../../hooks/useLoginData';
 import WishComponent from './components/WishComponent';
 import LeaveTaskComponent from './components/LeaveTaskComponent';
+import {useAttendanceData} from '../../hooks/useAttendanceData';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
@@ -40,6 +44,7 @@ export default function HomeScreen({navigation}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const {profile, allProfile, profileLoading} = useProfileData();
+
   const {tasksLoading} = useTaskData();
   const {leavesLoading} = useLeaveData();
   const {userId, role} = useLoginData();
@@ -53,7 +58,7 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     dispatch(fetchAllProfile());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (userId) {

@@ -19,6 +19,9 @@ import {
   FETCH_ADMIN_CURRENT_ATTENDANCE_START,
   FETCH_ADMIN_CURRENT_ATTENDANCE_SUCCESS,
   FETCH_ADMIN_CURRENT_ATTENDANCE_FAILURE,
+  FETCH_ALL_ATTENDANCE_START,
+  FETCH_ALL_ATTENDANCE_SUCCESS,
+  FETCH_ALL_ATTENDANCE_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -31,6 +34,7 @@ const initialState = {
   punchOutLocation: null,
   location: null,
   attendanceData: null,
+  allAttendanceData: null,
   adminAttendanceData: null,
   currentAttendance: null,
   isLoading: false,
@@ -79,6 +83,25 @@ const AttendanceReducer = (state = initialState, action) => {
       return {
         ...state,
         punchOutLocation: action.payload,
+      };
+
+    case FETCH_ALL_ATTENDANCE_START:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    case FETCH_ALL_ATTENDANCE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        allAttendanceData: action.payload,
+      };
+    case FETCH_ALL_ATTENDANCE_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
       };
 
     case FETCH_ATTENDANCE_START:

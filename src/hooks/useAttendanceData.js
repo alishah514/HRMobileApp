@@ -13,6 +13,10 @@ export const useAttendanceData = () => {
     state => state.attendance.currentAttendance,
   );
   const attendanceData = useSelector(state => state.attendance.attendanceData);
+  const allAttendanceData = useSelector(
+    state => state.attendance.allAttendanceData,
+  );
+
   const adminCurrentAttendanceData = useSelector(
     state => state.attendance.adminAttendanceData,
   );
@@ -25,6 +29,7 @@ export const useAttendanceData = () => {
     lastPunchOutTime,
     currentAttendance,
     attendanceData,
+    allAttendanceData,
     adminCurrentAttendanceData,
     attendanceLoading: isLoading,
   };
