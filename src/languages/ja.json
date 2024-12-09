@@ -167,5 +167,6 @@
   "punchOutTime": "退勤時間",
   "totalWorkHours": "総労働時間",
   "calendar": "カレンダー",
-  "googleCalendar": "Googleカレンダー"
+  "googleCalendar": "Googleカレンダー",
+  "allEmployees": "すべての従業員"
 }

@@ -11,10 +11,6 @@ import {Colors} from '../../components/common/Colors';
 import PunchInOut from './PunchComponent/PunchInOut';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import I18n from '../../i18n/i18n';
-import {
-  clearDashboardCountState,
-  fetchUserDashboardCount,
-} from '../../redux/dashboard/DashboardAction';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {fetchUserTasks} from '../../redux/tasks/TaskActions';
 import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
@@ -24,17 +20,13 @@ import {
 } from '../../redux/profile/ProfileActions';
 import EmployeeCounts from './Admin/EmployeeCounts';
 import EmployeeHours from './Employee/EmployeeHours';
-import {
-  fetchAllAttendance,
-  fetchAttendance,
-} from '../../redux/attendance/AttendanceActions';
+import {fetchAttendance} from '../../redux/attendance/AttendanceActions';
 import useProfileData from '../../hooks/useProfileData';
 import useTaskData from '../../hooks/useTaskData';
 import useLeaveData from '../../hooks/useLeaveData';
 import {useLoginData} from '../../hooks/useLoginData';
 import WishComponent from './components/WishComponent';
 import LeaveTaskComponent from './components/LeaveTaskComponent';
-import {useAttendanceData} from '../../hooks/useAttendanceData';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
@@ -44,17 +36,9 @@ export default function HomeScreen({navigation}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const {profile, allProfile, profileLoading} = useProfileData();
-
   const {tasksLoading} = useTaskData();
   const {leavesLoading} = useLeaveData();
   const {userId, role} = useLoginData();
-
-  useEffect(() => {
-    getDashboardCount();
-    return () => {
-      dispatch(clearDashboardCountState());
-    };
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchAllProfile());
@@ -66,16 +50,11 @@ export default function HomeScreen({navigation}) {
       dispatch(fetchUserTasks(userId));
       dispatch(fetchAttendance(userId));
       fetchUserProfile(userId);
-      getDashboardCount(userId);
     }
   }, [dispatch, userId]);
 
   const fetchUserProfile = userId => {
     dispatch(fetchProfile(userId));
-  };
-
-  const getDashboardCount = userId => {
-    dispatch(fetchUserDashboardCount(userId));
   };
 
   const handleDrawerOpen = () => {

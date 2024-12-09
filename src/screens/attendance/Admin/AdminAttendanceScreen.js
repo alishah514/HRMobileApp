@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import CommonSafeAreaViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import Header from '../../../components/ReusableComponents/Header/Header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../../components/common/Colors';
 import I18n from '../../../i18n/i18n';
 import Constants from '../../../components/common/Constants';
@@ -16,10 +17,9 @@ import {fetchAllAttendance} from '../../../redux/attendance/AttendanceActions';
 
 export default function AdminAttendanceScreen({navigation}) {
   const dispatch = useDispatch();
-
   const today = moment().format('YYYY-MM-DD');
   const route = useRoute();
-  const {status} = route.params;
+  const status = route?.params?.status ?? null;
   const [selectedDate, setSelectedDate] = useState(today);
   const [employeeList, setEmployeeList] = useState([]);
   const {attendanceLoading, allAttendanceData, punchInTime, punchOutTime} =
@@ -37,6 +37,9 @@ export default function AdminAttendanceScreen({navigation}) {
 
   const handleBackIconPress = () => {
     navigation.goBack();
+  };
+  const handleDrawerOpen = () => {
+    navigation.openDrawer();
   };
 
   const setDate = date => {
@@ -57,8 +60,6 @@ export default function AdminAttendanceScreen({navigation}) {
       };
     });
     setEmployeeList(updatedProfile);
-
-    console.log('updatedProfile', updatedProfile);
   };
 
   return (
@@ -66,13 +67,23 @@ export default function AdminAttendanceScreen({navigation}) {
       {(attendanceLoading || profileLoading) && <LogoLoaderComponent />}
       <Header
         title={I18n.t('attendance')}
-        onLeftIconPressed={handleBackIconPress}
+        onLeftIconPressed={
+          status === null ? handleDrawerOpen : handleBackIconPress
+        }
         leftIcon={
-          <AntDesign
-            name="arrowleft"
-            size={Constants.SIZE.largeIcon}
-            color={Colors.whiteColor}
-          />
+          status === null ? (
+            <Ionicons
+              name="menu"
+              size={Constants.SIZE.medIcon}
+              color={Colors.whiteColor}
+            />
+          ) : (
+            <AntDesign
+              name="arrowleft"
+              size={Constants.SIZE.largeIcon}
+              color={Colors.whiteColor}
+            />
+          )
         }
       />
       <WeeklyCalendarComponent

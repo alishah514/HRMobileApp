@@ -7,6 +7,7 @@ import CommonStyles from '../components/common/CommonStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import HomeScreen from '../screens/home/HomeScreen';
 import SettingScreen from '../screens/settings/SettingScreen';
@@ -17,11 +18,15 @@ import TaskScreen from '../screens/tasks/TaskScreen';
 import LeaveScreen from '../screens/leave/LeaveScreen';
 import EventScreen from '../screens/events/EventScreen';
 import CalendarScreen from '../screens/calendar/CalendarScreen';
+import {useLoginData} from '../hooks/useLoginData';
+import AdminAttendanceScreen from '../screens/attendance/Admin/AdminAttendanceScreen';
+import AdminEmployeeScreen from '../screens/employees/AdminEmployeeScreen';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
   const currentLanguage = useSelector(state => state.language.language);
+  const {role} = useLoginData();
 
   return (
     <SafeAreaView style={CommonStyles.container}>
@@ -66,7 +71,9 @@ const DrawerNavigator = () => {
         />
         <Drawer.Screen
           name="Attendance"
-          component={AttendanceScreen}
+          component={
+            role === 'Employee' ? AttendanceScreen : AdminAttendanceScreen
+          }
           options={{
             drawerLabel: () => (
               <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
@@ -94,6 +101,24 @@ const DrawerNavigator = () => {
             drawerIcon: ({focused, size}) => (
               <Ionicons
                 name={focused ? 'person' : 'person-outline'}
+                size={size}
+                color={Colors.whiteColor}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Employees"
+          component={AdminEmployeeScreen}
+          options={{
+            drawerLabel: () => (
+              <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
+                {I18n.t('employees')}
+              </Text>
+            ),
+            drawerIcon: ({focused, size}) => (
+              <Ionicons
+                name={focused ? 'people' : 'people-outline'}
                 size={size}
                 color={Colors.whiteColor}
               />

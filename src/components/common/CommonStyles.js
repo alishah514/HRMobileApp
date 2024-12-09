@@ -74,6 +74,11 @@ const CommonStyles = StyleSheet.create({
     paddingHorizontal: wp('3'),
   },
 
+  columnWrapper: {
+    justifyContent: 'space-around',
+    paddingVertical: wp(2),
+  },
+
   // overall
   margin5: {margin: wp('5')},
   mainPadding: {padding: wp('5')},

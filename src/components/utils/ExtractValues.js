@@ -1,5 +1,3 @@
-// utils/ExtractValues.js
-
 /**
  * Utility function to recursively extract values from Firestore fields
  * @param {Object} fields - Firestore fields object

@@ -167,5 +167,6 @@
   "punchOutTime": "Punch Out Time",
   "totalWorkHours": "Total Work Hours",
   "calendar": "Calendar",
-  "googleCalendar": "Google Calendar"
+  "googleCalendar": "Google Calendar",
+  "allEmployees": "All Employees"
 }

@@ -193,7 +193,6 @@ const TaskService = {
 
     try {
       const response = await TaskApiComponent(url, method, body);
-      // console.log('Fetch Paginated Tasks', response);
 
       return response;
     } catch (error) {

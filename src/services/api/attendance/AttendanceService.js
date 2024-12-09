@@ -15,7 +15,7 @@ const AttendanceService = {
 
       return attendanceData;
     } catch (error) {
-      console.error('Error fetching profiles:', error);
+      console.error('Error fetching attendance:', error);
       throw error;
     }
   },
@@ -67,7 +67,7 @@ const AttendanceService = {
 
       return finalResponse;
     } catch (error) {
-      console.error('Error fetching user profile:', error);
+      console.error('Error fetching user attendance:', error);
       throw error;
     }
   },

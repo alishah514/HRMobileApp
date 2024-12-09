@@ -1,4 +1,4 @@
-import {View, Text, Image, FlatList, StyleSheet, Platform} from 'react-native';
+import {View, Text, Image, FlatList, Platform} from 'react-native';
 import React from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
 import I18n from '../../../i18n/i18n';
@@ -8,78 +8,10 @@ import {Colors} from '../../../components/common/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../../components/common/Constants';
 import {TruncateTitle} from '../../../components/utils/TruncateTitle';
-
-const staticData = [
-  {
-    userId: '12345',
-    personal: {
-      fullName: 'John Doe',
-      imageUrl: null, // Use a valid URL for testing image rendering
-    },
-    isPresent: true,
-  },
-  {
-    userId: '67890',
-    personal: {
-      fullName: 'Jane Smith',
-      imageUrl: 'https://via.placeholder.com/150', // Example image URL
-    },
-    isPresent: false,
-  },
-  {
-    userId: '54321',
-    personal: {
-      fullName: 'Alice Johnson',
-      imageUrl: 'https://via.placeholder.com/150',
-    },
-    isPresent: true,
-  },
-  {
-    userId: '09876',
-    personal: {
-      fullName: 'Bob Brown',
-      imageUrl: null,
-    },
-    isPresent: false,
-  },
-  {
-    userId: '11223',
-    personal: {
-      fullName: 'Chris Green',
-      imageUrl: 'https://via.placeholder.com/150',
-    },
-    isPresent: true,
-  },
-  {
-    userId: '44556',
-    personal: {
-      fullName: 'Diana King',
-      imageUrl: null,
-    },
-    isPresent: false,
-  },
-  {
-    userId: '77889',
-    personal: {
-      fullName: 'Edward Hill',
-      imageUrl: 'https://via.placeholder.com/150',
-    },
-    isPresent: true,
-  },
-  {
-    userId: '99000',
-    personal: {
-      fullName: 'Fiona White',
-      imageUrl: null,
-    },
-    isPresent: false,
-  },
-];
+import styles from '../styles';
 
 export default function AttendanceList({data, status}) {
   const isNoData = !data || data?.length === 0;
-
-  // console.log('data', data);
 
   const renderItem = ({item}) => {
     const userIdLast4 = item?.userId?.slice(-5);
@@ -120,12 +52,13 @@ export default function AttendanceList({data, status}) {
   };
 
   return (
-    <View style={[CommonStyles.width80, CommonStyles.alignSelf]}>
+    <View style={CommonStyles.paddingHor5}>
       <Text
         style={[
           CommonStyles.bold6,
           CommonStyles.textBlack,
           CommonStyles.marginTop2,
+          CommonStyles.paddingLeft2,
         ]}>
         {status === 1
           ? I18n.t('employees')
@@ -136,7 +69,7 @@ export default function AttendanceList({data, status}) {
           : I18n.t('employees')}
       </Text>
 
-      <View style={CommonStyles.paddingTop5} />
+      <View style={CommonStyles.paddingTop2} />
 
       {isNoData ? (
         <View style={CommonStyles.height100}>
@@ -149,56 +82,14 @@ export default function AttendanceList({data, status}) {
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             numColumns={3}
+            columnWrapperStyle={CommonStyles.columnWrapper}
             contentContainerStyle={[
-              {paddingBottom: Platform.OS === 'ios' ? wp(80) : wp(65)},
+              {paddingBottom: Platform.OS === 'ios' ? wp(80) : wp(60)},
             ]}
+            showsVerticalScrollIndicator={false}
           />
         </View>
       )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: wp(2.5),
-    padding: wp(1.5),
-    borderRadius: wp(2),
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 3,
-    height: wp('30'),
-  },
-
-  name: {
-    fontSize: wp(3.5),
-    color: Colors.blackColor,
-    textAlign: 'center',
-    paddingTop: wp(4),
-  },
-  id: {
-    fontSize: wp(3),
-    color: Colors.blackColor,
-    textAlign: 'center',
-    paddingTop: wp(2),
-  },
-  statusIndicator: {
-    width: wp(4),
-    height: wp(4),
-    borderRadius: wp(2),
-    position: 'absolute',
-    top: 0,
-    right: 0,
-  },
-  image: {
-    width: Constants.SIZE.xLargeIcon,
-    height: Constants.SIZE.xLargeIcon,
-    borderRadius: Constants.SIZE.xLargeIcon / 2,
-  },
-});
