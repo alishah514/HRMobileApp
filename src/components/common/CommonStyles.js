@@ -108,6 +108,7 @@ const CommonStyles = StyleSheet.create({
   paddingBottom1: {paddingBottom: wp('1')},
   paddingBottom2: {paddingBottom: wp('2')},
   paddingBottom3: {paddingBottom: wp('3')},
+  paddingBottom5: {paddingBottom: wp('5')},
   paddingBottom7: {paddingBottom: wp('7')},
   paddingBottom10: {paddingBottom: wp('15')},
   marginBottom1: {marginBottom: wp('1')},

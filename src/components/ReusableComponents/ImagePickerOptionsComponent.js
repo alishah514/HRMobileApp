@@ -3,12 +3,14 @@ import {View, Text, Modal, TouchableOpacity, Image} from 'react-native';
 import {useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import CommonStyles from '../common/CommonStyles';
+import LogoLoaderComponent from './LogoLoaderComponent';
 
 export default function ImagePickerOptionsComponent({
   isVisible,
   onClose,
   clickImage,
   pickImage,
+  isLoading,
 }) {
   const currentLanguage = useSelector(state => state.language.language);
 
@@ -19,6 +21,7 @@ export default function ImagePickerOptionsComponent({
       visible={isVisible}
       onRequestClose={onClose}>
       <View style={CommonStyles.imageModal}>
+        {isLoading && <LogoLoaderComponent />}
         <View style={CommonStyles.imageModalContainer}>
           <View style={CommonStyles.rowBetween}>
             <Text style={CommonStyles.imageModalHeading}>

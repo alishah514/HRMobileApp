@@ -35,7 +35,7 @@ export default function ProfileHeader({
           ) : (
             <Ionicons
               name={'person'}
-              size={Constants.SIZE.xxLargeIcon}
+              size={Constants.SIZE.xxxLargeIcon}
               color={Colors.silverColor}
             />
           )}
@@ -51,7 +51,7 @@ export default function ProfileHeader({
           ) : (
             <Ionicons
               name={'person'}
-              size={Constants.SIZE.xxLargeIcon}
+              size={Constants.SIZE.xxxLargeIcon}
               color={Colors.silverColor}
             />
           )}

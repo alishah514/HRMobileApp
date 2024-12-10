@@ -25,7 +25,7 @@ const LoginService = {
           name: doc.fields.name.stringValue,
           email: doc.fields.email.stringValue,
           password: doc.fields.password.stringValue,
-          token: doc.fields.token.stringValue,
+          token: documentId,
           role: doc.fields.role.stringValue,
         };
       });

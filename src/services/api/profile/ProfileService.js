@@ -108,6 +108,115 @@ const ProfileService = {
     }
   },
 
+  postEmployeeProfile: async profileData => {
+    const url = `${Constants.FIREBASE_URL}/${Constants.EMPLOYEES}?key=${Constants.FIREBASE_KEY}`;
+
+    const body = {
+      fields: {
+        job: {
+          mapValue: {
+            fields: {
+              Designation: {
+                stringValue: profileData.job?.Designation || '',
+              },
+              Department: {
+                stringValue: profileData.job?.Department || '',
+              },
+              JoiningDate: {
+                timestampValue: profileData.job?.JoiningDate
+                  ? new Date(profileData.job.JoiningDate).toISOString()
+                  : '',
+              },
+              employmentType: {
+                stringValue: profileData.job?.employmentType || '',
+              },
+              salary: {
+                stringValue: profileData.job?.salary || '',
+              },
+              wageType: {
+                stringValue: profileData.job?.wageType || '',
+              },
+              punchInTime: {
+                integerValue: profileData.job?.punchInTime || '',
+              },
+              punchOutTime: {
+                integerValue: profileData.job?.punchOutTime || '',
+              },
+            },
+          },
+        },
+        personal: {
+          mapValue: {
+            fields: {
+              fullName: {
+                stringValue: profileData.personal?.fullName || '',
+              },
+              phone: {
+                integerValue: profileData.personal?.phone || '',
+              },
+              email: {
+                stringValue: profileData.personal?.email || '',
+              },
+              birthDate: {
+                timestampValue: profileData.personal?.birthDate
+                  ? new Date(profileData.personal.birthDate).toISOString()
+                  : '',
+              },
+              gender: {
+                stringValue: profileData.personal?.gender || '',
+              },
+              imageUrl: {
+                stringValue: profileData.personal?.imageUrl || '',
+              },
+            },
+          },
+        },
+        userId: {
+          stringValue: profileData.userId || '',
+        },
+        education: {
+          arrayValue: {
+            values:
+              profileData.education?.map(edu => ({
+                mapValue: {
+                  fields: {
+                    startDate: {
+                      timestampValue: edu.startDate
+                        ? new Date(edu.startDate).toISOString()
+                        : '',
+                    },
+                    Institute: {
+                      stringValue: edu.Institute || '',
+                    },
+                    Degree: {
+                      stringValue: edu.Degree || '',
+                    },
+                    endDate: {
+                      timestampValue: edu.endDate
+                        ? new Date(edu.endDate).toISOString()
+                        : '',
+                    },
+                  },
+                },
+              })) || [],
+          },
+        },
+      },
+    };
+
+    try {
+      const response = await axios.post(url, body);
+
+      return {success: true, response: response.data};
+    } catch (error) {
+      console.error('Error in LeaveService.postLeaveRequest:', error);
+      return {
+        success: false,
+        error: error.message || 'An unexpected error occurred.',
+      };
+    }
+  },
+
   patchEditProfile: async (profileId, profileData) => {
     const url = `${Constants.FIREBASE_URL}/${Constants.EMPLOYEES}/${profileId}?key=${Constants.FIREBASE_KEY}`;
     const method = 'patch';

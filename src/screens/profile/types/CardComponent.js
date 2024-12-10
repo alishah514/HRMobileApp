@@ -14,7 +14,7 @@ import styles from '../styles';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import Security from '../../../components/ReusableComponents/Security';
 
-export default function CardComponent({data}) {
+export default function CardComponent({data, employeeId}) {
   const viewShotRef = useRef();
   const [encryptedData, setEncryptedData] = useState(null);
 
@@ -29,7 +29,7 @@ export default function CardComponent({data}) {
   };
 
   const qrCodeData = JSON.stringify({
-    employeeId: data?.personal?.employeeId,
+    employeeId: employeeId,
     name: data?.personal?.fullName,
     creationDate: formatDate(data?.createTime),
     expiryDate: calculateExpiryDate(data?.createTime),
@@ -84,11 +84,19 @@ export default function CardComponent({data}) {
               style={styles.logo}
             />
             <View style={styles.dpView}>
-              <Ionicons
-                name={'person'}
-                size={Constants.SIZE.xLargeIcon}
-                color={Colors.silverColor}
-              />
+              {data?.personal?.imageUrl &&
+              data?.personal?.imageUrl !== 'null' ? (
+                <Image
+                  source={{uri: data.personal.imageUrl}}
+                  style={styles.dpView}
+                />
+              ) : (
+                <Ionicons
+                  name="person"
+                  size={Constants.SIZE.xLargeIcon}
+                  color={Colors.silverColor}
+                />
+              )}
             </View>
           </View>
 
@@ -97,7 +105,7 @@ export default function CardComponent({data}) {
               <Text style={styles.label}>
                 ID No.{' '}
                 <Text style={[styles.value, {fontSize: wp(3.5)}]}>
-                  {TruncateTitle(data?.personal?.employeeId, 20)}
+                  {TruncateTitle(employeeId, 20)}
                 </Text>
               </Text>
 

@@ -12,13 +12,14 @@ import CommonButton from '../../../../components/ReusableComponents/CommonCompon
 import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../../i18n/i18n';
 import {postTaskRequest} from '../../../../redux/tasks/TaskActions';
-import {CalculatePeriod} from '../../../../components/utils/CalculatePeriod';
 import {convertToTimestamp} from '../../../../components/utils/dateUtils';
 import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
 import {useLoginData} from '../../../../hooks/useLoginData';
 import useTaskData from '../../../../hooks/useTaskData';
 
 export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
+  const currentLanguage = useSelector(state => state.language.language);
+
   const dispatch = useDispatch();
   const {tasksLoading} = useTaskData();
   const {userId} = useLoginData();
@@ -156,20 +157,20 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
       animationType="fade"
       visible={isModalVisible}
       onRequestClose={toggleModal}>
-      <CommonSafeAreaScrollViewComponent>
-        {tasksLoading && <LogoLoaderComponent />}
-        <Header
-          title={I18n.t('addTask')}
-          onLeftIconPressed={toggleModal}
-          leftIcon={
-            <Ionicons
-              name="close"
-              size={Constants.SIZE.largeIcon}
-              color={Colors.whiteColor}
-            />
-          }
-        />
+      {tasksLoading && <LogoLoaderComponent />}
 
+      <Header
+        title={I18n.t('addTask')}
+        onLeftIconPressed={toggleModal}
+        leftIcon={
+          <Ionicons
+            name="close"
+            size={Constants.SIZE.largeIcon}
+            color={Colors.whiteColor}
+          />
+        }
+      />
+      <CommonSafeAreaScrollViewComponent>
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
             title={I18n.t('title')}

@@ -7,7 +7,7 @@ import I18n from '../../../i18n/i18n';
 import {formatDate} from '../../../components/utils/dateUtils';
 import NoRecordView from '../../../components/ReusableComponents/NoRecordView';
 
-export default function PersonalInfo({data}) {
+export default function PersonalInfo({data, employeeId}) {
   const currentLanguage = useSelector(state => state.language.language);
 
   if (!data || Object.keys(data).length === 0) {
@@ -46,7 +46,7 @@ export default function PersonalInfo({data}) {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              {TruncateTitle(data?.employeeId || 'null', 20)}
+              {TruncateTitle(employeeId || 'null', 20)}
             </Text>
           </View>
         </View>

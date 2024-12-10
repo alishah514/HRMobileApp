@@ -107,15 +107,28 @@ export default function ProfileScreen({navigation}) {
               data={[activeTab]}
               renderItem={() => (
                 <View>
-                  {activeTab === 0 ? (
-                    <PersonalInfo data={profile?.personal} />
-                  ) : activeTab === 1 ? (
-                    <EducationInfo data={profile?.education} />
-                  ) : activeTab === 2 ? (
-                    <WorkInfo data={profile?.job} />
-                  ) : activeTab === 3 ? (
-                    <CardComponent data={profile} />
-                  ) : null}
+                  {(() => {
+                    const employeeId = profile?.name?.split('/').pop();
+                    return (
+                      <>
+                        {activeTab === 0 ? (
+                          <PersonalInfo
+                            data={profile?.personal}
+                            employeeId={employeeId}
+                          />
+                        ) : activeTab === 1 ? (
+                          <EducationInfo data={profile?.education} />
+                        ) : activeTab === 2 ? (
+                          <WorkInfo data={profile?.job} />
+                        ) : activeTab === 3 ? (
+                          <CardComponent
+                            data={profile}
+                            employeeId={employeeId}
+                          />
+                        ) : null}
+                      </>
+                    );
+                  })()}
                 </View>
               )}
               keyExtractor={(item, index) => index.toString()}

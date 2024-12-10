@@ -20,31 +20,24 @@ export const signupUserFailure = error => ({
   payload: error,
 });
 
-export const signupAction = (userData, navigation) => async dispatch => {
+export const signupUser = userData => async dispatch => {
   dispatch(signupUserStart());
 
   try {
-    const response = await SignupService.signup(userData, navigation);
+    const response = await SignupService.postNewUser(userData);
 
     if (response.success) {
-      const {id, token, role} = response.data.fields;
+      dispatch(signupUserSuccess(response.response));
 
-      dispatch(signupUserSuccess(response.data));
-
-      dispatch(
-        saveUserDataAndRole(
-          token.stringValue,
-          id.integerValue,
-          true,
-          role.stringValue,
-        ),
-      );
+      return response.response;
     } else {
       dispatch(signupUserFailure(response.error));
+      throw new Error(response.error);
     }
   } catch (error) {
     dispatch(
       signupUserFailure(error.message || 'An unexpected error occurred.'),
     );
+    throw error;
   }
 };

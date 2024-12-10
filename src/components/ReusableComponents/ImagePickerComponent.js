@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Alert, Platform, PermissionsAndroid} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImagePickerOptionsComponent from './ImagePickerOptionsComponent';
@@ -11,6 +11,8 @@ export default function ImagePickerComponent({
   toggleImageOptionsModal,
   folder,
 }) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -34,6 +36,78 @@ export default function ImagePickerComponent({
     return true;
   };
 
+  // const handleImageFromGallery = async () => {
+  //   try {
+  //     const hasPermission = await requestCameraPermission();
+  //     if (!hasPermission) {
+  //       Alert.alert(
+  //         'Permission denied',
+  //         'Camera permission is required to access the gallery.',
+  //       );
+  //       return;
+  //     }
+
+  //     const image = await ImagePicker.openPicker({
+  //       width: 300,
+  //       height: 400,
+  //       cropping: false,
+  //     });
+  //     console.log('Gallery image: ', image.path);
+  //     setImage(image.path);
+  //     setIsLoading(true);
+  //     await handleImageUploadAWS(image, setImage, folder, null, setIsLoading);
+  //     setIsImagePickerOptionsVisible(false);
+  //   } catch (error) {
+  //     console.log('Gallery picker error: ', error);
+  //     setIsImagePickerOptionsVisible(false);
+  //   }
+  // };
+
+  // const handleImageFromCamera = async () => {
+  //   try {
+  //     const hasPermission = await requestCameraPermission();
+  //     if (!hasPermission) {
+  //       Alert.alert(
+  //         'Permission denied',
+  //         'Camera permission is required to take photos.',
+  //       );
+  //       return;
+  //     }
+
+  //     const image = await ImagePicker.openCamera({
+  //       width: 300,
+  //       height: 400,
+  //       cropping: true,
+  //     });
+  //     console.log('Camera image: ', image.path);
+  //     setImage(image.path);
+  //     setIsLoading(true);
+
+  //     await handleImageUploadAWS(image, setImage, folder, null, setIsLoading);
+  //     setIsImagePickerOptionsVisible(false);
+  //   } catch (error) {
+  //     console.log('Camera error: ', error);
+  //     setIsImagePickerOptionsVisible(false);
+  //   }
+  // };
+
+  const showConfirmationAlert = onConfirm => {
+    Alert.alert(
+      'Upload Confirmation',
+      'Are you sure you want to upload this image?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: onConfirm,
+        },
+      ],
+    );
+  };
+
   const handleImageFromGallery = async () => {
     try {
       const hasPermission = await requestCameraPermission();
@@ -50,11 +124,14 @@ export default function ImagePickerComponent({
         height: 400,
         cropping: false,
       });
-      console.log('Gallery image: ', image.path);
+      // console.log('Gallery image: ', image.path);
       setImage(image.path);
 
-      await handleImageUploadAWS(image, setImage, folder);
-      setIsImagePickerOptionsVisible(false);
+      showConfirmationAlert(async () => {
+        setIsLoading(true);
+        await handleImageUploadAWS(image, setImage, folder, null, setIsLoading);
+        setIsImagePickerOptionsVisible(false);
+      });
     } catch (error) {
       console.log('Gallery picker error: ', error);
       setIsImagePickerOptionsVisible(false);
@@ -77,11 +154,14 @@ export default function ImagePickerComponent({
         height: 400,
         cropping: true,
       });
-      console.log('Camera image: ', image.path);
+      // console.log('Camera image: ', image.path);
       setImage(image.path);
 
-      await handleImageUploadAWS(image, setImage, folder);
-      setIsImagePickerOptionsVisible(false);
+      showConfirmationAlert(async () => {
+        setIsLoading(true);
+        await handleImageUploadAWS(image, setImage, folder, null, setIsLoading);
+        setIsImagePickerOptionsVisible(false);
+      });
     } catch (error) {
       console.log('Camera error: ', error);
       setIsImagePickerOptionsVisible(false);
@@ -94,6 +174,7 @@ export default function ImagePickerComponent({
       onClose={toggleImageOptionsModal}
       clickImage={handleImageFromCamera}
       pickImage={handleImageFromGallery}
+      isLoading={isLoading}
     />
   );
 }

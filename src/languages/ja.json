@@ -168,5 +168,7 @@
   "totalWorkHours": "総労働時間",
   "calendar": "カレンダー",
   "googleCalendar": "Googleカレンダー",
-  "allEmployees": "すべての従業員"
+  "allEmployees": "すべての従業員",
+  "addEmployee": "従業員を追加",
+  "employeeList": "従業員リスト"
 }

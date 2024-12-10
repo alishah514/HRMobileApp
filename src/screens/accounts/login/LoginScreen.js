@@ -9,28 +9,19 @@ import InputFieldComponent from '../../../components/ReusableComponents/InputFie
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
-import Constants from '../../../components/common/Constants';
-import {CommonActions} from '@react-navigation/native';
 import {useCustomAlert} from '../../../components/ReusableComponents/CustomAlertProvider';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
-import useApi from '../../../services/Api';
-import {
-  loginAction,
-  loginUser,
-  saveUserDataAndRole,
-} from '../../../redux/login/LoginActions';
+import {loginAction} from '../../../redux/login/LoginActions';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function LoginScreen({navigation}) {
   const dispatch = useDispatch();
-  const {request} = useApi();
   const isLoading = useSelector(state => state.login.isLoading);
-  // const {request} = useApi('multipart/form-data'); if image then send this
   const {showAlert} = useCustomAlert();
-  const [email, setEmail] = useState('Shah@gmail.com');
-  const [password, setPassword] = useState('shah@123');
+  const [email, setEmail] = useState('Boy@gmail.com');
+  const [password, setPassword] = useState('boy1234');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
@@ -60,59 +51,6 @@ export default function LoginScreen({navigation}) {
 
   const login = async () => {
     dispatch(loginAction(email, password, navigation));
-  };
-  // const login = async () => {
-  //   const data = {
-  //     Email: email,
-  //     Password: password,
-  //   };
-  //   await handleApiRequest(
-  //     request,
-  //     'POST',
-  //     EndPoints.login,
-  //     data,
-  //     async (message, statusCode, result) => {
-  //       onSuccessCall(message, statusCode, result);
-  //     },
-  //     (errorMessage, errorCode) => {
-  //       onErrorCall(errorMessage, errorCode);
-  //     },
-  //     setLoading,
-  //     showAlert,
-  //     false,
-  //   );
-  // };
-
-  onSuccessCall = async (message, statusCode, result) => {
-    if (result?.Role && Constants.ROLE_STATUS.includes(result?.Role)) {
-      dispatch(
-        saveUserDataAndRole(
-          result?.Token?.access_token,
-          result?.Id,
-          true,
-          result?.Role,
-        ),
-      );
-      dispatch(loginUser(result?.Token?.access_token));
-
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{name: 'Home'}],
-        }),
-      );
-    } else {
-      showAlert({
-        code: null,
-        message: 'Invalid role. Please contact support.',
-      });
-    }
-  };
-  onErrorCall = async (errorMessage, errorCode) => {
-    showAlert({
-      code: errorCode,
-      message: errorMessage,
-    });
   };
 
   const setState = (stateSetter, text) => {

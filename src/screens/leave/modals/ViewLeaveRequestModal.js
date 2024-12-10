@@ -114,19 +114,19 @@ export default function ViewLeaveRequestModal({
       visible={isModalVisible}
       onRequestClose={toggleModal}>
       {leavesLoading && <LogoLoaderComponent />}
-      <CommonSafeAreaScrollViewComponent>
-        <Header
-          title={I18n.t('leaveDetails')}
-          onLeftIconPressed={toggleModal}
-          leftIcon={
-            <Ionicons
-              name="close"
-              size={Constants.SIZE.largeIcon}
-              color={Colors.whiteColor}
-            />
-          }
-        />
 
+      <Header
+        title={I18n.t('leaveDetails')}
+        onLeftIconPressed={toggleModal}
+        leftIcon={
+          <Ionicons
+            name="close"
+            size={Constants.SIZE.largeIcon}
+            color={Colors.whiteColor}
+          />
+        }
+      />
+      <CommonSafeAreaScrollViewComponent>
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
             title={I18n.t('leaveDuration')}

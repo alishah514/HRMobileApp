@@ -7,7 +7,8 @@ export const handleImageUploadAWS = async (
   image,
   setImage = null,
   folder = null,
-  path,
+  path = null,
+  setIsLoading = () => {},
 ) => {
   try {
     const filePath = image.path;
@@ -25,6 +26,7 @@ export const handleImageUploadAWS = async (
 
     const uploadedUrl = await uploadToS3(file, folder, path);
     console.log('Uploaded Image URL:', uploadedUrl);
+    setIsLoading(false);
 
     if (setImage) {
       setImage({...image, uploadedUrl});

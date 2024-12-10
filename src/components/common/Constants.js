@@ -16,6 +16,7 @@ const SELECTED_LANGUAGE_ITEM = 'selectedLanguageItem';
 const TOGGLE_SWITCH = 'toggleSwitch';
 const FCM_TOKEN = 'fcm_token';
 const ROLE = 'role';
+const USERS = 'users';
 const TASKS = 'tasks';
 const LEAVES = 'leaves';
 const EMPLOYEES = 'employees';
@@ -31,7 +32,8 @@ const ENCR_LENGTH = 256;
 const STRING_BYTE = 'CodeDecode@512';
 
 const SIZE = {
-  xxLargeIcon: wp('18'),
+  xxxLargeIcon: wp('18'),
+  xxLargeIcon: wp('12'),
   xLargeIcon: wp('9'),
   largeIcon: wp('7'),
   medIcon: wp('6'),
@@ -55,6 +57,7 @@ export default Constants = {
   ROLE,
   ROLE_STATUS,
   SIZE,
+  USERS,
   TASKS,
   LEAVES,
   EMPLOYEES,

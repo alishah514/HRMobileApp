@@ -125,7 +125,7 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
             {data?.imageUrl === '' || !isValidUrl(data?.imageUrl) ? (
               <Ionicons
                 name={'person'}
-                size={Constants.SIZE.xxLargeIcon}
+                size={Constants.SIZE.xxxLargeIcon}
                 color={Colors.silverColor}
               />
             ) : (
@@ -148,7 +148,7 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
             !isValidUrl(data?.punchOutData?.imageUrl) ? (
               <Ionicons
                 name={'person'}
-                size={Constants.SIZE.xxLargeIcon}
+                size={Constants.SIZE.xxxLargeIcon}
                 color={Colors.silverColor}
               />
             ) : (

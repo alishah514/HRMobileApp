@@ -9,9 +9,9 @@ import ProfileHeader from '../../components/ReusableComponents/Header/ProfileHea
 import ImagePickerComponent from '../../components/ReusableComponents/ImagePickerComponent';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
 import styles from './styles';
-import LeaveRequestModal from './Modal/LeaveRequestModal';
+
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
-import ViewLeaveRequestModal from './Modal/ViewLeaveRequestModal';
+
 import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import StatusComponent from './types/StatusComponent';
@@ -19,6 +19,8 @@ import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderC
 import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
 import {useLoginData} from '../../hooks/useLoginData';
 import useLeaveData from '../../hooks/useLeaveData';
+import LeaveRequestModal from './modals/LeaveRequestModal';
+import ViewLeaveRequestModal from './modals/ViewLeaveRequestModal';
 
 const tabs = [
   {

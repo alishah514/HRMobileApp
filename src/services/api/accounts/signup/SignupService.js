@@ -2,6 +2,7 @@ import axios from 'axios';
 import Constants from '../../../../components/common/Constants'; // Ensure the correct path
 import {CommonActions} from '@react-navigation/native';
 import {Alert} from 'react-native';
+import LeaveApiComponent from '../../leave/LeaveApiComponent';
 
 const SignupService = {
   signup: async (userData, navigation) => {
@@ -53,6 +54,49 @@ const SignupService = {
       return {
         success: false,
         error: error.message || 'An unexpected error occurred.',
+      };
+    }
+  },
+
+  postNewUser: async userData => {
+    const url = `${Constants.FIREBASE_URL}/${Constants.USERS}?key=${Constants.FIREBASE_KEY}`;
+    const method = 'post';
+    const body = {
+      fields: {
+        name: {
+          stringValue: userData.name,
+        },
+        email: {
+          stringValue: userData.email,
+        },
+        password: {
+          stringValue: userData.password,
+        },
+        role: {
+          stringValue: userData.role,
+        },
+      },
+    };
+
+    try {
+      const response = await axios.post(url, body, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      return {success: true, response: response.data};
+    } catch (error) {
+      console.error(
+        'Error in postNewUser:',
+        error.response?.data || error.message,
+      );
+      return {
+        success: false,
+        error:
+          error.response?.data ||
+          error.message ||
+          'An unexpected error occurred.',
       };
     }
   },

@@ -9,6 +9,9 @@ import {
   FETCH_ALL_PROFILE_START,
   FETCH_ALL_PROFILE_SUCCESS,
   FETCH_ALL_PROFILE_FAILURE,
+  POST_PROFILE_START,
+  POST_PROFILE_SUCCESS,
+  POST_PROFILE_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -16,6 +19,9 @@ const initialState = {
   data: null,
   isLoading: false,
   error: null,
+  isPosting: false,
+  postError: null,
+  postSuccess: false,
   isPatching: false,
   patchError: null,
   patchSuccess: false,
@@ -63,6 +69,29 @@ const ProfileReducer = (state = initialState, action) => {
       };
     case CLEAR_PROFILE_STATE:
       return initialState;
+
+    case POST_PROFILE_START:
+      return {
+        ...state,
+        isPosting: true,
+        postError: null,
+        postSuccess: false,
+      };
+    case POST_PROFILE_SUCCESS:
+      return {
+        ...state,
+        data: action.payload,
+        isPosting: false,
+        postError: null,
+        postSuccess: true,
+      };
+    case POST_PROFILE_FAILURE:
+      return {
+        ...state,
+        isPosting: false,
+        postError: action.payload,
+        postSuccess: false,
+      };
 
     case PATCH_PROFILE_START:
       return {

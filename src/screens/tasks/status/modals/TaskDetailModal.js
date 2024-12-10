@@ -90,30 +90,29 @@ export default function TaskDetailModal({
       animationType="fade"
       visible={isModalVisible}
       onRequestClose={toggleModal}>
-      <CommonSafeAreaScrollViewComponent>
-        {tasksLoading && <LogoLoaderComponent />}
-        <Header
-          title={I18n.t('taskDetails')}
-          onLeftIconPressed={toggleModal}
-          leftIcon={
+      {tasksLoading && <LogoLoaderComponent />}
+      <Header
+        title={I18n.t('taskDetails')}
+        onLeftIconPressed={toggleModal}
+        leftIcon={
+          <Ionicons
+            name="close"
+            size={Constants.SIZE.largeIcon}
+            color={Colors.whiteColor}
+          />
+        }
+        onRightIconPressed={askForConfirmation}
+        rightIcon={
+          taskDetails?.status !== 'Completed' && (
             <Ionicons
-              name="close"
+              name="checkmark"
               size={Constants.SIZE.largeIcon}
               color={Colors.whiteColor}
             />
-          }
-          onRightIconPressed={askForConfirmation}
-          rightIcon={
-            taskDetails?.status !== 'Completed' && (
-              <Ionicons
-                name="checkmark"
-                size={Constants.SIZE.largeIcon}
-                color={Colors.whiteColor}
-              />
-            )
-          }
-        />
-
+          )
+        }
+      />
+      <CommonSafeAreaScrollViewComponent>
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
             title={I18n.t('title')}

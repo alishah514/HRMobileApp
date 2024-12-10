@@ -10,6 +10,9 @@ import {
   FETCH_ALL_PROFILE_START,
   FETCH_ALL_PROFILE_SUCCESS,
   FETCH_ALL_PROFILE_FAILURE,
+  POST_PROFILE_START,
+  POST_PROFILE_SUCCESS,
+  POST_PROFILE_FAILURE,
 } from '../actions/actionTypes';
 
 export const fetchProfileStart = () => ({
@@ -44,6 +47,20 @@ export const clearProfileState = () => ({
   type: CLEAR_PROFILE_STATE,
 });
 
+export const postProfileStart = () => ({
+  type: POST_PROFILE_START,
+});
+
+export const postProfileSuccess = response => ({
+  type: POST_PROFILE_SUCCESS,
+  payload: response,
+});
+
+export const postProfileFailure = error => ({
+  type: POST_PROFILE_FAILURE,
+  payload: error,
+});
+
 export const patchProfileStart = () => ({
   type: PATCH_PROFILE_START,
 });
@@ -75,6 +92,24 @@ export const fetchProfile = userId => async dispatch => {
     dispatch(fetchProfileSuccess(response));
   } catch (error) {
     dispatch(fetchProfileFailure(error));
+  }
+};
+
+export const postProfile = profileData => async dispatch => {
+  dispatch(postProfileStart());
+  try {
+    const response = await ProfileService.postEmployeeProfile(profileData);
+    if (response.success) {
+      dispatch(postProfileSuccess(response));
+      return response;
+    } else {
+      dispatch(postProfileFailure(response.error));
+      return {success: false, error: response.error};
+    }
+  } catch (error) {
+    const errorMessage = error.message || 'An unexpected error occurred.';
+    dispatch(postProfileFailure(errorMessage));
+    return {success: false, error: errorMessage};
   }
 };
 
