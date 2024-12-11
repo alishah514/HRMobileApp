@@ -40,6 +40,9 @@ const LeaveService = {
         userId: {
           stringValue: leaveData.userId,
         },
+        leaveDocument: {
+          stringValue: leaveData.leaveDocument,
+        },
       },
     };
 
@@ -81,6 +84,9 @@ const LeaveService = {
         },
         userId: {
           stringValue: leaveData.userId,
+        },
+        leaveDocument: {
+          stringValue: leaveData.leaveDocument,
         },
       },
     };

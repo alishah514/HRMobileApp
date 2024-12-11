@@ -171,5 +171,10 @@
   "allEmployees": "All Employees",
   "addEmployee": "Add Employee",
   "employeeList": "Employee List",
-  "editEmployee": "Edit Employee"
+  "editEmployee": "Edit Employee",
+  "attachDocument": "Attach Document",
+  "viewDocument": "View Document",
+  "clickToView": "Click To View",
+  "selectDocument": "Select Document",
+  "clickToOpen": "Click To Open"
 }

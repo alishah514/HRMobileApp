@@ -1,5 +1,6 @@
 import {Platform, StyleSheet} from 'react-native';
 import {hp, wp} from '../../components/common/Dimensions';
+import {Colors} from '../../components/common/Colors';
 
 const styles = StyleSheet.create({
   maxHeight: {
@@ -13,6 +14,16 @@ const styles = StyleSheet.create({
   paddingBottom5Align: {
     paddingBottom: wp('5'),
     alignItems: 'center',
+  },
+  documentButton: {
+    width: wp('30'),
+    height: wp('10'),
+    backgroundColor: Colors.whiteColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: wp(2),
+    borderWidth: wp(0.1),
+    borderColor: Colors.greyColor,
   },
 });
 export default styles;

@@ -171,5 +171,10 @@
   "allEmployees": "すべての従業員",
   "addEmployee": "従業員を追加",
   "employeeList": "従業員リスト",
-  "editEmployee": "従業員を編集"
+  "editEmployee": "従業員を編集",
+  "attachDocument": "ドキュメントを添付する",
+  "viewDocument": "ドキュメントを表示",
+  "clickToView": "クリックして表示",
+  "selectDocument": "ドキュメントを選択",
+  "clickToOpen": "クリックして開く"
 }

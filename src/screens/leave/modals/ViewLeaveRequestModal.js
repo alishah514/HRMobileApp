@@ -1,4 +1,11 @@
-import {View, Text, Modal, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  Modal,
+  Alert,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import React from 'react';
 import CommonSafeAreaScrollViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import Header from '../../../components/ReusableComponents/Header/Header';
@@ -14,6 +21,7 @@ import {deleteLeave, patchLeaveStatus} from '../../../redux/leave/LeaveActions';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 import {formatDate} from '../../../components/utils/dateUtils';
 import useLeaveData from '../../../hooks/useLeaveData';
+import styles from '../styles';
 
 export default function ViewLeaveRequestModal({
   isModalVisible,
@@ -25,8 +33,17 @@ export default function ViewLeaveRequestModal({
   const currentLanguage = useSelector(state => state.language.language);
   const {leavesLoading} = useLeaveData();
 
-  const {type, reason, period, name, fromDate, toDate, status, userId} =
-    leaveDetails || {};
+  const {
+    type,
+    reason,
+    period,
+    name,
+    fromDate,
+    toDate,
+    status,
+    userId,
+    leaveDocument,
+  } = leaveDetails || {};
 
   const leaveDuration = `${formatDate(fromDate)} - ${formatDate(
     toDate,
@@ -77,6 +94,7 @@ export default function ViewLeaveRequestModal({
       period,
       status,
       userId,
+      leaveDocument,
     };
 
     const response = await dispatch(patchLeaveStatus(leaveId, leaveData));
@@ -104,6 +122,24 @@ export default function ViewLeaveRequestModal({
     } else {
       console.error('Failed to delete leave request:', response.error);
       Alert.alert('Error', response.error);
+    }
+  };
+
+  const openDocument = async () => {
+    try {
+      const supported =
+        leaveDocument.startsWith('http') || leaveDocument.startsWith('https');
+      if (supported) {
+        await Linking.openURL(leaveDocument);
+      } else {
+        Alert.alert('Error', 'Invalid document URL.');
+      }
+    } catch (error) {
+      console.error('Error opening document:', error);
+      Alert.alert(
+        'Error',
+        'An unexpected error occurred while trying to open the document.',
+      );
     }
   };
 
@@ -156,6 +192,25 @@ export default function ViewLeaveRequestModal({
             disabled={true}
             multiline={true}
           />
+          {leaveDocument && (
+            <View>
+              <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
+                {I18n.t('viewDocument')}
+              </Text>
+              <TouchableOpacity
+                onPress={openDocument}
+                style={[styles.documentButton, CommonStyles.shadow]}>
+                <Text
+                  style={[
+                    CommonStyles.font3,
+                    CommonStyles.textDarkGrey,
+                    CommonStyles.Bold600,
+                  ]}>
+                  {I18n.t('clickToOpen')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
           {status === 'pending' && (
             <CommonButton
               title={I18n.t('cancel')}

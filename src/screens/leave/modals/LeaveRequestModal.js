@@ -1,4 +1,4 @@
-import {View, Modal, Alert} from 'react-native';
+import {View, Modal, Alert, Text, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import CommonSafeAreaScrollViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import Header from '../../../components/ReusableComponents/Header/Header';
@@ -18,6 +18,10 @@ import {CalculatePeriod} from '../../../components/utils/CalculatePeriod';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 import {useLoginData} from '../../../hooks/useLoginData';
 import useLeaveData from '../../../hooks/useLeaveData';
+import {wp} from '../../../components/common/Dimensions';
+import styles from '../styles';
+import DocumentPicker, {types} from 'react-native-document-picker';
+import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentUploadAWS';
 
 export default function LeaveRequestModal({
   isModalVisible,
@@ -33,7 +37,30 @@ export default function LeaveRequestModal({
   const [leaveFrom, setLeaveFrom] = useState(null);
   const [leaveTo, setLeaveTo] = useState(null);
   const [leaveReason, setLeaveReason] = useState('');
+  const [leaveDocument, setLeaveDocument] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const leaveTypeOptions = ['Casual Leave', 'Plan Leave', 'Sick Leave'];
+
+  const viewData = async () => {
+    const fromDate = new Date(leaveFrom);
+    const toDate = new Date(leaveTo);
+
+    const period = CalculatePeriod(fromDate, toDate);
+    if (period === null) return;
+
+    const leaveData = {
+      reason: leaveReason,
+      type: leaveType,
+      fromDate: convertToTimestamp(leaveFrom),
+      toDate: convertToTimestamp(leaveTo),
+      period: period.toString(),
+      status: 'pending',
+      userId: userId,
+      leaveDocument: leaveDocument || '',
+    };
+
+    await askForConfirmation(leaveData);
+  };
 
   const askForConfirmation = leaveData => {
     const message = 'Are you sure you want to add this leave request?';
@@ -69,26 +96,6 @@ export default function LeaveRequestModal({
     }
   };
 
-  const viewData = async () => {
-    const fromDate = new Date(leaveFrom);
-    const toDate = new Date(leaveTo);
-
-    const period = CalculatePeriod(fromDate, toDate);
-    if (period === null) return;
-
-    const leaveData = {
-      reason: leaveReason,
-      type: leaveType,
-      fromDate: convertToTimestamp(leaveFrom),
-      toDate: convertToTimestamp(leaveTo),
-      period: period.toString(),
-      status: 'pending',
-      userId: userId,
-    };
-
-    await askForConfirmation(leaveData);
-  };
-
   const isLeaveFormValid = () => {
     return (
       leaveType !== null &&
@@ -105,13 +112,61 @@ export default function LeaveRequestModal({
     setLeaveReason('');
   };
 
+  const handleDocumentPick = async () => {
+    try {
+      const result = await DocumentPicker.pick({
+        type: [types.pdf, types.doc, types.docx, types.plainText, types.images],
+      });
+      showConfirmationAlert(async () => {
+        setIsLoading(true);
+        const document = result[0];
+        const uploadedUrl = await handleDocumentUploadAWS(
+          document,
+          'documents/leaves/',
+        );
+        console.log('Uploaded Document URL:', uploadedUrl);
+        setLeaveDocument(uploadedUrl);
+        setIsLoading(false);
+      });
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('User cancelled document picker');
+      } else {
+        console.error('DocumentPicker Error:', err);
+        Alert.alert(
+          'Error',
+          'An unexpected error occurred while selecting a document.',
+        );
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const showConfirmationAlert = onConfirm => {
+    Alert.alert(
+      'Upload Confirmation',
+      'Are you sure you want to upload this document?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: onConfirm,
+        },
+      ],
+    );
+  };
+
   return (
     <Modal
       transparent={false}
       animationType="fade"
       visible={isModalVisible}
       onRequestClose={toggleModal}>
-      {leavesLoading && <LogoLoaderComponent />}
+      {(leavesLoading || isLoading) && <LogoLoaderComponent />}
 
       <Header
         title={I18n.t('leaveRequest')}
@@ -153,6 +208,23 @@ export default function LeaveRequestModal({
             textColor={Colors.blackColor}
             multiline={true}
           />
+          <View>
+            <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
+              {I18n.t('attachDocument')}
+            </Text>
+            <TouchableOpacity
+              onPress={handleDocumentPick}
+              style={[styles.documentButton, CommonStyles.shadow]}>
+              <Text
+                style={[
+                  CommonStyles.font3,
+                  CommonStyles.textDarkGrey,
+                  CommonStyles.Bold600,
+                ]}>
+                {I18n.t('selectDocument')}
+              </Text>
+            </TouchableOpacity>
+          </View>
           <CommonButton
             title={I18n.t('sendLeaveRequest')}
             onPress={viewData}
