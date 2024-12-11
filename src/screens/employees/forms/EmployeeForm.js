@@ -21,9 +21,10 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Constants from '../../../components/common/Constants';
 import styles from '../styles';
 import ImagePickerComponent from '../../../components/ReusableComponents/ImagePickerComponent';
+import {convertTo12HourFormat} from '../../../components/utils/ConvertTimeToInt';
 
 const EmployeeForm = forwardRef((props, ref) => {
-  const {onFormValidityChange} = props;
+  const {onFormValidityChange, data, screen} = props;
   const currentLanguage = useSelector(state => state.language.language);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
     useState(false);
@@ -65,8 +66,41 @@ const EmployeeForm = forwardRef((props, ref) => {
   const [timeOptions, setTimeOptions] = useState([]);
 
   useEffect(() => {
-    const options = GenerateTimeOptions(6, 5);
+    if (screen === 'edit' && data) {
+      setFullName(data?.profile?.personal?.fullName || '');
+      setPhoneNumber(data?.profile?.personal?.phone?.toString() || '');
+      setEmailAddress(data?.profile?.personal?.email || '');
+      setDateOfBirth(data?.profile?.personal?.birthDate || '');
+      setGender(data?.profile?.personal?.gender || '');
+      setProfilePicture(data?.profile?.personal?.imageUrl || null);
+      setPassword(data?.users?.password || '');
 
+      if (data?.profile?.education && data?.profile?.education.length > 0) {
+        const educationItem = data?.profile?.education[0];
+
+        setDegreeFrom(educationItem?.startDate || '');
+        setDegreeTo(educationItem?.endDate || '');
+        setInstitution(educationItem?.Institute || '');
+        setDegreeTitle(educationItem?.Degree || '');
+      }
+
+      setJobDesignation(data?.profile?.job?.Designation || '');
+      setJobDepartment(data?.profile?.job?.Department || '');
+      setJoiningDate(data?.profile?.job?.JoiningDate || null);
+      setEmploymentType(data?.profile?.job?.employmentType || '');
+      setSalary(data?.profile?.job?.salary || '');
+      setWageType(data?.profile?.job?.wageType || '');
+      setPunchInTime(
+        convertTo12HourFormat(data?.profile?.job?.punchInTime) || null,
+      );
+      setPunchOutTime(
+        convertTo12HourFormat(data?.profile?.job?.punchOutTime) || null,
+      );
+    }
+  }, [data, screen]);
+
+  useEffect(() => {
+    const options = GenerateTimeOptions(6, 5);
     setTimeOptions(options);
   }, []);
 
@@ -127,7 +161,7 @@ const EmployeeForm = forwardRef((props, ref) => {
         emailAddress,
         dateOfBirth,
         gender,
-        profilePicture: profilePicture?.uploadedUrl,
+        profilePicture: profilePicture?.uploadedUrl || profilePicture,
         password,
         degreeFrom,
         degreeTo,
@@ -154,17 +188,23 @@ const EmployeeForm = forwardRef((props, ref) => {
             style={[styles.profilePicture]}>
             <Image
               source={
-                profilePicture?.path
+                typeof profilePicture === 'string' &&
+                profilePicture.startsWith('http')
+                  ? {uri: profilePicture}
+                  : profilePicture?.path
                   ? {uri: profilePicture.path}
                   : require('../../../assets/images/man-emoji.png')
               }
               resizeMode="cover"
               style={
-                profilePicture?.uploadedUrl
+                (typeof profilePicture === 'string' &&
+                  profilePicture.startsWith('http')) ||
+                profilePicture?.path
                   ? CommonStyles.imageView
                   : styles.imageView
               }
             />
+
             <View style={styles.editPenIconCircle}>
               <SimpleLineIcons
                 name={'pencil'}

@@ -9,3 +9,14 @@ export const convertTo24HourFormat = time => {
   }
   return hour;
 };
+
+export const convertTo12HourFormat = time => {
+  const period = time >= 12 ? 'PM' : 'AM';
+  let adjustedTime = time % 12;
+
+  if (adjustedTime === 0) {
+    adjustedTime = 12;
+  }
+
+  return `${adjustedTime}:00 ${period}`;
+};

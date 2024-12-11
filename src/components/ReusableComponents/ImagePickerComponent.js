@@ -36,61 +36,6 @@ export default function ImagePickerComponent({
     return true;
   };
 
-  // const handleImageFromGallery = async () => {
-  //   try {
-  //     const hasPermission = await requestCameraPermission();
-  //     if (!hasPermission) {
-  //       Alert.alert(
-  //         'Permission denied',
-  //         'Camera permission is required to access the gallery.',
-  //       );
-  //       return;
-  //     }
-
-  //     const image = await ImagePicker.openPicker({
-  //       width: 300,
-  //       height: 400,
-  //       cropping: false,
-  //     });
-  //     console.log('Gallery image: ', image.path);
-  //     setImage(image.path);
-  //     setIsLoading(true);
-  //     await handleImageUploadAWS(image, setImage, folder, null, setIsLoading);
-  //     setIsImagePickerOptionsVisible(false);
-  //   } catch (error) {
-  //     console.log('Gallery picker error: ', error);
-  //     setIsImagePickerOptionsVisible(false);
-  //   }
-  // };
-
-  // const handleImageFromCamera = async () => {
-  //   try {
-  //     const hasPermission = await requestCameraPermission();
-  //     if (!hasPermission) {
-  //       Alert.alert(
-  //         'Permission denied',
-  //         'Camera permission is required to take photos.',
-  //       );
-  //       return;
-  //     }
-
-  //     const image = await ImagePicker.openCamera({
-  //       width: 300,
-  //       height: 400,
-  //       cropping: true,
-  //     });
-  //     console.log('Camera image: ', image.path);
-  //     setImage(image.path);
-  //     setIsLoading(true);
-
-  //     await handleImageUploadAWS(image, setImage, folder, null, setIsLoading);
-  //     setIsImagePickerOptionsVisible(false);
-  //   } catch (error) {
-  //     console.log('Camera error: ', error);
-  //     setIsImagePickerOptionsVisible(false);
-  //   }
-  // };
-
   const showConfirmationAlert = onConfirm => {
     Alert.alert(
       'Upload Confirmation',
@@ -125,7 +70,7 @@ export default function ImagePickerComponent({
         cropping: false,
       });
       // console.log('Gallery image: ', image.path);
-      setImage(image.path);
+      setImage(image);
 
       showConfirmationAlert(async () => {
         setIsLoading(true);
@@ -154,8 +99,8 @@ export default function ImagePickerComponent({
         height: 400,
         cropping: true,
       });
-      // console.log('Camera image: ', image.path);
-      setImage(image.path);
+
+      setImage(image);
 
       showConfirmationAlert(async () => {
         setIsLoading(true);

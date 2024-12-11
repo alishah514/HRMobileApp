@@ -107,24 +107,27 @@ const DrawerNavigator = () => {
             ),
           }}
         />
-        <Drawer.Screen
-          name="Employees"
-          component={AdminEmployeeScreen}
-          options={{
-            drawerLabel: () => (
-              <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
-                {I18n.t('employees')}
-              </Text>
-            ),
-            drawerIcon: ({focused, size}) => (
-              <Ionicons
-                name={focused ? 'people' : 'people-outline'}
-                size={size}
-                color={Colors.whiteColor}
-              />
-            ),
-          }}
-        />
+        {role === 'Admin' && (
+          <Drawer.Screen
+            name="Employees"
+            component={AdminEmployeeScreen}
+            options={{
+              drawerLabel: () => (
+                <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
+                  {I18n.t('employees')}
+                </Text>
+              ),
+              drawerIcon: ({focused, size}) => (
+                <Ionicons
+                  name={focused ? 'people' : 'people-outline'}
+                  size={size}
+                  color={Colors.whiteColor}
+                />
+              ),
+            }}
+          />
+        )}
+
         <Drawer.Screen
           name="Tasks"
           component={TaskScreen}

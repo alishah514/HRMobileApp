@@ -113,16 +113,16 @@ export const postProfile = profileData => async dispatch => {
   }
 };
 
-export const patchProfile = (profileId, profileData) => async dispatch => {
+export const updateProfile = (profileId, profileData) => async dispatch => {
   dispatch(patchProfileStart());
   try {
-    const response = await ProfileService.patchEditProfile(
+    const response = await ProfileService.updateOrEditOProfile(
       profileId,
       profileData,
     );
     if (response.success) {
       dispatch(patchProfileSuccess(response));
-      return response;
+      return {success: true, data: response.response};
     } else {
       dispatch(patchProfileFailure(response.error));
       return {success: false, error: response.error};

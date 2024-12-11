@@ -57,7 +57,7 @@ export default function SignupScreen({navigation}) {
     }
 
     if (valid) {
-      signupUser();
+      createUser();
     }
   };
 
@@ -75,7 +75,7 @@ export default function SignupScreen({navigation}) {
     }
   };
 
-  const signupUser = () => {
+  const createUser = () => {
     const userData = {
       name: username,
       email: email,

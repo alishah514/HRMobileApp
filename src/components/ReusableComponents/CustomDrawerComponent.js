@@ -8,12 +8,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CommonStyles from '../common/CommonStyles';
 import {Colors} from '../common/Colors';
 import Constants from '../common/Constants';
-import {useSelector} from 'react-redux';
 import {TruncateTitle} from '../utils/TruncateTitle';
+import useProfileData from '../../hooks/useProfileData';
+import {useLoginData} from '../../hooks/useLoginData';
 
 export default function CustomDrawerComponent(props) {
-  const {data: profile} = useSelector(state => state.profile);
-  const role = useSelector(state => state.login.role);
+  const {profile} = useProfileData();
+  const {role} = useLoginData();
 
   return (
     <DrawerContentScrollView

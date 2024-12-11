@@ -170,5 +170,6 @@
   "googleCalendar": "Googleカレンダー",
   "allEmployees": "すべての従業員",
   "addEmployee": "従業員を追加",
-  "employeeList": "従業員リスト"
+  "employeeList": "従業員リスト",
+  "editEmployee": "従業員を編集"
 }

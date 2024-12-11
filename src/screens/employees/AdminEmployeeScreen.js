@@ -1,10 +1,10 @@
 import {
   View,
   Text,
-  SafeAreaView,
   FlatList,
   Platform,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
@@ -21,21 +21,28 @@ import styles from './styles';
 import useProfileData from '../../hooks/useProfileData';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {TruncateTitle} from '../../components/utils/TruncateTitle';
-import AddEmployeeModal from './modals/AddEmployeeModal';
 import {useSelector} from 'react-redux';
+import ManageEmployeeModal from './modals/ManageEmployeeModal';
 
 export default function AdminEmployeeScreen({navigation}) {
   const currentLanguage = useSelector(state => state.language.language);
-
   const {allProfile, profileLoading} = useProfileData();
   const [isAddEmployeeModalVisible, setIsAddEmployeeModalVisible] =
     useState(false);
+  const [modalData, setModalData] = useState({screen: 'add', employee: null});
 
   const handleDrawerOpen = () => {
     navigation.openDrawer();
   };
 
-  const toggleAddEmployeeModal = () => {
+  const toggleAddEmployeeModal = (
+    screenType = 'add',
+    currentEmployee = null,
+  ) => {
+    setModalData({
+      screen: screenType,
+      employee: currentEmployee,
+    });
     setIsAddEmployeeModalVisible(!isAddEmployeeModalVisible);
   };
 
@@ -43,7 +50,9 @@ export default function AdminEmployeeScreen({navigation}) {
     const userIdLast4 = item?.userId?.slice(-5);
 
     return (
-      <View style={styles.card}>
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => toggleAddEmployeeModal('edit', item)}>
         {item?.personal?.imageUrl ? (
           <Image
             source={{uri: item?.personal?.imageUrl}}
@@ -63,7 +72,7 @@ export default function AdminEmployeeScreen({navigation}) {
         <Text style={styles.id}>
           {userIdLast4 ? `****${userIdLast4}` : 'null'}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -72,7 +81,7 @@ export default function AdminEmployeeScreen({navigation}) {
       {profileLoading && <LogoLoaderComponent />}
       <Header
         title={I18n.t('employees')}
-        onRightIconPressed={toggleAddEmployeeModal}
+        onRightIconPressed={() => toggleAddEmployeeModal('add')}
         rightIcon={
           <Octicons
             name="person-add"
@@ -135,9 +144,11 @@ export default function AdminEmployeeScreen({navigation}) {
           </>
         }
       />
-      <AddEmployeeModal
+      <ManageEmployeeModal
         isModalVisible={isAddEmployeeModalVisible}
         toggleModal={toggleAddEmployeeModal}
+        screen={modalData.screen}
+        data={modalData.employee}
       />
     </CommonSafeAreaViewComponent>
   );

@@ -10,6 +10,7 @@ import {ChangePasswordReducer} from '../changePassword/ChangePasswordReducer';
 import ProfileReducer from '../profile/ProfileReducer';
 import EventReducer from '../events/EventReducer';
 import SettingsReducer from '../settings/SettingsReducers';
+import AccountReducers from '../accounts/AccountReducers';
 
 const RootReducer = combineReducers({
   login: LoginReducer,
@@ -23,6 +24,7 @@ const RootReducer = combineReducers({
   profile: ProfileReducer,
   events: EventReducer,
   settings: SettingsReducer,
+  accounts: AccountReducers,
 });
 
 export default RootReducer;

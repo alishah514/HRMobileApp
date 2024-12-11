@@ -20,7 +20,7 @@ export const signupUserFailure = error => ({
   payload: error,
 });
 
-export const signupUser = userData => async dispatch => {
+export const createUser = userData => async dispatch => {
   dispatch(signupUserStart());
 
   try {

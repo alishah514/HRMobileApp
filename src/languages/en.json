@@ -170,5 +170,6 @@
   "googleCalendar": "Google Calendar",
   "allEmployees": "All Employees",
   "addEmployee": "Add Employee",
-  "employeeList": "Employee List"
+  "employeeList": "Employee List",
+  "editEmployee": "Edit Employee"
 }

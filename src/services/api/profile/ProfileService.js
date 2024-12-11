@@ -137,10 +137,10 @@ const ProfileService = {
                 stringValue: profileData.job?.wageType || '',
               },
               punchInTime: {
-                integerValue: profileData.job?.punchInTime || '',
+                integerValue: profileData.job?.punchInTime || null,
               },
               punchOutTime: {
-                integerValue: profileData.job?.punchOutTime || '',
+                integerValue: profileData.job?.punchOutTime || null,
               },
             },
           },
@@ -152,7 +152,7 @@ const ProfileService = {
                 stringValue: profileData.personal?.fullName || '',
               },
               phone: {
-                integerValue: profileData.personal?.phone || '',
+                integerValue: profileData.personal?.phone || null,
               },
               email: {
                 stringValue: profileData.personal?.email || '',
@@ -217,9 +217,8 @@ const ProfileService = {
     }
   },
 
-  patchEditProfile: async (profileId, profileData) => {
+  updateOrEditOProfile: async (profileId, profileData) => {
     const url = `${Constants.FIREBASE_URL}/${Constants.EMPLOYEES}/${profileId}?key=${Constants.FIREBASE_KEY}`;
-    const method = 'patch';
 
     const body = {
       fields: {
@@ -233,7 +232,9 @@ const ProfileService = {
                 stringValue: profileData.job?.Department || '',
               },
               JoiningDate: {
-                timestampValue: profileData.job?.JoiningDate || '',
+                timestampValue: profileData.job?.JoiningDate
+                  ? new Date(profileData.job.JoiningDate).toISOString()
+                  : '',
               },
               employmentType: {
                 stringValue: profileData.job?.employmentType || '',
@@ -244,29 +245,37 @@ const ProfileService = {
               wageType: {
                 stringValue: profileData.job?.wageType || '',
               },
+              punchInTime: {
+                integerValue: profileData.job?.punchInTime || null,
+              },
+              punchOutTime: {
+                integerValue: profileData.job?.punchOutTime || null,
+              },
             },
           },
         },
         personal: {
           mapValue: {
             fields: {
-              employeeId: {
-                stringValue: profileId,
-              },
               fullName: {
                 stringValue: profileData.personal?.fullName || '',
               },
               phone: {
-                integerValue: profileData.personal?.phone || '0',
+                integerValue: profileData.personal?.phone || null,
               },
               email: {
                 stringValue: profileData.personal?.email || '',
               },
               birthDate: {
-                timestampValue: profileData.personal?.birthDate || '',
+                timestampValue: profileData.personal?.birthDate
+                  ? new Date(profileData.personal.birthDate).toISOString()
+                  : '',
               },
               gender: {
                 stringValue: profileData.personal?.gender || '',
+              },
+              imageUrl: {
+                stringValue: profileData.personal?.imageUrl || '',
               },
             },
           },
@@ -281,7 +290,9 @@ const ProfileService = {
                 mapValue: {
                   fields: {
                     startDate: {
-                      timestampValue: edu.startDate || '',
+                      timestampValue: edu.startDate
+                        ? new Date(edu.startDate).toISOString()
+                        : '',
                     },
                     Institute: {
                       stringValue: edu.Institute || '',
@@ -289,9 +300,10 @@ const ProfileService = {
                     Degree: {
                       stringValue: edu.Degree || '',
                     },
-
                     endDate: {
-                      timestampValue: edu.endDate || '',
+                      timestampValue: edu.endDate
+                        ? new Date(edu.endDate).toISOString()
+                        : '',
                     },
                   },
                 },
@@ -300,6 +312,8 @@ const ProfileService = {
         },
       },
     };
+
+    // console.log('body: ' + JSON.stringify(body));
 
     try {
       const response = await axios.patch(url, body);

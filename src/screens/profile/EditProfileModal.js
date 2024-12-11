@@ -14,9 +14,10 @@ import I18n from '../../i18n/i18n';
 import CustomSectionedMultiSelectComponent from '../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 import {formatDate} from '../../components/utils/dateUtils';
 import {PaymentRegex} from '../../components/utils/PaymentRegex';
-import {patchProfile} from '../../redux/profile/ProfileActions';
+import {updateProfile} from '../../redux/profile/ProfileActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {useLoginData} from '../../hooks/useLoginData';
+import useProfileData from '../../hooks/useProfileData';
 
 export default function EditProfileModal({
   onClose,
@@ -26,7 +27,8 @@ export default function EditProfileModal({
 }) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
-  const isLoading = useSelector(state => state.profile.isPatching);
+
+  const {isPatching} = useProfileData();
 
   const {userId} = useLoginData();
   //personal
@@ -128,7 +130,7 @@ export default function EditProfileModal({
   };
 
   const handleUpdateProfile = async (profileId, profileData) => {
-    const response = await dispatch(patchProfile(profileId, profileData));
+    const response = await dispatch(updateProfile(profileId, profileData));
     if (response.success === true) {
       Alert.alert('Profile is updated successfully!');
       onSuccess();
@@ -144,7 +146,7 @@ export default function EditProfileModal({
       animationType="fade"
       visible={isModalVisible}
       onRequestClose={onClose}>
-      {isLoading && <LogoLoaderComponent />}
+      {isPatching && <LogoLoaderComponent />}
       <CommonSafeAreaScrollViewComponent>
         <Header
           title={I18n.t('editProfile')}
