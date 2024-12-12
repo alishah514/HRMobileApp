@@ -9,10 +9,14 @@ import {
   PATCH_TASK_STATUS_START,
   PATCH_TASK_STATUS_SUCCESS,
   PATCH_TASK_STATUS_FAILURE,
+  FETCH_ALL_TASKS_START,
+  FETCH_ALL_TASKS_SUCCESS,
+  FETCH_ALL_TASKS_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
   data: [],
+  allTasks: [],
   isLoading: false,
   error: null,
   taskData: null,
@@ -21,6 +25,23 @@ const initialState = {
 
 const TaskReducer = (state = initialState, action) => {
   switch (action.type) {
+    case FETCH_ALL_TASKS_START:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case FETCH_ALL_TASKS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        allTasks: action.payload,
+      };
+    case FETCH_ALL_TASKS_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
     case FETCH_TASKS_START:
       return {
         ...state,

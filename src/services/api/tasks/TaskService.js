@@ -8,7 +8,7 @@ const TaskService = {
 
     try {
       const response = await TaskApiComponent(url, method);
-      // console.log('Fetch Tasks', response);
+
       return response;
     } catch (error) {
       throw error;

@@ -15,7 +15,7 @@ import AddTaskModal from './status/modals/AddTaskModal';
 import I18n from '../../i18n/i18n';
 import {useDispatch, useSelector} from 'react-redux';
 import TasksComponent from './status/TaskComponent';
-import {fetchUserTasks} from '../../redux/tasks/TaskActions';
+import {fetchAllTasks, fetchUserTasks} from '../../redux/tasks/TaskActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {useLoginData} from '../../hooks/useLoginData';
 import useTaskData from '../../hooks/useTaskData';
@@ -46,8 +46,9 @@ export default function TaskScreen({navigation, route}) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
   const {userId, role} = useLoginData();
-  const tasks = useSelector(state => state.tasks.data);
-  const {tasksLoading} = useTaskData();
+
+  const {tasks, tasksLoading, allTasks} = useTaskData();
+
   const [activeTab, setActiveTab] = useState(0);
   const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
 
@@ -56,11 +57,17 @@ export default function TaskScreen({navigation, route}) {
   }, []);
 
   const getTasks = () => {
-    dispatch(
-      fetchUserTasks(userId, {
-        limit: 25,
-      }),
-    );
+    if (role === 'Employee') {
+      dispatch(
+        fetchUserTasks(userId, {
+          limit: 25,
+        }),
+      );
+    } else {
+      console.log('role admin');
+
+      dispatch(fetchAllTasks());
+    }
   };
 
   const handleTabPress = index => {
@@ -135,19 +142,29 @@ export default function TaskScreen({navigation, route}) {
                   {activeTab === 0 ? (
                     <TasksComponent
                       taskType="all"
-                      data={tasks}
+                      data={role === 'Employee' ? tasks : allTasks}
                       apiCall={getTasks}
                     />
                   ) : activeTab === 1 ? (
                     <TasksComponent
                       taskType="Pending"
-                      data={tasks.filter(tasks => tasks.status === 'Pending')}
+                      data={
+                        role === 'Employee'
+                          ? tasks?.filter(task => task.status === 'Pending')
+                          : allTasks?.filter(task => task.status === 'Pending')
+                      }
                       apiCall={getTasks}
                     />
                   ) : activeTab === 2 ? (
                     <TasksComponent
                       taskType="Completed"
-                      data={tasks.filter(tasks => tasks.status === 'Completed')}
+                      data={
+                        role === 'Employee'
+                          ? tasks?.filter(task => task.status === 'Completed')
+                          : allTasks?.filter(
+                              task => task.status === 'Completed',
+                            )
+                      }
                       apiCall={getTasks}
                     />
                   ) : null}

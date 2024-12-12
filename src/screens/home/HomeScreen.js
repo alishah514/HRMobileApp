@@ -12,7 +12,7 @@ import PunchInOut from './PunchComponent/PunchInOut';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import I18n from '../../i18n/i18n';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
-import {fetchUserTasks} from '../../redux/tasks/TaskActions';
+import {fetchAllTasks, fetchUserTasks} from '../../redux/tasks/TaskActions';
 import {fetchAllLeaves, fetchUserLeaves} from '../../redux/leave/LeaveActions';
 import {
   fetchAllProfile,
@@ -48,10 +48,12 @@ export default function HomeScreen({navigation}) {
     if (userId) {
       if (role === 'Employee') {
         dispatch(fetchUserLeaves(userId));
+        dispatch(fetchUserTasks(userId));
       } else {
         dispatch(fetchAllLeaves());
+        dispatch(fetchAllTasks());
       }
-      dispatch(fetchUserTasks(userId));
+
       dispatch(fetchAttendance(userId));
       fetchUserProfile(userId);
     }

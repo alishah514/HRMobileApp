@@ -12,7 +12,7 @@ import I18n from '../../../i18n/i18n';
 import {useLoginData} from '../../../hooks/useLoginData';
 
 export default function LeaveTaskComponent({navigation}) {
-  const {validTaskCount} = useTaskData();
+  const {validTaskCount, validAllTaskCount} = useTaskData();
   const {validLeavesCount, validAllLeavesCount} = useLeaveData();
   const {role} = useLoginData();
   return (
@@ -34,7 +34,7 @@ export default function LeaveTaskComponent({navigation}) {
               CommonStyles.textBlack,
               CommonStyles.marginVertical2,
             ]}>
-            {validTaskCount}
+            {role === 'Employee' ? validTaskCount : validAllTaskCount}
           </Text>
           <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
             {I18n.t('tasks')}

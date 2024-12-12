@@ -10,8 +10,24 @@ import {
   PATCH_TASK_STATUS_START,
   PATCH_TASK_STATUS_SUCCESS,
   PATCH_TASK_STATUS_FAILURE,
+  FETCH_ALL_TASKS_START,
+  FETCH_ALL_TASKS_SUCCESS,
+  FETCH_ALL_TASKS_FAILURE,
 } from '../actions/actionTypes';
 
+export const fetchAllTasksStart = () => ({
+  type: FETCH_ALL_TASKS_START,
+});
+
+export const fetchAllTasksSuccess = tasks => ({
+  type: FETCH_ALL_TASKS_SUCCESS,
+  payload: tasks,
+});
+
+export const fetchAllTasksFailure = error => ({
+  type: FETCH_ALL_TASKS_FAILURE,
+  payload: error,
+});
 export const fetchTasksStart = () => ({
   type: FETCH_TASKS_START,
 });
@@ -58,13 +74,14 @@ export const patchTaskStatusFailure = error => ({
   payload: error,
 });
 
-export const fetchTasks = () => async dispatch => {
-  dispatch(fetchTasksStart());
+export const fetchAllTasks = () => async dispatch => {
+  dispatch(fetchAllTasksStart());
   try {
     const response = await TaskService.fetchTasks();
-    dispatch(fetchTasksSuccess(response));
+    // console.log('response from fetchTasks:', response);
+    dispatch(fetchAllTasksSuccess(response));
   } catch (error) {
-    dispatch(fetchTasksFailure(error));
+    dispatch(fetchAllTasksFailure(error));
   }
 };
 
