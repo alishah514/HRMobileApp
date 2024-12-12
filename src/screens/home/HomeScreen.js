@@ -13,7 +13,7 @@ import CommonSafeAreaViewComponent from '../../components/ReusableComponents/Com
 import I18n from '../../i18n/i18n';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {fetchUserTasks} from '../../redux/tasks/TaskActions';
-import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
+import {fetchAllLeaves, fetchUserLeaves} from '../../redux/leave/LeaveActions';
 import {
   fetchAllProfile,
   fetchProfile,
@@ -46,7 +46,11 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     if (userId) {
-      dispatch(fetchUserLeaves(userId));
+      if (role === 'Employee') {
+        dispatch(fetchUserLeaves(userId));
+      } else {
+        dispatch(fetchAllLeaves());
+      }
       dispatch(fetchUserTasks(userId));
       dispatch(fetchAttendance(userId));
       fetchUserProfile(userId);

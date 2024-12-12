@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import CommonSafeAreaScrollViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import Header from '../../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -22,6 +22,9 @@ import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoad
 import {formatDate} from '../../../components/utils/dateUtils';
 import useLeaveData from '../../../hooks/useLeaveData';
 import styles from '../styles';
+import {useLoginData} from '../../../hooks/useLoginData';
+import {getSpecificUser} from '../../../redux/accounts/AccountActions';
+import {useAccountsData} from '../../../hooks/useAccountsData';
 
 export default function ViewLeaveRequestModal({
   isModalVisible,
@@ -31,7 +34,9 @@ export default function ViewLeaveRequestModal({
 }) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
+  const {role} = useLoginData();
   const {leavesLoading} = useLeaveData();
+  const {specificUserData, isLoading: profileLoading} = useAccountsData();
 
   const {
     type,
@@ -45,6 +50,12 @@ export default function ViewLeaveRequestModal({
     leaveDocument,
   } = leaveDetails || {};
 
+  useEffect(() => {
+    if (role === 'Admin') {
+      dispatch(getSpecificUser(userId));
+    }
+  }, [userId, role]);
+
   const leaveDuration = `${formatDate(fromDate)} - ${formatDate(
     toDate,
   )} (${period} Days)`;
@@ -57,7 +68,7 @@ export default function ViewLeaveRequestModal({
       message = 'Are you sure you want to approve this leave request?';
     } else if (status === 'delete') {
       message = 'Are you sure you want to delete this leave request?';
-    } else {
+    } else if (status === 'rejected') {
       message = 'Are you sure you want to reject this leave request?';
     }
 
@@ -149,7 +160,7 @@ export default function ViewLeaveRequestModal({
       animationType="fade"
       visible={isModalVisible}
       onRequestClose={toggleModal}>
-      {leavesLoading && <LogoLoaderComponent />}
+      {(leavesLoading || profileLoading) && <LogoLoaderComponent />}
 
       <Header
         title={I18n.t('leaveDetails')}
@@ -164,6 +175,18 @@ export default function ViewLeaveRequestModal({
       />
       <CommonSafeAreaScrollViewComponent>
         <View style={CommonStyles.mainPadding}>
+          {role === 'Admin' && (
+            <InputFieldComponent
+              title={I18n.t('employeeName')}
+              value={specificUserData?.name}
+              placeholder={I18n.t('enterEmployeeName')}
+              placeholderColor={Colors.placeholderColorDark}
+              borderColor={Colors.greyColor}
+              textColor={Colors.blackColor}
+              disabled={true}
+            />
+          )}
+
           <InputFieldComponent
             title={I18n.t('leaveDuration')}
             value={leaveDuration}
@@ -211,12 +234,29 @@ export default function ViewLeaveRequestModal({
               </TouchableOpacity>
             </View>
           )}
-          {status === 'pending' && (
+          {role === 'Employee' && status === 'pending' && (
             <CommonButton
               title={I18n.t('cancel')}
               onPress={() => askForConfirmation('delete')}
               backgroundColor={Colors.redColor}
             />
+          )}
+
+          {role === 'Admin' && status === 'pending' && (
+            <View style={[CommonStyles.rowBetween]}>
+              <CommonButton
+                title={I18n.t('reject')}
+                onPress={() => askForConfirmation('rejected')}
+                backgroundColor={Colors.redColor}
+                half
+              />
+              <CommonButton
+                title={I18n.t('approve')}
+                onPress={() => askForConfirmation('approved')}
+                backgroundColor={Colors.greenColor}
+                half
+              />
+            </View>
           )}
         </View>
       </CommonSafeAreaScrollViewComponent>

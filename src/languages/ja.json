@@ -176,5 +176,7 @@
   "viewDocument": "ドキュメントを表示",
   "clickToView": "クリックして表示",
   "selectDocument": "ドキュメントを選択",
-  "clickToOpen": "クリックして開く"
+  "clickToOpen": "クリックして開く",
+  "employeeName": "従業員名 ",
+  "enterEmployeeName": "従業員名を入力してください"
 }

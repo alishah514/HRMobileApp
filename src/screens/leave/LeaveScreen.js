@@ -9,14 +9,12 @@ import ProfileHeader from '../../components/ReusableComponents/Header/ProfileHea
 import ImagePickerComponent from '../../components/ReusableComponents/ImagePickerComponent';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
 import styles from './styles';
-
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
-
 import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import StatusComponent from './types/StatusComponent';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
-import {fetchUserLeaves} from '../../redux/leave/LeaveActions';
+import {fetchAllLeaves, fetchUserLeaves} from '../../redux/leave/LeaveActions';
 import {useLoginData} from '../../hooks/useLoginData';
 import useLeaveData from '../../hooks/useLeaveData';
 import LeaveRequestModal from './modals/LeaveRequestModal';
@@ -45,10 +43,11 @@ const tabs = [
 
 export default function LeaveScreen({navigation, route}) {
   const source = route.params?.source || 'default';
+
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
-  const {leaves, leavesLoading} = useLeaveData();
-  const {userId} = useLoginData();
+  const {leaves, leavesLoading, allLeaves} = useLeaveData();
+  const {userId, role} = useLoginData();
   const [activeTab, setActiveTab] = useState(0);
   const [image, setImage] = useState(null);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
@@ -64,11 +63,15 @@ export default function LeaveScreen({navigation, route}) {
   }, []);
 
   const getLeaves = () => {
-    dispatch(
-      fetchUserLeaves(userId, {
-        limit: 25,
-      }),
-    );
+    if (role === 'Employee') {
+      dispatch(
+        fetchUserLeaves(userId, {
+          limit: 25,
+        }),
+      );
+    } else {
+      dispatch(fetchAllLeaves());
+    }
   };
 
   const toggleImageOptionsModal = () => {
@@ -111,11 +114,13 @@ export default function LeaveScreen({navigation, route}) {
         }
         onRightIconPressed={toggleLeaveRequestModal}
         rightIcon={
-          <Ionicons
-            name="add-outline"
-            size={Constants.SIZE.largeIcon}
-            color={Colors.whiteColor}
-          />
+          role === 'Employee' ? (
+            <Ionicons
+              name="add-outline"
+              size={Constants.SIZE.largeIcon}
+              color={Colors.whiteColor}
+            />
+          ) : null
         }
       />
       <CustomerBackgroundComponent
@@ -144,19 +149,25 @@ export default function LeaveScreen({navigation, route}) {
                   {activeTab === 0 ? (
                     <StatusComponent
                       status="pending"
-                      data={leaves.filter(leave => leave.status === 'pending')}
+                      data={(role === 'Employee' ? leaves : allLeaves).filter(
+                        leave => leave.status === 'pending',
+                      )}
                       toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
                     />
                   ) : activeTab === 1 ? (
                     <StatusComponent
                       status="approved"
-                      data={leaves.filter(leave => leave.status === 'approved')}
+                      data={(role === 'Employee' ? leaves : allLeaves).filter(
+                        leave => leave.status === 'approved',
+                      )}
                       toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
                     />
                   ) : activeTab === 2 ? (
                     <StatusComponent
                       status="rejected"
-                      data={leaves.filter(leave => leave.status === 'rejected')}
+                      data={(role === 'Employee' ? leaves : allLeaves).filter(
+                        leave => leave.status === 'rejected',
+                      )}
                       toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
                     />
                   ) : null}

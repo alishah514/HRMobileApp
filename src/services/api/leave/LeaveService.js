@@ -86,7 +86,7 @@ const LeaveService = {
           stringValue: leaveData.userId,
         },
         leaveDocument: {
-          stringValue: leaveData.leaveDocument,
+          stringValue: leaveData.leaveDocument || '',
         },
       },
     };

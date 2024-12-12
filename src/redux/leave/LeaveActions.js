@@ -13,7 +13,24 @@ import {
   DELETE_LEAVE_START,
   DELETE_LEAVE_SUCCESS,
   DELETE_LEAVE_FAILURE,
+  FETCH_ALL_LEAVES_START,
+  FETCH_ALL_LEAVES_SUCCESS,
+  FETCH_ALL_LEAVES_FAILURE,
 } from '../actions/actionTypes';
+
+export const fetchAllLeavesStart = () => ({
+  type: FETCH_ALL_LEAVES_START,
+});
+
+export const fetchAllLeavesSuccess = leaves => ({
+  type: FETCH_ALL_LEAVES_SUCCESS,
+  payload: leaves,
+});
+
+export const fetchAllLeavesFailure = error => ({
+  type: FETCH_ALL_LEAVES_FAILURE,
+  payload: error,
+});
 
 export const fetchLeavesStart = () => ({
   type: FETCH_LEAVES_START,
@@ -75,13 +92,13 @@ export const deleteLeaveFailure = error => ({
   payload: error,
 });
 
-export const fetchLeaves = () => async dispatch => {
-  dispatch(fetchLeavesStart());
+export const fetchAllLeaves = () => async dispatch => {
+  dispatch(fetchAllLeavesStart());
   try {
     const response = await LeaveService.fetchLeaves();
-    dispatch(fetchLeavesSuccess(response));
+    dispatch(fetchAllLeavesSuccess(response));
   } catch (error) {
-    dispatch(fetchLeavesFailure(error));
+    dispatch(fetchAllLeavesFailure(error));
   }
 };
 

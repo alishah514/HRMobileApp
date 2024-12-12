@@ -12,10 +12,14 @@ import {
   DELETE_LEAVE_START,
   DELETE_LEAVE_SUCCESS,
   DELETE_LEAVE_FAILURE,
+  FETCH_ALL_LEAVES_START,
+  FETCH_ALL_LEAVES_SUCCESS,
+  FETCH_ALL_LEAVES_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
   data: [],
+  allLeaves: [],
   isLoading: false,
   error: null,
   leaveData: null,
@@ -24,6 +28,23 @@ const initialState = {
 
 const LeaveReducer = (state = initialState, action) => {
   switch (action.type) {
+    case FETCH_ALL_LEAVES_START:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case FETCH_ALL_LEAVES_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        allLeaves: action.payload,
+      };
+    case FETCH_ALL_LEAVES_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
     case FETCH_LEAVES_START:
       return {
         ...state,

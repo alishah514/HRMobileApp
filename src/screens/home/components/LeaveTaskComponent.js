@@ -9,10 +9,12 @@ import styles from '../styles';
 import useTaskData from '../../../hooks/useTaskData';
 import useLeaveData from '../../../hooks/useLeaveData';
 import I18n from '../../../i18n/i18n';
+import {useLoginData} from '../../../hooks/useLoginData';
 
 export default function LeaveTaskComponent({navigation}) {
   const {validTaskCount} = useTaskData();
-  const {validLeavesCount} = useLeaveData();
+  const {validLeavesCount, validAllLeavesCount} = useLeaveData();
+  const {role} = useLoginData();
   return (
     <View style={[CommonStyles.rowBetween, styles.width80Center]}>
       <TouchableOpacity
@@ -56,7 +58,7 @@ export default function LeaveTaskComponent({navigation}) {
               CommonStyles.textBlack,
               CommonStyles.marginVertical2,
             ]}>
-            {validLeavesCount}
+            {role === 'Employee' ? validLeavesCount : validAllLeavesCount}
           </Text>
           <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
             {I18n.t('leaves')}

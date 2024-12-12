@@ -176,5 +176,7 @@
   "viewDocument": "View Document",
   "clickToView": "Click To View",
   "selectDocument": "Select Document",
-  "clickToOpen": "Click To Open"
+  "clickToOpen": "Click To Open",
+  "employeeName": "Employee Name",
+  "enterEmployeeName": "Enter Employee Name"
 }

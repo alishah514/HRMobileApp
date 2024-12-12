@@ -5,14 +5,18 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {Colors} from '../../../components/common/Colors';
 import Constants from '../../../components/common/Constants';
 import CommonStyles from '../../../components/common/CommonStyles';
+import useProfileData from '../../../hooks/useProfileData';
+import {useLoginData} from '../../../hooks/useLoginData';
 
 export default function ProfileHeader({
   image,
   toggleImageOptionsModal,
   name,
-  role,
+  // role,
   editable = false,
 }) {
+  const {profile} = useProfileData();
+  const {role} = useLoginData();
   return (
     <View style={CommonStyles.paddingBottom5Align}>
       {editable ? (
@@ -42,15 +46,15 @@ export default function ProfileHeader({
         </TouchableOpacity>
       ) : (
         <View style={CommonStyles.imageCircle}>
-          {image ? (
+          {profile?.personal?.imageUrl &&
+          profile?.personal?.imageUrl !== 'null' ? (
             <Image
-              source={{uri: image}}
-              resizeMode="cover"
-              style={CommonStyles.imageView}
+              source={{uri: profile.personal.imageUrl}}
+              style={CommonStyles.imageCircle}
             />
           ) : (
             <Ionicons
-              name={'person'}
+              name="person"
               size={Constants.SIZE.xxxLargeIcon}
               color={Colors.silverColor}
             />
@@ -65,9 +69,11 @@ export default function ProfileHeader({
             CommonStyles.textWhite,
             CommonStyles.marginTop2,
           ]}>
-          {name}
+          {profile?.personal?.fullName || name}
         </Text>
-        <Text style={[CommonStyles.font5, CommonStyles.textWhite]}>{role}</Text>
+        <Text style={[CommonStyles.font5, CommonStyles.textWhite]}>
+          {role || 'Undefined'}
+        </Text>
       </View>
     </View>
   );

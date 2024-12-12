@@ -20,8 +20,8 @@ export default function LoginScreen({navigation}) {
   const dispatch = useDispatch();
   const isLoading = useSelector(state => state.login.isLoading);
   const {showAlert} = useCustomAlert();
-  const [email, setEmail] = useState('Boy@gmail.com');
-  const [password, setPassword] = useState('boy1234');
+  const [email, setEmail] = useState('Codedecode@gmail.com');
+  const [password, setPassword] = useState('codedecode1234');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
