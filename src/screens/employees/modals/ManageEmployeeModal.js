@@ -54,9 +54,37 @@ export default function ManageEmployeeModal({
     dispatch(getSpecificUser(userId));
   }, [data]);
 
+  // const validateForm = () => {
+  //   const employeeData = employeeFormRef.current?.getFormData();
+  //   return (
+  //     employeeData &&
+  //     employeeData.fullName &&
+  //     employeeData.phoneNumber &&
+  //     employeeData.emailAddress &&
+  //     employeeData.dateOfBirth &&
+  //     employeeData.gender &&
+  //     employeeData.jobDesignation &&
+  //     employeeData.jobDepartment &&
+  //     employeeData.joiningDate &&
+  //     employeeData.employmentType &&
+  //     employeeData.salary &&
+  //     employeeData.wageType &&
+  //     employeeData.degreeFrom &&
+  //     employeeData.degreeTo &&
+  //     employeeData.institution &&
+  //     employeeData.degreeTitle &&
+  //     employeeData.punchInTime &&
+  //     employeeData.punchOutTime &&
+  //     employeeData.profilePicture &&
+  //     employeeData.password
+  //   );
+  // };
   const validateForm = () => {
     const employeeData = employeeFormRef.current?.getFormData();
-    return (
+    let valid = true; // Start with the assumption that the form is valid
+
+    // Check if all the required fields are provided
+    if (
       employeeData &&
       employeeData.fullName &&
       employeeData.phoneNumber &&
@@ -77,7 +105,17 @@ export default function ManageEmployeeModal({
       employeeData.punchOutTime &&
       employeeData.profilePicture &&
       employeeData.password
-    );
+    ) {
+      const email = employeeData.emailAddress;
+
+      if (!/\S+@\S+\.\S+/.test(email)) {
+        valid = false;
+      }
+    } else {
+      valid = false;
+    }
+
+    return valid;
   };
 
   useEffect(() => {

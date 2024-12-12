@@ -28,6 +28,7 @@ const EmployeeForm = forwardRef((props, ref) => {
   const currentLanguage = useSelector(state => state.language.language);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
     useState(false);
+  const [emailError, setEmailError] = useState('');
 
   //personal
   const [fullName, setFullName] = useState('');
@@ -108,7 +109,21 @@ const EmployeeForm = forwardRef((props, ref) => {
     setIsImagePickerOptionsVisible(!isImagePickerOptionsVisible);
   };
 
+  const validateEmail = email => {
+    if (email === '') {
+      setEmailError(I18n.t('emailRequired'));
+      return false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError(I18n.t('emailInvalid'));
+      return false;
+    } else {
+      setEmailError('');
+      return true;
+    }
+  };
+
   useEffect(() => {
+    const isEmailValid = validateEmail(emailAddress);
     const isFormValid =
       fullName &&
       phoneNumber &&
@@ -128,7 +143,8 @@ const EmployeeForm = forwardRef((props, ref) => {
       wageType &&
       punchInTime &&
       punchOutTime &&
-      profilePicture;
+      profilePicture &&
+      isEmailValid;
 
     onFormValidityChange(isFormValid);
   }, [
@@ -151,6 +167,7 @@ const EmployeeForm = forwardRef((props, ref) => {
     punchInTime,
     punchOutTime,
     profilePicture,
+    emailError,
   ]);
 
   useImperativeHandle(ref, () => ({
@@ -251,8 +268,11 @@ const EmployeeForm = forwardRef((props, ref) => {
             value={emailAddress}
             placeholder={I18n.t('enterEmailAddress')}
             placeholderColor={Colors.placeholderColorDark}
-            onChangeText={text => setEmailAddress(text)}
-            borderColor={Colors.greyColor}
+            onChangeText={text => {
+              setEmailAddress(text);
+              validateEmail(text);
+            }}
+            borderColor={emailError ? Colors.redColor : Colors.greyColor}
             textColor={Colors.blackColor}
             email={true}
           />
