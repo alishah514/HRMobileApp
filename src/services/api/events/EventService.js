@@ -19,23 +19,20 @@ const EventService = {
     const method = 'post';
     const body = {
       fields: {
-        reason: {
-          stringValue: eventData.reason,
+        title: {
+          stringValue: eventData.title,
         },
-        fromDate: {
-          timestampValue: eventData.fromDate,
+        description: {
+          stringValue: eventData.description,
         },
-        type: {
-          stringValue: eventData.type,
+        startDate: {
+          timestampValue: eventData.startDate,
         },
-        toDate: {
-          timestampValue: eventData.toDate,
+        endDate: {
+          timestampValue: eventData.endDate,
         },
-        period: {
-          integerValue: eventData.period.toString(),
-        },
-        status: {
-          stringValue: eventData.status,
+        adminId: {
+          stringValue: eventData.adminId,
         },
         userId: {
           stringValue: eventData.userId,
@@ -60,23 +57,20 @@ const EventService = {
     const method = 'patch';
     const body = {
       fields: {
-        reason: {
-          stringValue: eventData.reason,
+        title: {
+          stringValue: eventData.title,
         },
-        fromDate: {
-          timestampValue: eventData.fromDate,
+        description: {
+          stringValue: eventData.description,
         },
-        type: {
-          stringValue: eventData.type,
+        startDate: {
+          timestampValue: eventData.startDate,
         },
-        toDate: {
-          timestampValue: eventData.toDate,
+        endDate: {
+          timestampValue: eventData.endDate,
         },
-        period: {
-          integerValue: eventData.period.toString(),
-        },
-        status: {
-          stringValue: eventData.status,
+        adminId: {
+          stringValue: eventData.adminId,
         },
         userId: {
           stringValue: eventData.userId,

@@ -7,7 +7,6 @@ import CommonStyles from '../../../components/common/CommonStyles';
 import styles from '../styles';
 import I18n from '../../../i18n/i18n';
 import {useAttendanceData} from '../../../hooks/useAttendanceData';
-import {useDispatch} from 'react-redux';
 
 export default function EmployeeCounts({totalEmployees, navigation}) {
   const {adminCurrentAttendanceData} = useAttendanceData();

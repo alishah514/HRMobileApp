@@ -178,5 +178,16 @@
   "selectDocument": "Select Document",
   "clickToOpen": "Click To Open",
   "employeeName": "Employee Name",
-  "enterEmployeeName": "Enter Employee Name"
+  "enterEmployeeName": "Enter Employee Name",
+  "eventTitle": "Event Title",
+  "enterEventTitle": "Enter Event Title",
+  "addEvent": "Add Event",
+  "eventDescription": "Event Description",
+  "enterEventDescription": "Enter Event Description",
+  "eventFrom": "Event From",
+  "eventTo": "Event To",
+  "eventStartDate": "Event Start Date",
+  "eventEndDate": "Event End Date",
+  "editEvent": "Edit Event",
+  "updateEvent": "Update Event"
 }

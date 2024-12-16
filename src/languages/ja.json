@@ -178,5 +178,16 @@
   "selectDocument": "ドキュメントを選択",
   "clickToOpen": "クリックして開く",
   "employeeName": "従業員名 ",
-  "enterEmployeeName": "従業員名を入力してください"
+  "enterEmployeeName": "従業員名を入力してください",
+  "eventTitle": "イベントタイトル",
+  "enterEventTitle": "イベントタイトルを入力",
+  "addEvent": "イベントを追加",
+  "eventDescription": "イベントの説明",
+  "enterEventDescription": "イベントの説明を入力",
+  "eventFrom": "開始日時",
+  "eventTo": "終了日時",
+  "eventStartDate": "イベント開始日",
+  "eventEndDate": "イベント終了日",
+  "editEvent": "イベントを編集",
+  "updateEvent": "イベントを更新"
 }

@@ -1,35 +1,48 @@
 import {View, Text, SafeAreaView} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import CommonStyles from '../../components/common/CommonStyles';
 import Header from '../../components/ReusableComponents/Header/Header';
 import I18n from '../../i18n/i18n';
 import {useDispatch, useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
 import EventCalendarComponent from './EventCalendarComponent';
 import {fetchEvents} from '../../redux/events/EventActions';
+import ManageEventModal from './modals/ManageEventModal';
+import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
+import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
+import {useEventData} from '../../hooks/useEventData';
+import {useLoginData} from '../../hooks/useLoginData';
 
 export default function EventScreen({navigation}) {
   const dispatch = useDispatch();
+  const {role} = useLoginData();
+  const {events, isLoading} = useEventData();
   const currentLanguage = useSelector(state => state.language.language);
-  const events = useSelector(state => state.events.data);
+  const [isManageEventModalVisible, setIsManageEventModalVisible] =
+    useState(false);
 
   const handleDrawerOpen = () => {
     navigation.openDrawer();
   };
 
   useEffect(() => {
-    getLeaves();
+    getEvents();
   }, []);
 
-  const getLeaves = () => {
+  const getEvents = () => {
     dispatch(fetchEvents());
   };
 
+  const toggleManageEventModal = item => {
+    setIsManageEventModalVisible(!isManageEventModalVisible);
+  };
+
   return (
-    <SafeAreaView style={CommonStyles.container}>
+    <CommonSafeAreaViewComponent>
       <Header
         title={I18n.t('events')}
         onLeftIconPressed={handleDrawerOpen}
@@ -40,7 +53,18 @@ export default function EventScreen({navigation}) {
             color={Colors.whiteColor}
           />
         }
+        onRightIconPressed={toggleManageEventModal}
+        rightIcon={
+          role === 'Admin' && (
+            <MaterialCommunityIcons
+              name="calendar-plus"
+              size={Constants.SIZE.medIcon}
+              color={Colors.whiteColor}
+            />
+          )
+        }
       />
+      {isLoading && <LogoLoaderComponent />}
       <CustomerBackgroundComponent
         topVerySmall
         topChild={
@@ -68,6 +92,10 @@ export default function EventScreen({navigation}) {
           </>
         }
       />
-    </SafeAreaView>
+      <ManageEventModal
+        isModalVisible={isManageEventModalVisible}
+        toggleModal={toggleManageEventModal}
+      />
+    </CommonSafeAreaViewComponent>
   );
 }

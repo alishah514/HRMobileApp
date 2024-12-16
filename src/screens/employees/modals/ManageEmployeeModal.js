@@ -54,36 +54,10 @@ export default function ManageEmployeeModal({
     dispatch(getSpecificUser(userId));
   }, [data]);
 
-  // const validateForm = () => {
-  //   const employeeData = employeeFormRef.current?.getFormData();
-  //   return (
-  //     employeeData &&
-  //     employeeData.fullName &&
-  //     employeeData.phoneNumber &&
-  //     employeeData.emailAddress &&
-  //     employeeData.dateOfBirth &&
-  //     employeeData.gender &&
-  //     employeeData.jobDesignation &&
-  //     employeeData.jobDepartment &&
-  //     employeeData.joiningDate &&
-  //     employeeData.employmentType &&
-  //     employeeData.salary &&
-  //     employeeData.wageType &&
-  //     employeeData.degreeFrom &&
-  //     employeeData.degreeTo &&
-  //     employeeData.institution &&
-  //     employeeData.degreeTitle &&
-  //     employeeData.punchInTime &&
-  //     employeeData.punchOutTime &&
-  //     employeeData.profilePicture &&
-  //     employeeData.password
-  //   );
-  // };
   const validateForm = () => {
     const employeeData = employeeFormRef.current?.getFormData();
-    let valid = true; // Start with the assumption that the form is valid
+    let valid = true;
 
-    // Check if all the required fields are provided
     if (
       employeeData &&
       employeeData.fullName &&

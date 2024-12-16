@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Touchable, TouchableOpacity} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {Colors} from '../../components/common/Colors';
 import CommonStyles from '../../components/common/CommonStyles';
 import styles from './styles';
+import {useLoginData} from '../../hooks/useLoginData';
+import ManageEventModal from './modals/ManageEventModal';
 
-// Ensure LocaleConfig is correctly defined
 LocaleConfig.locales['en'] = {
   monthNames: [
     'January',
@@ -50,6 +51,9 @@ LocaleConfig.locales['en'] = {
 LocaleConfig.defaultLocale = 'en';
 
 export default function EventCalendarComponent({data}) {
+  const {role} = useLoginData();
+  const [isManageEventModalVisible, setIsManageEventModalVisible] =
+    useState(false);
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split('T')[0],
   );
@@ -60,20 +64,34 @@ export default function EventCalendarComponent({data}) {
     if (!data || data.length === 0) return;
 
     const dates = {};
+
     data.forEach(event => {
       if (event.startDate && event.endDate) {
         const startDate = event.startDate.split('T')[0];
         const endDate = event.endDate.split('T')[0];
 
         if (startDate === endDate) {
-          dates[startDate] = {marked: true, dotColor: Colors.orangeColor};
+          if (startDate === selectedDate) {
+            dates[startDate] = {marked: true, dotColor: Colors.white};
+          } else {
+            dates[startDate] = {marked: true, dotColor: Colors.orangeColor};
+          }
         } else {
           let currentDate = new Date(startDate);
           const end = new Date(endDate);
 
           while (currentDate <= end) {
             const formattedDate = currentDate.toISOString().split('T')[0];
-            dates[formattedDate] = {marked: true, dotColor: Colors.orangeColor};
+
+            if (formattedDate === selectedDate) {
+              dates[formattedDate] = {marked: true, dotColor: Colors.white};
+            } else {
+              dates[formattedDate] = {
+                marked: true,
+                dotColor: Colors.orangeColor,
+              };
+            }
+
             currentDate.setDate(currentDate.getDate() + 1);
           }
         }
@@ -90,18 +108,23 @@ export default function EventCalendarComponent({data}) {
     }
 
     setMarkedDates(dates);
+    handleDayPress({dateString: selectedDate});
   }, [data, selectedDate]);
 
   const handleDayPress = day => {
-    setSelectedDate(day.dateString);
+    setSelectedDate(day?.dateString);
 
     const event = data.find(event => {
-      const startDate = event.startDate.split('T')[0];
-      const endDate = event.endDate.split('T')[0];
-      return day.dateString >= startDate && day.dateString <= endDate;
+      const startDate = event?.startDate?.split('T')[0];
+      const endDate = event?.endDate?.split('T')[0];
+      return day?.dateString >= startDate && day?.dateString <= endDate;
     });
 
     setEventDetails(event || null);
+  };
+
+  const toggleManageEventModal = () => {
+    setIsManageEventModalVisible(!isManageEventModalVisible);
   };
 
   return (
@@ -114,7 +137,23 @@ export default function EventCalendarComponent({data}) {
       />
       {eventDetails ? (
         <View style={styles.eventDetails}>
-          <Text style={styles.eventTitle}>{eventDetails.title}</Text>
+          <View
+            style={[CommonStyles.rowBetween, CommonStyles.alignItemsCenter]}>
+            <Text style={styles.eventTitle}>{eventDetails.title}</Text>
+            {role === 'Admin' && (
+              <TouchableOpacity onPress={toggleManageEventModal}>
+                <Text
+                  style={[
+                    CommonStyles.textBlue,
+                    CommonStyles.font4,
+                    CommonStyles.underlineText,
+                    CommonStyles.paddingRight3,
+                  ]}>
+                  Edit
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
           <View
             style={[
               CommonStyles.rowBetween,
@@ -138,6 +177,12 @@ export default function EventCalendarComponent({data}) {
           <Text style={styles.eventDate}>No Event on this Date</Text>
         </View>
       )}
+      <ManageEventModal
+        isModalVisible={isManageEventModalVisible}
+        toggleModal={toggleManageEventModal}
+        isEdit
+        data={eventDetails}
+      />
     </View>
   );
 }

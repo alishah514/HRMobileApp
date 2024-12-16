@@ -23,45 +23,53 @@ export const formatDate = timestamp => {
 export const convertToTimestamp = dateStr => {
   if (!dateStr) return null;
 
-  // Normalize the date string to avoid leading/trailing spaces
-  dateStr = dateStr.trim();
+  // If dateStr is a Date object, no need to call trim
+  if (dateStr instanceof Date) {
+    return dateStr.toISOString();
+  }
 
-  // Check if the date is already in the expected format (DD-MM-YYYY)
+  // Normalize the date string only if it is a string
+  if (typeof dateStr === 'string') {
+    dateStr = dateStr.trim();
+  }
+
+  // Check if the date is in DD-MM-YYYY format
   const isValidDDMMYYYY = /^\d{1,2}-\d{1,2}-\d{4}$/.test(dateStr);
 
   if (isValidDDMMYYYY) {
-    // Split the input string and ensure the result has 3 parts
-    const parts = dateStr.split('-').map(Number);
-    if (parts.length !== 3) {
-      console.error('Invalid date format. Expected DD-MM-YYYY');
-      return null;
-    }
+    const [day, month, year] = dateStr.split('-').map(Number);
 
-    const [day, month, year] = parts;
-
-    // Validate month and day ranges
+    // Validate the ranges for day and month
     if (month < 1 || month > 12) {
       console.error('Invalid month:', month);
       return null;
     }
 
-    // Check for days in the month (basic validation)
-    const daysInMonth = new Date(year, month, 0).getDate(); // 0 gets the last day of the previous month
+    const daysInMonth = new Date(year, month, 0).getDate(); // Last day of the month
     if (day < 1 || day > daysInMonth) {
       console.error('Invalid day:', day);
       return null;
     }
 
-    // Create a date object using UTC to avoid timezone issues
-    const date = new Date(Date.UTC(year, month - 1, day));
-    return date.toISOString(); // Return as an ISO string
+    // Force the date to midnight UTC
+    const utcDate = new Date(Date.UTC(year, month - 1, day));
+    return utcDate.toISOString();
   } else {
-    // Try to parse date in other formats (like "Sun Oct 20 2024")
+    // Handle other formats or directly parse
     const parsedDate = new Date(dateStr);
     if (isNaN(parsedDate.getTime())) {
       console.error('Failed to create date from:', dateStr);
       return null;
     }
-    return parsedDate.toISOString(); // Return as an ISO string
+
+    // Ensure we return the UTC version of the date
+    const utcDate = new Date(
+      Date.UTC(
+        parsedDate.getFullYear(),
+        parsedDate.getMonth(),
+        parsedDate.getDate(),
+      ),
+    );
+    return utcDate.toISOString();
   }
 };
