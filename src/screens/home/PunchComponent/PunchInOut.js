@@ -25,6 +25,7 @@ import {
   fetchCurrentAttendance,
   fetchAttendance,
   fetchAdminCurrentAttendance,
+  fetchAllAttendance,
 } from '../../../redux/attendance/AttendanceActions';
 import {convertTime} from '../../../components/ReusableComponents/ConvertTime';
 import {useFocusEffect} from '@react-navigation/native';
@@ -306,13 +307,14 @@ export default function PunchInOut({setIsLoading, username}) {
         dispatch(savePunchInTime(timestamp));
         setIsPunchOutDisabled(false);
         setIsPunchInDisabled(true);
+        dispatch(fetchAttendance(userId));
+        dispatch(fetchAllAttendance());
       } else {
         isType = 'Punched Out';
 
         dispatch(savePunchOutTime(timestamp));
         setIsPunchOutDisabled(true);
         setIsPunchInDisabled(false);
-        dispatch(fetchAttendance(userId));
       }
 
       Alert.alert(`${isType} successfully`);

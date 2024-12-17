@@ -25,43 +25,60 @@ export const CalculateAttendanceStatus = (attendanceData, punchInHour) => {
     recordsByDay[dayIndex].push(record);
   });
 
-  const getFirstPunchPair = dayRecords => {
-    const sortedRecords = dayRecords.sort(
-      (a, b) => new Date(a.creationDate) - new Date(b.creationDate),
-    );
+  // const getFirstPunchPair = dayRecords => {
+  //   const sortedRecords = dayRecords.sort(
+  //     (a, b) => new Date(a.creationDate) - new Date(b.creationDate),
+  //   );
 
-    const firstPunchIn = sortedRecords.find(
-      record => record.type === 'PunchIn',
-    );
-    const firstPunchOut = sortedRecords.find(
-      record => record.type === 'PunchOut',
-    );
+  //   const firstPunchIn = sortedRecords.find(
+  //     record => record.type === 'PunchIn',
+  //   );
+  //   const firstPunchOut = sortedRecords.find(
+  //     record => record.type === 'PunchOut',
+  //   );
 
-    if (firstPunchIn && firstPunchOut) {
-      const punchInTime = moment(firstPunchIn.creationDate);
-      const punchOutTime = moment(firstPunchOut.creationDate);
+  //   if (firstPunchIn && firstPunchOut) {
+  //     const punchInTime = moment(firstPunchIn.creationDate);
+  //     const punchOutTime = moment(firstPunchOut.creationDate);
 
-      const threshold = punchInTime
-        .clone()
-        .hour(thresholdTime.hour())
-        .minute(thresholdTime.minute())
-        .second(thresholdTime.second());
+  //     const threshold = punchInTime
+  //       .clone()
+  //       .hour(thresholdTime.hour())
+  //       .minute(thresholdTime.minute())
+  //       .second(thresholdTime.second());
 
-      const status = punchInTime.isAfter(threshold) ? 'Late' : 'On Time';
-      return {punchInTime, punchOutTime, status};
-    } else {
-      return null;
-    }
-  };
+  //     const status = punchInTime.isAfter(threshold) ? 'Late' : 'On Time';
+  //     return { punchInTime, punchOutTime, status };
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
   let onTimeCount = 0;
   let lateCount = 0;
 
   recordsByDay.forEach(dayRecords => {
     if (dayRecords.length > 0) {
-      const firstPair = getFirstPunchPair(dayRecords);
-      if (firstPair) {
-        if (firstPair.status === 'On Time') {
+      const sortedRecords = dayRecords.sort(
+        (a, b) => new Date(a.creationDate) - new Date(b.creationDate),
+      );
+
+      const firstPunchIn = sortedRecords.find(
+        record => record.type === 'PunchIn',
+      );
+
+      if (firstPunchIn) {
+        const punchInTime = moment(firstPunchIn.creationDate);
+
+        const threshold = punchInTime
+          .clone()
+          .hour(thresholdTime.hour())
+          .minute(thresholdTime.minute())
+          .second(thresholdTime.second());
+
+        const status = punchInTime.isAfter(threshold) ? 'Late' : 'On Time';
+
+        if (status === 'On Time') {
           onTimeCount += 1;
         } else {
           lateCount += 1;
