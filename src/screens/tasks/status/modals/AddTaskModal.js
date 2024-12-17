@@ -1,5 +1,5 @@
 import {View, Modal, Alert} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from '../../../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../../../components/common/Colors';
@@ -11,16 +11,22 @@ import CustomSectionedMultiSelectComponent from '../../../../components/Reusable
 import CommonButton from '../../../../components/ReusableComponents/CommonComponents/CommonButton';
 import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../../i18n/i18n';
-import {postTaskRequest} from '../../../../redux/tasks/TaskActions';
+import {
+  fetchAllTasks,
+  postTaskRequest,
+} from '../../../../redux/tasks/TaskActions';
 import {convertToTimestamp} from '../../../../components/utils/dateUtils';
 import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
 import {useLoginData} from '../../../../hooks/useLoginData';
 import useTaskData from '../../../../hooks/useTaskData';
+import CustomDatePickerComponent from '../../../../components/ReusableComponents/CustomDatePickerComponent';
+import {TruncateTitle} from '../../../../components/utils/TruncateTitle';
+import {fetchAllUsers} from '../../../../redux/accounts/AccountActions';
+import {useAccountsData} from '../../../../hooks/useAccountsData';
 
-export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
-  const currentLanguage = useSelector(state => state.language.language);
-
+export default function AddTaskModal({isModalVisible, toggleModal}) {
   const dispatch = useDispatch();
+  const {allUsersData} = useAccountsData();
   const {tasksLoading} = useTaskData();
   const {userId} = useLoginData();
   const [taskTitle, setTaskTitle] = useState('');
@@ -28,13 +34,18 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
   const [taskCategory, setTaskCategory] = useState(null);
   const [taskPriority, setTaskPriority] = useState(null);
   const [taskStatus, setTaskStatus] = useState(null);
-  const [estimatedJobs, setEstimatedJobs] = useState(0);
+  // const [estimatedJobs, setEstimatedJobs] = useState(0);
+  const [storyPoints, setStoryPoints] = useState(0);
   const [department, setDepartment] = useState(null);
   const [assignedTo, setAssignedTo] = useState(null);
   const [description, setDescription] = useState(null);
+  const [assignedDate, setAssignedDate] = useState(null);
+  const [dueDate, setDueDate] = useState(null);
+
   const taskPriorityOptions = ['Low', 'Medium', 'High'];
   const taskStatusOptions = ['Pending', 'Completed'];
   const taskCategoryOptions = [
+    'IT',
     'ICD',
     'Sales',
     'Stock',
@@ -44,15 +55,7 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
     'Rikso',
   ];
   const taskDepartmentOptions = [
-    'Operations',
-    'Sales',
-    'Marketing',
-    'Accounting',
-    'Transportation',
-    'Yard Management',
-    'Custom',
-  ];
-  const taskAssigneeOptions = [
+    'CodeDecode',
     'Operations',
     'Sales',
     'Marketing',
@@ -77,19 +80,17 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
     const taskData = {
       title: taskTitle,
       category: taskCategory,
-      completedTasks: 7,
-      pendingTasks: 3,
       department: department,
       priority: taskPriority,
       department: department,
-      estimatedJobs: estimatedJobs,
-      dueDate: convertToTimestamp('Fri Oct 18 2024'),
+      // estimatedJobs: estimatedJobs,
+      dueDate: convertToTimestamp(dueDate),
       taskCode: taskCode,
       storypoints: 16,
-      assignedTo: assignedTo,
+      assignedTo: assignedTo?.id,
       status: taskStatus,
       description: description,
-      assignedDate: convertToTimestamp(getTodayDate()),
+      assignedDate: convertToTimestamp(assignedDate || getTodayDate()),
       userId: userId,
     };
     const message = 'Are you sure you want to add this task request?';
@@ -119,7 +120,7 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
       Alert.alert('Task added successfully! ');
       clearStates();
       toggleModal();
-      apiCall();
+      dispatch(fetchAllTasks());
     } else {
       console.error('Failed to post task request:', response.error);
     }
@@ -132,10 +133,13 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
       taskCategory !== null &&
       taskPriority !== null &&
       taskStatus !== null &&
-      estimatedJobs > 0 &&
+      // estimatedJobs > 0 &&
       department !== null &&
       assignedTo !== null &&
-      description !== null
+      description !== null &&
+      dueDate !== null &&
+      assignedDate !== null &&
+      storyPoints !== null
     );
   };
 
@@ -145,10 +149,13 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
     setTaskCategory(null);
     setTaskPriority(null);
     setTaskStatus(null);
-    setEstimatedJobs(0);
+    // setEstimatedJobs(0);
+    setStoryPoints(0);
     setDepartment(null);
     setAssignedTo(null);
     setDescription(null);
+    setAssignedDate(null);
+    setDueDate(null);
   };
 
   return (
@@ -198,6 +205,20 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
             />
           </View>
           <View style={CommonStyles.rowBetween}>
+            <CustomDatePickerComponent
+              selectedDate={assignedDate}
+              setSelectedDate={setAssignedDate}
+              label={I18n.t('assignedDate')}
+              half
+            />
+            <CustomDatePickerComponent
+              selectedDate={dueDate}
+              setSelectedDate={setDueDate}
+              label={I18n.t('dueDate')}
+              half
+            />
+          </View>
+          <View style={CommonStyles.rowBetween}>
             <CustomSectionedMultiSelectComponent
               title={I18n.t('priority')}
               selectedValue={taskPriority}
@@ -213,12 +234,22 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
               halfWidth={true}
             />
           </View>
+          {/* <InputFieldComponent
+            title={I18n.t('estimatedJobs')}
+            value={estimatedJobs}
+            onChangeText={text => setEstimatedJobs(text)}
+            placeholder={TruncateTitle(I18n.t('enterEstimatedJobs'), 30)}
+            placeholderColor={Colors.placeholderColorDark}
+            borderColor={Colors.greyColor}
+            textColor={Colors.blackColor}
+          /> */}
           <View style={CommonStyles.rowBetween}>
             <InputFieldComponent
-              title={I18n.t('estimatedJobs')}
-              value={estimatedJobs}
-              onChangeText={text => setEstimatedJobs(text)}
-              placeholder={I18n.t('enterEstimatedJobs')}
+              title={I18n.t('storyPoints')}
+              numeric={true}
+              value={storyPoints}
+              onChangeText={text => setStoryPoints(text)}
+              placeholder={TruncateTitle(I18n.t('enterStoryPoints'), 16)}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
@@ -228,7 +259,7 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
               title={I18n.t('taskCode')}
               value={taskCode}
               onChangeText={text => setTaskCode(text)}
-              placeholder={I18n.t('enterTaskCode')}
+              placeholder={TruncateTitle(I18n.t('enterTaskCode'), 16)}
               placeholderColor={Colors.placeholderColorDark}
               borderColor={Colors.greyColor}
               textColor={Colors.blackColor}
@@ -238,11 +269,27 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
 
           <CustomSectionedMultiSelectComponent
             title={I18n.t('assignedTo')}
-            selectedValue={assignedTo}
-            setSelectedValue={setAssignedTo}
-            options={taskAssigneeOptions}
-            multiple={true}
+            selectedValue={
+              assignedTo
+                ? `${assignedTo.name}${
+                    assignedTo.id === userId ? ' - (You)' : ''
+                  }`
+                : null
+            }
+            setSelectedValue={selected => {
+              const selectedUser = allUsersData.find(user => {
+                const userName =
+                  user.id === userId ? `${user.name} - (You)` : user.name;
+                return userName === selected;
+              });
+
+              setAssignedTo(selectedUser || null);
+            }}
+            options={allUsersData.map(user =>
+              user.id === userId ? `${user.name} - (You)` : `${user.name}`,
+            )}
           />
+
           <InputFieldComponent
             title={I18n.t('description')}
             value={description}

@@ -272,7 +272,11 @@ const EmployeeForm = forwardRef((props, ref) => {
               setEmailAddress(text);
               validateEmail(text);
             }}
-            borderColor={emailError ? Colors.redColor : Colors.greyColor}
+            borderColor={
+              emailError && emailAddress.length !== 0
+                ? Colors.redColor
+                : Colors.greyColor
+            }
             textColor={Colors.blackColor}
             email={true}
           />

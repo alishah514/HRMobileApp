@@ -1,4 +1,4 @@
-import {View, Text, Modal, Alert} from 'react-native';
+import {View, Modal, Alert} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Header from '../../../components/ReusableComponents/Header/Header';
 import I18n from '../../../i18n/i18n';
@@ -6,7 +6,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../../components/common/Constants';
 import {Colors} from '../../../components/common/Colors';
-import CommonSafeAreaScrollViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import CommonStyles from '../../../components/common/CommonStyles';
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
 import CommonSafeAreaViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
@@ -50,9 +49,6 @@ export default function ManageEventModal({
   }, [data]);
 
   const confirmAddEvent = async () => {
-    console.log('eventFrom', eventFrom);
-    console.log('eventTo', eventTo);
-
     const eventData = {
       title: eventTitle,
       description: eventDescription,

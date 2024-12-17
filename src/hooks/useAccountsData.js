@@ -6,10 +6,12 @@ export const useAccountsData = () => {
   const specificUserData = useSelector(
     state => state.accounts.specificUserData,
   );
+  const allUsersData = useSelector(state => state.accounts.allUsersData);
 
   return {
     isLoading,
     isUpdating,
     specificUserData,
+    allUsersData,
   };
 };

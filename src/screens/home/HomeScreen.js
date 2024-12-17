@@ -27,6 +27,10 @@ import useLeaveData from '../../hooks/useLeaveData';
 import {useLoginData} from '../../hooks/useLoginData';
 import WishComponent from './components/WishComponent';
 import LeaveTaskComponent from './components/LeaveTaskComponent';
+import {
+  clearSpecificUserData,
+  fetchAllUsers,
+} from '../../redux/accounts/AccountActions';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
@@ -42,26 +46,23 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     dispatch(fetchAllProfile());
+    dispatch(clearSpecificUserData());
+    dispatch(fetchAllUsers());
+    dispatch(fetchAllTasks());
   }, [dispatch]);
 
   useEffect(() => {
     if (userId) {
       if (role === 'Employee') {
         dispatch(fetchUserLeaves(userId));
-        dispatch(fetchUserTasks(userId));
       } else {
         dispatch(fetchAllLeaves());
-        dispatch(fetchAllTasks());
       }
 
       dispatch(fetchAttendance(userId));
-      fetchUserProfile(userId);
+      dispatch(fetchProfile(userId));
     }
   }, [dispatch, userId]);
-
-  const fetchUserProfile = userId => {
-    dispatch(fetchProfile(userId));
-  };
 
   const handleDrawerOpen = () => {
     navigation.openDrawer();

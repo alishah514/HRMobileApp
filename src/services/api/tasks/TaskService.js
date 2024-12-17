@@ -35,27 +35,17 @@ const TaskService = {
         category: {
           stringValue: taskData.category,
         },
-        completedTasks: {
-          integerValue: taskData.completedTasks,
-        },
-        pendingTasks: {
-          integerValue: taskData.pendingTasks,
-        },
         department: {
           stringValue: taskData.department,
         },
         priority: {
           stringValue: taskData.priority,
         },
-        estimatedJobs: {
-          integerValue: taskData.estimatedJobs,
-        },
+        // estimatedJobs: {
+        //   integerValue: taskData.estimatedJobs,
+        // },
         assignedTo: {
-          arrayValue: {
-            values: taskData.assignedTo.map(assignee => ({
-              stringValue: assignee,
-            })),
-          },
+          stringValue: taskData.assignedTo,
         },
         storypoints: {
           integerValue: taskData.storypoints,
@@ -105,27 +95,17 @@ const TaskService = {
         category: {
           stringValue: taskData.category,
         },
-        completedTasks: {
-          integerValue: taskData.completedTasks,
-        },
-        pendingTasks: {
-          integerValue: taskData.pendingTasks,
-        },
         department: {
           stringValue: taskData.department,
         },
         priority: {
           stringValue: taskData.priority,
         },
-        estimatedJobs: {
-          integerValue: taskData.estimatedJobs,
-        },
+        // estimatedJobs: {
+        //   integerValue: taskData.estimatedJobs,
+        // },
         assignedTo: {
-          arrayValue: {
-            values: taskData.assignedTo.map(assignee => ({
-              stringValue: assignee,
-            })),
-          },
+          stringValue: taskData.assignedTo,
         },
         storypoints: {
           integerValue: taskData.storypoints,

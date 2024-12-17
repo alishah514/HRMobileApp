@@ -7,11 +7,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../common/Constants';
 import I18n from '../../i18n/i18n';
 import {useSelector} from 'react-redux';
+import {TruncateTitle} from '../utils/TruncateTitle';
 
 export default function CustomDatePickerComponent({
   selectedDate,
   setSelectedDate,
   label = I18n.t('select date'),
+  half = false,
 }) {
   const currentLanguage = useSelector(state => state.language.language);
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
@@ -23,7 +25,7 @@ export default function CustomDatePickerComponent({
 
   return (
     <>
-      <View style={CommonStyles.marginBottom5}>
+      <View style={[CommonStyles.marginBottom5, half && CommonStyles.width40]}>
         <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
           {label}
         </Text>
@@ -41,7 +43,7 @@ export default function CustomDatePickerComponent({
                 color: selectedDate ? Colors.blackColor : Colors.greyColor,
               },
             ]}>
-            {selectedDate || `${I18n.t('enter')} ${label}`}
+            {selectedDate || TruncateTitle(`${I18n.t('enter')} ${label}`, 18)}
           </Text>
 
           <Ionicons

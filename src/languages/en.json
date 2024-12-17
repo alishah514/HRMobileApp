@@ -189,5 +189,6 @@
   "eventStartDate": "Event Start Date",
   "eventEndDate": "Event End Date",
   "editEvent": "Edit Event",
-  "updateEvent": "Update Event"
+  "updateEvent": "Update Event",
+  "updateTask": "Update Task"
 }

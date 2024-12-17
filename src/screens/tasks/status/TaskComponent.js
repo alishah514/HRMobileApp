@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 import NoRecordView from '../../../components/ReusableComponents/NoRecordView';
 
-const TasksComponent = ({taskType, data, apiCall}) => {
+const TasksComponent = ({taskType, data}) => {
   const currentLanguage = useSelector(state => state.language.language);
 
   const taskMapping = {
@@ -37,7 +37,7 @@ const TasksComponent = ({taskType, data, apiCall}) => {
           <NoRecordView errorMessage={'No Record Found'} />
         </View>
       ) : (
-        <TimeLine data={data} status={status} apiCall={apiCall} />
+        <TimeLine data={data} status={status} />
       )}
     </View>
   );

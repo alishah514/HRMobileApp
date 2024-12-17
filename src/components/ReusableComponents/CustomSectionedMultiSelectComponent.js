@@ -38,7 +38,7 @@ export default function CustomSectionedMultiSelectComponent({
         style={[
           CommonStyles.lessBold3P5,
           CommonStyles.textBlue,
-          Platform.OS === 'ios' && CommonStyles.marginBottom2,
+          CommonStyles.marginBottom2,
         ]}>
         {title}
       </Text>
@@ -50,6 +50,7 @@ export default function CustomSectionedMultiSelectComponent({
         single={!multiple}
         confirmText={I18n.t('confirm')}
         hideSearch={options?.length < 20 ? true : hideSearch}
+        hideConfirm={!multiple ? true : false}
         selectText={multiple && selectedValue?.length > 0 ? '' : placeholder}
         showCancelButton={true}
         onSelectedItemsChange={selectedItems => {
@@ -153,6 +154,20 @@ export default function CustomSectionedMultiSelectComponent({
           },
           cancelButton: {
             backgroundColor: Colors.redColor,
+            ...(multiple
+              ? {}
+              : Platform.select({
+                  ios: {
+                    minHeight: '100%',
+                    minWidth: '100%',
+                    marginBottom: wp(5),
+                  },
+                  default: {
+                    height: '100%',
+                    minWidth: '100%',
+                    marginBottom: wp(0),
+                  },
+                })),
           },
           listContainer: {
             height: '40%',

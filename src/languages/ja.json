@@ -189,5 +189,6 @@
   "eventStartDate": "イベント開始日",
   "eventEndDate": "イベント終了日",
   "editEvent": "イベントを編集",
-  "updateEvent": "イベントを更新"
+  "updateEvent": "イベントを更新",
+  "updateTask": "タスクを更新"
 }

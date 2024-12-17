@@ -43,7 +43,7 @@ export default InputFieldComponent = ({error, errorMessage, ...rest}) => {
               : CommonStyles.inputContainer,
             {
               marginBottom: error ? wp('2') : wp('5'),
-              paddingRight: wp('12'),
+              paddingRight: wp('2'),
               borderColor: error ? Colors.redColor : Colors.greyColor,
             },
           ]}

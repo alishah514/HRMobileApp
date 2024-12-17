@@ -12,9 +12,14 @@ import I18n from '../../../i18n/i18n';
 import {useLoginData} from '../../../hooks/useLoginData';
 
 export default function LeaveTaskComponent({navigation}) {
-  const {validTaskCount, validAllTaskCount} = useTaskData();
+  const {validTaskCount, validAllTaskCount, allTasks} = useTaskData();
   const {validLeavesCount, validAllLeavesCount} = useLeaveData();
-  const {role} = useLoginData();
+  const {role, userId} = useLoginData();
+
+  const employeeTasksCount = allTasks.filter(
+    task => task.assignedTo === userId || task.userId === userId,
+  );
+
   return (
     <View style={[CommonStyles.rowBetween, styles.width80Center]}>
       <TouchableOpacity
@@ -34,7 +39,9 @@ export default function LeaveTaskComponent({navigation}) {
               CommonStyles.textBlack,
               CommonStyles.marginVertical2,
             ]}>
-            {role === 'Employee' ? validTaskCount : validAllTaskCount}
+            {role === 'Employee'
+              ? employeeTasksCount?.length
+              : validAllTaskCount}
           </Text>
           <Text style={[CommonStyles.font5, CommonStyles.textBlack]}>
             {I18n.t('tasks')}

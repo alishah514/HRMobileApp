@@ -78,7 +78,7 @@ export const fetchAllTasks = () => async dispatch => {
   dispatch(fetchAllTasksStart());
   try {
     const response = await TaskService.fetchTasks();
-    // console.log('response from fetchTasks:', response);
+
     dispatch(fetchAllTasksSuccess(response));
   } catch (error) {
     dispatch(fetchAllTasksFailure(error));

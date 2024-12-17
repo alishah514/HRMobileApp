@@ -11,14 +11,11 @@ import {wp} from '../../../components/common/Dimensions';
 import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 
-export default function TimeLine({data, status, apiCall}) {
+export default function TimeLine({data, status}) {
   const currentLanguage = useSelector(state => state.language.language);
   const tasks = useSelector(state => state.tasks.data);
   const [isTaskDetailModal, setIsTaskDetailModal] = useState(null);
   const [details, setDetails] = useState(null);
-
-  const pendingTasks = tasks.filter(task => task.status === 'Pending');
-  const completedTasks = tasks.filter(task => task.status === 'Completed');
 
   const sortedData = [...data].sort((a, b) => {
     if (a.status === 'Pending' && b.status === 'Completed') {
@@ -37,6 +34,11 @@ export default function TimeLine({data, status, apiCall}) {
     setIsTaskDetailModal(!isTaskDetailModal);
     setDetails({...item});
   };
+
+  const pendingTasks = sortedData?.filter(task => task.status === 'Pending');
+  const completedTasks = sortedData?.filter(
+    task => task.status === 'Completed',
+  );
 
   const TaskItem = ({item}) => (
     <TouchableOpacity
@@ -177,7 +179,6 @@ export default function TimeLine({data, status, apiCall}) {
         isModalVisible={isTaskDetailModal}
         toggleModal={toggleTaskDetailModal}
         taskDetails={details}
-        apiCall={apiCall}
       />
     </>
   );

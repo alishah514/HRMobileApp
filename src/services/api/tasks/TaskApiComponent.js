@@ -37,7 +37,7 @@ const TaskApiComponent = async (url, method, body = null, postTask = false) => {
 
 const handleGetResponse = response => {
   if (!Array.isArray(response.data.documents)) {
-    console.error(
+    console.log(
       'Expected response.data.documents to be an array',
       response.data,
     );

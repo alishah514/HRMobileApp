@@ -9,7 +9,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
 import CommonStyles from '../../components/common/CommonStyles';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
-
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import AddTaskModal from './status/modals/AddTaskModal';
 import I18n from '../../i18n/i18n';
@@ -47,28 +46,18 @@ export default function TaskScreen({navigation, route}) {
   const currentLanguage = useSelector(state => state.language.language);
   const {userId, role} = useLoginData();
 
-  const {tasks, tasksLoading, allTasks} = useTaskData();
+  const {tasksLoading, allTasks} = useTaskData();
 
   const [activeTab, setActiveTab] = useState(0);
   const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
 
+  const employeeTasks = allTasks.filter(
+    task => task.assignedTo === userId || task.userId === userId,
+  );
+
   useEffect(() => {
-    getTasks();
-  }, []);
-
-  const getTasks = () => {
-    if (role === 'Employee') {
-      dispatch(
-        fetchUserTasks(userId, {
-          limit: 25,
-        }),
-      );
-    } else {
-      console.log('role admin');
-
-      dispatch(fetchAllTasks());
-    }
-  };
+    dispatch(fetchAllTasks());
+  }, [dispatch]);
 
   const handleTabPress = index => {
     setActiveTab(index);
@@ -142,30 +131,31 @@ export default function TaskScreen({navigation, route}) {
                   {activeTab === 0 ? (
                     <TasksComponent
                       taskType="all"
-                      data={role === 'Employee' ? tasks : allTasks}
-                      apiCall={getTasks}
+                      data={role === 'Employee' ? employeeTasks : allTasks}
                     />
                   ) : activeTab === 1 ? (
                     <TasksComponent
                       taskType="Pending"
                       data={
                         role === 'Employee'
-                          ? tasks?.filter(task => task.status === 'Pending')
+                          ? employeeTasks?.filter(
+                              task => task.status === 'Pending',
+                            )
                           : allTasks?.filter(task => task.status === 'Pending')
                       }
-                      apiCall={getTasks}
                     />
                   ) : activeTab === 2 ? (
                     <TasksComponent
                       taskType="Completed"
                       data={
                         role === 'Employee'
-                          ? tasks?.filter(task => task.status === 'Completed')
+                          ? employeeTasks?.filter(
+                              task => task.status === 'Completed',
+                            )
                           : allTasks?.filter(
                               task => task.status === 'Completed',
                             )
                       }
-                      apiCall={getTasks}
                     />
                   ) : null}
                 </View>
@@ -178,7 +168,6 @@ export default function TaskScreen({navigation, route}) {
       <AddTaskModal
         isModalVisible={isAddTaskModalVisible}
         toggleModal={toggleAddTaskModal}
-        apiCall={getTasks}
       />
     </CommonSafeAreaViewComponent>
   );

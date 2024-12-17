@@ -16,6 +16,7 @@ import {
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 import {convertTo24HourFormat} from '../../../components/utils/ConvertTimeToInt';
 import {
+  clearSpecificUserData,
   getSpecificUser,
   updateOrEditUser,
 } from '../../../redux/accounts/AccountActions';
@@ -259,6 +260,11 @@ export default function ManageEmployeeModal({
     );
   };
 
+  const onCancelModal = () => {
+    dispatch(clearSpecificUserData());
+    toggleModal();
+  };
+
   return (
     <Modal
       transparent={false}
@@ -269,7 +275,7 @@ export default function ManageEmployeeModal({
         title={
           screen === 'add' ? I18n.t('addEmployee') : I18n.t('editEmployee')
         }
-        onLeftIconPressed={toggleModal}
+        onLeftIconPressed={onCancelModal}
         leftIcon={
           <Ionicons
             name="close"

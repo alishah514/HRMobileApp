@@ -2,8 +2,34 @@ import axios from 'axios';
 import Constants from '../../../../components/common/Constants';
 
 const GetUserService = {
+  getAllUsers: async () => {
+    const url = `${Constants.FIREBASE_URL}/${Constants.USERS}?key=${Constants.FIREBASE_KEY}`;
+
+    try {
+      const response = await axios.get(url);
+
+      const formattedUsers = response.data.documents.map(doc => {
+        const {fields, name, createTime, updateTime} = doc;
+
+        return {
+          id: name.split('/').pop(),
+          email: fields.email.stringValue,
+          name: fields.name.stringValue,
+          password: fields.password.stringValue,
+          role: fields.role.stringValue,
+          // createTime,
+          // updateTime,
+        };
+      });
+
+      return formattedUsers;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   getSpecificUser: async userId => {
-    const url = `${Constants.FIREBASE_URL}/users?key=${Constants.FIREBASE_KEY}`;
+    const url = `${Constants.FIREBASE_URL}/${Constants.USERS}?key=${Constants.FIREBASE_KEY}`;
     const method = 'get';
 
     try {
