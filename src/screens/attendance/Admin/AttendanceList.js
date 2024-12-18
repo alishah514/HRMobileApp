@@ -1,4 +1,11 @@
-import {View, Text, Image, FlatList, Platform} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  Platform,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
 import I18n from '../../../i18n/i18n';
@@ -9,15 +16,28 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../../components/common/Constants';
 import {TruncateTitle} from '../../../components/utils/TruncateTitle';
 import styles from '../styles';
+import {useNavigation} from '@react-navigation/native';
 
-export default function AttendanceList({data, status}) {
+export default function AttendanceList({data, status, selectedDate}) {
+  const navigation = useNavigation();
   const isNoData = !data || data?.length === 0;
 
   const renderItem = ({item}) => {
+    const employeeId = item?.userId;
+    const employeeName = item?.personal?.fullName;
+
     const userIdLast4 = item?.userId?.slice(-5);
 
     return (
-      <View style={styles.card}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('Admin Attendance Details', {
+            employeeId,
+            selectedDate,
+            employeeName,
+          })
+        }
+        style={styles.card}>
         {item?.personal?.imageUrl ? (
           <Image
             source={{uri: item?.personal?.imageUrl}}
@@ -47,7 +67,7 @@ export default function AttendanceList({data, status}) {
             },
           ]}
         />
-      </View>
+      </TouchableOpacity>
     );
   };
 

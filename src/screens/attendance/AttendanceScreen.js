@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import Header from '../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
 import moment from 'moment';
@@ -17,9 +18,13 @@ import {useAttendanceData} from '../../hooks/useAttendanceData';
 
 const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
-export default function AttendanceScreen({navigation}) {
+export default function AttendanceScreen({navigation, route}) {
   const dispatch = useDispatch();
-  const {userId} = useLoginData();
+  const {userId, role} = useLoginData();
+
+  const employeeId = route?.params?.employeeId;
+  const passedDate = route?.params?.selectedDate;
+  const employeeName = route?.params?.employeeName;
 
   const {attendanceData, attendanceLoading} = useAttendanceData();
 
@@ -31,16 +36,24 @@ export default function AttendanceScreen({navigation}) {
   useFocusEffect(
     React.useCallback(() => {
       getAttendance();
-    }, []),
+    }, [route]),
   );
 
   const getAttendance = () => {
-    dispatch(fetchAttendance(userId));
+    if (role === 'Employee') {
+      dispatch(fetchAttendance(userId));
+    } else {
+      dispatch(fetchAttendance(employeeId));
+    }
   };
 
   useEffect(() => {
-    setDate(today);
-  }, [attendanceData]);
+    if (role === 'Employee') {
+      setDate(today);
+    } else {
+      setDate(passedDate);
+    }
+  }, [attendanceData, route]);
 
   const setDate = date => {
     const filteredData = attendanceData?.filter(item => {
@@ -125,19 +138,32 @@ export default function AttendanceScreen({navigation}) {
   const handleDrawerOpen = () => {
     navigation.openDrawer();
   };
+  const handleBackIconPress = () => {
+    navigation.goBack();
+  };
 
   return (
     <CommonSafeAreaViewComponent>
       {attendanceLoading && <LogoLoaderComponent />}
       <Header
         title={I18n.t('attendance')}
-        onLeftIconPressed={handleDrawerOpen}
+        onLeftIconPressed={
+          role === 'Admin' ? handleBackIconPress : handleDrawerOpen
+        }
         leftIcon={
-          <Ionicons
-            name="menu"
-            size={Constants.SIZE.medIcon}
-            color={Colors.whiteColor}
-          />
+          role === 'Admin' ? (
+            <AntDesign
+              name="arrowleft"
+              size={Constants.SIZE.largeIcon}
+              color={Colors.whiteColor}
+            />
+          ) : (
+            <Ionicons
+              name="menu"
+              size={Constants.SIZE.medIcon}
+              color={Colors.whiteColor}
+            />
+          )
         }
       />
 
@@ -146,6 +172,7 @@ export default function AttendanceScreen({navigation}) {
         selectedDate={selectedDate}
         filteredAttendance={filteredAttendance}
         totalTimeWorked={totalTimeWorked}
+        employeeName={employeeName}
       />
     </CommonSafeAreaViewComponent>
   );

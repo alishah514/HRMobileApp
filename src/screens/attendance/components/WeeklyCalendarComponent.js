@@ -21,6 +21,7 @@ export default function WeeklyCalendarComponent({
   totalTimeWorked,
   employeeList,
   status,
+  employeeName,
 }) {
   const {role} = useLoginData();
 
@@ -180,10 +181,18 @@ export default function WeeklyCalendarComponent({
               </TouchableOpacity>
             </View>
           </View>
-          {role === 'Employee' ? (
-            <Record data={filteredAttendance} time={totalTimeWorked} />
+          {role === 'Employee' || (role === 'Admin' && employeeName) ? (
+            <Record
+              data={filteredAttendance}
+              time={totalTimeWorked}
+              employeeName={employeeName}
+            />
           ) : (
-            <AttendanceList data={filteredEmployeeList()} status={status} />
+            <AttendanceList
+              data={filteredEmployeeList()}
+              status={status}
+              selectedDate={selectedDate}
+            />
           )}
         </>
       }

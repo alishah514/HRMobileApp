@@ -8,7 +8,7 @@ import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 import NoRecordView from '../../../components/ReusableComponents/NoRecordView';
 
-export default function Record({data, time}) {
+export default function Record({data, time, employeeName}) {
   const currentLanguage = useSelector(state => state.language.language);
 
   const isNoData = !data || data?.length === 0;
@@ -21,7 +21,7 @@ export default function Record({data, time}) {
           CommonStyles.textBlack,
           CommonStyles.marginTop2,
         ]}>
-        {I18n.t('record')}
+        {I18n.t('record')} {employeeName && `- (${employeeName})`}
       </Text>
 
       <View style={CommonStyles.paddingTop5} />

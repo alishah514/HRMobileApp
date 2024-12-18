@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -7,6 +7,7 @@ import Constants from '../../../components/common/Constants';
 import CommonStyles from '../../../components/common/CommonStyles';
 import useProfileData from '../../../hooks/useProfileData';
 import {useLoginData} from '../../../hooks/useLoginData';
+import FullScreenImageModal from '../FullScreenImageModal';
 
 export default function ProfileHeader({
   image,
@@ -17,6 +18,14 @@ export default function ProfileHeader({
 }) {
   const {profile} = useProfileData();
   const {role} = useLoginData();
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+
+  const toggleImageModal = url => {
+    setImageUrl(url);
+    setIsImageModalVisible(!isImageModalVisible);
+  };
+
   return (
     <View style={CommonStyles.paddingBottom5Align}>
       {editable ? (
@@ -48,10 +57,13 @@ export default function ProfileHeader({
         <View style={CommonStyles.imageCircle}>
           {profile?.personal?.imageUrl &&
           profile?.personal?.imageUrl !== 'null' ? (
-            <Image
-              source={{uri: profile.personal.imageUrl}}
-              style={CommonStyles.imageCircle}
-            />
+            <TouchableOpacity
+              onPress={() => toggleImageModal(profile?.personal?.imageUrl)}>
+              <Image
+                source={{uri: profile.personal.imageUrl}}
+                style={CommonStyles.imageCircle}
+              />
+            </TouchableOpacity>
           ) : (
             <Ionicons
               name="person"
@@ -75,6 +87,11 @@ export default function ProfileHeader({
           {role || 'Undefined'}
         </Text>
       </View>
+      <FullScreenImageModal
+        visible={isImageModalVisible}
+        imageUrl={imageUrl}
+        onClose={() => setIsImageModalVisible(false)}
+      />
     </View>
   );
 }

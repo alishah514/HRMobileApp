@@ -1,15 +1,22 @@
 import React, {useState} from 'react';
-import {View, Text, Image} from 'react-native';
-import MapView, {Marker, Callout} from 'react-native-maps';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
+import MapView, {Marker} from 'react-native-maps';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../../components/common/Constants';
 import {Colors} from '../../../components/common/Colors';
 import styles from '../styles';
 import CommonStyles from '../../../components/common/CommonStyles';
-import {wp} from '../../../components/common/Dimensions';
+import FullScreenImageModal from '../../../components/ReusableComponents/FullScreenImageModal';
 
 const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+
+  const toggleImageModal = url => {
+    setImageUrl(url);
+    setIsImageModalVisible(!isImageModalVisible);
+  };
 
   const areLocationsNear = (loc1, loc2) => {
     const threshold = 0.0001;
@@ -121,7 +128,9 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
             <Text style={styles.calloutTextBelow}>{data?.punchIn}</Text>
           </View>
 
-          <View style={styles.imageStyle}>
+          <TouchableOpacity
+            style={styles.imageStyle}
+            onPress={() => toggleImageModal(data?.imageUrl)}>
             {data?.imageUrl === '' || !isValidUrl(data?.imageUrl) ? (
               <Ionicons
                 name={'person'}
@@ -135,7 +144,7 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
                 resizeMode="cover"
               />
             )}
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={[CommonStyles.width40, CommonStyles.alignItemsCenter]}>
           <View>
@@ -143,7 +152,9 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
             <Text style={styles.calloutTextBelow}>{data?.punchOut}</Text>
           </View>
 
-          <View style={styles.imageStyle}>
+          <TouchableOpacity
+            style={styles.imageStyle}
+            onPress={() => toggleImageModal(data?.punchOutData?.imageUrl)}>
             {data?.punchOutData?.imageUrl === '' ||
             !isValidUrl(data?.punchOutData?.imageUrl) ? (
               <Ionicons
@@ -158,9 +169,14 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
                 resizeMode="cover"
               />
             )}
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
+      <FullScreenImageModal
+        visible={isImageModalVisible}
+        imageUrl={imageUrl}
+        onClose={() => setIsImageModalVisible(false)}
+      />
     </View>
   );
 };

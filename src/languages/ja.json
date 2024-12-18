@@ -190,5 +190,6 @@
   "eventEndDate": "イベント終了日",
   "editEvent": "イベントを編集",
   "updateEvent": "イベントを更新",
-  "updateTask": "タスクを更新"
+  "updateTask": "タスクを更新",
+  "employeeAttendance": "従業員の出席"
 }

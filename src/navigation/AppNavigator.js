@@ -13,6 +13,8 @@ import LocalizationScreen from '../screens/settings/screens/localization/Localiz
 import AttendanceDetails from '../screens/attendance/AttendanceRecord/AttendanceDetails';
 import AdminAttendanceScreen from '../screens/attendance/Admin/AdminAttendanceScreen';
 
+import AttendanceScreen from '../screens/attendance/AttendanceScreen';
+
 const Stack = createStackNavigator();
 
 const screenOptions = {
@@ -32,11 +34,15 @@ const AppNavigator = () => {
         <Stack.Screen name="Change Password" component={ChangePasswordScreen} />
         <Stack.Screen name="Localization" component={LocalizationScreen} />
         <Stack.Screen name="Attendance Details" component={AttendanceDetails} />
+
+        <Stack.Screen
+          name="Admin Attendance Details"
+          component={AttendanceScreen}
+        />
         <Stack.Screen
           name="Admin Attendance"
           component={AdminAttendanceScreen}
         />
-
         <Stack.Screen
           name="Home"
           component={DrawerNavigator}

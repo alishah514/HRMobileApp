@@ -24,6 +24,7 @@ import {createUser} from '../../../redux/signup/SignupActions';
 import {useLoginData} from '../../../hooks/useLoginData';
 import useProfileData from '../../../hooks/useProfileData';
 import {useAccountsData} from '../../../hooks/useAccountsData';
+import {fetchAllTasks} from '../../../redux/tasks/TaskActions';
 
 export default function ManageEmployeeModal({
   isModalVisible,
@@ -141,6 +142,7 @@ export default function ManageEmployeeModal({
             if (response.success) {
               dispatch(fetchAllProfile());
               dispatch(fetchProfile(currentUserId));
+              dispatch(fetchAllTasks());
             } else {
               handleErrorResponse(response);
             }

@@ -22,7 +22,7 @@ const Header = props => {
       </TouchableOpacity>
       <View style={styles.titleCenter}>
         <Text style={[styles.titleText]}>
-          {truncateTitle(props?.title, 18)}
+          {truncateTitle(props?.title, 20)}
         </Text>
       </View>
     </View>
