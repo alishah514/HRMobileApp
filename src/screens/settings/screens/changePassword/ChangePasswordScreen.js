@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, Alert} from 'react-native';
 import React, {useState} from 'react';
 import CommonSafeAreaViewComponent from '../../../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import Header from '../../../../components/ReusableComponents/Header/Header';
@@ -57,6 +57,7 @@ export default function ChangePasswordScreen({navigation}) {
     );
     if (result.success) {
       stateClear();
+      Alert.alert('Password changed successfully!');
     }
   };
 

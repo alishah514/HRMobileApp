@@ -2,7 +2,7 @@ import axios from 'axios';
 import Constants from '../../../../components/common/Constants';
 const ChangePasswordService = {
   GetUserByEmailAndPassword: async (userId, currentPassword, newPassword) => {
-    const url = `${Constants.FIREBASE_URL}/users/${userId}?key=${Constants.FIREBASE_KEY}`;
+    const url = `${Constants.FIREBASE_URL}/${Constants.USERS}/${userId}?key=${Constants.FIREBASE_KEY}`;
 
     try {
       const response = await axios({
@@ -13,12 +13,14 @@ const ChangePasswordService = {
         },
       });
 
+      const userId = response?.data?.name.split('/').pop();
+
       const user = {
-        id: response.data.fields.id.stringValue,
+        id: userId,
         name: response.data.fields.name.stringValue,
         email: response.data.fields.email.stringValue,
         password: response.data.fields.password.stringValue,
-        token: response.data.fields.token.stringValue,
+
         role: response.data.fields.role.stringValue,
       };
 
@@ -43,7 +45,7 @@ const ChangePasswordService = {
   },
 
   UpdateUserPassword: async (user, newPassword) => {
-    const url = `${Constants.FIREBASE_URL}/users/${user.id}?key=${Constants.FIREBASE_KEY}`; // Use user.id here
+    const url = `${Constants.FIREBASE_URL}/${Constants.USERS}/${user.id}?key=${Constants.FIREBASE_KEY}`;
 
     const body = {
       fields: {
@@ -59,9 +61,7 @@ const ChangePasswordService = {
         password: {
           stringValue: newPassword,
         },
-        token: {
-          stringValue: user.token,
-        },
+
         role: {
           stringValue: user.role,
         },
