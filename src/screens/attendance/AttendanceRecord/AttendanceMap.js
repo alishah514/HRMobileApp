@@ -42,6 +42,7 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
   return (
     <View style={styles.mapContainer}>
       <MapView
+        ref={map => (this.map = map)}
         style={styles.map}
         initialRegion={{
           latitude:
@@ -52,6 +53,24 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
+        onMapReady={() => {
+          this.map.fitToCoordinates(
+            [
+              {
+                latitude: punchInLocation.latitude,
+                longitude: punchInLocation.longitude,
+              },
+              {
+                latitude: adjustedPunchOutLocation.latitude,
+                longitude: adjustedPunchOutLocation.longitude,
+              },
+            ],
+            {
+              edgePadding: {top: 50, right: 50, bottom: 50, left: 50},
+              animated: true,
+            },
+          );
+        }}
         onPress={() => {
           setSelectedMarker(null);
         }}>
@@ -60,7 +79,6 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
           pinColor={Colors.blueColor}
           onPress={e => {
             e.stopPropagation();
-
             setSelectedMarker('punchIn');
           }}>
           <Ionicons
@@ -69,7 +87,6 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
             color={Colors.blueColor}
           />
           {selectedMarker === 'punchIn' && (
-            // <Callout>
             <View style={styles.calloutContainer}>
               <Text style={styles.calloutTitle}>Punch In Time:</Text>
               <Text style={styles.calloutText}>{data?.punchIn}</Text>
@@ -80,7 +97,6 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
                 {`${data?.latitude}, ${data?.longitude}`}
               </Text>
             </View>
-            // </Callout>
           )}
         </Marker>
 
@@ -98,7 +114,6 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
             size={Constants.SIZE.xLargeIcon}
             color={Colors.redColor}
           />
-
           {selectedMarker === 'punchOut' && (
             <View style={styles.calloutContainer}>
               <Text style={styles.calloutTitle}>Punch Out Time:</Text>
@@ -115,6 +130,7 @@ const AttendanceMap = ({punchInLocation, punchOutLocation, data}) => {
           )}
         </Marker>
       </MapView>
+
       <View
         style={[
           CommonStyles.paddingHor5,

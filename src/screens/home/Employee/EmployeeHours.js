@@ -7,7 +7,6 @@ import Constants from '../../../components/common/Constants';
 import {Colors} from '../../../components/common/Colors';
 import I18n from '../../../i18n/i18n';
 import {CalculateTotalHours} from '../../../components/utils/CalculateTotalHoursComponent';
-import {useSelector} from 'react-redux';
 import {CalculateAttendanceStatus} from '../../../components/utils/CalculateAttendanceStatus';
 import {useAttendanceData} from '../../../hooks/useAttendanceData';
 

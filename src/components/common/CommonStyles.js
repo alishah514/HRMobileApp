@@ -609,6 +609,20 @@ const CommonStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  // image container
+  imageContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeIcon: {
+    position: 'absolute',
+    top: 100,
+    right: 20,
+    zIndex: 10,
+  },
 });
 
 export default CommonStyles;
