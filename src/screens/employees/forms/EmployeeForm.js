@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState,
 } from 'react';
 import CommonSafeAreaScrollViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
@@ -22,8 +23,12 @@ import Constants from '../../../components/common/Constants';
 import styles from '../styles';
 import ImagePickerComponent from '../../../components/ReusableComponents/ImagePickerComponent';
 import {convertTo12HourFormat} from '../../../components/utils/ConvertTimeToInt';
+import {wp} from '../../../components/common/Dimensions';
+import PhoneInput from 'react-native-phone-input';
 
 const EmployeeForm = forwardRef((props, ref) => {
+  const phoneInputRef = useRef();
+
   const {onFormValidityChange, data, screen} = props;
   const currentLanguage = useSelector(state => state.language.language);
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
@@ -69,7 +74,13 @@ const EmployeeForm = forwardRef((props, ref) => {
   useEffect(() => {
     if (screen === 'edit' && data) {
       setFullName(data?.profile?.personal?.fullName || '');
-      setPhoneNumber(data?.profile?.personal?.phone?.toString() || '');
+
+      const phone = data?.profile?.personal?.phone?.toString() || '';
+      if (phone && !phone.startsWith('+')) {
+        setPhoneNumber(`+${phone}`);
+      } else {
+        setPhoneNumber(phone);
+      }
       setEmailAddress(data?.profile?.personal?.email || '');
       setDateOfBirth(data?.profile?.personal?.birthDate || '');
       setGender(data?.profile?.personal?.gender || '');
@@ -196,6 +207,12 @@ const EmployeeForm = forwardRef((props, ref) => {
     },
   }));
 
+  useEffect(() => {
+    if (phoneInputRef.current) {
+      phoneInputRef.current.setValue(phoneNumber);
+    }
+  }, [phoneNumber]);
+
   return (
     <CommonSafeAreaScrollViewComponent>
       <View style={CommonStyles.mainPadding}>
@@ -253,16 +270,26 @@ const EmployeeForm = forwardRef((props, ref) => {
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
           />
-          <InputFieldComponent
-            title={I18n.t('phoneNumber')}
-            value={phoneNumber}
-            placeholder={I18n.t('enterPhoneNumber')}
-            placeholderColor={Colors.placeholderColorDark}
-            onChangeText={text => setPhoneNumber(text)}
-            borderColor={Colors.greyColor}
-            textColor={Colors.blackColor}
-            numeric={true}
-          />
+          <View style={{marginVertical: wp(2), marginBottom: wp(5)}}>
+            <Text
+              style={[
+                CommonStyles.lessBold3P5,
+                CommonStyles.textBlue,
+                CommonStyles.paddingBottom2,
+              ]}>
+              {I18n.t('phoneNumber')}
+            </Text>
+
+            <PhoneInput
+              ref={phoneInputRef}
+              initialCountry="us"
+              value={phoneNumber}
+              onChangePhoneNumber={setPhoneNumber}
+              style={styles.phoneNumberView}
+              textStyle={[CommonStyles.InputField]}
+            />
+          </View>
+
           <InputFieldComponent
             title={I18n.t('emailAddress')}
             value={emailAddress}

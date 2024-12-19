@@ -77,5 +77,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 1,
   },
+  phoneNumberView: {
+    borderBottomWidth: wp('0.15'),
+    borderColor: Colors.greyColor,
+    paddingBottom: wp('2'),
+  },
 });
 export default styles;

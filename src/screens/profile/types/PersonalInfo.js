@@ -86,6 +86,7 @@ export default function PersonalInfo({data, employeeId}) {
             ]}>
             {I18n.t('phone')}
           </Text>
+          {console.log('data', data)}
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
               style={[
@@ -94,7 +95,7 @@ export default function PersonalInfo({data, employeeId}) {
                 CommonStyles.Bold600,
                 CommonStyles.paddingRight1,
               ]}>
-              +92 {TruncateTitle(data?.phone || 'null', 11)}
+              +{TruncateTitle(data?.phone || 'null', 13)}
             </Text>
           </View>
         </View>

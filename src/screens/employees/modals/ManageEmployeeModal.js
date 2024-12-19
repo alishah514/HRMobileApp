@@ -58,6 +58,7 @@ export default function ManageEmployeeModal({
 
   const validateForm = () => {
     const employeeData = employeeFormRef.current?.getFormData();
+
     let valid = true;
 
     if (
