@@ -86,7 +86,7 @@ export default function PersonalInfo({data, employeeId}) {
             ]}>
             {I18n.t('phone')}
           </Text>
-          {console.log('data', data)}
+
           <View style={[CommonStyles.flexRow, CommonStyles.centerView]}>
             <Text
               style={[

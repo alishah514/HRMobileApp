@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {wp} from '../../components/common/Dimensions';
 import {Colors} from '../../components/common/Colors';
+import CommonStyles from '../../components/common/CommonStyles';
 
 const styles = StyleSheet.create({
   card: {
@@ -82,5 +83,10 @@ const styles = StyleSheet.create({
     borderColor: Colors.greyColor,
     paddingBottom: wp('2'),
   },
+  phoneNumberInput: {marginBottom: wp(5)},
+  pickerTextStyle: [
+    {color: Colors.blueColor, fontSize: wp(4)},
+    CommonStyles.underlineText,
+  ],
 });
 export default styles;

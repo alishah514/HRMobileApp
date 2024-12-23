@@ -270,7 +270,7 @@ const EmployeeForm = forwardRef((props, ref) => {
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
           />
-          <View style={{marginVertical: wp(2), marginBottom: wp(5)}}>
+          <View style={styles.phoneNumberInput}>
             <Text
               style={[
                 CommonStyles.lessBold3P5,
@@ -286,7 +286,11 @@ const EmployeeForm = forwardRef((props, ref) => {
               value={phoneNumber}
               onChangePhoneNumber={setPhoneNumber}
               style={styles.phoneNumberView}
-              textStyle={[CommonStyles.InputField]}
+              textStyle={CommonStyles.InputField}
+              pickerBackgroundColor={Colors.whiteColor}
+              cancelTextStyle={styles.pickerTextStyle}
+              confirmTextStyle={styles.pickerTextStyle}
+              pickerItemStyle={CommonStyles.font5}
             />
           </View>
 
