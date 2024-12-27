@@ -11,6 +11,7 @@ import CommonSafeAreaViewComponent from '../../components/ReusableComponents/Com
 import Header from '../../components/ReusableComponents/Header/Header';
 import I18n from '../../i18n/i18n';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
@@ -24,8 +25,9 @@ import {TruncateTitle} from '../../components/utils/TruncateTitle';
 import {useSelector} from 'react-redux';
 import ManageEmployeeModal from './modals/ManageEmployeeModal';
 
-export default function AdminEmployeeScreen({navigation}) {
+export default function AdminEmployeeScreen({navigation, route}) {
   const currentLanguage = useSelector(state => state.language.language);
+  const status = route?.params?.status ?? null;
   const {allProfile, profileLoading} = useProfileData();
   const [isAddEmployeeModalVisible, setIsAddEmployeeModalVisible] =
     useState(false);
@@ -33,6 +35,9 @@ export default function AdminEmployeeScreen({navigation}) {
 
   const handleDrawerOpen = () => {
     navigation.openDrawer();
+  };
+  const handleBackIconPress = () => {
+    navigation.goBack();
   };
 
   const toggleAddEmployeeModal = (
@@ -89,13 +94,23 @@ export default function AdminEmployeeScreen({navigation}) {
             color={Colors.whiteColor}
           />
         }
-        onLeftIconPressed={handleDrawerOpen}
+        onLeftIconPressed={
+          status === null ? handleDrawerOpen : handleBackIconPress
+        }
         leftIcon={
-          <Ionicons
-            name="menu"
-            size={Constants.SIZE.medIcon}
-            color={Colors.whiteColor}
-          />
+          status === null ? (
+            <Ionicons
+              name="menu"
+              size={Constants.SIZE.medIcon}
+              color={Colors.whiteColor}
+            />
+          ) : (
+            <AntDesign
+              name="arrowleft"
+              size={Constants.SIZE.largeIcon}
+              color={Colors.whiteColor}
+            />
+          )
         }
       />
       <CustomerBackgroundComponent

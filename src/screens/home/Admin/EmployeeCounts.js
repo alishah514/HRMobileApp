@@ -28,7 +28,7 @@ export default function EmployeeCounts({totalEmployees, navigation}) {
   return (
     <View style={[CommonStyles.width95, CommonStyles.flexRow]}>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Admin Attendance', {status: 1})}
+        onPress={() => navigation.navigate('Admin All Employees', {status: 1})}
         style={[
           styles.boxViewTime,
           CommonStyles.shadow,

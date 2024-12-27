@@ -14,6 +14,7 @@ import AttendanceDetails from '../screens/attendance/AttendanceRecord/Attendance
 import AdminAttendanceScreen from '../screens/attendance/Admin/AdminAttendanceScreen';
 
 import AttendanceScreen from '../screens/attendance/AttendanceScreen';
+import AdminEmployeeScreen from '../screens/employees/AdminEmployeeScreen';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,10 @@ const AppNavigator = () => {
         <Stack.Screen name="Change Password" component={ChangePasswordScreen} />
         <Stack.Screen name="Localization" component={LocalizationScreen} />
         <Stack.Screen name="Attendance Details" component={AttendanceDetails} />
+        <Stack.Screen
+          name="Admin All Employees"
+          component={AdminEmployeeScreen}
+        />
 
         <Stack.Screen
           name="Admin Attendance Details"
