@@ -1,4 +1,4 @@
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity, Platform} from 'react-native';
 import React, {
   forwardRef,
   useEffect,
@@ -287,7 +287,9 @@ const EmployeeForm = forwardRef((props, ref) => {
               onChangePhoneNumber={setPhoneNumber}
               style={styles.phoneNumberView}
               textStyle={CommonStyles.InputField}
-              pickerBackgroundColor={Colors.whiteColor}
+              pickerBackgroundColor={
+                Platform.OS === 'android' ? Colors.blueColor : Colors.whiteColor
+              }
               cancelTextStyle={styles.pickerTextStyle}
               confirmTextStyle={styles.pickerTextStyle}
               pickerItemStyle={CommonStyles.font5}

@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {wp} from '../../components/common/Dimensions';
+import {Platform, StyleSheet} from 'react-native';
+import {hp, wp} from '../../components/common/Dimensions';
 import {Colors} from '../../components/common/Colors';
 import CommonStyles from '../../components/common/CommonStyles';
 
@@ -85,7 +85,12 @@ const styles = StyleSheet.create({
   },
   phoneNumberInput: {marginBottom: wp(5)},
   pickerTextStyle: [
-    {color: Colors.blueColor, fontSize: wp(4)},
+    {
+      color: Platform.OS === 'android' ? Colors.whiteColor : Colors.blackColor,
+      fontSize: wp(4),
+      fontWeight: 'bold',
+      minHeight: hp(8),
+    },
     CommonStyles.underlineText,
   ],
 });
