@@ -17,6 +17,7 @@ import {
 } from '../../../components/utils/dateUtils';
 import {useLoginData} from '../../../hooks/useLoginData';
 import {
+  deleteEvent,
   fetchEvents,
   patchEventStatus,
   postEventRequest,
@@ -48,24 +49,7 @@ export default function ManageEventModal({
     }
   }, [data]);
 
-  const confirmAddEvent = async () => {
-    const eventData = {
-      title: eventTitle,
-      description: eventDescription,
-      startDate: convertToTimestamp(eventFrom),
-      endDate: convertToTimestamp(eventTo),
-      adminId: userId,
-      userId: userId,
-    };
-
-    await askForConfirmation(eventData);
-  };
-
-  const askForConfirmation = eventData => {
-    const message = isEdit
-      ? 'Are you sure you want to update this event?'
-      : 'Are you sure you want to add this event?';
-
+  const askForConfirmation = (message, onConfirm, data = null) => {
     Alert.alert(
       'Confirm Action',
       message,
@@ -77,11 +61,48 @@ export default function ManageEventModal({
         },
         {
           text: 'Confirm',
-          onPress: () => submitEventRequest(eventData),
+          onPress: () => onConfirm(data),
         },
       ],
       {cancelable: false},
     );
+  };
+
+  const confirmAddEvent = async () => {
+    const eventData = {
+      title: eventTitle,
+      description: eventDescription,
+      startDate: convertToTimestamp(eventFrom),
+      endDate: convertToTimestamp(eventTo),
+      adminId: userId,
+      userId: userId,
+    };
+
+    const message = isEdit
+      ? 'Are you sure you want to update this event?'
+      : 'Are you sure you want to add this event?';
+
+    askForConfirmation(message, submitEventRequest, eventData);
+  };
+
+  const confirmAndSubmitDeleteRequest = () => {
+    const message = 'Are you sure you want to delete this event?';
+    askForConfirmation(message, submitDeleteRequest);
+  };
+
+  const submitDeleteRequest = async () => {
+    const eventId = data?.name?.split('/').pop();
+    const response = await dispatch(deleteEvent(eventId));
+
+    if (response.success) {
+      Alert.alert(response.message);
+      clearStates();
+      toggleModal();
+      dispatch(fetchEvents());
+    } else {
+      console.error('Failed to delete event request:', response.error);
+      Alert.alert('Error', response.error);
+    }
   };
 
   const submitEventRequest = async eventData => {
@@ -165,11 +186,22 @@ export default function ManageEventModal({
             textColor={Colors.blackColor}
             multiline
           />
-          <CommonButton
-            title={isEdit ? I18n.t('updateEvent') : I18n.t('addEvent')}
-            onPress={confirmAddEvent}
-            disabled={!isEventFormValid()}
-          />
+          <View style={isEdit && CommonStyles.rowBetween}>
+            <CommonButton
+              title={isEdit ? I18n.t('updateEvent') : I18n.t('addEvent')}
+              onPress={confirmAddEvent}
+              disabled={!isEventFormValid()}
+              half={isEdit}
+            />
+            {isEdit && (
+              <CommonButton
+                title={I18n.t('deleteEvent')}
+                onPress={confirmAndSubmitDeleteRequest}
+                backgroundColor={Colors.redColor}
+                half
+              />
+            )}
+          </View>
         </View>
       </CommonSafeAreaViewComponent>
     </Modal>

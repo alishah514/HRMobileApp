@@ -191,5 +191,6 @@
   "editEvent": "イベントを編集",
   "updateEvent": "イベントを更新",
   "updateTask": "タスクを更新",
-  "employeeAttendance": "従業員の出席"
+  "employeeAttendance": "従業員の出席",
+  "deleteEvent": "イベントを削除"
 }
