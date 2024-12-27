@@ -26,7 +26,6 @@ import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentU
 export default function LeaveRequestModal({
   isModalVisible,
   toggleModal,
-
   apiCall,
 }) {
   const dispatch = useDispatch();
@@ -218,10 +217,14 @@ export default function LeaveRequestModal({
               <Text
                 style={[
                   CommonStyles.font3,
-                  CommonStyles.textDarkGrey,
+                  leaveDocument
+                    ? CommonStyles.textBlue
+                    : CommonStyles.textDarkGrey,
                   CommonStyles.Bold600,
                 ]}>
-                {I18n.t('selectDocument')}
+                {leaveDocument
+                  ? I18n.t('selectedDocument')
+                  : I18n.t('selectDocument')}
               </Text>
             </TouchableOpacity>
           </View>

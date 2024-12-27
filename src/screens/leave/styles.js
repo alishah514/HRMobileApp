@@ -16,7 +16,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   documentButton: {
-    width: wp('30'),
+    minWidth: wp('30'),
+    maxWidth: wp('35'),
+
     height: wp('10'),
     backgroundColor: Colors.whiteColor,
     alignItems: 'center',

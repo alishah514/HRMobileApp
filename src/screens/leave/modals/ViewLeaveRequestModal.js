@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import CommonSafeAreaScrollViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import Header from '../../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -25,6 +25,8 @@ import styles from '../styles';
 import {useLoginData} from '../../../hooks/useLoginData';
 import {getSpecificUser} from '../../../redux/accounts/AccountActions';
 import {useAccountsData} from '../../../hooks/useAccountsData';
+import DocumentPicker, {types} from 'react-native-document-picker';
+import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentUploadAWS';
 
 export default function ViewLeaveRequestModal({
   isModalVisible,
@@ -37,6 +39,8 @@ export default function ViewLeaveRequestModal({
   const {role} = useLoginData();
   const {leavesLoading} = useLeaveData();
   const {specificUserData, isLoading: profileLoading} = useAccountsData();
+  const [updatedLeaveDocument, setUpdatedLeaveDocument] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     type,
@@ -55,6 +59,10 @@ export default function ViewLeaveRequestModal({
       dispatch(getSpecificUser(userId));
     }
   }, [userId, role]);
+
+  useEffect(() => {
+    setUpdatedLeaveDocument(leaveDocument);
+  }, [leaveDetails]);
 
   const leaveDuration = `${formatDate(fromDate)} - ${formatDate(
     toDate,
@@ -105,7 +113,7 @@ export default function ViewLeaveRequestModal({
       period,
       status,
       userId,
-      leaveDocument,
+      updatedLeaveDocument,
     };
 
     const response = await dispatch(patchLeaveStatus(leaveId, leaveData));
@@ -136,12 +144,34 @@ export default function ViewLeaveRequestModal({
     }
   };
 
+  const showDocumentActionAlert = () => {
+    Alert.alert(
+      'Choose Action',
+      'Do you want to view the document or update it?',
+      [
+        {
+          text: 'View',
+          onPress: openDocument,
+        },
+        {
+          text: 'Update',
+          onPress: handleDocumentPick,
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      {cancelable: true},
+    );
+  };
+
   const openDocument = async () => {
     try {
       const supported =
         leaveDocument.startsWith('http') || leaveDocument.startsWith('https');
       if (supported) {
-        await Linking.openURL(leaveDocument);
+        await Linking.openURL(updatedLeaveDocument);
       } else {
         Alert.alert('Error', 'Invalid document URL.');
       }
@@ -154,13 +184,63 @@ export default function ViewLeaveRequestModal({
     }
   };
 
+  const handleDocumentPick = async () => {
+    try {
+      const result = await DocumentPicker.pick({
+        type: [types.pdf, types.doc, types.docx, types.plainText, types.images],
+      });
+      showConfirmationAlert(async () => {
+        setIsLoading(true);
+        const document = result[0];
+        const uploadedUrl = await handleDocumentUploadAWS(
+          document,
+          'documents/leaves/',
+        );
+        console.log('Uploaded Document URL:', uploadedUrl);
+        setUpdatedLeaveDocument(uploadedUrl);
+        setIsLoading(false);
+      });
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('User cancelled document picker');
+      } else {
+        console.error('DocumentPicker Error:', err);
+        Alert.alert(
+          'Error',
+          'An unexpected error occurred while selecting a document.',
+        );
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const showConfirmationAlert = onConfirm => {
+    Alert.alert(
+      'Upload Confirmation',
+      'Are you sure you want to upload this document?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: onConfirm,
+        },
+      ],
+    );
+  };
+
   return (
     <Modal
       transparent={false}
       animationType="fade"
       visible={isModalVisible}
       onRequestClose={toggleModal}>
-      {(leavesLoading || profileLoading) && <LogoLoaderComponent />}
+      {(leavesLoading || profileLoading || isLoading) && (
+        <LogoLoaderComponent />
+      )}
 
       <Header
         title={I18n.t('leaveDetails')}
@@ -218,10 +298,16 @@ export default function ViewLeaveRequestModal({
           {leaveDocument && (
             <View>
               <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
-                {I18n.t('viewDocument')}
+                {role === 'Admin' && status === 'pending'
+                  ? I18n.t('viewOrEditDocument')
+                  : I18n.t('viewDocument')}
               </Text>
               <TouchableOpacity
-                onPress={openDocument}
+                onPress={
+                  role === 'Admin' && status === 'pending'
+                    ? showDocumentActionAlert
+                    : openDocument
+                }
                 style={[styles.documentButton, CommonStyles.shadow]}>
                 <Text
                   style={[
@@ -229,7 +315,7 @@ export default function ViewLeaveRequestModal({
                     CommonStyles.textDarkGrey,
                     CommonStyles.Bold600,
                   ]}>
-                  {I18n.t('clickToOpen')}
+                  {I18n.t('clickHere')}
                 </Text>
               </TouchableOpacity>
             </View>
