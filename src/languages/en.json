@@ -20,6 +20,7 @@
   "signUp": "Sign Up",
   "now": "Now",
   "forgotPassword": "Forgot Password?",
+  "contactSupport": "Please contact info@m3logi.com!",
   "emailRequired": "Email address is required.",
   "emailInvalid": "Please enter a valid email.",
   "passwordRequired": "Password cannot be empty.",

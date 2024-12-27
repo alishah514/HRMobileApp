@@ -1,4 +1,4 @@
-import {View, Text, Image, Dimensions} from 'react-native';
+import {View, Text, Image, Dimensions, Alert} from 'react-native';
 import React, {useState} from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
 import {Colors} from '../../../components/common/Colors';
@@ -132,7 +132,7 @@ export default function LoginScreen({navigation}) {
               </Text>
               <View style={CommonStyles.paddingVertical2} />
               <Text
-                onPress={() => navigation.navigate('Forgot Password')}
+                onPress={() => Alert.alert('SUPPORT', I18n.t('contactSupport'))}
                 style={[
                   CommonStyles.textYellow,
                   CommonStyles.font4P,
