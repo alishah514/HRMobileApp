@@ -19,7 +19,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
 import {deleteLeave, patchLeaveStatus} from '../../../redux/leave/LeaveActions';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
-import {formatDate} from '../../../components/utils/dateUtils';
+import {
+  convertToTimestamp,
+  formatDate,
+} from '../../../components/utils/dateUtils';
 import useLeaveData from '../../../hooks/useLeaveData';
 import styles from '../styles';
 import {useLoginData} from '../../../hooks/useLoginData';
@@ -27,6 +30,9 @@ import {getSpecificUser} from '../../../redux/accounts/AccountActions';
 import {useAccountsData} from '../../../hooks/useAccountsData';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentUploadAWS';
+import CustomDatePickerComponent from '../../../components/ReusableComponents/CustomDatePickerComponent';
+import CustomSectionedMultiSelectComponent from '../../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
+import {CalculatePeriod} from '../../../components/utils/CalculatePeriod';
 
 export default function ViewLeaveRequestModal({
   isModalVisible,
@@ -41,6 +47,13 @@ export default function ViewLeaveRequestModal({
   const {specificUserData, isLoading: profileLoading} = useAccountsData();
   const [updatedLeaveDocument, setUpdatedLeaveDocument] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [leaveType, setLeaveType] = useState(null);
+  const [leaveFrom, setLeaveFrom] = useState(null);
+  const [leaveTo, setLeaveTo] = useState(null);
+  const [leaveReason, setLeaveReason] = useState('');
+  const [updatedLeaveDuration, setUpdatedLeaveDuration] = useState(0);
+
+  const leaveTypeOptions = ['Casual Leave', 'Plan Leave', 'Sick Leave'];
 
   const {
     type,
@@ -62,6 +75,11 @@ export default function ViewLeaveRequestModal({
 
   useEffect(() => {
     setUpdatedLeaveDocument(leaveDocument);
+    setLeaveType(type);
+    setLeaveFrom(fromDate);
+    setLeaveTo(toDate);
+    setLeaveReason(reason);
+    setUpdatedLeaveDuration(period);
   }, [leaveDetails]);
 
   const leaveDuration = `${formatDate(fromDate)} - ${formatDate(
@@ -78,6 +96,8 @@ export default function ViewLeaveRequestModal({
       message = 'Are you sure you want to delete this leave request?';
     } else if (status === 'rejected') {
       message = 'Are you sure you want to reject this leave request?';
+    } else if (status === 'update') {
+      message = 'Are you sure you want to update this leave request?';
     }
 
     Alert.alert(
@@ -94,6 +114,8 @@ export default function ViewLeaveRequestModal({
           onPress: async () => {
             if (status === 'delete') {
               await submitDeleteRequest(leaveId);
+            } else if (status === 'update') {
+              await updateLeaveRequest(leaveId);
             } else {
               await submitLeaveRequest(status, leaveId);
             }
@@ -124,6 +146,36 @@ export default function ViewLeaveRequestModal({
       } else {
         Alert.alert('Leave request rejected successfully');
       }
+      toggleModal();
+      apiCall();
+    } else {
+      console.error('Failed to post leave request:', response.error);
+    }
+  };
+
+  const updateLeaveRequest = async leaveId => {
+    const fromDate = new Date(leaveFrom);
+    const toDate = new Date(leaveTo);
+
+    const period = CalculatePeriod(fromDate, toDate);
+
+    const leaveData = {
+      reason: leaveReason,
+      type: leaveType,
+      fromDate: convertToTimestamp(leaveFrom),
+      toDate: convertToTimestamp(leaveTo),
+      status: 'pending',
+      period: period,
+      status,
+      userId,
+      leaveDocument: updatedLeaveDocument,
+    };
+
+    const response = await dispatch(patchLeaveStatus(leaveId, leaveData));
+
+    if (response.success === true) {
+      Alert.alert('Leave request updated successfully');
+
       toggleModal();
       apiCall();
     } else {
@@ -232,6 +284,148 @@ export default function ViewLeaveRequestModal({
     );
   };
 
+  const renderEmployeeFields = () => {
+    return (
+      <>
+        <CustomDatePickerComponent
+          selectedDate={formatDate(leaveFrom)}
+          setSelectedDate={setLeaveFrom}
+          label={I18n.t('leaveFrom')}
+        />
+        <CustomDatePickerComponent
+          selectedDate={formatDate(leaveTo)}
+          setSelectedDate={setLeaveTo}
+          label={I18n.t('leaveTo')}
+        />
+        <CustomSectionedMultiSelectComponent
+          title={I18n.t('leaveType')}
+          selectedValue={leaveType}
+          setSelectedValue={setLeaveType}
+          options={leaveTypeOptions}
+        />
+        <InputFieldComponent
+          title={I18n.t('reason')}
+          value={leaveReason}
+          placeholder={I18n.t('enterLeaveReason')}
+          placeholderColor={Colors.placeholderColorDark}
+          onChangeText={setLeaveReason}
+          borderColor={Colors.greyColor}
+          textColor={Colors.blackColor}
+          multiline
+        />
+      </>
+    );
+  };
+
+  const renderAdminFields = () => {
+    return (
+      <>
+        <InputFieldComponent
+          title={I18n.t('leaveDuration')}
+          value={leaveDuration}
+          placeholder={I18n.t('enterLeaveDuration')}
+          placeholderColor={Colors.placeholderColorDark}
+          borderColor={Colors.greyColor}
+          textColor={Colors.blackColor}
+          disabled
+        />
+        <InputFieldComponent
+          title={I18n.t('leaveType')}
+          value={type}
+          placeholder={I18n.t('enterLeaveType')}
+          placeholderColor={Colors.placeholderColorDark}
+          borderColor={Colors.greyColor}
+          textColor={Colors.blackColor}
+          disabled
+        />
+        <InputFieldComponent
+          title={I18n.t('leaveReason')}
+          value={reason}
+          placeholder={I18n.t('enterLeaveReason')}
+          placeholderColor={Colors.placeholderColorDark}
+          borderColor={Colors.greyColor}
+          textColor={Colors.blackColor}
+          disabled
+          multiline
+        />
+      </>
+    );
+  };
+
+  const renderButtons = () => {
+    if (role === 'Employee' && status === 'pending') {
+      return (
+        <View style={[CommonStyles.rowBetween]}>
+          <CommonButton
+            title={I18n.t('cancel')}
+            onPress={() => askForConfirmation('delete')}
+            backgroundColor={Colors.redColor}
+            half
+          />
+          <CommonButton
+            title={I18n.t('update')}
+            onPress={() => askForConfirmation('update')}
+            backgroundColor={Colors.greenColor}
+            half
+          />
+        </View>
+      );
+    }
+
+    if (role === 'Admin' && status === 'pending') {
+      return (
+        <View style={[CommonStyles.rowBetween]}>
+          <CommonButton
+            title={I18n.t('reject')}
+            onPress={() => askForConfirmation('rejected')}
+            backgroundColor={Colors.redColor}
+            half
+          />
+          <CommonButton
+            title={I18n.t('approve')}
+            onPress={() => askForConfirmation('approved')}
+            backgroundColor={Colors.greenColor}
+            half
+          />
+        </View>
+      );
+    }
+
+    return null;
+  };
+
+  const renderDocumentSection = () => {
+    if (leaveDocument) {
+      return (
+        <View>
+          <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
+            {role === 'Employee' && status === 'pending'
+              ? I18n.t('viewOrEditDocument')
+              : I18n.t('viewDocument')}
+          </Text>
+          <TouchableOpacity
+            onPress={
+              role === 'Employee' && status === 'pending'
+                ? showDocumentActionAlert
+                : openDocument
+            }
+            style={[styles.documentButton, CommonStyles.shadow]}>
+            <Text
+              style={[
+                CommonStyles.font3,
+                CommonStyles.textDarkGrey,
+                CommonStyles.Bold600,
+              ]}>
+              {I18n.t('clickHere')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <Modal
       transparent={false}
@@ -267,83 +461,12 @@ export default function ViewLeaveRequestModal({
             />
           )}
 
-          <InputFieldComponent
-            title={I18n.t('leaveDuration')}
-            value={leaveDuration}
-            placeholder={I18n.t('enterLeaveDuration')}
-            placeholderColor={Colors.placeholderColorDark}
-            borderColor={Colors.greyColor}
-            textColor={Colors.blackColor}
-            disabled={true}
-          />
-          <InputFieldComponent
-            title={I18n.t('leaveType')}
-            value={type}
-            placeholder={I18n.t('enterLeaveType')}
-            placeholderColor={Colors.placeholderColorDark}
-            borderColor={Colors.greyColor}
-            textColor={Colors.blackColor}
-            disabled={true}
-          />
-          <InputFieldComponent
-            title={I18n.t('leaveReason')}
-            value={reason}
-            placeholder={I18n.t('enterLeaveReason')}
-            placeholderColor={Colors.placeholderColorDark}
-            borderColor={Colors.greyColor}
-            textColor={Colors.blackColor}
-            disabled={true}
-            multiline={true}
-          />
-          {leaveDocument && (
-            <View>
-              <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
-                {role === 'Admin' && status === 'pending'
-                  ? I18n.t('viewOrEditDocument')
-                  : I18n.t('viewDocument')}
-              </Text>
-              <TouchableOpacity
-                onPress={
-                  role === 'Admin' && status === 'pending'
-                    ? showDocumentActionAlert
-                    : openDocument
-                }
-                style={[styles.documentButton, CommonStyles.shadow]}>
-                <Text
-                  style={[
-                    CommonStyles.font3,
-                    CommonStyles.textDarkGrey,
-                    CommonStyles.Bold600,
-                  ]}>
-                  {I18n.t('clickHere')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          {role === 'Employee' && status === 'pending' && (
-            <CommonButton
-              title={I18n.t('cancel')}
-              onPress={() => askForConfirmation('delete')}
-              backgroundColor={Colors.redColor}
-            />
-          )}
+          {role === 'Employee' && status === 'pending'
+            ? renderEmployeeFields()
+            : renderAdminFields()}
 
-          {role === 'Admin' && status === 'pending' && (
-            <View style={[CommonStyles.rowBetween]}>
-              <CommonButton
-                title={I18n.t('reject')}
-                onPress={() => askForConfirmation('rejected')}
-                backgroundColor={Colors.redColor}
-                half
-              />
-              <CommonButton
-                title={I18n.t('approve')}
-                onPress={() => askForConfirmation('approved')}
-                backgroundColor={Colors.greenColor}
-                half
-              />
-            </View>
-          )}
+          {renderDocumentSection()}
+          {renderButtons()}
         </View>
       </CommonSafeAreaScrollViewComponent>
     </Modal>

@@ -196,5 +196,6 @@
   "updateEvent": "Update Event",
   "updateTask": "Update Task",
   "employeeAttendance": "Employee Attendance",
-  "deleteEvent": "Delete Event"
+  "deleteEvent": "Delete Event",
+  "update": "Update"
 }
