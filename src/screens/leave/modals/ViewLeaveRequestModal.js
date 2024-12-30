@@ -164,7 +164,7 @@ export default function ViewLeaveRequestModal({
       type: leaveType,
       fromDate: convertToTimestamp(leaveFrom),
       toDate: convertToTimestamp(leaveTo),
-      status: 'pending',
+      status,
       period: period,
       status,
       userId,
