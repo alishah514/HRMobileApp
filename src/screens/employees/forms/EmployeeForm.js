@@ -1,4 +1,11 @@
-import {View, Text, Image, TouchableOpacity, Platform} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Platform,
+  Alert,
+} from 'react-native';
 import React, {
   forwardRef,
   useEffect,
@@ -115,6 +122,27 @@ const EmployeeForm = forwardRef((props, ref) => {
     const options = GenerateTimeOptions(6, 5);
     setTimeOptions(options);
   }, []);
+
+  const parseTime = timeString => {
+    const [time, period] = timeString.split(' ');
+    const [hours, minutes] = time.split(':').map(Number);
+    let totalMinutes = (hours % 12) * 60 + minutes;
+    if (period === 'PM') totalMinutes += 12 * 60;
+    return totalMinutes;
+  };
+
+  const handleSetPunchOutTime = value => {
+    if (punchInTime && parseTime(value) <= parseTime(punchInTime)) {
+      Alert.alert(
+        'Invalid Selection',
+        'Punch-out time must be greater than punch-in time.',
+      );
+    } else if (!punchInTime) {
+      Alert.alert('Invalid Selection', 'Please select Punch-in time first.');
+    } else {
+      setPunchOutTime(value);
+    }
+  };
 
   const toggleImageOptionsModal = () => {
     setIsImagePickerOptionsVisible(!isImagePickerOptionsVisible);
@@ -435,6 +463,7 @@ const EmployeeForm = forwardRef((props, ref) => {
             setSelectedValue={setWageType}
             options={wageTypeOptions}
           />
+
           <View style={CommonStyles.rowBetween}>
             <CustomSectionedMultiSelectComponent
               title={I18n.t('punchInTime')}
@@ -447,7 +476,7 @@ const EmployeeForm = forwardRef((props, ref) => {
             <CustomSectionedMultiSelectComponent
               title={I18n.t('punchOutTime')}
               selectedValue={punchOutTime}
-              setSelectedValue={setPunchOutTime}
+              setSelectedValue={handleSetPunchOutTime}
               options={timeOptions}
               halfWidth={true}
               hideSearch={true}
