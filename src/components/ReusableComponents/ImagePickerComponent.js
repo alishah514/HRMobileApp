@@ -69,6 +69,7 @@ export default function ImagePickerComponent({
         width: 300,
         height: 400,
         cropping: false,
+        mediaType: 'photo',
       });
 
       // Check if image size is valid
@@ -104,6 +105,7 @@ export default function ImagePickerComponent({
         width: 300,
         height: 400,
         cropping: true,
+        mediaType: 'photo',
       });
       if (!isSizeValid(image)) {
         Alert.alert('File size error', 'Image size must be less than 5 MB.');
