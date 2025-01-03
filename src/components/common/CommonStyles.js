@@ -145,6 +145,7 @@ const CommonStyles = StyleSheet.create({
   paddingLeft2: {paddingLeft: wp('2')},
   paddingLeft3: {paddingLeft: wp('3')},
   paddingLeft5: {paddingLeft: wp('5')},
+  marginLeft5: {marginLeft: wp('5')},
 
   // right
   paddingRight1: {paddingRight: wp('1')},

@@ -30,6 +30,7 @@ const ENCR_SALT = 'XYZ';
 const ENCR_COST = 5000;
 const ENCR_LENGTH = 256;
 const STRING_BYTE = 'CodeDecode@512';
+const MAX_FILE_SIZE_MB = 5;
 
 const SIZE = {
   xxxLargeIcon: wp('18'),
@@ -70,4 +71,5 @@ export default Constants = {
   ENCR_COST,
   ENCR_LENGTH,
   STRING_BYTE,
+  MAX_FILE_SIZE_MB,
 };

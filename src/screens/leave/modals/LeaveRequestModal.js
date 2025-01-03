@@ -22,6 +22,7 @@ import {wp} from '../../../components/common/Dimensions';
 import styles from '../styles';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentUploadAWS';
+import {isSizeValid} from '../../../components/ReusableComponents/DocumentSizeComponent';
 
 export default function LeaveRequestModal({
   isModalVisible,
@@ -116,6 +117,12 @@ export default function LeaveRequestModal({
       const result = await DocumentPicker.pick({
         type: [types.pdf, types.doc, types.docx, types.plainText, types.images],
       });
+
+      if (!isSizeValid(result[0])) {
+        Alert.alert('File size error', 'File size must be less than 5 MB.');
+        return;
+      }
+
       showConfirmationAlert(async () => {
         setIsLoading(true);
         const document = result[0];

@@ -197,5 +197,8 @@
   "updateTask": "Update Task",
   "employeeAttendance": "Employee Attendance",
   "deleteEvent": "Delete Event",
-  "update": "Update"
+  "update": "Update",
+  "document": "Document",
+  "uploadDocument": "Upload Document",
+  "noDocumentUploaded": "No Document Uploaded"
 }

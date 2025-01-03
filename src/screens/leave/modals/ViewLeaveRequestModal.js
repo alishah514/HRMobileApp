@@ -33,6 +33,10 @@ import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentU
 import CustomDatePickerComponent from '../../../components/ReusableComponents/CustomDatePickerComponent';
 import CustomSectionedMultiSelectComponent from '../../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 import {CalculatePeriod} from '../../../components/utils/CalculatePeriod';
+import {wp} from '../../../components/common/Dimensions';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {isSizeValid} from '../../../components/ReusableComponents/DocumentSizeComponent';
 
 export default function ViewLeaveRequestModal({
   isModalVisible,
@@ -241,9 +245,14 @@ export default function ViewLeaveRequestModal({
       const result = await DocumentPicker.pick({
         type: [types.pdf, types.doc, types.docx, types.plainText, types.images],
       });
+
+      if (!isSizeValid(result[0])) {
+        Alert.alert('File size error', 'File size must be less than 5 MB.');
+        return;
+      }
+
       showConfirmationAlert(async () => {
         setIsLoading(true);
-        const document = result[0];
         const uploadedUrl = await handleDocumentUploadAWS(
           document,
           'documents/leaves/',
@@ -395,35 +404,47 @@ export default function ViewLeaveRequestModal({
   };
 
   const renderDocumentSection = () => {
-    if (leaveDocument) {
-      return (
-        <View>
-          <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
-            {role === 'Employee' && status === 'pending'
-              ? I18n.t('viewOrEditDocument')
-              : I18n.t('viewDocument')}
+    return (
+      <View>
+        <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
+          {I18n.t('document')}
+        </Text>
+        <View style={styles.uploadIconMainView}>
+          <Text
+            style={[
+              CommonStyles.underlineText,
+              CommonStyles.bold4,
+              CommonStyles.textBlack,
+            ]}>
+            {updatedLeaveDocument
+              ? updatedLeaveDocument.split('/').pop().split('_').pop()
+              : I18n.t('noDocumentUploaded')}
           </Text>
-          <TouchableOpacity
-            onPress={
-              role === 'Employee' && status === 'pending'
-                ? showDocumentActionAlert
-                : openDocument
-            }
-            style={[styles.documentButton, CommonStyles.shadow]}>
-            <Text
-              style={[
-                CommonStyles.font3,
-                CommonStyles.textDarkGrey,
-                CommonStyles.Bold600,
-              ]}>
-              {I18n.t('clickHere')}
-            </Text>
-          </TouchableOpacity>
+          {updatedLeaveDocument && (
+            <TouchableOpacity
+              onPress={openDocument}
+              style={[CommonStyles.marginLeft5, styles.iconView]}>
+              <AntDesign
+                name="eye"
+                size={Constants.SIZE.smallIcon}
+                color={Colors.whiteColor}
+              />
+            </TouchableOpacity>
+          )}
+          {role === 'Employee' && status === 'pending' && (
+            <TouchableOpacity
+              onPress={handleDocumentPick}
+              style={[CommonStyles.marginLeft5, styles.iconView]}>
+              <Entypo
+                name="pencil"
+                size={Constants.SIZE.smallIcon}
+                color={Colors.whiteColor}
+              />
+            </TouchableOpacity>
+          )}
         </View>
-      );
-    }
-
-    return null;
+      </View>
+    );
   };
 
   return (

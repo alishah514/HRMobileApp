@@ -27,5 +27,18 @@ const styles = StyleSheet.create({
     borderWidth: wp(0.1),
     borderColor: Colors.greyColor,
   },
+  iconView: {
+    width: wp(8),
+    height: wp(8),
+    borderRadius: wp(4),
+    backgroundColor: Colors.blueColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  uploadIconMainView: {
+    marginVertical: wp(3),
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });
 export default styles;

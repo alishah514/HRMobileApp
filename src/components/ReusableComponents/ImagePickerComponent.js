@@ -3,6 +3,7 @@ import {Alert, Platform, PermissionsAndroid} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImagePickerOptionsComponent from './ImagePickerOptionsComponent';
 import {handleImageUploadAWS} from '../utils/HandleImageUploadAWS';
+import {isSizeValid} from './DocumentSizeComponent';
 
 export default function ImagePickerComponent({
   setImage,
@@ -69,7 +70,12 @@ export default function ImagePickerComponent({
         height: 400,
         cropping: false,
       });
-      // console.log('Gallery image: ', image.path);
+
+      // Check if image size is valid
+      if (!isSizeValid(image)) {
+        Alert.alert('File size error', 'Image size must be less than 5 MB.');
+        return;
+      }
       setImage(image);
 
       showConfirmationAlert(async () => {
@@ -99,7 +105,10 @@ export default function ImagePickerComponent({
         height: 400,
         cropping: true,
       });
-
+      if (!isSizeValid(image)) {
+        Alert.alert('File size error', 'Image size must be less than 5 MB.');
+        return;
+      }
       setImage(image);
 
       showConfirmationAlert(async () => {
