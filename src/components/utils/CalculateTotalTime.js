@@ -31,7 +31,7 @@ export const CalculateTotalTime = (
 
   const formattedTime = `${String(hours).padStart(2, '0')}:${String(
     minutes,
-  ).padStart(2, '0')}:${String(seconds).padStart(2, '0')} Hours`;
+  ).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
   return formattedTime;
 };

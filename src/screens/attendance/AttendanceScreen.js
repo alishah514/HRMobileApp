@@ -17,13 +17,10 @@ import WeeklyCalendarComponent from './components/WeeklyCalendarComponent';
 import {useAttendanceData} from '../../hooks/useAttendanceData';
 
 import RNFS from 'react-native-fs';
-import Share from 'react-native-share';
-import {Alert, PermissionsAndroid, Platform} from 'react-native';
+import {Alert, Platform} from 'react-native';
 import ExcelJS from 'exceljs';
 import {shareFile} from '../../components/ReusableComponents/ShareComponent';
 import {CalculateTotalTime} from '../../components/utils/CalculateTotalTime';
-
-const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 export default function AttendanceScreen({navigation, route}) {
   const dispatch = useDispatch();
@@ -175,7 +172,6 @@ export default function AttendanceScreen({navigation, route}) {
       const base64 = buffer.toString('base64');
 
       await RNFS.writeFile(filePath, base64, 'base64');
-      console.log('Excel file written to:', filePath);
 
       const shareOptions = {
         url: `file://${filePath}`,
@@ -193,8 +189,9 @@ export default function AttendanceScreen({navigation, route}) {
       );
     }
   };
+
   const createTitleRow = worksheet => {
-    worksheet.mergeCells('A1:C1');
+    worksheet.mergeCells('A1:D1');
     const titleCell = worksheet.getCell('A1');
 
     titleCell.value = 'Employee Daily Attendance';
@@ -203,15 +200,26 @@ export default function AttendanceScreen({navigation, route}) {
 
     titleCell.font = {bold: true, size: 14};
 
-    worksheet.getColumn(1).width = 20;
-    worksheet.getColumn(2).width = 20;
-    worksheet.getColumn(3).width = 20;
+    worksheet.getColumn(1).width = 25;
+    worksheet.getColumn(2).width = 25;
+    worksheet.getColumn(3).width = 25;
+    worksheet.getColumn(4).width = 25;
+
+    worksheet.getColumn(1).alignment = {horizontal: 'center'};
+    worksheet.getColumn(2).alignment = {horizontal: 'center'};
+    worksheet.getColumn(3).alignment = {horizontal: 'center'};
+    worksheet.getColumn(4).alignment = {horizontal: 'center'};
   };
 
   const addEmployeeDetails = (worksheet, employeeName, employeeId) => {
-    worksheet.addRow(['Employee Name', employeeName]);
-    worksheet.addRow(['Employee ID', employeeId]);
-    worksheet.addRow(['Date', selectedDate]);
+    const employeeNameRow = worksheet.addRow(['Employee Name', employeeName]);
+    const employeeIdRow = worksheet.addRow(['Employee ID', employeeId]);
+    const dateRow = worksheet.addRow(['Date', selectedDate]);
+
+    employeeNameRow.font = {bold: true};
+    employeeIdRow.font = {bold: true};
+    dateRow.font = {bold: true};
+
     worksheet.addRow([]);
   };
 
@@ -219,78 +227,114 @@ export default function AttendanceScreen({navigation, route}) {
     const headerRow = worksheet.addRow(['Type', 'Time', 'Location', 'Image']);
     headerRow.font = {bold: true};
     headerRow.alignment = {horizontal: 'center'};
+
+    worksheet.getColumn(1).width = 25;
+    worksheet.getColumn(2).width = 25;
+    worksheet.getColumn(3).width = 25;
+    worksheet.getColumn(4).width = 25;
+
+    worksheet.getColumn(1).alignment = {horizontal: 'center'};
+    worksheet.getColumn(2).alignment = {horizontal: 'center'};
+    worksheet.getColumn(3).alignment = {horizontal: 'center'};
+    worksheet.getColumn(4).alignment = {horizontal: 'center'};
   };
 
   const addAttendanceData = (worksheet, filteredAttendance) => {
     filteredAttendance.forEach(item => {
-      const punchInLocationLink =
-        item.latitude && item.longitude
-          ? `https://www.google.com/maps?q=${item.latitude},${item.longitude}`
-          : 'N/A';
-
-      const punchInRow = worksheet.addRow([
+      const punchInData = processPunchData(
+        item,
         'Punch In',
-        item.punchIn || 'N/A',
-        punchInLocationLink !== 'N/A' ? 'View Location' : 'N/A',
-        item.imageUrl ? 'View Image' : 'No Image',
-      ]);
+        item.latitude,
+        item.longitude,
+        item.imageUrl,
+      );
+      const punchInRow = worksheet.addRow(punchInData);
 
-      if (punchInLocationLink !== 'N/A') {
-        const locationCell = punchInRow.getCell(3);
-        locationCell.value = {
-          text: 'View Location',
-          hyperlink: punchInLocationLink,
-        };
-        locationCell.font = {color: {argb: 'FF0000FF'}, underline: true};
-      }
+      formatRow(punchInRow, 3, item.latitude, item.longitude, item.imageUrl);
 
-      if (item.imageUrl) {
-        const imageCell = punchInRow.getCell(4);
-        imageCell.value = {
-          text: 'View Image',
-          hyperlink: item.imageUrl,
-        };
-        imageCell.font = {color: {argb: 'FF0000FF'}, underline: true};
-      }
-
+      // Process Punch Out data if available
       if (item.punchOut) {
-        const punchOutLocationLink =
-          item.punchOutData?.latitude && item.punchOutData?.longitude
-            ? `https://www.google.com/maps?q=${item.punchOutData.latitude},${item.punchOutData.longitude}`
-            : 'N/A';
-
-        const punchOutRow = worksheet.addRow([
+        const punchOutData = processPunchData(
+          item,
           'Punch Out',
-          item.punchOut,
-          punchOutLocationLink !== 'N/A' ? 'View Location' : 'N/A',
-          item.punchOutData?.imageUrl ? 'View Image' : 'No Image',
-        ]);
+          item.punchOutData?.latitude,
+          item.punchOutData?.longitude,
+          item.punchOutData?.imageUrl,
+        );
+        const punchOutRow = worksheet.addRow(punchOutData);
 
-        if (punchOutLocationLink !== 'N/A') {
-          const locationCell = punchOutRow.getCell(3);
-          locationCell.value = {
-            text: 'View Location',
-            hyperlink: punchOutLocationLink,
-          };
-          locationCell.font = {color: {argb: 'FF0000FF'}, underline: true};
-        }
-
-        if (item.punchOutData?.imageUrl) {
-          const imageCell = punchOutRow.getCell(4);
-          imageCell.value = {
-            text: 'View Image',
-            hyperlink: item.punchOutData.imageUrl,
-          };
-          imageCell.font = {color: {argb: 'FF0000FF'}, underline: true};
-        }
+        // Apply location and image formatting for Punch Out
+        formatRow(
+          punchOutRow,
+          3,
+          item.punchOutData?.latitude,
+          item.punchOutData?.longitude,
+          item.punchOutData?.imageUrl,
+        );
       }
     });
   };
 
+  // Function to process punch data
+  const processPunchData = (item, punchType, latitude, longitude, imageUrl) => {
+    const locationLink =
+      latitude && longitude
+        ? `https://www.google.com/maps?q=${latitude},${longitude}`
+        : 'N/A';
+
+    return [
+      punchType,
+      item.punchIn || item.punchOut || 'N/A',
+      locationLink !== 'N/A' ? 'View Location' : 'N/A',
+      imageUrl ? 'View Image' : 'No Image',
+    ];
+  };
+
+  // Function to format the row with links and styles
+  const formatRow = (row, locationCellIndex, latitude, longitude, imageUrl) => {
+    const locationLink =
+      latitude && longitude
+        ? `https://www.google.com/maps?q=${latitude},${longitude}`
+        : 'N/A';
+
+    if (locationLink !== 'N/A') {
+      const locationCell = row.getCell(locationCellIndex);
+      locationCell.value = {
+        text: 'View Location',
+        hyperlink: locationLink,
+      };
+      locationCell.font = {color: {argb: 'FF0000FF'}, underline: true};
+    }
+
+    if (imageUrl) {
+      const imageCell = row.getCell(4);
+      imageCell.value = {
+        text: 'View Image',
+        hyperlink: imageUrl,
+      };
+      imageCell.font = {color: {argb: 'FF0000FF'}, underline: true};
+    }
+  };
+
   const addTotalTimeRow = (worksheet, totalTime) => {
-    const totalRow = worksheet.addRow(['Total Time', totalTime, '', '']);
+    const totalRow = worksheet.addRow([
+      'Total Time',
+      `${totalTime} Hours`,
+      '',
+      '',
+    ]);
     totalRow.font = {bold: true};
     totalRow.alignment = {horizontal: 'center'};
+
+    worksheet.getColumn(1).width = 25;
+    worksheet.getColumn(2).width = 25;
+    worksheet.getColumn(3).width = 25;
+    worksheet.getColumn(4).width = 25;
+
+    worksheet.getColumn(1).alignment = {horizontal: 'center'};
+    worksheet.getColumn(2).alignment = {horizontal: 'center'};
+    worksheet.getColumn(3).alignment = {horizontal: 'center'};
+    worksheet.getColumn(4).alignment = {horizontal: 'center'};
   };
 
   const handleDrawerOpen = () => {
