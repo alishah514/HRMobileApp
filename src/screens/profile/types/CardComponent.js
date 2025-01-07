@@ -13,6 +13,7 @@ import CommonStyles from '../../../components/common/CommonStyles';
 import styles from '../styles';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import Security from '../../../components/ReusableComponents/Security';
+import {shareFile} from '../../../components/ReusableComponents/ShareComponent';
 
 export default function CardComponent({data, employeeId}) {
   const viewShotRef = useRef();
@@ -58,7 +59,7 @@ export default function CardComponent({data, employeeId}) {
         type: 'image/png',
       };
 
-      await Share.open(shareOptions);
+      await shareFile(shareOptions);
     } catch (error) {
       console.error('Error sharing image:', error);
     }

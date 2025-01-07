@@ -20,6 +20,8 @@ import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import {Alert, PermissionsAndroid, Platform} from 'react-native';
 import ExcelJS from 'exceljs';
+import {shareFile} from '../../components/ReusableComponents/ShareComponent';
+import {CalculateTotalTime} from '../../components/utils/CalculateTotalTime';
 
 const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
@@ -141,6 +143,56 @@ export default function AttendanceScreen({navigation, route}) {
     )}:${String(seconds).padStart(2, '0')}`;
   };
 
+  const exportToExcel = async () => {
+    try {
+      const downloadPath =
+        Platform.OS === 'android'
+          ? RNFS.DownloadDirectoryPath || RNFS.ExternalStorageDirectoryPath
+          : RNFS.DocumentDirectoryPath;
+
+      if (!downloadPath) {
+        throw new Error(
+          'Unable to determine the download path. Please check your device permissions.',
+        );
+      }
+
+      const filePath = `${downloadPath}/Attendance_${employeeName.trim()}_${selectedDate}.xlsx`;
+
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Attendance');
+
+      createTitleRow(worksheet);
+      worksheet.addRow([]);
+      addEmployeeDetails(worksheet, employeeName, employeeId);
+      addTableHeaders(worksheet);
+      addAttendanceData(worksheet, filteredAttendance);
+
+      const totalTime = CalculateTotalTime(filteredAttendance);
+
+      addTotalTimeRow(worksheet, totalTime);
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const base64 = buffer.toString('base64');
+
+      await RNFS.writeFile(filePath, base64, 'base64');
+      console.log('Excel file written to:', filePath);
+
+      const shareOptions = {
+        url: `file://${filePath}`,
+        title: `${employeeName}'s Daily Attendance Report - ${selectedDate}`,
+        message: 'Please find the attached attendance file.',
+      };
+
+      await shareFile(shareOptions);
+    } catch (error) {
+      console.error('Error:', error);
+
+      Alert.alert(
+        'An error occurred',
+        error.message || 'Something went wrong. Please try again.',
+      );
+    }
+  };
   const createTitleRow = worksheet => {
     worksheet.mergeCells('A1:C1');
     const titleCell = worksheet.getCell('A1');
@@ -179,14 +231,14 @@ export default function AttendanceScreen({navigation, route}) {
       const punchInRow = worksheet.addRow([
         'Punch In',
         item.punchIn || 'N/A',
-        punchInLocationLink,
+        punchInLocationLink !== 'N/A' ? 'View Location' : 'N/A',
         item.imageUrl ? 'View Image' : 'No Image',
       ]);
 
       if (punchInLocationLink !== 'N/A') {
         const locationCell = punchInRow.getCell(3);
         locationCell.value = {
-          text: punchInLocationLink,
+          text: 'View Location',
           hyperlink: punchInLocationLink,
         };
         locationCell.font = {color: {argb: 'FF0000FF'}, underline: true};
@@ -210,14 +262,14 @@ export default function AttendanceScreen({navigation, route}) {
         const punchOutRow = worksheet.addRow([
           'Punch Out',
           item.punchOut,
-          punchOutLocationLink,
+          punchOutLocationLink !== 'N/A' ? 'View Location' : 'N/A',
           item.punchOutData?.imageUrl ? 'View Image' : 'No Image',
         ]);
 
         if (punchOutLocationLink !== 'N/A') {
           const locationCell = punchOutRow.getCell(3);
           locationCell.value = {
-            text: punchOutLocationLink,
+            text: 'View Location',
             hyperlink: punchOutLocationLink,
           };
           locationCell.font = {color: {argb: 'FF0000FF'}, underline: true};
@@ -235,65 +287,10 @@ export default function AttendanceScreen({navigation, route}) {
     });
   };
 
-  const importAsExcel = async () => {
-    const downloadPath =
-      Platform.OS === 'android'
-        ? RNFS.DownloadDirectoryPath || RNFS.ExternalStorageDirectoryPath
-        : RNFS.DocumentDirectoryPath;
-
-    if (!downloadPath) {
-      Alert.alert(
-        'Unable to determine the download path. Please check your device permissions.',
-      );
-      return;
-    }
-
-    const filePath = `${downloadPath}/Attendance_${employeeName.trim()}_${selectedDate}.xlsx`;
-
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Attendance');
-
-    createTitleRow(worksheet);
-
-    worksheet.addRow([]);
-
-    addEmployeeDetails(worksheet, employeeName, employeeId);
-
-    addTableHeaders(worksheet);
-
-    addAttendanceData(worksheet, filteredAttendance);
-
-    const buffer = await workbook.xlsx.writeBuffer();
-    const base64 = buffer.toString('base64');
-
-    RNFS.writeFile(filePath, base64, 'base64')
-      .then(() => {
-        console.log('Excel file written to:', filePath);
-        shareFile(filePath);
-      })
-      .catch(error => {
-        console.error('Error writing file:', error);
-        Alert.alert(
-          'An error occurred while writing the file. Please try again.',
-        );
-      });
-  };
-
-  const shareFile = async filePath => {
-    try {
-      await Share.open({
-        url: `file://${filePath}`,
-        title: `${employeeName}'s Daily Attendance Report - ${selectedDate}`,
-        message: 'Please find the attached attendance file.',
-      });
-    } catch (error) {
-      if (error.message !== 'User did not share') {
-        console.error('Error sharing file:', error);
-        Alert.alert(
-          'An error occurred while sharing the file. Please try again.',
-        );
-      }
-    }
+  const addTotalTimeRow = (worksheet, totalTime) => {
+    const totalRow = worksheet.addRow(['Total Time', totalTime, '', '']);
+    totalRow.font = {bold: true};
+    totalRow.alignment = {horizontal: 'center'};
   };
 
   const handleDrawerOpen = () => {
@@ -326,7 +323,7 @@ export default function AttendanceScreen({navigation, route}) {
             />
           )
         }
-        onRightIconPressed={importAsExcel}
+        onRightIconPressed={exportToExcel}
         rightIcon={
           role === 'Admin' &&
           employeeName && (
