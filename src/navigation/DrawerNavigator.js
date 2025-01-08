@@ -20,6 +20,8 @@ import CalendarScreen from '../screens/calendar/CalendarScreen';
 import {useLoginData} from '../hooks/useLoginData';
 import AdminAttendanceScreen from '../screens/attendance/Admin/AdminAttendanceScreen';
 import AdminEmployeeScreen from '../screens/employees/AdminEmployeeScreen';
+import NoticeScreen from '../screens/announcement/AnnouncementScreen';
+import AnnouncementScreen from '../screens/announcement/AnnouncementScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -177,6 +179,24 @@ const DrawerNavigator = () => {
             drawerIcon: ({focused, size}) => (
               <Ionicons
                 name={focused ? 'calendar-number' : 'calendar-number-outline'}
+                size={size}
+                color={Colors.whiteColor}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Announcements"
+          component={AnnouncementScreen}
+          options={{
+            drawerLabel: () => (
+              <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
+                {I18n.t('announcements')}
+              </Text>
+            ),
+            drawerIcon: ({focused, size}) => (
+              <Ionicons
+                name={focused ? 'newspaper' : 'newspaper-outline'}
                 size={size}
                 color={Colors.whiteColor}
               />

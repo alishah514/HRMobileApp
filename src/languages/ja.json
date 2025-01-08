@@ -200,5 +200,14 @@
   "update": "更新",
   "document": "ドキュメント",
   "uploadDocument": "ドキュメントをアップロード",
-  "noDocumentUploaded": "ドキュメントがアップロードされていません"
+  "noDocumentUploaded": "ドキュメントがアップロードされていません",
+  "noticeBoard": "掲示板",
+  "announcements": "お知らせ",
+  "announcementList": "お知らせ一覧",
+  "addAnnouncement": "お知らせを追加",
+  "enterAnnouncementTitle": "お知らせのタイトルを入力",
+  "announcementFor": "お知らせ対象",
+  "announcementMessage": "お知らせ内容",
+  "enterAnnouncementMessage": "お知らせ内容を入力",
+  "postAnnouncement": "お知らせを投稿"
 }

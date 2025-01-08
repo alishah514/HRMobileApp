@@ -36,9 +36,7 @@ export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
   const handleLogout = LogoutConfirmationComponent();
   const {language: currentLanguage} = useSelector(state => state.language);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const {profile, allProfile, profileLoading} = useProfileData();
   const {tasksLoading} = useTaskData();
   const {leavesLoading} = useLeaveData();

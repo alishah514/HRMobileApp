@@ -1,5 +1,5 @@
 import {View, Modal, Alert} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Header from '../../../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../../../components/common/Colors';
@@ -9,7 +9,7 @@ import InputFieldComponent from '../../../../components/ReusableComponents/Input
 import CommonSafeAreaScrollViewComponent from '../../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import CustomSectionedMultiSelectComponent from '../../../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 import CommonButton from '../../../../components/ReusableComponents/CommonComponents/CommonButton';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import I18n from '../../../../i18n/i18n';
 import {
   fetchAllTasks,
@@ -21,7 +21,6 @@ import {useLoginData} from '../../../../hooks/useLoginData';
 import useTaskData from '../../../../hooks/useTaskData';
 import CustomDatePickerComponent from '../../../../components/ReusableComponents/CustomDatePickerComponent';
 import {TruncateTitle} from '../../../../components/utils/TruncateTitle';
-import {fetchAllUsers} from '../../../../redux/accounts/AccountActions';
 import {useAccountsData} from '../../../../hooks/useAccountsData';
 
 export default function AddTaskModal({isModalVisible, toggleModal}) {
@@ -34,7 +33,7 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
   const [taskCategory, setTaskCategory] = useState(null);
   const [taskPriority, setTaskPriority] = useState(null);
   const [taskStatus, setTaskStatus] = useState(null);
-  // const [estimatedJobs, setEstimatedJobs] = useState(0);
+
   const [storyPoints, setStoryPoints] = useState(0);
   const [department, setDepartment] = useState(null);
   const [assignedTo, setAssignedTo] = useState(null);
@@ -133,7 +132,6 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
       taskCategory !== null &&
       taskPriority !== null &&
       taskStatus !== null &&
-      // estimatedJobs > 0 &&
       department !== null &&
       assignedTo !== null &&
       description !== null &&
@@ -149,7 +147,7 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
     setTaskCategory(null);
     setTaskPriority(null);
     setTaskStatus(null);
-    // setEstimatedJobs(0);
+
     setStoryPoints(0);
     setDepartment(null);
     setAssignedTo(null);
@@ -234,15 +232,7 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
               halfWidth={true}
             />
           </View>
-          {/* <InputFieldComponent
-            title={I18n.t('estimatedJobs')}
-            value={estimatedJobs}
-            onChangeText={text => setEstimatedJobs(text)}
-            placeholder={TruncateTitle(I18n.t('enterEstimatedJobs'), 30)}
-            placeholderColor={Colors.placeholderColorDark}
-            borderColor={Colors.greyColor}
-            textColor={Colors.blackColor}
-          /> */}
+
           <View style={CommonStyles.rowBetween}>
             <InputFieldComponent
               title={I18n.t('storyPoints')}

@@ -111,7 +111,7 @@
   "completedTask": "Completed Task",
   "report": "Report",
   "summary": "Summary",
-  "title": "Task Title",
+  "title": "Title",
   "enterTaskDetails": "Enter Task Details",
   "assignedBy": "Assigned By",
   "enterAssignedBy": "Enter Assigned By",
@@ -200,5 +200,14 @@
   "update": "Update",
   "document": "Document",
   "uploadDocument": "Upload Document",
-  "noDocumentUploaded": "No Document Uploaded"
+  "noDocumentUploaded": "No Document Uploaded",
+  "noticeBoard": "Notice Board",
+  "announcements": "Announcements",
+  "announcementList": "Announcements List",
+  "addAnnouncement": "Add Announcement",
+  "enterAnnouncementTitle": "Enter Announcement Title",
+  "announcementFor": "Announcement For",
+  "announcementMessage": "Announcement Message",
+  "enterAnnouncementMessage": "Enter Announcement Message",
+  "postAnnouncement": "Post Announcement"
 }

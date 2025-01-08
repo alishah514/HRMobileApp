@@ -24,6 +24,7 @@ const ATTENDANCE = 'attendance';
 const DASHBOARD = 'dashboard';
 const EVENTS = 'events';
 const SETTINGS = 'settings';
+const ANNOUNCEMENTS = 'announcements';
 const ROLE_STATUS = ['Admin', 'Staff'];
 const ENCR_PASS = 'M3LOGI512';
 const ENCR_SALT = 'XYZ';
@@ -66,6 +67,7 @@ export default Constants = {
   DASHBOARD,
   EVENTS,
   SETTINGS,
+  ANNOUNCEMENTS,
   ENCR_PASS,
   ENCR_SALT,
   ENCR_COST,

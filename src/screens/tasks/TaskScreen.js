@@ -45,9 +45,7 @@ export default function TaskScreen({navigation, route}) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
   const {userId, role} = useLoginData();
-
   const {tasksLoading, allTasks} = useTaskData();
-
   const [activeTab, setActiveTab] = useState(0);
   const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
 

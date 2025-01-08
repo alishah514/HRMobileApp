@@ -11,6 +11,7 @@ import ProfileReducer from '../profile/ProfileReducer';
 import EventReducer from '../events/EventReducer';
 import SettingsReducer from '../settings/SettingsReducers';
 import AccountReducers from '../accounts/AccountReducers';
+import AnnouncementsReducer from '../announcements/AnnouncementReducers';
 
 const RootReducer = combineReducers({
   login: LoginReducer,
@@ -25,6 +26,7 @@ const RootReducer = combineReducers({
   events: EventReducer,
   settings: SettingsReducer,
   accounts: AccountReducers,
+  announcements: AnnouncementsReducer,
 });
 
 export default RootReducer;
