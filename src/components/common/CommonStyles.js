@@ -168,6 +168,7 @@ const CommonStyles = StyleSheet.create({
   width40: {width: wp('40')},
   width50: {width: wp('50')},
   width60: {width: wp('60')},
+  width65: {width: wp('65')},
   width80: {width: wp('80')},
   width90: {width: wp('90')},
   width95: {width: wp('95')},

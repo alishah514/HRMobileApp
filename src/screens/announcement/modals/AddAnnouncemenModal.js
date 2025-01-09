@@ -1,4 +1,11 @@
-import {View, Text, Modal, Alert} from 'react-native';
+import {
+  View,
+  Modal,
+  Alert,
+  Text,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import React, {useState} from 'react';
 import Header from '../../../components/ReusableComponents/Header/Header';
 import CommonSafeAreaScrollViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
@@ -9,7 +16,6 @@ import InputFieldComponent from '../../../components/ReusableComponents/InputFie
 import {Colors} from '../../../components/common/Colors';
 import Constants from '../../../components/common/Constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import CustomSectionedMultiSelectComponent from '../../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import {useLoginData} from '../../../hooks/useLoginData';
 import {
@@ -17,16 +23,22 @@ import {
   postAnnouncements,
 } from '../../../redux/announcements/AnnouncementActions';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
+import styles from '../styles';
+import DocumentPicker, {types} from 'react-native-document-picker';
+import {isSizeValid} from '../../../components/ReusableComponents/DocumentSizeComponent';
+import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentUploadAWS';
 
 export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
   const dispatch = useDispatch();
   const {userId} = useLoginData();
   const currentLanguage = useSelector(state => state.language.language);
-  const {isLoading} = useSelector(state => state.announcements);
+  const {isLoading: announcementLoading} = useSelector(
+    state => state.announcements,
+  );
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
-  const [announcementFor, setAnnouncementFor] = useState(null);
-  const announcementForOptions = ['All', 'M3LOGI', 'Courage'];
+  const [attachment, setAttachment] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const askForConfirmation = () => {
     const creationDate = new Date();
@@ -38,7 +50,7 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
     const data = {
       title,
       message,
-      announcementFor,
+      attachment,
       adminId: userId,
       creationDate: timestamp,
     };
@@ -78,11 +90,83 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
   const clearStates = () => {
     setTitle('');
     setMessage('');
-    setAnnouncementFor(null);
+    setAttachment(null);
   };
 
   const isFormValid = () => {
-    return title !== '' && message !== '' && announcementFor !== null;
+    return title !== '' && message !== '' && attachment !== null;
+  };
+
+  const handleDocumentPick = async () => {
+    try {
+      const result = await DocumentPicker.pick({
+        type: [types.pdf, types.doc, types.docx, types.plainText, types.images],
+      });
+
+      if (!isSizeValid(result[0])) {
+        Alert.alert('File size error', 'File size must be less than 5 MB.');
+        return;
+      }
+
+      showConfirmationAlert(async () => {
+        setIsLoading(true);
+        const document = result[0];
+        const uploadedUrl = await handleDocumentUploadAWS(
+          document,
+          'documents/announcements',
+        );
+        console.log('Uploaded Document URL:', uploadedUrl);
+        setAttachment(uploadedUrl);
+        setIsLoading(false);
+      });
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('User cancelled document picker');
+      } else {
+        console.error('DocumentPicker Error:', err);
+        Alert.alert(
+          'Error',
+          'An unexpected error occurred while selecting a document.',
+        );
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const showConfirmationAlert = onConfirm => {
+    Alert.alert(
+      'Upload Confirmation',
+      'Are you sure you want to upload this document?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: onConfirm,
+        },
+      ],
+    );
+  };
+
+  const openDocument = async () => {
+    try {
+      const supported =
+        attachment.startsWith('http') || attachment.startsWith('https');
+      if (supported) {
+        await Linking.openURL(attachment);
+      } else {
+        Alert.alert('Error', 'Invalid document URL.');
+      }
+    } catch (error) {
+      console.error('Error opening document:', error);
+      Alert.alert(
+        'Error',
+        'An unexpected error occurred while trying to open the document.',
+      );
+    }
   };
 
   return (
@@ -102,7 +186,7 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
           />
         }
       />
-      {isLoading && <LogoLoaderComponent />}
+      {(announcementLoading || isLoading) && <LogoLoaderComponent />}
       <CommonSafeAreaScrollViewComponent>
         <View style={CommonStyles.mainPadding}>
           <InputFieldComponent
@@ -115,12 +199,6 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
             textColor={Colors.blackColor}
           />
 
-          <CustomSectionedMultiSelectComponent
-            title={I18n.t('announcementFor')}
-            selectedValue={announcementFor}
-            setSelectedValue={setAnnouncementFor}
-            options={announcementForOptions}
-          />
           <InputFieldComponent
             title={I18n.t('announcementMessage')}
             value={message}
@@ -131,6 +209,45 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
             textColor={Colors.blackColor}
             multiline
           />
+          <View>
+            <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
+              {I18n.t('attachDocument')}
+            </Text>
+            <View style={[CommonStyles.flexRow, CommonStyles.alignItemsCenter]}>
+              <TouchableOpacity
+                onPress={handleDocumentPick}
+                style={[styles.documentButton, CommonStyles.shadow]}>
+                <Text
+                  style={[
+                    CommonStyles.font3,
+                    attachment
+                      ? CommonStyles.textBlue
+                      : CommonStyles.textDarkGrey,
+                    CommonStyles.Bold600,
+                  ]}>
+                  {attachment
+                    ? I18n.t('selectedDocument')
+                    : I18n.t('selectDocument')}
+                </Text>
+              </TouchableOpacity>
+              {attachment && (
+                <TouchableOpacity onPress={openDocument}>
+                  <Text
+                    style={[
+                      CommonStyles.font3,
+                      attachment
+                        ? CommonStyles.textBlue
+                        : CommonStyles.textDarkGrey,
+                      CommonStyles.Bold600,
+                      CommonStyles.marginLeft5,
+                      CommonStyles.underlineText,
+                    ]}>
+                    {attachment.split('_').slice(1).join('_')}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
           <CommonButton
             title={I18n.t('postAnnouncement')}
             onPress={askForConfirmation}

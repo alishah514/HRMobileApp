@@ -31,8 +31,9 @@ const AnnouncementsService = {
         adminId: {
           stringValue: data.adminId,
         },
-        announcementFor: {
-          stringValue: data.announcementFor,
+
+        attachment: {
+          stringValue: data.attachment,
         },
       },
     };

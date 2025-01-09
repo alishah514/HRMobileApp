@@ -45,7 +45,6 @@ export default function ViewLeaveRequestModal({
   apiCall,
 }) {
   const dispatch = useDispatch();
-  const currentLanguage = useSelector(state => state.language.language);
   const {role} = useLoginData();
   const {leavesLoading} = useLeaveData();
   const {specificUserData, isLoading: profileLoading} = useAccountsData();
@@ -198,28 +197,6 @@ export default function ViewLeaveRequestModal({
       console.error('Failed to delete leave request:', response.error);
       Alert.alert('Error', response.error);
     }
-  };
-
-  const showDocumentActionAlert = () => {
-    Alert.alert(
-      'Choose Action',
-      'Do you want to view the document or update it?',
-      [
-        {
-          text: 'View',
-          onPress: openDocument,
-        },
-        {
-          text: 'Update',
-          onPress: handleDocumentPick,
-        },
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-      ],
-      {cancelable: true},
-    );
   };
 
   const openDocument = async () => {

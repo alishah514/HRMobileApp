@@ -16,8 +16,8 @@ const TabNavigator = () => {
     <View style={[CommonStyles.container, CommonStyles.whiteBackground]}>
       <Tab.Navigator
         screenOptions={{
-          headerShown: false, // This hides the header on each tab screen
-          tabBarShowLabel: false, // Removes the default tab labels
+          headerShown: false,
+          tabBarShowLabel: false,
           tabBarStyle: [CommonStyles.tabBarStyle, CommonStyles.shadowTabBar],
         }}>
         <Tab.Screen

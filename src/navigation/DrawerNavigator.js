@@ -20,7 +20,6 @@ import CalendarScreen from '../screens/calendar/CalendarScreen';
 import {useLoginData} from '../hooks/useLoginData';
 import AdminAttendanceScreen from '../screens/attendance/Admin/AdminAttendanceScreen';
 import AdminEmployeeScreen from '../screens/employees/AdminEmployeeScreen';
-import NoticeScreen from '../screens/announcement/AnnouncementScreen';
 import AnnouncementScreen from '../screens/announcement/AnnouncementScreen';
 
 const Drawer = createDrawerNavigator();
@@ -42,7 +41,6 @@ const DrawerNavigator = () => {
           headerShown: false,
           drawerStyle: {
             ...CommonStyles.whiteBackground,
-            ...CommonStyles.width60,
           },
           drawerLabelStyle: {
             color: Colors.whiteColor,
