@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Header from '../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
 import {FlatList, View} from 'react-native';
@@ -12,7 +11,6 @@ import styles from './styles';
 import PersonalInfo from './types/PersonalInfo';
 import WorkInfo from './types/WorkInfo';
 import EducationInfo from './types/education/EducationInfo';
-import EditProfileModal from './EditProfileModal';
 import ProfileHeader from '../../components/ReusableComponents/Header/ProfileHeader';
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
@@ -31,6 +29,8 @@ const tabs = [
 ];
 
 export default function ProfileScreen({navigation}) {
+  const currentLanguage = useSelector(state => state.language.language);
+
   const dispatch = useDispatch();
   const {userId} = useLoginData();
   const {data: profile, isLoading} = useSelector(state => state.profile);

@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import Aes from 'react-native-aes-crypto';
 import Constants from '../common/Constants';
 
-const convertStringToByteArray = str => {
+export const convertStringToByteArray = str => {
   let hex = '';
   for (let i = 0, l = str.length; i < l; i++) {
     hex += str.charCodeAt(i).toString(16);
@@ -15,7 +15,7 @@ const convertStringToByteArray = str => {
   return hex.substring(0, 32);
 };
 
-const generateKey = async (password, salt, cost, length) => {
+export const generateKey = async (password, salt, cost, length) => {
   try {
     const key = await Aes.pbkdf2(password, salt, cost, length, 'SHA256');
     return key;
@@ -25,7 +25,7 @@ const generateKey = async (password, salt, cost, length) => {
   }
 };
 
-const encrypt = async (text, key) => {
+export const encrypt = async (text, key) => {
   try {
     const iv = convertStringToByteArray(Constants.STRING_BYTE);
     const cipher = await Aes.encrypt(text, key, iv, 'aes-256-cbc');
@@ -36,7 +36,7 @@ const encrypt = async (text, key) => {
   }
 };
 
-const decrypt = async (encryptedData, key) => {
+export const decrypt = async (encryptedData, key) => {
   try {
     const iv = convertStringToByteArray(Constants.STRING_BYTE);
     const decryptedData = await Aes.decrypt(
@@ -64,7 +64,7 @@ const Security = ({data, onEncrypted}) => {
         );
         const {cipher} = await encrypt(data, key);
         if (onEncrypted) {
-          onEncrypted(cipher); // Send encrypted data back
+          onEncrypted(cipher);
         }
       } catch (error) {
         console.error('Error in encryption:', error);

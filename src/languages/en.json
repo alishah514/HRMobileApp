@@ -209,5 +209,10 @@
   "announcementFor": "Announcement For",
   "announcementMessage": "Announcement Message",
   "enterAnnouncementMessage": "Enter Announcement Message",
-  "postAnnouncement": "Post Announcement"
+  "postAnnouncement": "Post Announcement",
+  "scanQrCode": "Scan QR Code",
+  "showScannedData": "Show Scanned Data",
+  "scannedData": "Scanned Data",
+  "creationDate": "Creation Date",
+  "expiryDate": "Expiry Date"
 }

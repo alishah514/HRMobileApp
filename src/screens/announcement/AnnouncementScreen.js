@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, Platform} from 'react-native';
+import {View, Text, FlatList} from 'react-native';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import Header from '../../components/ReusableComponents/Header/Header';
 import I18n from '../../i18n/i18n';
@@ -17,7 +17,6 @@ import styles from './styles';
 import AddAnnouncementModal from './modals/AddAnnouncemenModal';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import NoRecordView from '../../components/ReusableComponents/NoRecordView';
-import {hp, wp} from '../../components/common/Dimensions';
 
 export default function AnnouncementScreen({navigation}) {
   const dispatch = useDispatch();

@@ -21,6 +21,7 @@ import {useLoginData} from '../hooks/useLoginData';
 import AdminAttendanceScreen from '../screens/attendance/Admin/AdminAttendanceScreen';
 import AdminEmployeeScreen from '../screens/employees/AdminEmployeeScreen';
 import AnnouncementScreen from '../screens/announcement/AnnouncementScreen';
+import ScanQRScreen from '../screens/scanQR/ScanQRScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -237,6 +238,26 @@ const DrawerNavigator = () => {
             ),
           }}
         />
+        {role === 'Admin' && (
+          <Drawer.Screen
+            name="Scan QR Code"
+            component={ScanQRScreen}
+            options={{
+              drawerLabel: () => (
+                <Text style={[CommonStyles.bold4, CommonStyles.textWhite]}>
+                  {I18n.t('scanQrCode')}
+                </Text>
+              ),
+              drawerIcon: ({focused, size}) => (
+                <Ionicons
+                  name={focused ? 'qr-code' : 'qr-code-outline'}
+                  size={size}
+                  color={Colors.whiteColor}
+                />
+              ),
+            }}
+          />
+        )}
       </Drawer.Navigator>
     </SafeAreaView>
   );

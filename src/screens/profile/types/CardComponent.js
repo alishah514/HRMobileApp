@@ -34,6 +34,13 @@ export default function CardComponent({data, employeeId}) {
     name: data?.personal?.fullName,
     creationDate: formatDate(data?.createTime),
     expiryDate: calculateExpiryDate(data?.createTime),
+
+    birthDay: formatDate(data?.personal?.birthDate),
+    email: data?.personal?.email,
+    profilePicture: data?.personal?.imageUrl,
+    phoneNumber: data?.personal?.phoneNumber,
+    designation: data?.job?.Designation,
+    department: data?.job?.Department,
   });
 
   const handleEncryptedData = cipher => {

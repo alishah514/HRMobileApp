@@ -209,5 +209,10 @@
   "announcementFor": "お知らせ対象",
   "announcementMessage": "お知らせ内容",
   "enterAnnouncementMessage": "お知らせ内容を入力",
-  "postAnnouncement": "お知らせを投稿"
+  "postAnnouncement": "お知らせを投稿",
+  "scanQrCode": "QRコードをスキャン",
+  "showScannedData": "スキャンしたデータを表示",
+  "scannedData": "スキャンしたデータ",
+  "creationDate": "作成日",
+  "expiryDate": "有効期限"
 }
