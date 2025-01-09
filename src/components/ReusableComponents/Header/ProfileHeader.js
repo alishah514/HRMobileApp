@@ -15,7 +15,6 @@ export default function ProfileHeader({
   name,
   // role,
   editable = false,
-  scan,
 }) {
   const {profile} = useProfileData();
   const {role} = useLoginData();
@@ -28,10 +27,7 @@ export default function ProfileHeader({
   };
 
   return (
-    <View
-      style={
-        scan ? CommonStyles.alignItemsCenter : CommonStyles.paddingBottom5Align
-      }>
+    <View style={CommonStyles.paddingBottom5Align}>
       {editable ? (
         <TouchableOpacity
           onPress={toggleImageOptionsModal}
@@ -58,7 +54,7 @@ export default function ProfileHeader({
           )}
         </TouchableOpacity>
       ) : (
-        <View style={[CommonStyles.imageCircle, CommonStyles.shadow]}>
+        <View style={CommonStyles.imageCircle}>
           {profile?.personal?.imageUrl &&
           profile?.personal?.imageUrl !== 'null' ? (
             <TouchableOpacity
@@ -78,24 +74,19 @@ export default function ProfileHeader({
         </View>
       )}
 
-      {scan ? (
-        <View style={{paddingTop: 20}} />
-      ) : (
-        <View style={CommonStyles.alignItemsCenter}>
-          <Text
-            style={[
-              CommonStyles.bold6,
-              CommonStyles.textWhite,
-              CommonStyles.marginTop2,
-            ]}>
-            {profile?.personal?.fullName || name}
-          </Text>
-          <Text style={[CommonStyles.font5, CommonStyles.textWhite]}>
-            {role || 'Undefined'}
-          </Text>
-        </View>
-      )}
-
+      <View style={CommonStyles.alignItemsCenter}>
+        <Text
+          style={[
+            CommonStyles.bold6,
+            CommonStyles.textWhite,
+            CommonStyles.marginTop2,
+          ]}>
+          {profile?.personal?.fullName || name}
+        </Text>
+        <Text style={[CommonStyles.font5, CommonStyles.textWhite]}>
+          {role || 'Undefined'}
+        </Text>
+      </View>
       <FullScreenImageModal
         visible={isImageModalVisible}
         imageUrl={imageUrl}
