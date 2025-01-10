@@ -23,6 +23,7 @@ import styles from '../styles';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentUploadAWS';
 import {isSizeValid} from '../../../components/ReusableComponents/DocumentSizeComponent';
+import AttachmentPicker from '../../../components/ReusableComponents/AttachmentComponent';
 
 export default function LeaveRequestModal({
   isModalVisible,
@@ -110,6 +111,7 @@ export default function LeaveRequestModal({
     setLeaveFrom(null);
     setLeaveTo(null);
     setLeaveReason('');
+    setLeaveDocument(null);
   };
 
   const handleDocumentPick = async () => {
@@ -166,6 +168,22 @@ export default function LeaveRequestModal({
     );
   };
 
+  const handleLeaveFromChange = date => {
+    if (leaveTo && new Date(date) > new Date(leaveTo)) {
+      Alert.alert(I18n.t('error'), I18n.t('ToDateMustBeGreaterThanFromDate'));
+      return;
+    }
+    setLeaveFrom(date);
+  };
+
+  const handleLeaveToChange = date => {
+    if (leaveFrom && new Date(date) < new Date(leaveFrom)) {
+      Alert.alert(I18n.t('error'), I18n.t('ToDateMustBeGreaterThanFromDate'));
+      return;
+    }
+    setLeaveTo(date);
+  };
+
   return (
     <Modal
       transparent={false}
@@ -189,12 +207,12 @@ export default function LeaveRequestModal({
         <View style={CommonStyles.mainPadding}>
           <CustomDatePickerComponent
             selectedDate={leaveFrom}
-            setSelectedDate={setLeaveFrom}
+            setSelectedDate={handleLeaveFromChange}
             label={I18n.t('leaveFrom')}
           />
           <CustomDatePickerComponent
             selectedDate={leaveTo}
-            setSelectedDate={setLeaveTo}
+            setSelectedDate={handleLeaveToChange}
             label={I18n.t('leaveTo')}
           />
 
@@ -214,27 +232,11 @@ export default function LeaveRequestModal({
             textColor={Colors.blackColor}
             multiline={true}
           />
-          <View>
-            <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
-              {I18n.t('attachDocument')}
-            </Text>
-            <TouchableOpacity
-              onPress={handleDocumentPick}
-              style={[styles.documentButton, CommonStyles.shadow]}>
-              <Text
-                style={[
-                  CommonStyles.font3,
-                  leaveDocument
-                    ? CommonStyles.textBlue
-                    : CommonStyles.textDarkGrey,
-                  CommonStyles.Bold600,
-                ]}>
-                {leaveDocument
-                  ? I18n.t('selectedDocument')
-                  : I18n.t('selectDocument')}
-              </Text>
-            </TouchableOpacity>
-          </View>
+
+          <AttachmentPicker
+            attachment={leaveDocument}
+            handleDocumentPick={handleDocumentPick}
+          />
           <CommonButton
             title={I18n.t('sendLeaveRequest')}
             onPress={viewData}

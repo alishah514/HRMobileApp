@@ -214,5 +214,8 @@
   "showScannedData": "スキャンしたデータを表示",
   "scannedData": "スキャンしたデータ",
   "creationDate": "作成日",
-  "expiryDate": "有効期限"
+  "expiryDate": "有効期限",
+  "error": "エラー",
+  "leaveFromCannotBeGreaterThanLeaveTo": "開始日が終了日より後の日付に設定されているため、開始日を修正してください。",
+  "leaveToCannotBeBeforeLeaveFrom": "終了日が開始日より前の日付に設定されているため、終了日を修正してください。"
 }

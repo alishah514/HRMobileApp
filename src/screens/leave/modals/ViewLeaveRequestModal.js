@@ -37,6 +37,7 @@ import {wp} from '../../../components/common/Dimensions';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {isSizeValid} from '../../../components/ReusableComponents/DocumentSizeComponent';
+import AttachmentPicker from '../../../components/ReusableComponents/AttachmentComponent';
 
 export default function ViewLeaveRequestModal({
   isModalVisible,
@@ -382,45 +383,17 @@ export default function ViewLeaveRequestModal({
 
   const renderDocumentSection = () => {
     return (
-      <View>
-        <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
-          {I18n.t('document')}
-        </Text>
-        <View style={styles.uploadIconMainView}>
-          <Text
-            style={[
-              CommonStyles.underlineText,
-              CommonStyles.bold4,
-              CommonStyles.textBlack,
-            ]}>
-            {updatedLeaveDocument
-              ? updatedLeaveDocument.split('/').pop().split('_').pop()
-              : I18n.t('noDocumentUploaded')}
-          </Text>
-          {updatedLeaveDocument && (
-            <TouchableOpacity
-              onPress={openDocument}
-              style={[CommonStyles.marginLeft5, styles.iconView]}>
-              <AntDesign
-                name="eye"
-                size={Constants.SIZE.smallIcon}
-                color={Colors.whiteColor}
-              />
-            </TouchableOpacity>
-          )}
-          {role === 'Employee' && status === 'pending' && (
-            <TouchableOpacity
-              onPress={handleDocumentPick}
-              style={[CommonStyles.marginLeft5, styles.iconView]}>
-              <Entypo
-                name="pencil"
-                size={Constants.SIZE.smallIcon}
-                color={Colors.whiteColor}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
+      <>
+        {updatedLeaveDocument && (
+          <AttachmentPicker
+            attachment={updatedLeaveDocument}
+            handleDocumentPick={handleDocumentPick}
+            editable={
+              role === 'Employee' && status === 'pending' ? true : false
+            }
+          />
+        )}
+      </>
     );
   };
 

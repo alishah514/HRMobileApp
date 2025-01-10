@@ -214,5 +214,9 @@
   "showScannedData": "Show Scanned Data",
   "scannedData": "Scanned Data",
   "creationDate": "Creation Date",
-  "expiryDate": "Expiry Date"
+  "expiryDate": "Expiry Date",
+  "error": "Error",
+  "leaveFromCannotBeGreaterThanLeaveTo": "Leave From cannot be greater than Leave To",
+  "leaveToCannotBeBeforeLeaveFrom": "Leave To cannot be before Leave From",
+  "ToDateMustBeGreaterThanFromDate": "To Date must be greater than or equal to From Date"
 }

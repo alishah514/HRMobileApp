@@ -95,7 +95,7 @@ export default function AdminAttendanceScreen({navigation}) {
   const separateByUserId = filteredData => {
     const separatedData = {};
 
-    filteredData.forEach(item => {
+    filteredData?.forEach(item => {
       const {userId} = item;
 
       if (!separatedData[userId]) {
@@ -113,7 +113,7 @@ export default function AdminAttendanceScreen({navigation}) {
       const profile = allProfile.find(profile => profile.userId === userId);
 
       if (profile) {
-        separatedData[userId].forEach(item => {
+        separatedData[userId]?.forEach(item => {
           item.fullName = profile.personal.fullName;
         });
       }
@@ -143,7 +143,7 @@ export default function AdminAttendanceScreen({navigation}) {
 
       let currentRow = 4;
 
-      Object.keys(currentAttendanceList).forEach(userId => {
+      Object.keys(currentAttendanceList)?.forEach(userId => {
         const userData = currentAttendanceList[userId];
         const userName = userData[0]?.fullName || 'Unknown';
 
@@ -221,7 +221,7 @@ export default function AdminAttendanceScreen({navigation}) {
   const addAttendanceData = (worksheet, userData, startRow) => {
     let currentRow = startRow;
 
-    userData.forEach(item => {
+    userData?.forEach(item => {
       const punchLocationLink =
         item.latitude && item.longitude
           ? `https://www.google.com/maps?q=${item.latitude},${item.longitude}`
@@ -306,7 +306,7 @@ export default function AdminAttendanceScreen({navigation}) {
     let totalWorkTime = 0;
     let lastPunchInTime = null;
 
-    userData.forEach(item => {
+    userData?.forEach(item => {
       const currentPunchTime = new Date(item.createTime).getTime();
 
       if (item.type === 'PunchIn') {
