@@ -23,15 +23,14 @@ import {
   postAnnouncements,
 } from '../../../redux/announcements/AnnouncementActions';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
-import styles from '../styles';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {isSizeValid} from '../../../components/ReusableComponents/DocumentSizeComponent';
 import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentUploadAWS';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
   const dispatch = useDispatch();
   const {userId} = useLoginData();
-  const currentLanguage = useSelector(state => state.language.language);
   const {isLoading: announcementLoading} = useSelector(
     state => state.announcements,
   );
@@ -151,24 +150,6 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
     );
   };
 
-  const openDocument = async () => {
-    try {
-      const supported =
-        attachment.startsWith('http') || attachment.startsWith('https');
-      if (supported) {
-        await Linking.openURL(attachment);
-      } else {
-        Alert.alert('Error', 'Invalid document URL.');
-      }
-    } catch (error) {
-      console.error('Error opening document:', error);
-      Alert.alert(
-        'Error',
-        'An unexpected error occurred while trying to open the document.',
-      );
-    }
-  };
-
   return (
     <Modal
       transparent={false}
@@ -209,43 +190,42 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
             textColor={Colors.blackColor}
             multiline
           />
+
           <View>
             <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
               {I18n.t('attachDocument')}
             </Text>
-            <View style={[CommonStyles.flexRow, CommonStyles.alignItemsCenter]}>
+            <View style={CommonStyles.attachmentContainer}>
               <TouchableOpacity
-                onPress={handleDocumentPick}
-                style={[styles.documentButton, CommonStyles.shadow]}>
-                <Text
-                  style={[
-                    CommonStyles.font3,
-                    attachment
-                      ? CommonStyles.textBlue
-                      : CommonStyles.textDarkGrey,
-                    CommonStyles.Bold600,
-                  ]}>
-                  {attachment
-                    ? I18n.t('selectedDocument')
-                    : I18n.t('selectDocument')}
-                </Text>
-              </TouchableOpacity>
-              {attachment && (
-                <TouchableOpacity onPress={openDocument}>
+                style={CommonStyles.alignSelf}
+                onPress={handleDocumentPick}>
+                <LinearGradient
+                  colors={[Colors.whiteColor, Colors.lightGrey]}
+                  style={CommonStyles.attachmentGradientButton}>
                   <Text
                     style={[
-                      CommonStyles.font3,
-                      attachment
-                        ? CommonStyles.textBlue
-                        : CommonStyles.textDarkGrey,
-                      CommonStyles.Bold600,
-                      CommonStyles.marginLeft5,
-                      CommonStyles.underlineText,
+                      CommonStyles.font3P,
+                      CommonStyles.bold500,
+                      CommonStyles.textBlack,
                     ]}>
-                    {attachment.split('_').slice(1).join('_')}
+                    Choose File
                   </Text>
-                </TouchableOpacity>
-              )}
+                </LinearGradient>
+              </TouchableOpacity>
+              <View style={CommonStyles.attachmentNoFileTextContainer}>
+                <Text
+                  numberOfLines={2}
+                  style={[
+                    CommonStyles.width50,
+                    attachment ? CommonStyles.textBlue : CommonStyles.textBlack,
+                    CommonStyles.font3P,
+                    attachment && CommonStyles.underlineText,
+                  ]}>
+                  {attachment
+                    ? attachment.split('_').slice(1).join('_')
+                    : 'No file selected'}
+                </Text>
+              </View>
             </View>
           </View>
           <CommonButton

@@ -175,8 +175,8 @@ const CommonStyles = StyleSheet.create({
   width35: {width: wp('35')},
   width70: {width: wp('70')},
   width75: {width: wp('75')},
+  width55: {width: wp('55')},
   width30: {width: wp('30')},
-  width50: {width: wp('50')},
 
   // height
   height30: {height: wp('30')},
@@ -625,6 +625,31 @@ const CommonStyles = StyleSheet.create({
     top: 100,
     right: 20,
     zIndex: 10,
+  },
+  // attachment
+  attachmentContainer: {
+    borderWidth: wp('0.15'),
+    borderColor: Colors.greyColor,
+    paddingVertical: wp('2'),
+    height: wp('15'),
+    marginTop: wp(2),
+    borderRadius: wp(2),
+    paddingHorizontal: wp(3),
+    flexDirection: 'row',
+  },
+  attachmentGradientButton: {
+    height: wp('7.5'),
+    borderRadius: wp(5),
+    width: wp('26'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: wp(0.25),
+    alignSelf: 'center',
+  },
+
+  attachmentNoFileTextContainer: {
+    alignSelf: 'center',
+    marginHorizontal: wp(2),
   },
 });
 

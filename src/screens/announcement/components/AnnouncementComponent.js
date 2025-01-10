@@ -29,7 +29,8 @@ export default function AnnouncementComponent({announcement}) {
           CommonStyles.textBlack,
           CommonStyles.Bold600,
           CommonStyles.marginBottom2,
-        ]}>
+        ]}
+        numberOfLines={2}>
         {announcement?.title}
       </Text>
 
@@ -38,7 +39,8 @@ export default function AnnouncementComponent({announcement}) {
           CommonStyles.font3P,
           CommonStyles.textDarkGrey,
           CommonStyles.marginBottom1,
-        ]}>
+        ]}
+        numberOfLines={2}>
         {announcement?.content}
       </Text>
       <View style={[CommonStyles.rowBetween, CommonStyles.alignItemsCenter]}>
@@ -63,7 +65,11 @@ export default function AnnouncementComponent({announcement}) {
                 CommonStyles.marginLeft5,
                 CommonStyles.underlineText,
               ]}>
-              {announcement?.attachment.split('_').slice(1).join('_')}
+              {announcement?.attachment
+                .split('_')
+                .slice(1)
+                .join('_')
+                .slice(-25)}
             </Text>
           </TouchableOpacity>
         )}
