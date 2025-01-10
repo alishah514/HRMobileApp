@@ -84,7 +84,7 @@ export default function AnnouncementScreen({navigation}) {
             renderItem={({item}) => {
               return <AnnouncementComponent announcement={item} />;
             }}
-            keyExtractor={(item, index) => item.name || index.toString()}
+            keyExtractor={(item, index) => index.toString()}
             ListEmptyComponent={
               <View style={CommonStyles.height100}>
                 <NoRecordView errorMessage={'No Record Found'} />

@@ -7,6 +7,12 @@ import {
   FETCH_ALL_ANNOUNCEMENTS_START,
   FETCH_ALL_ANNOUNCEMENTS_SUCCESS,
   FETCH_ALL_ANNOUNCEMENTS_FAILURE,
+  PATCH_ANNOUNCEMENTS_START,
+  PATCH_ANNOUNCEMENTS_SUCCESS,
+  PATCH_ANNOUNCEMENTS_FAILURE,
+  DELETE_ANNOUNCEMENTS_START,
+  DELETE_ANNOUNCEMENTS_SUCCESS,
+  DELETE_ANNOUNCEMENTS_FAILURE,
 } from '../actions/actionTypes';
 
 export const fetchAllAnnouncementsStart = () => ({
@@ -41,6 +47,34 @@ export const postAnnouncementsFailure = error => ({
   payload: error,
 });
 
+export const patchAnnouncementsStart = () => ({
+  type: PATCH_ANNOUNCEMENTS_START,
+});
+
+export const patchAnnouncementsSuccess = response => ({
+  type: PATCH_ANNOUNCEMENTS_SUCCESS,
+  payload: response,
+});
+
+export const patchAnnouncementsFailure = error => ({
+  type: PATCH_ANNOUNCEMENTS_FAILURE,
+  payload: error,
+});
+
+export const deleteAnnouncementsStart = () => ({
+  type: DELETE_ANNOUNCEMENTS_START,
+});
+
+export const deleteAnnouncementsSuccess = leaveId => ({
+  type: DELETE_ANNOUNCEMENTS_SUCCESS,
+  payload: leaveId,
+});
+
+export const deleteAnnouncementsFailure = error => ({
+  type: DELETE_ANNOUNCEMENTS_FAILURE,
+  payload: error,
+});
+
 export const fetchAllAnnouncements = () => async dispatch => {
   dispatch(fetchAllAnnouncementsStart());
   try {
@@ -63,4 +97,42 @@ export const postAnnouncements = data => async dispatch => {
   }
 
   return response;
+};
+
+export const patchAnnouncement =
+  (announcementId, announcementData) => async dispatch => {
+    dispatch(patchAnnouncementsStart());
+
+    const response = await AnnouncementsService.patchAnnouncement(
+      announcementId,
+      announcementData,
+    );
+
+    if (response.success) {
+      dispatch(patchAnnouncementsSuccess(response.response));
+    } else {
+      dispatch(patchAnnouncementsFailure(response.error));
+    }
+
+    return response;
+  };
+
+export const deleteAnnouncement = announcementId => async dispatch => {
+  dispatch(deleteAnnouncementsStart());
+
+  try {
+    const response = await AnnouncementsService.deleteAnnouncement(
+      announcementId,
+    );
+
+    if (response.success) {
+      dispatch(deleteAnnouncementsSuccess(announcementId));
+    } else {
+      dispatch(deleteAnnouncementsFailure(response.error));
+    }
+
+    return response;
+  } catch (error) {
+    dispatch(deleteAnnouncementsFailure(error));
+  }
 };

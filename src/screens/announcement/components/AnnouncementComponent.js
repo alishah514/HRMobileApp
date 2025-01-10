@@ -1,10 +1,20 @@
 import {View, Text, TouchableOpacity, Linking} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
 import styles from '../styles';
 import {formatDate} from '../../../components/utils/dateUtils';
+import {TruncateTitle} from '../../../components/utils/TruncateTitle';
+import {useLoginData} from '../../../hooks/useLoginData';
+import ViewDetailsAnnouncementModal from '../modals/ViewDetailsAnnouncementModal';
 
 export default function AnnouncementComponent({announcement}) {
+  const {role} = useLoginData();
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+
+  const toggleEditModal = () => {
+    setIsEditModalVisible(!isEditModalVisible);
+  };
+
   const openDocument = async link => {
     try {
       const supported = link.startsWith('http') || link.startsWith('https');
@@ -23,16 +33,29 @@ export default function AnnouncementComponent({announcement}) {
   };
   return (
     <View style={[styles.boxView, CommonStyles.shadow]}>
-      <Text
-        style={[
-          CommonStyles.font4P,
-          CommonStyles.textBlack,
-          CommonStyles.Bold600,
-          CommonStyles.marginBottom2,
-        ]}
-        numberOfLines={2}>
-        {announcement?.title}
-      </Text>
+      <View style={[CommonStyles.rowBetween, CommonStyles.alignItemsCenter]}>
+        <Text
+          style={[
+            CommonStyles.font4P,
+            CommonStyles.textBlack,
+            CommonStyles.Bold600,
+            CommonStyles.marginBottom2,
+          ]}
+          numberOfLines={2}>
+          {TruncateTitle(announcement?.title, 22)}
+        </Text>
+
+        <TouchableOpacity onPress={toggleEditModal}>
+          <Text
+            style={[
+              CommonStyles.font3P,
+              CommonStyles.textGrey,
+              CommonStyles.Bold600,
+            ]}>
+            {role === 'Admin' ? 'Update Details' : 'View Details'}
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       <Text
         style={[
@@ -74,6 +97,11 @@ export default function AnnouncementComponent({announcement}) {
           </TouchableOpacity>
         )}
       </View>
+      <ViewDetailsAnnouncementModal
+        isModalVisible={isEditModalVisible}
+        toggleModal={toggleEditModal}
+        data={announcement}
+      />
     </View>
   );
 }

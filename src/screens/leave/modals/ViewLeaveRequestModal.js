@@ -200,24 +200,6 @@ export default function ViewLeaveRequestModal({
     }
   };
 
-  const openDocument = async () => {
-    try {
-      const supported =
-        leaveDocument.startsWith('http') || leaveDocument.startsWith('https');
-      if (supported) {
-        await Linking.openURL(updatedLeaveDocument);
-      } else {
-        Alert.alert('Error', 'Invalid document URL.');
-      }
-    } catch (error) {
-      console.error('Error opening document:', error);
-      Alert.alert(
-        'Error',
-        'An unexpected error occurred while trying to open the document.',
-      );
-    }
-  };
-
   const handleDocumentPick = async () => {
     try {
       const result = await DocumentPicker.pick({

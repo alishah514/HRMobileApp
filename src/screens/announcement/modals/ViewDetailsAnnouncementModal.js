@@ -1,5 +1,5 @@
 import {View, Modal, Alert} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from '../../../components/ReusableComponents/Header/Header';
 import CommonSafeAreaScrollViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import I18n from '../../../i18n/i18n';
@@ -12,7 +12,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import {useLoginData} from '../../../hooks/useLoginData';
 import {
+  deleteAnnouncement,
   fetchAllAnnouncements,
+  patchAnnouncement,
   postAnnouncements,
 } from '../../../redux/announcements/AnnouncementActions';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
@@ -21,9 +23,13 @@ import {isSizeValid} from '../../../components/ReusableComponents/DocumentSizeCo
 import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentUploadAWS';
 import AttachmentPicker from '../../../components/ReusableComponents/AttachmentComponent';
 
-export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
+export default function ViewDetailsAnnouncementModal({
+  isModalVisible,
+  toggleModal,
+  data,
+}) {
   const dispatch = useDispatch();
-  const {userId} = useLoginData();
+  const {role} = useLoginData();
   const {isLoading: announcementLoading} = useSelector(
     state => state.announcements,
   );
@@ -32,21 +38,27 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
   const [attachment, setAttachment] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const askForConfirmation = () => {
-    const creationDate = new Date();
-    const timestamp = {
-      seconds: Math.floor(creationDate.getTime() / 1000),
-      nanos: creationDate.getMilliseconds() * 1000000,
-    };
+  useEffect(() => {
+    setTitle(data?.title);
+    setMessage(data?.content);
+    setAttachment(data?.attachment);
+  }, [data]);
 
-    const data = {
+  const askForConfirmation = status => {
+    let alertMessage;
+    if (status === 'delete') {
+      alertMessage = 'Are you sure you want to delete this Announcement?';
+    } else if (status === 'update') {
+      alertMessage = 'Are you sure you want to update this Announcement?';
+    }
+    const announcementId = data?.name?.split('/').pop();
+    const announcementData = {
       title,
       message,
       attachment,
-      adminId: userId,
-      creationDate: timestamp,
+      adminId: data?.adminId,
+      creationDate: data?.creationDate,
     };
-    const alertMessage = 'Are you sure you want to add this announcement?';
 
     Alert.alert(
       'Confirm Action',
@@ -59,34 +71,47 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
         },
         {
           text: 'Confirm',
-          onPress: () => submitAnnouncement(data),
+          onPress: async () => {
+            if (status === 'delete') {
+              await submitDeleteRequest(announcementId);
+            } else if (status === 'update') {
+              await updateAnnouncementRequest(announcementData, announcementId);
+            }
+          },
         },
       ],
       {cancelable: false},
     );
   };
 
-  const submitAnnouncement = async data => {
-    const response = await dispatch(postAnnouncements(data));
+  const updateAnnouncementRequest = async (
+    announcementData,
+    announcementId,
+  ) => {
+    const response = await dispatch(
+      patchAnnouncement(announcementId, announcementData),
+    );
 
-    if (response.success) {
-      Alert.alert('Announcement added successfully! ');
-      clearStates();
+    if (response.success === true) {
+      Alert.alert('Announcement updated successfully');
       toggleModal();
       dispatch(fetchAllAnnouncements());
     } else {
-      console.error('Failed to post task request:', response.error);
+      console.error('Failed to update Announcement request:', response.error);
     }
   };
 
-  const clearStates = () => {
-    setTitle('');
-    setMessage('');
-    setAttachment(null);
-  };
+  const submitDeleteRequest = async announcementId => {
+    const response = await dispatch(deleteAnnouncement(announcementId));
 
-  const isFormValid = () => {
-    return title !== '' && message !== '' && attachment !== null;
+    if (response.success) {
+      Alert.alert(response.message);
+      toggleModal();
+      dispatch(fetchAllAnnouncements());
+    } else {
+      console.error('Failed to delete leave request:', response.error);
+      Alert.alert('Error', response.error);
+    }
   };
 
   const handleDocumentPick = async () => {
@@ -150,7 +175,11 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
       visible={isModalVisible}
       onRequestClose={toggleModal}>
       <Header
-        title={I18n.t('addAnnouncement')}
+        title={
+          role === 'Admin'
+            ? I18n.t('updateAnnouncement')
+            : I18n.t('viewAnnouncement')
+        }
         onLeftIconPressed={toggleModal}
         leftIcon={
           <Ionicons
@@ -171,6 +200,7 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
             placeholderColor={Colors.placeholderColorDark}
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
+            disabled={role === 'Employee'}
           />
 
           <InputFieldComponent
@@ -182,17 +212,29 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
             multiline
+            disabled={role === 'Employee'}
           />
 
           <AttachmentPicker
             attachment={attachment}
             handleDocumentPick={handleDocumentPick}
+            editable={role === 'Admin' ? true : false}
           />
-          <CommonButton
-            title={I18n.t('postAnnouncement')}
-            onPress={askForConfirmation}
-            disabled={!isFormValid()}
-          />
+          {role === 'Admin' && (
+            <View style={CommonStyles.rowBetween}>
+              <CommonButton
+                title={I18n.t('delete')}
+                onPress={() => askForConfirmation('delete')}
+                backgroundColor={Colors.redColor}
+                half
+              />
+              <CommonButton
+                title={I18n.t('update')}
+                onPress={() => askForConfirmation('update')}
+                half
+              />
+            </View>
+          )}
         </View>
       </CommonSafeAreaScrollViewComponent>
     </Modal>
