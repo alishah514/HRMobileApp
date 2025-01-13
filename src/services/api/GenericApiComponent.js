@@ -1,12 +1,9 @@
 import axios from 'axios';
-import ExtractValues from '../../../components/utils/ExtractValues';
+import ExtractValues from '../../components/utils/ExtractValues';
 
-const LeaveApiComponent = async (
-  url,
-  method,
-  body = null,
-  postLeave = false,
-) => {
+const GenericApiComponent = async (url, method, body = null, options = {}) => {
+  const {postFlag = false, resourceType = '', customHandlers = {}} = options;
+
   try {
     const config = {
       url,
@@ -19,14 +16,23 @@ const LeaveApiComponent = async (
 
     const response = await axios(config);
 
-    if (method.toLowerCase() === 'get') {
-      return handleGetResponse(response);
-    } else if (method.toLowerCase() === 'post') {
-      return handlePostResponse(response, postLeave);
-    } else if (method.toLowerCase() === 'patch') {
-      return handlePatchResponse(response);
-    } else if (method.toLowerCase() === 'delete') {
-      return handleDeleteResponse(response); // New handling for DELETE
+    switch (method.toLowerCase()) {
+      case 'get':
+        return (customHandlers.getHandler || handleGetResponse)(
+          response,
+          resourceType,
+        );
+      case 'post':
+        return (customHandlers.postHandler || handlePostResponse)(
+          response,
+          postFlag,
+        );
+      case 'patch':
+        return (customHandlers.patchHandler || handlePatchResponse)(response);
+      case 'delete':
+        return (customHandlers.deleteHandler || handleDeleteResponse)(response);
+      default:
+        throw new Error(`Unsupported HTTP method: ${method}`);
     }
   } catch (error) {
     if (error.response) {
@@ -42,7 +48,6 @@ const LeaveApiComponent = async (
   }
 };
 
-// Existing response handlers remain unchanged
 const handleGetResponse = response => {
   if (!Array.isArray(response.data.documents)) {
     console.error(
@@ -68,11 +73,11 @@ const handleGetResponse = response => {
         ...values,
       };
     })
-    .filter(user => user !== null);
+    .filter(item => item !== null);
 };
 
-const handlePostResponse = (response, postLeave) => {
-  if (postLeave) {
+const handlePostResponse = (response, postFlag) => {
+  if (postFlag) {
     return response.data;
   }
 
@@ -98,17 +103,17 @@ const handlePostResponse = (response, postLeave) => {
         ...values,
       };
     })
-    .filter(user => user !== null);
+    .filter(item => item !== null);
 };
 
+// Generic PATCH response handler
 const handlePatchResponse = response => {
   return response.data;
 };
 
-// New response handler for DELETE requests
-const handleDeleteResponse = response => {
-  // Typically, DELETE responses do not contain a body
+// Generic DELETE response handler
+const handleDeleteResponse = () => {
   return {success: true, message: 'Resource deleted successfully'};
 };
 
-export default LeaveApiComponent;
+export default GenericApiComponent;
