@@ -1,14 +1,14 @@
 import Constants from '../../../components/common/Constants';
-import SettingsApiComponent from './SettingsApiComponent';
+import GenericApiComponent from '../GenericApiComponent';
 
 const SettingsService = {
   fetchSettings: async () => {
     const url = `${Constants.FIREBASE_URL}/${Constants.SETTINGS}?key=${Constants.FIREBASE_KEY}`;
     const method = 'get';
+    const options = {resourceType: 'Settings'};
 
     try {
-      const response = await SettingsApiComponent(url, method);
-
+      const response = await GenericApiComponent(url, method, null, options);
       return response;
     } catch (error) {
       throw error;
@@ -18,25 +18,21 @@ const SettingsService = {
   postSettings: async settingsData => {
     const url = `${Constants.FIREBASE_URL}/${Constants.SETTINGS}?key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
+    const options = {resourceType: 'Settings', postFlag: true};
+
     const body = {
       fields: {
-        adminId: {
-          stringValue: settingsData.adminId,
-        },
-        calendarId: {
-          stringValue: settingsData.calendarId,
-        },
-        timezone: {
-          stringValue: settingsData.timezone,
-        },
+        adminId: {stringValue: settingsData.adminId},
+        calendarId: {stringValue: settingsData.calendarId},
+        timezone: {stringValue: settingsData.timezone},
       },
     };
 
     try {
-      const response = await SettingsApiComponent(url, method, body, true);
+      const response = await GenericApiComponent(url, method, body, options);
       return {success: true, response};
     } catch (error) {
-      console.error('Error in SettingsService.postSettingsRequest:', error);
+      console.error('Error in SettingsService.postSettings:', error);
       return {
         success: false,
         error: error.message || 'An unexpected error occurred.',
@@ -47,30 +43,23 @@ const SettingsService = {
   fetchAdminSettings: async adminId => {
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
+    const options = {resourceType: 'Settings'};
+
     const body = {
       structuredQuery: {
-        from: [
-          {
-            collectionId: Constants.SETTINGS,
-          },
-        ],
+        from: [{collectionId: Constants.SETTINGS}],
         where: {
           fieldFilter: {
-            field: {
-              fieldPath: 'adminId',
-            },
+            field: {fieldPath: 'adminId'},
             op: 'EQUAL',
-            value: {
-              stringValue: adminId,
-            },
+            value: {stringValue: adminId},
           },
         },
       },
     };
 
     try {
-      const response = await SettingsApiComponent(url, method, body);
-
+      const response = await GenericApiComponent(url, method, body, options);
       return response;
     } catch (error) {
       throw error;
