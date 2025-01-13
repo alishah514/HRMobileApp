@@ -92,7 +92,9 @@ export default function ManageEventModal({
   };
 
   const submitDeleteRequest = async () => {
-    const eventId = data?.name?.split('/').pop();
+    // const eventId = data?.name?.split('/').pop();
+    const eventId = extractId(data?.name);
+
     const response = await dispatch(deleteEvent(eventId));
 
     if (response.success) {
@@ -107,7 +109,12 @@ export default function ManageEventModal({
   };
 
   const submitEventRequest = async eventData => {
-    const eventId = extractId(data?.name);
+    let eventId = null;
+
+    if (isEdit) {
+      eventId = extractId(data?.name);
+    }
+
     const response = isEdit
       ? await dispatch(patchEventStatus(eventId, eventData))
       : await dispatch(postEventRequest(eventData));
@@ -118,7 +125,7 @@ export default function ManageEventModal({
       toggleModal();
       dispatch(fetchEvents());
     } else {
-      console.error('Failed to post leave request:', response.error);
+      console.error('Failed to post event request:', response.error);
     }
   };
 

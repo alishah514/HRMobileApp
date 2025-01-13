@@ -1,13 +1,14 @@
 import Constants from '../../../components/common/Constants';
-import EventApiComponent from './EventApiComponent';
+import GenericApiComponent from '../GenericApiComponent';
 
 const EventService = {
   fetchEvents: async () => {
     const url = `${Constants.FIREBASE_URL}/${Constants.EVENTS}?key=${Constants.FIREBASE_KEY}`;
     const method = 'get';
+    const options = {resourceType: 'Event'};
 
     try {
-      const response = await EventApiComponent(url, method);
+      const response = await GenericApiComponent(url, method, null, options);
       return response;
     } catch (error) {
       throw error;
@@ -17,34 +18,24 @@ const EventService = {
   postEvent: async eventData => {
     const url = `${Constants.FIREBASE_URL}/${Constants.EVENTS}?key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
+    const options = {resourceType: 'Event', postFlag: true};
+
     const body = {
       fields: {
-        title: {
-          stringValue: eventData.title,
-        },
-        description: {
-          stringValue: eventData.description,
-        },
-        startDate: {
-          timestampValue: eventData.startDate,
-        },
-        endDate: {
-          timestampValue: eventData.endDate,
-        },
-        adminId: {
-          stringValue: eventData.adminId,
-        },
-        userId: {
-          stringValue: eventData.userId,
-        },
+        title: {stringValue: eventData.title},
+        description: {stringValue: eventData.description},
+        startDate: {timestampValue: eventData.startDate},
+        endDate: {timestampValue: eventData.endDate},
+        adminId: {stringValue: eventData.adminId},
+        userId: {stringValue: eventData.userId},
       },
     };
 
     try {
-      const response = await EventApiComponent(url, method, body, true);
+      const response = await GenericApiComponent(url, method, body, options);
       return {success: true, response};
     } catch (error) {
-      console.error('Error in EventService.postEventRequest:', error);
+      console.error('Error in EventService.postEvent:', error);
       return {
         success: false,
         error: error.message || 'An unexpected error occurred.',
@@ -55,34 +46,24 @@ const EventService = {
   patchEventStatus: async (eventId, eventData) => {
     const url = `${Constants.FIREBASE_URL}/${Constants.EVENTS}/${eventId}?key=${Constants.FIREBASE_KEY}`;
     const method = 'patch';
+    const options = {resourceType: 'Event'};
+
     const body = {
       fields: {
-        title: {
-          stringValue: eventData.title,
-        },
-        description: {
-          stringValue: eventData.description,
-        },
-        startDate: {
-          timestampValue: eventData.startDate,
-        },
-        endDate: {
-          timestampValue: eventData.endDate,
-        },
-        adminId: {
-          stringValue: eventData.adminId,
-        },
-        userId: {
-          stringValue: eventData.userId,
-        },
+        title: {stringValue: eventData.title},
+        description: {stringValue: eventData.description},
+        startDate: {timestampValue: eventData.startDate},
+        endDate: {timestampValue: eventData.endDate},
+        adminId: {stringValue: eventData.adminId},
+        userId: {stringValue: eventData.userId},
       },
     };
 
     try {
-      const response = await EventApiComponent(url, method, body);
+      const response = await GenericApiComponent(url, method, body, options);
       return {success: true, response};
     } catch (error) {
-      console.error('Error in EventService.patchEVENTStatus:', error);
+      console.error('Error in EventService.patchEventStatus:', error);
       return {
         success: false,
         error: error.message || 'An unexpected error occurred.',
@@ -92,11 +73,11 @@ const EventService = {
 
   deleteEvent: async eventId => {
     const url = `${Constants.FIREBASE_URL}/${Constants.EVENTS}/${eventId}?key=${Constants.FIREBASE_KEY}`;
-    const method = 'DELETE';
+    const method = 'delete';
+    const options = {resourceType: 'Event'};
 
     try {
-      const response = await EventApiComponent(url, method);
-
+      const response = await GenericApiComponent(url, method, null, options);
       if (response) {
         return {success: true, message: 'Event deleted successfully'};
       } else {
@@ -114,30 +95,23 @@ const EventService = {
   fetchUserEvents: async userId => {
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
+    const options = {resourceType: 'Event'};
+
     const body = {
       structuredQuery: {
-        from: [
-          {
-            collectionId: Constants.EVENTS,
-          },
-        ],
+        from: [{collectionId: Constants.EVENTS}],
         where: {
           fieldFilter: {
-            field: {
-              fieldPath: 'userId',
-            },
+            field: {fieldPath: 'userId'},
             op: 'EQUAL',
-            value: {
-              stringValue: userId,
-            },
+            value: {stringValue: userId},
           },
         },
       },
     };
 
     try {
-      const response = await EventApiComponent(url, method, body);
-
+      const response = await GenericApiComponent(url, method, body, options);
       return response;
     } catch (error) {
       throw error;
