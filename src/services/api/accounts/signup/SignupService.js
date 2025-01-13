@@ -1,12 +1,11 @@
 import axios from 'axios';
-import Constants from '../../../../components/common/Constants'; // Ensure the correct path
+import Constants from '../../../../components/common/Constants';
 import {CommonActions} from '@react-navigation/native';
 import {Alert} from 'react-native';
-import LeaveApiComponent from '../../leave/LeaveApiComponent';
 
 const SignupService = {
   signup: async (userData, navigation) => {
-    const url = `${Constants.FIREBASE_URL}/users?key=${Constants.FIREBASE_KEY}`;
+    const url = `${Constants.FIREBASE_URL}/${Constants.USERS}?key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const body = {
       fields: {

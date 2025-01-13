@@ -6,7 +6,7 @@ import {extractId} from '../../../../components/utils/ExtractId';
 
 const LoginService = {
   login: async (email, password, navigation) => {
-    const url = `${Constants.FIREBASE_URL}/users?key=${Constants.FIREBASE_KEY}`;
+    const url = `${Constants.FIREBASE_URL}/${Constants.USERS}?key=${Constants.FIREBASE_KEY}`;
     const method = 'get';
 
     try {
