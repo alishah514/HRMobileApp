@@ -1,5 +1,5 @@
 import axios from 'axios';
-import ExtractValues from '../../components/utils/ExtractValues';
+import ExtractValues from '../components/utils/ExtractValues';
 
 const GenericApiComponent = async (url, method, body = null, options = {}) => {
   const {postFlag = false, resourceType = '', customHandlers = {}} = options;

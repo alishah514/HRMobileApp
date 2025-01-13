@@ -1,5 +1,5 @@
 import Constants from '../../../components/common/Constants';
-import GenericApiComponent from '../GenericApiComponent';
+import GenericApiComponent from '../../GenericApiComponent';
 
 const SettingsService = {
   fetchSettings: async () => {
