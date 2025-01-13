@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Constants from '../../../../components/common/Constants';
+import {extractId} from '../../../../components/utils/ExtractId';
 const ChangePasswordService = {
   GetUserByEmailAndPassword: async (userId, currentPassword, newPassword) => {
     const url = `${Constants.FIREBASE_URL}/${Constants.USERS}/${userId}?key=${Constants.FIREBASE_KEY}`;
@@ -13,7 +14,7 @@ const ChangePasswordService = {
         },
       });
 
-      const userId = response?.data?.name.split('/').pop();
+      const userId = extractId(response?.data?.name);
 
       const user = {
         id: userId,

@@ -2,6 +2,7 @@ import axios from 'axios';
 import Constants from '../../../../components/common/Constants';
 import {Alert} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
+import {extractId} from '../../../../components/utils/ExtractId';
 
 const LoginService = {
   login: async (email, password, navigation) => {
@@ -18,7 +19,7 @@ const LoginService = {
       });
 
       const users = response.data.documents.map(doc => {
-        const documentId = doc.name.split('/').pop();
+        const documentId = extractId(doc.name);
 
         return {
           id: documentId,

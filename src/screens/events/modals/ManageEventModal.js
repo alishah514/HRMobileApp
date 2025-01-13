@@ -24,6 +24,7 @@ import {
 } from '../../../redux/events/EventActions';
 import {useEventData} from '../../../hooks/useEventData';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
+import {extractId} from '../../../components/utils/ExtractId';
 
 export default function ManageEventModal({
   isModalVisible,
@@ -106,7 +107,7 @@ export default function ManageEventModal({
   };
 
   const submitEventRequest = async eventData => {
-    const eventId = data?.name.split('/').pop();
+    const eventId = extractId(data?.name);
     const response = isEdit
       ? await dispatch(patchEventStatus(eventId, eventData))
       : await dispatch(postEventRequest(eventData));

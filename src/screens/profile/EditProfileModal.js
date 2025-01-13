@@ -18,6 +18,7 @@ import {updateProfile} from '../../redux/profile/ProfileActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {useLoginData} from '../../hooks/useLoginData';
 import useProfileData from '../../hooks/useProfileData';
+import {extractId} from '../../components/utils/ExtractId';
 
 export default function EditProfileModal({
   onClose,
@@ -84,7 +85,7 @@ export default function EditProfileModal({
   }, [data]);
 
   const onTickPress = () => {
-    const profileId = data?.name ? data?.name.split('/').pop() : null;
+    const profileId = data?.name ? extractId(data?.name) : null;
     const interEducation = data?.education?.[1] || {};
     const matricEducation = data?.education?.[2] || {};
     const profileData = {

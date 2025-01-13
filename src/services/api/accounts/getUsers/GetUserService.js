@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Constants from '../../../../components/common/Constants';
+import {extractId} from '../../../../components/utils/ExtractId';
 
 const GetUserService = {
   getAllUsers: async () => {
@@ -52,7 +53,7 @@ const GetUserService = {
 
       const matchedUser = response.data.documents
         .map(doc => {
-          const documentId = doc.name.split('/').pop();
+          const documentId = extractId(doc.name);
           return {
             id: documentId,
             email: doc.fields.email.stringValue,

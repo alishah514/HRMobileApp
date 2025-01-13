@@ -31,6 +31,7 @@ export default function AnnouncementComponent({announcement}) {
       );
     }
   };
+
   return (
     <View style={[styles.boxView, CommonStyles.shadow]}>
       <View style={[CommonStyles.rowBetween, CommonStyles.alignItemsCenter]}>
@@ -88,11 +89,7 @@ export default function AnnouncementComponent({announcement}) {
                 CommonStyles.marginLeft5,
                 CommonStyles.underlineText,
               ]}>
-              {announcement?.attachment
-                .split('_')
-                .slice(1)
-                .join('_')
-                .slice(-25)}
+              View Document
             </Text>
           </TouchableOpacity>
         )}

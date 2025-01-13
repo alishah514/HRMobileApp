@@ -15,7 +15,6 @@ import {
   deleteAnnouncement,
   fetchAllAnnouncements,
   patchAnnouncement,
-  postAnnouncements,
 } from '../../../redux/announcements/AnnouncementActions';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 import DocumentPicker, {types} from 'react-native-document-picker';

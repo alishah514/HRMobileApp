@@ -21,6 +21,7 @@ import {useLoginData} from '../../../../hooks/useLoginData';
 import CustomSectionedMultiSelectComponent from '../../../../components/ReusableComponents/CustomSectionedMultiSelectComponent';
 import CustomDatePickerComponent from '../../../../components/ReusableComponents/CustomDatePickerComponent';
 import {TruncateTitle} from '../../../../components/utils/TruncateTitle';
+import {extractId} from '../../../../components/utils/ExtractId';
 
 export default function TaskDetailModal({
   isModalVisible,
@@ -133,9 +134,7 @@ export default function TaskDetailModal({
   };
 
   const changeStatusRequest = async taskData => {
-    const taskId = taskDetails?.name
-      ? taskDetails?.name.split('/').pop()
-      : null;
+    const taskId = taskDetails?.name ? extractId(taskDetails?.name) : null;
 
     const response = await dispatch(patchTaskStatus(taskId, taskData));
 

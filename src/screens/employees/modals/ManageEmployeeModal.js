@@ -25,6 +25,7 @@ import {useLoginData} from '../../../hooks/useLoginData';
 import useProfileData from '../../../hooks/useProfileData';
 import {useAccountsData} from '../../../hooks/useAccountsData';
 import {fetchAllTasks} from '../../../redux/tasks/TaskActions';
+import {extractId} from '../../../components/utils/ExtractId';
 
 export default function ManageEmployeeModal({
   isModalVisible,
@@ -134,7 +135,8 @@ export default function ManageEmployeeModal({
         const response = await dispatch(createUser(userData));
 
         if (response?.name) {
-          const userId = response.name.split('/').pop();
+          const userId = extractId(response.name);
+
           const profileData = buildProfileData(employeeData, userId);
 
           try {
