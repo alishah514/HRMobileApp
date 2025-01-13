@@ -1,5 +1,5 @@
 import Constants from '../../../components/common/Constants';
-import LeaveApiComponent from './LeaveApiComponent';
+import GenericApiComponent from '../GenericApiComponent';
 
 const LeaveService = {
   fetchLeaves: async () => {
@@ -7,7 +7,9 @@ const LeaveService = {
     const method = 'get';
 
     try {
-      const response = await LeaveApiComponent(url, method);
+      const response = await GenericApiComponent(url, method, null, {
+        resourceType: 'Leave',
+      });
       return response;
     } catch (error) {
       throw error;
@@ -47,11 +49,12 @@ const LeaveService = {
     };
 
     try {
-      const response = await LeaveApiComponent(url, method, body, true);
-
+      const response = await GenericApiComponent(url, method, body, {
+        postFlag: true,
+      });
       return {success: true, response};
     } catch (error) {
-      console.error('Error in LeaveService.postLeaveRequest:', error);
+      console.error('Error in LeaveService.postLeave:', error);
       return {
         success: false,
         error: error.message || 'An unexpected error occurred.',
@@ -92,7 +95,7 @@ const LeaveService = {
     };
 
     try {
-      const response = await LeaveApiComponent(url, method, body);
+      const response = await GenericApiComponent(url, method, body);
       return {success: true, response};
     } catch (error) {
       console.error('Error in LeaveService.patchLeaveStatus:', error);
@@ -105,10 +108,10 @@ const LeaveService = {
 
   deleteLeave: async leaveId => {
     const url = `${Constants.FIREBASE_URL}/${Constants.LEAVES}/${leaveId}?key=${Constants.FIREBASE_KEY}`;
-    const method = 'DELETE';
+    const method = 'delete';
 
     try {
-      const response = await LeaveApiComponent(url, method);
+      const response = await GenericApiComponent(url, method);
 
       if (response) {
         return {success: true, message: 'Leave deleted successfully'};
@@ -156,14 +159,14 @@ const LeaveService = {
             direction: direction.toUpperCase(),
           },
         ],
-
         ...(limit ? {limit: limit} : {}),
       },
     };
 
     try {
-      const response = await LeaveApiComponent(url, method, body);
-      // console.log('Fetch Paginated Leaves', response);
+      const response = await GenericApiComponent(url, method, body, {
+        resourceType: 'Leave',
+      });
       return response;
     } catch (error) {
       throw error;
