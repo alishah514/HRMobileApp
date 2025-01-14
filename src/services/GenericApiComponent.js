@@ -106,12 +106,10 @@ const handlePostResponse = (response, postFlag) => {
     .filter(item => item !== null);
 };
 
-// Generic PATCH response handler
 const handlePatchResponse = response => {
   return response.data;
 };
 
-// Generic DELETE response handler
 const handleDeleteResponse = () => {
   return {success: true, message: 'Resource deleted successfully'};
 };

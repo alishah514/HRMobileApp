@@ -16,6 +16,9 @@ import {
   FETCH_ALL_LEAVES_START,
   FETCH_ALL_LEAVES_SUCCESS,
   FETCH_ALL_LEAVES_FAILURE,
+  FETCH_PAGINATED_LEAVES_START,
+  FETCH_PAGINATED_LEAVES_SUCCESS,
+  FETCH_PAGINATED_LEAVES_FAILURE,
 } from '../actions/actionTypes';
 
 export const fetchAllLeavesStart = () => ({
@@ -43,6 +46,20 @@ export const fetchLeavesSuccess = leaves => ({
 
 export const fetchLeavesFailure = error => ({
   type: FETCH_LEAVES_FAILURE,
+  payload: error,
+});
+
+export const fetchPaginatedLeavesStart = () => ({
+  type: FETCH_PAGINATED_LEAVES_START,
+});
+
+export const fetchPaginatedLeavesSuccess = leaves => ({
+  type: FETCH_PAGINATED_LEAVES_SUCCESS,
+  payload: leaves,
+});
+
+export const fetchPaginatedLeavesFailure = error => ({
+  type: FETCH_PAGINATED_LEAVES_FAILURE,
   payload: error,
 });
 
@@ -109,6 +126,7 @@ export const fetchUserLeaves =
     try {
       const response = await LeaveService.fetchUserLeaves(userId, options);
       dispatch(fetchLeavesSuccess(response));
+      return response;
     } catch (error) {
       dispatch(fetchLeavesFailure(error));
     }
@@ -159,3 +177,33 @@ export const deleteLeave = leaveId => async dispatch => {
     dispatch(deleteLeaveFailure(error));
   }
 };
+
+export const fetchPaginatedLeaves =
+  ({pageSize, pageCount}) =>
+  async dispatch => {
+    dispatch(fetchPaginatedLeavesStart());
+    try {
+      const response = await LeaveService.fetchAllPaginatedLeaves({
+        pageSize,
+        pageCount,
+      });
+      dispatch(fetchPaginatedLeavesSuccess(response));
+    } catch (error) {
+      dispatch(fetchPaginatedLeavesFailure(error));
+    }
+  };
+
+// export const fetchPaginatedUserLeaves =
+//   (userId, {pageSize, pageCount}) =>
+//   async dispatch => {
+//     dispatch(fetchPaginatedLeavesStart());
+//     try {
+//       const response = await LeaveService.fetchAllUserPaginatedLeaves(userId, {
+//         pageSize,
+//         pageCount,
+//       });
+//       dispatch(fetchPaginatedLeavesSuccess(response));
+//     } catch (error) {
+//       dispatch(fetchPaginatedLeavesFailure(error));
+//     }
+//   };

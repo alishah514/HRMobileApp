@@ -5,6 +5,8 @@ const useLeaveData = () => {
     data: leaves,
     isLoading,
     allLeaves,
+    loadingPaginatedLeaves,
+    paginatedLeaves,
   } = useSelector(state => state.leaves);
   const validLeavesCount = leaves?.filter(leave => leave.name).length || 0;
   const validAllLeavesCount =
@@ -15,6 +17,8 @@ const useLeaveData = () => {
     leavesLoading: isLoading,
     allLeaves,
     validAllLeavesCount,
+    loadingPaginatedLeaves,
+    paginatedLeaves,
   };
 };
 

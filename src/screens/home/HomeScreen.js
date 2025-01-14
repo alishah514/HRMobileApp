@@ -13,7 +13,11 @@ import CommonSafeAreaViewComponent from '../../components/ReusableComponents/Com
 import I18n from '../../i18n/i18n';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {fetchAllTasks, fetchUserTasks} from '../../redux/tasks/TaskActions';
-import {fetchAllLeaves, fetchUserLeaves} from '../../redux/leave/LeaveActions';
+import {
+  fetchAllLeaves,
+  fetchPaginatedLeaves,
+  fetchUserLeaves,
+} from '../../redux/leave/LeaveActions';
 import {
   fetchAllProfile,
   fetchProfile,

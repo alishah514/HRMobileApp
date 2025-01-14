@@ -129,8 +129,9 @@ const LeaveService = {
 
   fetchUserLeaves: async (
     userId,
-    {sortBy = 'period', direction = 'ASCENDING', limit = null},
+    {sortBy = 'period', direction = 'ASCENDING', limit = null, page = 1},
   ) => {
+    const offset = (page - 1) * limit; // Calculate the offset
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const body = {
@@ -160,6 +161,7 @@ const LeaveService = {
           },
         ],
         ...(limit ? {limit: limit} : {}),
+        ...(offset ? {offset: offset} : {}), // Include the offset in the query
       },
     };
 
@@ -172,6 +174,72 @@ const LeaveService = {
       throw error;
     }
   },
+  // PAGINATION
+
+  fetchAllPaginatedLeaves: async ({pageSize, pageCount}) => {
+    const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
+    const method = 'post';
+    const offset = pageSize * (pageCount - 1);
+
+    const body = {
+      structuredQuery: {
+        from: [
+          {
+            collectionId: Constants.LEAVES,
+          },
+        ],
+        limit: pageSize,
+        offset: offset,
+      },
+    };
+
+    try {
+      const response = await GenericApiComponent(url, method, body, {
+        resourceType: 'Leave',
+      });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // fetchAllUserPaginatedLeaves: async (userId, {pageSize, pageCount}) => {
+  //   const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
+  //   const method = 'post';
+  //   const offset = pageSize * (pageCount - 1);
+
+  //   const body = {
+  //     structuredQuery: {
+  //       from: [
+  //         {
+  //           collectionId: Constants.LEAVES,
+  //         },
+  //       ],
+  //       where: {
+  //         fieldFilter: {
+  //           field: {
+  //             fieldPath: 'userId',
+  //           },
+  //           op: 'EQUAL',
+  //           value: {
+  //             stringValue: userId,
+  //           },
+  //         },
+  //       },
+  //       limit: pageSize,
+  //       offset: offset,
+  //     },
+  //   };
+
+  //   try {
+  //     const response = await GenericApiComponent(url, method, body, {
+  //       resourceType: 'Leave',
+  //     });
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // },
 };
 
 export default LeaveService;

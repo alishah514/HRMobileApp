@@ -15,6 +15,9 @@ import {
   FETCH_ALL_LEAVES_START,
   FETCH_ALL_LEAVES_SUCCESS,
   FETCH_ALL_LEAVES_FAILURE,
+  FETCH_PAGINATED_LEAVES_START,
+  FETCH_PAGINATED_LEAVES_SUCCESS,
+  FETCH_PAGINATED_LEAVES_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -24,6 +27,9 @@ const initialState = {
   error: null,
   leaveData: null,
   patchSuccess: false,
+  paginatedLeaves: [],
+  loadingPaginatedLeaves: false,
+  paginatedError: null,
 };
 
 const LeaveReducer = (state = initialState, action) => {
@@ -61,6 +67,24 @@ const LeaveReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: action.payload,
+      };
+    case FETCH_PAGINATED_LEAVES_START:
+      return {
+        ...state,
+        loadingPaginatedLeaves: true,
+        paginatedError: null,
+      };
+    case FETCH_PAGINATED_LEAVES_SUCCESS:
+      return {
+        ...state,
+        loadingPaginatedLeaves: false,
+        paginatedLeaves: action.payload,
+      };
+    case FETCH_PAGINATED_LEAVES_FAILURE:
+      return {
+        ...state,
+        loadingPaginatedLeaves: false,
+        paginatedError: action.payload,
       };
     case CLEAR_LEAVES_STATE:
       return initialState;

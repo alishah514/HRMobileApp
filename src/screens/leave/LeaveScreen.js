@@ -64,11 +64,12 @@ export default function LeaveScreen({navigation, route}) {
 
   const getLeaves = () => {
     if (role === 'Employee') {
-      dispatch(
-        fetchUserLeaves(userId, {
-          limit: 25,
-        }),
-      );
+      dispatch(fetchUserLeaves(userId));
+      // dispatch(
+      //   fetchUserLeaves(userId, {
+      //     limit: 25,
+      //   }),
+      // );
     } else {
       dispatch(fetchAllLeaves());
     }
