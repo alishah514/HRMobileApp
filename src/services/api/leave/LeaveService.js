@@ -131,7 +131,7 @@ const LeaveService = {
     userId,
     {sortBy = 'period', direction = 'ASCENDING', limit = null, page = 1},
   ) => {
-    const offset = (page - 1) * limit; // Calculate the offset
+    const offset = (page - 1) * limit;
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const body = {
@@ -161,7 +161,7 @@ const LeaveService = {
           },
         ],
         ...(limit ? {limit: limit} : {}),
-        ...(offset ? {offset: offset} : {}), // Include the offset in the query
+        ...(offset ? {offset: offset} : {}),
       },
     };
 

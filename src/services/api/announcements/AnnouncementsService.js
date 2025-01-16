@@ -15,6 +15,66 @@ const AnnouncementsService = {
     }
   },
 
+  // fetchAllPaginatedAnnouncements: async ({pageSize, pageCount}) => {
+  //   const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
+  //   const method = 'post';
+  //   const offset = pageSize * (pageCount - 1);
+  //   const options = {
+  //     resourceType: 'Announcement',
+  //   };
+  //   const body = {
+  //     structuredQuery: {
+  //       from: [
+  //         {
+  //           collectionId: Constants.ANNOUNCEMENTS,
+  //         },
+  //       ],
+  //       limit: pageSize,
+  //       offset: offset,
+  //     },
+  //   };
+
+  //   console.log('pageSize', pageSize, 'pageCount', pageCount);
+
+  //   try {
+  //     const response = await GenericApiComponent(url, method, body, options);
+  //     console.log('response', response);
+
+  //     return response;
+  //   } catch (error) {
+  //     console.error('Service error:', error);
+  //     throw error;
+  //   }
+  // },
+  fetchAllPaginatedAnnouncements: async ({limit = null, page = 1}) => {
+    const offset = (page - 1) * limit;
+    const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
+    const method = 'post';
+    const options = {
+      resourceType: 'Announcement',
+    };
+    const body = {
+      structuredQuery: {
+        from: [
+          {
+            collectionId: Constants.ANNOUNCEMENTS,
+          },
+        ],
+        ...(limit ? {limit: limit} : {}),
+        ...(offset ? {offset: offset} : {}),
+      },
+    };
+
+    try {
+      const response = await GenericApiComponent(url, method, body, options);
+
+      return response;
+    } catch (error) {
+      console.error('Error in fetching paginated announcements:', error);
+      throw error;
+    }
+  },
+
   postAnnouncement: async data => {
     const url = `${Constants.FIREBASE_URL}/${Constants.ANNOUNCEMENTS}?key=${Constants.FIREBASE_KEY}`;
     const method = 'post';

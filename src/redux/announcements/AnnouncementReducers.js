@@ -12,6 +12,9 @@ import {
   DELETE_ANNOUNCEMENTS_START,
   DELETE_ANNOUNCEMENTS_SUCCESS,
   DELETE_ANNOUNCEMENTS_FAILURE,
+  FETCH_PAGINATED_ANNOUNCEMENTS_START,
+  FETCH_PAGINATED_ANNOUNCEMENTS_SUCCESS,
+  FETCH_PAGINATED_ANNOUNCEMENTS_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -21,6 +24,9 @@ const initialState = {
   postSuccess: false,
   patchSuccess: false,
   deleteSuccess: false,
+  paginatedAnnouncements: [],
+  loadingPaginatedAnnouncements: false,
+  paginatedError: null,
 };
 
 const AnnouncementsReducer = (state = initialState, action) => {
@@ -43,6 +49,33 @@ const AnnouncementsReducer = (state = initialState, action) => {
         isLoading: false,
         error: action.payload,
       };
+
+    case FETCH_PAGINATED_ANNOUNCEMENTS_START:
+      return {
+        ...state,
+        loadingPaginatedAnnouncements: true,
+        paginatedError: null,
+      };
+    case FETCH_PAGINATED_ANNOUNCEMENTS_SUCCESS:
+      const validRecords = action.payload.filter(
+        item => item.name && item.createTime && item.title,
+      );
+      return {
+        ...state,
+        loadingPaginatedAnnouncements: false,
+
+        paginatedAnnouncements: [
+          ...state.paginatedAnnouncements,
+          ...validRecords,
+        ],
+      };
+    case FETCH_PAGINATED_ANNOUNCEMENTS_FAILURE:
+      return {
+        ...state,
+        loadingPaginatedAnnouncements: false,
+        paginatedError: action.payload,
+      };
+
     case POST_ANNOUNCEMENTS_START:
       return {
         ...state,

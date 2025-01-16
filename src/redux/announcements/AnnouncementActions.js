@@ -13,6 +13,9 @@ import {
   DELETE_ANNOUNCEMENTS_START,
   DELETE_ANNOUNCEMENTS_SUCCESS,
   DELETE_ANNOUNCEMENTS_FAILURE,
+  FETCH_PAGINATED_ANNOUNCEMENTS_START,
+  FETCH_PAGINATED_ANNOUNCEMENTS_SUCCESS,
+  FETCH_PAGINATED_ANNOUNCEMENTS_FAILURE,
 } from '../actions/actionTypes';
 
 export const fetchAllAnnouncementsStart = () => ({
@@ -26,6 +29,20 @@ export const fetchAllAnnouncementsSuccess = announcements => ({
 
 export const fetchAllAnnouncementsFailure = error => ({
   type: FETCH_ALL_ANNOUNCEMENTS_FAILURE,
+  payload: error,
+});
+
+export const fetchPaginatedAnnouncementsStart = () => ({
+  type: FETCH_PAGINATED_ANNOUNCEMENTS_START,
+});
+
+export const fetchPaginatedAnnouncementsSuccess = leaves => ({
+  type: FETCH_PAGINATED_ANNOUNCEMENTS_SUCCESS,
+  payload: leaves,
+});
+
+export const fetchPaginatedAnnouncementsFailure = error => ({
+  type: FETCH_PAGINATED_ANNOUNCEMENTS_FAILURE,
   payload: error,
 });
 
@@ -136,3 +153,36 @@ export const deleteAnnouncement = announcementId => async dispatch => {
     dispatch(deleteAnnouncementsFailure(error));
   }
 };
+
+// export const fetchPaginatedAnnouncements =
+//   ({pageSize, pageCount}) =>
+//   async dispatch => {
+//     dispatch(fetchPaginatedAnnouncementsStart());
+//     try {
+//       const response =
+//         await AnnouncementsService.fetchAllPaginatedAnnouncements({
+//           pageSize,
+//           pageCount,
+//         });
+//       dispatch(fetchPaginatedAnnouncementsSuccess(response));
+//     } catch (error) {
+//       dispatch(fetchPaginatedAnnouncementsFailure(error));
+//     }
+//   };
+
+export const fetchPaginatedAnnouncements =
+  (options = {}) =>
+  async dispatch => {
+    dispatch(fetchPaginatedAnnouncementsStart());
+    try {
+      const {limit, page} = options; // Destructure limit and page from options
+      const response =
+        await AnnouncementsService.fetchAllPaginatedAnnouncements({
+          limit,
+          page,
+        });
+      dispatch(fetchPaginatedAnnouncementsSuccess(response));
+    } catch (error) {
+      dispatch(fetchPaginatedAnnouncementsFailure(error));
+    }
+  };

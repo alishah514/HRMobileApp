@@ -17,10 +17,12 @@ import styles from './styles';
 import AddAnnouncementModal from './modals/AddAnnouncemenModal';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import NoRecordView from '../../components/ReusableComponents/NoRecordView';
+import {useAnnouncementData} from '../../hooks/useAnnouncementData';
 
 export default function AnnouncementScreen({navigation}) {
   const dispatch = useDispatch();
-  const {announcements, isLoading} = useSelector(state => state.announcements);
+  // const {announcements, isLoading} = useSelector(state => state.announcements);
+  const {announcements, isLoading} = useAnnouncementData();
   const {role} = useLoginData();
   const [isAddAnnouncementModalVisible, setIsAddAnnouncementModalVisible] =
     useState(false);
