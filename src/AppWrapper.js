@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
 import I18n from './i18n/i18n';
 import AppNavigator from './navigation/AppNavigator';
 import {setLanguage} from './redux/language/LanguageActions';
+import {navigationRef} from './components/ReusableComponents/ref/NavigationRef';
+import {NavigationContainer} from '@react-navigation/native';
 
 const AppWrapper = () => {
   const dispatch = useDispatch();

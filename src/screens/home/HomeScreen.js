@@ -12,12 +12,8 @@ import PunchInOut from './PunchComponent/PunchInOut';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import I18n from '../../i18n/i18n';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
-import {fetchAllTasks, fetchUserTasks} from '../../redux/tasks/TaskActions';
-import {
-  fetchAllLeaves,
-  fetchPaginatedLeaves,
-  fetchUserLeaves,
-} from '../../redux/leave/LeaveActions';
+import {fetchAllTasks} from '../../redux/tasks/TaskActions';
+import {fetchAllLeaves, fetchUserLeaves} from '../../redux/leave/LeaveActions';
 import {
   fetchAllProfile,
   fetchProfile,

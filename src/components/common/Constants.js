@@ -32,6 +32,7 @@ const ENCR_COST = 5000;
 const ENCR_LENGTH = 256;
 const STRING_BYTE = 'CodeDecode@512';
 const MAX_FILE_SIZE_MB = 5;
+const CHANNEL_ID = 'com.hrmobileapp.pk';
 
 const SIZE = {
   xxxLargeIcon: wp('18'),
@@ -74,4 +75,5 @@ export default Constants = {
   ENCR_LENGTH,
   STRING_BYTE,
   MAX_FILE_SIZE_MB,
+  CHANNEL_ID,
 };

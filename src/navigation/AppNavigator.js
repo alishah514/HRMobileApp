@@ -24,37 +24,34 @@ const screenOptions = {
 
 const AppNavigator = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={screenOptions} initialRouteName="Splash">
-        <Stack.Screen name="Splash" component={SplashScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name="Forgot Password" component={ForgotPasswordScreen} />
-        <Stack.Screen name="Leave" component={LeaveScreen} />
-        <Stack.Screen name="Task" component={TaskScreen} />
-        <Stack.Screen name="Change Password" component={ChangePasswordScreen} />
-        <Stack.Screen name="Localization" component={LocalizationScreen} />
-        <Stack.Screen name="Attendance Details" component={AttendanceDetails} />
-        <Stack.Screen
-          name="Admin All Employees"
-          component={AdminEmployeeScreen}
-        />
+    // <NavigationContainer>
+    <Stack.Navigator screenOptions={screenOptions} initialRouteName="Splash">
+      <Stack.Screen name="Splash" component={SplashScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen name="Forgot Password" component={ForgotPasswordScreen} />
+      <Stack.Screen name="Leave" component={LeaveScreen} />
+      <Stack.Screen name="Task" component={TaskScreen} />
+      <Stack.Screen name="Change Password" component={ChangePasswordScreen} />
+      <Stack.Screen name="Localization" component={LocalizationScreen} />
+      <Stack.Screen name="Attendance Details" component={AttendanceDetails} />
+      <Stack.Screen
+        name="Admin All Employees"
+        component={AdminEmployeeScreen}
+      />
 
-        <Stack.Screen
-          name="Admin Attendance Details"
-          component={AttendanceScreen}
-        />
-        <Stack.Screen
-          name="Admin Attendance"
-          component={AdminAttendanceScreen}
-        />
-        <Stack.Screen
-          name="Home"
-          component={DrawerNavigator}
-          options={{gestureEnabled: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+      <Stack.Screen
+        name="Admin Attendance Details"
+        component={AttendanceScreen}
+      />
+      <Stack.Screen name="Admin Attendance" component={AdminAttendanceScreen} />
+      <Stack.Screen
+        name="Home"
+        component={DrawerNavigator}
+        options={{gestureEnabled: false}}
+      />
+    </Stack.Navigator>
+    // </NavigationContainer>
   );
 };
 
