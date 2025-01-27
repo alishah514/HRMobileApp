@@ -38,7 +38,7 @@ PushNotification.configure({
     console.log('NOTIFICATION:', notification);
 
     if (notification.userInteraction) {
-      const screenName = notification.data?.screen || 'DefaultScreen';
+      const screenName = notification.data?.screen || 'Login';
       const params = notification.data?.params || {};
       navigate(screenName, params);
     }
@@ -78,7 +78,7 @@ if (Platform.OS === 'ios') {
     console.log('iOS NOTIFICATION:', notification);
 
     if (notification.userInteraction) {
-      const screenName = notification.data?.screen || 'DefaultScreen';
+      const screenName = notification.data?.screen || 'Login';
       const params = notification.data?.params || {};
       navigate(screenName, params);
     }
@@ -90,7 +90,7 @@ if (Platform.OS === 'ios') {
     console.log('iOS LOCAL NOTIFICATION:', notification);
 
     if (notification.userInteraction) {
-      const screenName = notification.data?.screen || 'DefaultScreen';
+      const screenName = notification.data?.screen || 'Login';
       const params = notification.data?.params || {};
       navigate(screenName, params);
     }

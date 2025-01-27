@@ -1,6 +1,9 @@
 #import "AppDelegate.h"
+#import <Firebase.h>
+
 #import <UserNotifications/UserNotifications.h>
 #import <RNCPushNotificationIOS.h>
+
 
 #import <React/RCTBundleURLProvider.h>
 
@@ -43,6 +46,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [FIRApp configure];
   self.moduleName = @"HRMobileApp";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.

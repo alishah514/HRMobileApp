@@ -7,7 +7,7 @@ const SendNotification = (navigation, title, message, data, screenName) => {
   if (!screenName && navigation) {
     const currentRoute =
       navigation.getState().routes[navigation.getState().index];
-    screenName = currentRoute ? currentRoute.name : 'DefaultScreen';
+    screenName = currentRoute ? currentRoute.name : 'Login';
   }
 
   const notificationData = {screen: screenName, ...data};

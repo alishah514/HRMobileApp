@@ -3,6 +3,7 @@ import Constants from '../../../../components/common/Constants';
 import {Alert} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {extractId} from '../../../../components/utils/ExtractId';
+import {getDeviceToken} from '../../../../components/ReusableComponents/firebase/FirebaseNotifications';
 
 const LoginService = {
   login: async (email, password, navigation) => {
@@ -28,6 +29,7 @@ const LoginService = {
           password: doc.fields.password.stringValue,
           token: documentId,
           role: doc.fields.role.stringValue,
+          // fcmToken: doc.fields?.fcmToken?.stringValue,
         };
       });
 
@@ -52,6 +54,7 @@ const LoginService = {
             name: matchedUser.name,
             token: matchedUser.token,
             role: matchedUser.role,
+            // fcmToken: matchedUser?.fcmToken,
           },
         };
       } else {

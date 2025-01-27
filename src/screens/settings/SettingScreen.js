@@ -10,7 +10,7 @@ import {Button, Text, View} from 'react-native';
 import SettingList from './list/SettingList';
 import I18n from '../../i18n/i18n';
 import {useSelector} from 'react-redux';
-import SendNotification from '../../components/utils/SendNotification';
+// import SendNotification from '../../components/utils/SendNotification';
 
 export default function SettingScreen({navigation}) {
   const currentLanguage = useSelector(state => state.language.language);
@@ -19,19 +19,19 @@ export default function SettingScreen({navigation}) {
     navigation.openDrawer();
   };
 
-  const handleSendNotificationWithScreenName = () => {
-    SendNotification(
-      navigation,
-      'Custom Title',
-      'This is a custom message.',
-      {itemId: 42},
-      'Leave',
-    );
-  };
+  // const handleSendNotificationWithScreenName = () => {
+  //   SendNotification(
+  //     navigation,
+  //     'Custom Title',
+  //     'This is a custom message.',
+  //     {itemId: 42},
+  //     'Leave',
+  //   );
+  // };
 
-  const handleSendNotificationWithoutScreenName = () => {
-    SendNotification(navigation, 'Another Title', 'This is another message.');
-  };
+  // const handleSendNotificationWithoutScreenName = () => {
+  //   SendNotification(navigation, 'Another Title', 'This is another message.');
+  // };
 
   return (
     <CommonSafeAreaViewComponent>
@@ -63,7 +63,7 @@ export default function SettingScreen({navigation}) {
               CommonStyles.marginTop7,
             ]}>
             <SettingList navigation={navigation} />
-            <Button
+            {/* <Button
               title="Click Here"
               onPress={handleSendNotificationWithScreenName}
             />
@@ -72,7 +72,7 @@ export default function SettingScreen({navigation}) {
             <Button
               title="Click Here Without Screen Name"
               onPress={handleSendNotificationWithoutScreenName}
-            />
+            /> */}
           </View>
         }
       />
