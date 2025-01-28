@@ -15,9 +15,13 @@ import {
   FETCH_ALL_LEAVES_START,
   FETCH_ALL_LEAVES_SUCCESS,
   FETCH_ALL_LEAVES_FAILURE,
-  FETCH_PAGINATED_LEAVES_START,
-  FETCH_PAGINATED_LEAVES_SUCCESS,
-  FETCH_PAGINATED_LEAVES_FAILURE,
+  FETCH_USER_PAGINATED_LEAVES_START,
+  FETCH_USER_PAGINATED_LEAVES_SUCCESS,
+  FETCH_USER_PAGINATED_LEAVES_FAILURE,
+  FETCH_ALL_PAGINATED_LEAVES_START,
+  FETCH_ALL_PAGINATED_LEAVES_SUCCESS,
+  FETCH_ALL_PAGINATED_LEAVES_FAILURE,
+  SET_NO_MORE_ALL_RECORDS,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -27,9 +31,13 @@ const initialState = {
   error: null,
   leaveData: null,
   patchSuccess: false,
-  paginatedLeaves: [],
-  loadingPaginatedLeaves: false,
-  paginatedError: null,
+  userPaginatedLeaves: [],
+  isLoadingUserPaginatedLeaves: false,
+  userPaginatedError: null,
+  allPaginatedLeaves: [],
+  isLoadingAllPaginatedLeaves: false,
+  allPaginatedError: null,
+  noMoreAllRecords: false,
 };
 
 const LeaveReducer = (state = initialState, action) => {
@@ -68,23 +76,41 @@ const LeaveReducer = (state = initialState, action) => {
         isLoading: false,
         error: action.payload,
       };
-    case FETCH_PAGINATED_LEAVES_START:
+    case FETCH_USER_PAGINATED_LEAVES_START:
       return {
         ...state,
-        loadingPaginatedLeaves: true,
-        paginatedError: null,
+        isLoadingUserPaginatedLeaves: true,
+        userPaginatedError: null,
       };
-    case FETCH_PAGINATED_LEAVES_SUCCESS:
+    case FETCH_USER_PAGINATED_LEAVES_SUCCESS:
       return {
         ...state,
-        loadingPaginatedLeaves: false,
-        paginatedLeaves: action.payload,
+        isLoadingUserPaginatedLeaves: false,
+        userPaginatedLeaves: [...state.userPaginatedLeaves, ...action.payload],
       };
-    case FETCH_PAGINATED_LEAVES_FAILURE:
+    case FETCH_USER_PAGINATED_LEAVES_FAILURE:
       return {
         ...state,
-        loadingPaginatedLeaves: false,
-        paginatedError: action.payload,
+        isLoadingUserPaginatedLeaves: false,
+        userPaginatedError: action.payload,
+      };
+    case FETCH_ALL_PAGINATED_LEAVES_START:
+      return {
+        ...state,
+        isLoadingAllPaginatedLeaves: true,
+        allPaginatedError: null,
+      };
+    case FETCH_ALL_PAGINATED_LEAVES_SUCCESS:
+      return {
+        ...state,
+        isLoadingAllPaginatedLeaves: false,
+        allPaginatedLeaves: [...state.allPaginatedLeaves, ...action.payload],
+      };
+    case FETCH_ALL_PAGINATED_LEAVES_FAILURE:
+      return {
+        ...state,
+        isLoadingAllPaginatedLeaves: false,
+        allPaginatedError: action.payload,
       };
     case CLEAR_LEAVES_STATE:
       return initialState;
@@ -146,6 +172,11 @@ const LeaveReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: action.payload,
+      };
+    case SET_NO_MORE_ALL_RECORDS:
+      return {
+        ...state,
+        noMoreAllRecords: action.payload,
       };
     default:
       return state;

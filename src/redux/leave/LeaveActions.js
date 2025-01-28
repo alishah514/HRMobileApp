@@ -16,9 +16,13 @@ import {
   FETCH_ALL_LEAVES_START,
   FETCH_ALL_LEAVES_SUCCESS,
   FETCH_ALL_LEAVES_FAILURE,
-  FETCH_PAGINATED_LEAVES_START,
-  FETCH_PAGINATED_LEAVES_SUCCESS,
-  FETCH_PAGINATED_LEAVES_FAILURE,
+  FETCH_USER_PAGINATED_LEAVES_START,
+  FETCH_USER_PAGINATED_LEAVES_SUCCESS,
+  FETCH_USER_PAGINATED_LEAVES_FAILURE,
+  FETCH_ALL_PAGINATED_LEAVES_START,
+  FETCH_ALL_PAGINATED_LEAVES_SUCCESS,
+  FETCH_ALL_PAGINATED_LEAVES_FAILURE,
+  SET_NO_MORE_ALL_RECORDS,
 } from '../actions/actionTypes';
 
 export const fetchAllLeavesStart = () => ({
@@ -49,17 +53,31 @@ export const fetchLeavesFailure = error => ({
   payload: error,
 });
 
-export const fetchPaginatedLeavesStart = () => ({
-  type: FETCH_PAGINATED_LEAVES_START,
+export const fetchUserPaginatedLeavesStart = () => ({
+  type: FETCH_USER_PAGINATED_LEAVES_START,
 });
 
-export const fetchPaginatedLeavesSuccess = leaves => ({
-  type: FETCH_PAGINATED_LEAVES_SUCCESS,
+export const fetchUserPaginatedLeavesSuccess = leaves => ({
+  type: FETCH_USER_PAGINATED_LEAVES_SUCCESS,
   payload: leaves,
 });
 
-export const fetchPaginatedLeavesFailure = error => ({
-  type: FETCH_PAGINATED_LEAVES_FAILURE,
+export const fetchUserPaginatedLeavesFailure = error => ({
+  type: FETCH_USER_PAGINATED_LEAVES_FAILURE,
+  payload: error,
+});
+
+export const fetchAllPaginatedLeavesStart = () => ({
+  type: FETCH_ALL_PAGINATED_LEAVES_START,
+});
+
+export const fetchAllPaginatedLeavesSuccess = leaves => ({
+  type: FETCH_ALL_PAGINATED_LEAVES_SUCCESS,
+  payload: leaves,
+});
+
+export const fetchAllPaginatedLeavesFailure = error => ({
+  type: FETCH_ALL_PAGINATED_LEAVES_FAILURE,
   payload: error,
 });
 
@@ -107,6 +125,11 @@ export const deleteLeaveSuccess = leaveId => ({
 export const deleteLeaveFailure = error => ({
   type: DELETE_LEAVE_FAILURE,
   payload: error,
+});
+
+export const setNoMoreAllRecords = () => ({
+  type: SET_NO_MORE_ALL_RECORDS,
+  payload: true,
 });
 
 export const fetchAllLeaves = () => async dispatch => {
@@ -178,32 +201,38 @@ export const deleteLeave = leaveId => async dispatch => {
   }
 };
 
-export const fetchPaginatedLeaves =
-  ({pageSize, pageCount}) =>
+export const getUserPaginatedLeaves =
+  ({userId, status, pageSize, pageCount}) =>
   async dispatch => {
-    dispatch(fetchPaginatedLeavesStart());
+    dispatch(fetchUserPaginatedLeavesStart());
     try {
-      const response = await LeaveService.fetchAllPaginatedLeaves({
+      const response = await LeaveService.fetchUserPaginatedLeaves({
+        userId,
+        status,
         pageSize,
         pageCount,
+        dispatch,
       });
-      dispatch(fetchPaginatedLeavesSuccess(response));
+      dispatch(fetchUserPaginatedLeavesSuccess(response));
     } catch (error) {
-      dispatch(fetchPaginatedLeavesFailure(error));
+      dispatch(fetchUserPaginatedLeavesFailure(error));
     }
   };
 
-// export const fetchPaginatedUserLeaves =
-//   (userId, {pageSize, pageCount}) =>
-//   async dispatch => {
-//     dispatch(fetchPaginatedLeavesStart());
-//     try {
-//       const response = await LeaveService.fetchAllUserPaginatedLeaves(userId, {
-//         pageSize,
-//         pageCount,
-//       });
-//       dispatch(fetchPaginatedLeavesSuccess(response));
-//     } catch (error) {
-//       dispatch(fetchPaginatedLeavesFailure(error));
-//     }
-//   };
+export const getAllPaginatedLeaves =
+  ({status, pageSize, pageCount}) =>
+  async dispatch => {
+    dispatch(fetchAllPaginatedLeavesStart());
+    try {
+      const response = await LeaveService.fetchAllPaginatedLeaves({
+        status,
+        pageSize,
+        pageCount,
+        dispatch,
+      });
+
+      dispatch(fetchAllPaginatedLeavesSuccess(response));
+    } catch (error) {
+      dispatch(fetchAllPaginatedLeavesFailure(error));
+    }
+  };

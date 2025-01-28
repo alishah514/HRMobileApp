@@ -1,4 +1,5 @@
 import Constants from '../../../components/common/Constants';
+import {setNoMoreAllRecords} from '../../../redux/leave/LeaveActions';
 import GenericApiComponent from '../../GenericApiComponent';
 
 const LeaveService = {
@@ -176,7 +177,14 @@ const LeaveService = {
   },
   // PAGINATION
 
-  fetchAllPaginatedLeaves: async ({pageSize, pageCount}) => {
+  // Function to fetch paginated leaves by userId and status
+  fetchUserPaginatedLeaves: async ({
+    userId,
+    status,
+    pageSize,
+    pageCount,
+    dispatch,
+  }) => {
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const offset = pageSize * (pageCount - 1);
@@ -188,6 +196,35 @@ const LeaveService = {
             collectionId: Constants.LEAVES,
           },
         ],
+        where: {
+          compositeFilter: {
+            op: 'AND',
+            filters: [
+              {
+                fieldFilter: {
+                  field: {
+                    fieldPath: 'userId',
+                  },
+                  op: 'EQUAL',
+                  value: {
+                    stringValue: userId,
+                  },
+                },
+              },
+              {
+                fieldFilter: {
+                  field: {
+                    fieldPath: 'status',
+                  },
+                  op: 'EQUAL',
+                  value: {
+                    stringValue: status,
+                  },
+                },
+              },
+            ],
+          },
+        },
         limit: pageSize,
         offset: offset,
       },
@@ -197,49 +234,74 @@ const LeaveService = {
       const response = await GenericApiComponent(url, method, body, {
         resourceType: 'Leave',
       });
-      return response;
+
+      const filteredResponse = response.filter(record => record.name !== null);
+
+      if (filteredResponse.length < pageSize) {
+        dispatch(setNoMoreAllRecords(true));
+      }
+
+      return filteredResponse;
     } catch (error) {
       throw error;
     }
   },
 
-  // fetchAllUserPaginatedLeaves: async (userId, {pageSize, pageCount}) => {
-  //   const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
-  //   const method = 'post';
-  //   const offset = pageSize * (pageCount - 1);
+  // Function to fetch paginated leaves by status only
+  fetchAllPaginatedLeaves: async ({status, pageSize, pageCount, dispatch}) => {
+    console.log('status, pageSize, pageCount', status, pageSize, pageCount);
 
-  //   const body = {
-  //     structuredQuery: {
-  //       from: [
-  //         {
-  //           collectionId: Constants.LEAVES,
-  //         },
-  //       ],
-  //       where: {
-  //         fieldFilter: {
-  //           field: {
-  //             fieldPath: 'userId',
-  //           },
-  //           op: 'EQUAL',
-  //           value: {
-  //             stringValue: userId,
-  //           },
-  //         },
-  //       },
-  //       limit: pageSize,
-  //       offset: offset,
-  //     },
-  //   };
+    const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
+    const method = 'post';
+    const offset = pageSize * (pageCount - 1);
 
-  //   try {
-  //     const response = await GenericApiComponent(url, method, body, {
-  //       resourceType: 'Leave',
-  //     });
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // },
+    const body = {
+      structuredQuery: {
+        from: [
+          {
+            collectionId: Constants.LEAVES,
+          },
+        ],
+        where: {
+          fieldFilter: {
+            field: {
+              fieldPath: 'status',
+            },
+            op: 'EQUAL',
+            value: {
+              stringValue: status,
+            },
+          },
+        },
+        // orderBy: [
+        //   {
+        //     field: {
+        //       fieldPath: 'fromDate',
+        //     },
+        //     direction: 'ASCENDING',
+        //   },
+        // ],
+        limit: pageSize,
+        offset: offset,
+      },
+    };
+
+    try {
+      const response = await GenericApiComponent(url, method, body, {
+        resourceType: 'Leave',
+      });
+
+      const filteredResponse = response.filter(record => record.name !== null);
+
+      if (filteredResponse.length < pageSize) {
+        dispatch(setNoMoreAllRecords(true));
+      }
+
+      return filteredResponse;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default LeaveService;

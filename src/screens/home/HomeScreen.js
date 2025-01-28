@@ -13,7 +13,11 @@ import CommonSafeAreaViewComponent from '../../components/ReusableComponents/Com
 import I18n from '../../i18n/i18n';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {fetchAllTasks} from '../../redux/tasks/TaskActions';
-import {fetchAllLeaves, fetchUserLeaves} from '../../redux/leave/LeaveActions';
+import {
+  clearLeavesState,
+  fetchAllLeaves,
+  fetchUserLeaves,
+} from '../../redux/leave/LeaveActions';
 import {
   fetchAllProfile,
   fetchProfile,
@@ -47,6 +51,7 @@ export default function HomeScreen({navigation}) {
     dispatch(clearSpecificUserData());
     dispatch(fetchAllUsers());
     dispatch(fetchAllTasks());
+    dispatch(clearLeavesState());
   }, [dispatch]);
 
   useEffect(() => {

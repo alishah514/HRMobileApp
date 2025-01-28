@@ -1,4 +1,4 @@
-import {FlatList, View} from 'react-native';
+import {Button, FlatList, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Header from '../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -14,11 +14,20 @@ import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import StatusComponent from './types/StatusComponent';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
-import {fetchAllLeaves, fetchUserLeaves} from '../../redux/leave/LeaveActions';
+import {
+  clearLeavesState,
+  fetchAllLeaves,
+  fetchUserLeaves,
+  getAllPaginatedLeaves,
+  getUserPaginatedLeaves,
+  setNoMoreAllRecords,
+} from '../../redux/leave/LeaveActions';
 import {useLoginData} from '../../hooks/useLoginData';
 import useLeaveData from '../../hooks/useLeaveData';
 import LeaveRequestModal from './modals/LeaveRequestModal';
 import ViewLeaveRequestModal from './modals/ViewLeaveRequestModal';
+import CommonButton from '../../components/ReusableComponents/CommonComponents/CommonButton';
+import {wp} from '../../components/common/Dimensions';
 
 const tabs = [
   {
@@ -45,8 +54,14 @@ export default function LeaveScreen({navigation, route}) {
   const source = route.params?.source || 'default';
 
   const dispatch = useDispatch();
-  const currentLanguage = useSelector(state => state.language.language);
-  const {leaves, leavesLoading, allLeaves} = useLeaveData();
+  const {
+    leavesLoading,
+    allPaginatedLeaves,
+    isLoadingAllPaginatedLeaves,
+    isLoadingUserPaginatedLeaves,
+    userPaginatedLeaves,
+    noMoreAllRecords,
+  } = useLeaveData();
   const {userId, role} = useLoginData();
   const [activeTab, setActiveTab] = useState(0);
   const [image, setImage] = useState(null);
@@ -57,24 +72,43 @@ export default function LeaveScreen({navigation, route}) {
   const [isViewLeaveRequestVisible, setIsViewLeaveRequestVisible] =
     useState(false);
   const [details, setDetails] = useState(null);
+  const [pageSize] = useState(25);
+  const [pageCount, setPageCount] = useState(1);
 
   useEffect(() => {
-    getLeaves();
+    getLeaves(pageSize, pageCount, 'pending');
+
+    return () => {
+      dispatch(setNoMoreAllRecords(false));
+      dispatch(clearLeavesState());
+      if (role === 'Employee') {
+        dispatch(fetchUserLeaves(userId));
+      } else {
+        dispatch(fetchAllLeaves());
+      }
+    };
   }, []);
 
-  const getLeaves = () => {
+  const getLeaves = (pageSize, pageCount, status) => {
     if (role === 'Employee') {
-      dispatch(fetchUserLeaves(userId));
-      // dispatch(
-      //   fetchUserLeaves(userId, {
-      //     limit: 25,
-      //   }),
-      // );
+      dispatch(
+        getUserPaginatedLeaves({
+          userId,
+          status,
+          pageSize,
+          pageCount,
+        }),
+      );
     } else {
-      dispatch(fetchAllLeaves());
+      dispatch(
+        getAllPaginatedLeaves({
+          status,
+          pageSize,
+          pageCount,
+        }),
+      );
     }
   };
-
   const toggleImageOptionsModal = () => {
     setIsImagePickerOptionsVisible(!isImagePickerOptionsVisible);
   };
@@ -90,6 +124,16 @@ export default function LeaveScreen({navigation, route}) {
 
   const handleTabPress = index => {
     setActiveTab(index);
+    setPageCount(1);
+    dispatch(clearLeavesState());
+
+    const statusMap = ['pending', 'approved', 'rejected'];
+    const status = statusMap[index];
+
+    const pageSize = 25;
+    const pageCount = 1;
+
+    getLeaves(pageSize, pageCount, status);
   };
 
   const goBack = () => {
@@ -100,9 +144,24 @@ export default function LeaveScreen({navigation, route}) {
     navigation.openDrawer();
   };
 
+  const loadMoreLeaves = () => {
+    setPageCount(prevPageCount => {
+      const newPageCount = prevPageCount + 1;
+
+      const statusMap = ['pending', 'approved', 'rejected'];
+      const status = statusMap[activeTab];
+
+      getLeaves(pageSize, newPageCount, status);
+
+      return newPageCount;
+    });
+  };
+
   return (
     <CommonSafeAreaViewComponent>
-      {leavesLoading && <LogoLoaderComponent />}
+      {(leavesLoading ||
+        isLoadingAllPaginatedLeaves ||
+        isLoadingUserPaginatedLeaves) && <LogoLoaderComponent />}
       <Header
         title={I18n.t('leaves')}
         onLeftIconPressed={source === 'drawer' ? handleDrawerOpen : goBack}
@@ -146,35 +205,25 @@ export default function LeaveScreen({navigation, route}) {
               contentContainerStyle={[styles.infoStarting]}
               data={[activeTab]}
               renderItem={() => (
-                <View>
-                  {activeTab === 0 ? (
-                    <StatusComponent
-                      status="pending"
-                      data={(role === 'Employee' ? leaves : allLeaves).filter(
-                        leave => leave.status === 'pending',
-                      )}
-                      toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
-                    />
-                  ) : activeTab === 1 ? (
-                    <StatusComponent
-                      status="approved"
-                      data={(role === 'Employee' ? leaves : allLeaves).filter(
-                        leave => leave.status === 'approved',
-                      )}
-                      toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
-                    />
-                  ) : activeTab === 2 ? (
-                    <StatusComponent
-                      status="rejected"
-                      data={(role === 'Employee' ? leaves : allLeaves).filter(
-                        leave => leave.status === 'rejected',
-                      )}
-                      toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
-                    />
-                  ) : null}
-                </View>
+                <StatusComponent
+                  status={
+                    activeTab === 0
+                      ? 'pending'
+                      : activeTab === 1
+                      ? 'approved'
+                      : 'rejected'
+                  }
+                  data={
+                    role === 'Employee'
+                      ? userPaginatedLeaves
+                      : allPaginatedLeaves
+                  }
+                  toggleViewLeaveRequestModal={toggleViewLeaveRequestModal}
+                />
               )}
               keyExtractor={(item, index) => index.toString()}
+              onEndReached={!noMoreAllRecords && loadMoreLeaves}
+              onEndReachedThreshold={0.1}
             />
           </>
         }

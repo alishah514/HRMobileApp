@@ -5,20 +5,40 @@ const useLeaveData = () => {
     data: leaves,
     isLoading,
     allLeaves,
-    loadingPaginatedLeaves,
-    paginatedLeaves,
+    error,
+    leaveData,
+    patchSuccess,
+    userPaginatedLeaves,
+    isLoadingUserPaginatedLeaves,
+    userPaginatedError,
+    allPaginatedLeaves,
+    isLoadingAllPaginatedLeaves,
+    allPaginatedError,
+    noMoreAllRecords,
   } = useSelector(state => state.leaves);
+
   const validLeavesCount = leaves?.filter(leave => leave.name).length || 0;
   const validAllLeavesCount =
     allLeaves?.filter(leave => leave.name).length || 0;
+
   return {
     leaves,
     validLeavesCount,
     leavesLoading: isLoading,
     allLeaves,
     validAllLeavesCount,
-    loadingPaginatedLeaves,
-    paginatedLeaves,
+    loadingPaginatedLeaves: isLoadingAllPaginatedLeaves,
+    paginatedLeaves: allPaginatedLeaves,
+    error,
+    leaveData,
+    patchSuccess,
+    userPaginatedLeaves,
+    isLoadingUserPaginatedLeaves,
+    userPaginatedError,
+    allPaginatedLeaves,
+    isLoadingAllPaginatedLeaves,
+    allPaginatedError,
+    noMoreAllRecords,
   };
 };
 
