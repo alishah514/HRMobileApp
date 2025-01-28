@@ -22,7 +22,7 @@ import {
   FETCH_ALL_PAGINATED_LEAVES_START,
   FETCH_ALL_PAGINATED_LEAVES_SUCCESS,
   FETCH_ALL_PAGINATED_LEAVES_FAILURE,
-  SET_NO_MORE_ALL_RECORDS,
+  SET_NO_MORE_ALL_LEAVES_RECORDS,
 } from '../actions/actionTypes';
 
 export const fetchAllLeavesStart = () => ({
@@ -127,8 +127,8 @@ export const deleteLeaveFailure = error => ({
   payload: error,
 });
 
-export const setNoMoreAllRecords = () => ({
-  type: SET_NO_MORE_ALL_RECORDS,
+export const setNoMoreAllLeaveRecords = () => ({
+  type: SET_NO_MORE_ALL_LEAVES_RECORDS,
   payload: true,
 });
 

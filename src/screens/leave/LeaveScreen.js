@@ -1,5 +1,5 @@
-import {Button, FlatList, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {FlatList} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import Header from '../../components/ReusableComponents/Header/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../../components/common/Constants';
@@ -10,7 +10,7 @@ import ImagePickerComponent from '../../components/ReusableComponents/ImagePicke
 import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeader';
 import styles from './styles';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import StatusComponent from './types/StatusComponent';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
@@ -20,14 +20,12 @@ import {
   fetchUserLeaves,
   getAllPaginatedLeaves,
   getUserPaginatedLeaves,
-  setNoMoreAllRecords,
+  setNoMoreAllLeaveRecords,
 } from '../../redux/leave/LeaveActions';
 import {useLoginData} from '../../hooks/useLoginData';
 import useLeaveData from '../../hooks/useLeaveData';
 import LeaveRequestModal from './modals/LeaveRequestModal';
 import ViewLeaveRequestModal from './modals/ViewLeaveRequestModal';
-import CommonButton from '../../components/ReusableComponents/CommonComponents/CommonButton';
-import {wp} from '../../components/common/Dimensions';
 
 const tabs = [
   {
@@ -52,6 +50,7 @@ const tabs = [
 
 export default function LeaveScreen({navigation, route}) {
   const source = route.params?.source || 'default';
+  const flatListRef = useRef(null);
 
   const dispatch = useDispatch();
   const {
@@ -72,14 +71,14 @@ export default function LeaveScreen({navigation, route}) {
   const [isViewLeaveRequestVisible, setIsViewLeaveRequestVisible] =
     useState(false);
   const [details, setDetails] = useState(null);
-  const [pageSize] = useState(25);
+  const [pageSize] = useState(4);
   const [pageCount, setPageCount] = useState(1);
 
   useEffect(() => {
     getLeaves(pageSize, pageCount, 'pending');
 
     return () => {
-      dispatch(setNoMoreAllRecords(false));
+      dispatch(setNoMoreAllLeaveRecords(false));
       dispatch(clearLeavesState());
       if (role === 'Employee') {
         dispatch(fetchUserLeaves(userId));
@@ -122,7 +121,11 @@ export default function LeaveScreen({navigation, route}) {
     setDetails({...item});
   };
 
-  const handleTabPress = index => {
+  const scrollToTop = () => {
+    flatListRef.current?.scrollToOffset({animated: true, offset: 0});
+  };
+
+  const handleTabLogic = index => {
     setActiveTab(index);
     setPageCount(1);
     dispatch(clearLeavesState());
@@ -130,10 +133,18 @@ export default function LeaveScreen({navigation, route}) {
     const statusMap = ['pending', 'approved', 'rejected'];
     const status = statusMap[index];
 
-    const pageSize = 25;
+    const pageSize = 4;
     const pageCount = 1;
 
     getLeaves(pageSize, pageCount, status);
+  };
+
+  const handleTabPress = index => {
+    scrollToTop();
+
+    setTimeout(() => {
+      handleTabLogic(index);
+    }, 300);
   };
 
   const goBack = () => {
@@ -201,6 +212,7 @@ export default function LeaveScreen({navigation, route}) {
               handleTabPress={handleTabPress}
             />
             <FlatList
+              ref={flatListRef}
               style={styles.maxHeight}
               contentContainerStyle={[styles.infoStarting]}
               data={[activeTab]}

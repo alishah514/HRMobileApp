@@ -21,7 +21,7 @@ import {
   FETCH_ALL_PAGINATED_LEAVES_START,
   FETCH_ALL_PAGINATED_LEAVES_SUCCESS,
   FETCH_ALL_PAGINATED_LEAVES_FAILURE,
-  SET_NO_MORE_ALL_RECORDS,
+  SET_NO_MORE_ALL_LEAVES_RECORDS,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -173,7 +173,7 @@ const LeaveReducer = (state = initialState, action) => {
         isLoading: false,
         error: action.payload,
       };
-    case SET_NO_MORE_ALL_RECORDS:
+    case SET_NO_MORE_ALL_LEAVES_RECORDS:
       return {
         ...state,
         noMoreAllRecords: action.payload,

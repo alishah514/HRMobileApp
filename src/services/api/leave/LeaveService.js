@@ -1,5 +1,5 @@
 import Constants from '../../../components/common/Constants';
-import {setNoMoreAllRecords} from '../../../redux/leave/LeaveActions';
+import {setNoMoreAllLeaveRecords} from '../../../redux/leave/LeaveActions';
 import GenericApiComponent from '../../GenericApiComponent';
 
 const LeaveService = {
@@ -238,7 +238,7 @@ const LeaveService = {
       const filteredResponse = response.filter(record => record.name !== null);
 
       if (filteredResponse.length < pageSize) {
-        dispatch(setNoMoreAllRecords(true));
+        dispatch(setNoMoreAllLeaveRecords(true));
       }
 
       return filteredResponse;
@@ -294,7 +294,7 @@ const LeaveService = {
       const filteredResponse = response.filter(record => record.name !== null);
 
       if (filteredResponse.length < pageSize) {
-        dispatch(setNoMoreAllRecords(true));
+        dispatch(setNoMoreAllLeaveRecords(true));
       }
 
       return filteredResponse;
