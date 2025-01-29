@@ -12,6 +12,13 @@ import {
   FETCH_ALL_TASKS_START,
   FETCH_ALL_TASKS_SUCCESS,
   FETCH_ALL_TASKS_FAILURE,
+  SET_NO_MORE_ALL_TASKS_RECORDS,
+  FETCH_ALL_PAGINATED_TASKS_START,
+  FETCH_ALL_PAGINATED_TASKS_SUCCESS,
+  FETCH_ALL_PAGINATED_TASKS_FAILURE,
+  FETCH_USER_PAGINATED_TASKS_START,
+  FETCH_USER_PAGINATED_TASKS_SUCCESS,
+  FETCH_USER_PAGINATED_TASKS_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -21,6 +28,13 @@ const initialState = {
   error: null,
   taskData: null,
   patchSuccess: false,
+  allPaginatedTasks: [],
+  isLoadingAllPaginatedTasks: false,
+  allPaginatedError: null,
+  userPaginatedTasks: [],
+  isLoadingUserPaginatedTasks: false,
+  userPaginatedError: null,
+  noMoreAllRecords: false,
 };
 
 const TaskReducer = (state = initialState, action) => {
@@ -58,6 +72,42 @@ const TaskReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: action.payload,
+      };
+    case FETCH_ALL_PAGINATED_TASKS_START:
+      return {
+        ...state,
+        isLoadingAllPaginatedTasks: true,
+        allPaginatedError: null,
+      };
+    case FETCH_ALL_PAGINATED_TASKS_SUCCESS:
+      return {
+        ...state,
+        isLoadingAllPaginatedTasks: false,
+        allPaginatedTasks: [...state.allPaginatedTasks, ...action.payload],
+      };
+    case FETCH_ALL_PAGINATED_TASKS_FAILURE:
+      return {
+        ...state,
+        isLoadingAllPaginatedTasks: false,
+        allPaginatedError: action.payload,
+      };
+    case FETCH_USER_PAGINATED_TASKS_START:
+      return {
+        ...state,
+        isLoadingUserPaginatedTasks: true,
+        userPaginatedError: null,
+      };
+    case FETCH_USER_PAGINATED_TASKS_SUCCESS:
+      return {
+        ...state,
+        isLoadingUserPaginatedTasks: false,
+        userPaginatedTasks: [...state.userPaginatedTasks, ...action.payload],
+      };
+    case FETCH_USER_PAGINATED_TASKS_FAILURE:
+      return {
+        ...state,
+        isLoadingUserPaginatedTasks: false,
+        userPaginatedError: action.payload,
       };
     case CLEAR_TASKS_STATE:
       return initialState;
@@ -102,6 +152,11 @@ const TaskReducer = (state = initialState, action) => {
         isLoading: false,
         patchSuccess: false,
         error: action.payload,
+      };
+    case SET_NO_MORE_ALL_TASKS_RECORDS:
+      return {
+        ...state,
+        noMoreAllRecords: action.payload,
       };
 
     default:

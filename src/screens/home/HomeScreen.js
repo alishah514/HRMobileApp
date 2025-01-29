@@ -12,7 +12,7 @@ import PunchInOut from './PunchComponent/PunchInOut';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import I18n from '../../i18n/i18n';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
-import {fetchAllTasks} from '../../redux/tasks/TaskActions';
+import {clearTasksState, fetchAllTasks} from '../../redux/tasks/TaskActions';
 import {
   clearLeavesState,
   fetchAllLeaves,
@@ -52,6 +52,7 @@ export default function HomeScreen({navigation}) {
     dispatch(fetchAllUsers());
     dispatch(fetchAllTasks());
     dispatch(clearLeavesState());
+    dispatch(clearTasksState());
   }, [dispatch]);
 
   useEffect(() => {

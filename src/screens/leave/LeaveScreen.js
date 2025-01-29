@@ -71,11 +71,11 @@ export default function LeaveScreen({navigation, route}) {
   const [isViewLeaveRequestVisible, setIsViewLeaveRequestVisible] =
     useState(false);
   const [details, setDetails] = useState(null);
-  const [pageSize] = useState(4);
+
   const [pageCount, setPageCount] = useState(1);
 
   useEffect(() => {
-    getLeaves(pageSize, pageCount, 'pending');
+    getLeaves(Constants.PAGE_SIZE, pageCount, 'pending');
 
     return () => {
       dispatch(setNoMoreAllLeaveRecords(false));
@@ -133,10 +133,7 @@ export default function LeaveScreen({navigation, route}) {
     const statusMap = ['pending', 'approved', 'rejected'];
     const status = statusMap[index];
 
-    const pageSize = 4;
-    const pageCount = 1;
-
-    getLeaves(pageSize, pageCount, status);
+    getLeaves(Constants.PAGE_SIZE, 1, status);
   };
 
   const handleTabPress = index => {
@@ -162,7 +159,7 @@ export default function LeaveScreen({navigation, route}) {
       const statusMap = ['pending', 'approved', 'rejected'];
       const status = statusMap[activeTab];
 
-      getLeaves(pageSize, newPageCount, status);
+      getLeaves(Constants.PAGE_SIZE, newPageCount, status);
 
       return newPageCount;
     });
@@ -250,13 +247,13 @@ export default function LeaveScreen({navigation, route}) {
       <LeaveRequestModal
         isModalVisible={isAddLeaveRequestVisible}
         toggleModal={toggleLeaveRequestModal}
-        apiCall={getLeaves}
+        apiCall={() => getLeaves(Constants.PAGE_SIZE, 1, 'pending')}
       />
       <ViewLeaveRequestModal
         isModalVisible={isViewLeaveRequestVisible}
         toggleModal={toggleViewLeaveRequestModal}
         leaveDetails={details}
-        apiCall={getLeaves}
+        apiCall={() => getLeaves(Constants.PAGE_SIZE, 1, 'pending')}
       />
     </CommonSafeAreaViewComponent>
   );

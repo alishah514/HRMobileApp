@@ -1,5 +1,5 @@
 import {View, Text, FlatList} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Header from '../../components/ReusableComponents/Header/Header';
 import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
@@ -12,9 +12,15 @@ import TabBarHeader from '../../components/ReusableComponents/Header/TabBarHeade
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import AddTaskModal from './status/modals/AddTaskModal';
 import I18n from '../../i18n/i18n';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import TasksComponent from './status/TaskComponent';
-import {fetchAllTasks, fetchUserTasks} from '../../redux/tasks/TaskActions';
+import {
+  clearTasksState,
+  fetchAllTasks,
+  getAllPaginatedTasks,
+  getUserPaginatedTasks,
+  setNoMoreAllTaskRecords,
+} from '../../redux/tasks/TaskActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import {useLoginData} from '../../hooks/useLoginData';
 import useTaskData from '../../hooks/useTaskData';
@@ -42,26 +48,88 @@ const tabs = [
 
 export default function TaskScreen({navigation, route}) {
   const source = route.params?.source || 'default';
+  const flatListRef = useRef(null);
+
   const dispatch = useDispatch();
-  const currentLanguage = useSelector(state => state.language.language);
   const {userId, role} = useLoginData();
-  const {tasksLoading, allTasks} = useTaskData();
+  const {
+    tasksLoading,
+    allPaginatedTasks,
+    isLoadingAllPaginatedTasks,
+    noMoreAllRecords,
+    userPaginatedTasks,
+    isLoadingUserPaginatedTasks,
+  } = useTaskData();
   const [activeTab, setActiveTab] = useState(0);
   const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
-
-  const employeeTasks = allTasks.filter(
-    task => task.assignedTo === userId || task.userId === userId,
-  );
+  const [pageCount, setPageCount] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchAllTasks());
-  }, [dispatch]);
+    getTasks(Constants.PAGE_SIZE, pageCount, 'All');
 
-  const handleTabPress = index => {
-    setActiveTab(index);
+    return () => {
+      dispatch(setNoMoreAllTaskRecords(false));
+      dispatch(clearTasksState());
+
+      dispatch(fetchAllTasks());
+    };
+  }, []);
+
+  const getTasks = (pageSize, pageCount, status) => {
+    if (role === 'Employee') {
+      dispatch(
+        getUserPaginatedTasks({
+          userId,
+          status,
+          pageSize,
+          pageCount,
+        }),
+      );
+    } else {
+      dispatch(
+        getAllPaginatedTasks({
+          status,
+          pageSize,
+          pageCount,
+        }),
+      );
+    }
   };
 
-  const toggleAddTaskModal = item => {
+  useEffect(() => {
+    getAllTasks();
+  }, [dispatch]);
+
+  const getAllTasks = () => {
+    dispatch(fetchAllTasks());
+  };
+
+  const scrollToTop = () => {
+    flatListRef.current?.scrollToOffset({animated: true, offset: 0});
+  };
+
+  const handleTabLogic = index => {
+    setActiveTab(index);
+
+    setPageCount(1);
+    dispatch(clearTasksState());
+    dispatch(fetchAllTasks());
+
+    const statusMap = ['All', 'Pending', 'Completed'];
+    const status = statusMap[index];
+
+    getTasks(Constants.PAGE_SIZE, 1, status);
+  };
+
+  const handleTabPress = index => {
+    scrollToTop();
+
+    setTimeout(() => {
+      handleTabLogic(index);
+    }, 300);
+  };
+
+  const toggleAddTaskModal = () => {
     setIsAddTaskModalVisible(!isAddTaskModalVisible);
   };
 
@@ -73,9 +141,29 @@ export default function TaskScreen({navigation, route}) {
     navigation.openDrawer();
   };
 
+  const loadMoreLeaves = () => {
+    setPageCount(prevPageCount => {
+      const newPageCount = prevPageCount + 1;
+
+      const statusMap = ['All', 'Pending', 'Completed'];
+      const status = statusMap[activeTab];
+      if (
+        !noMoreAllRecords &&
+        !tasksLoading &&
+        !(isLoadingAllPaginatedTasks || !isLoadingUserPaginatedTasks)
+      ) {
+        getTasks(Constants.PAGE_SIZE, newPageCount, status);
+      }
+
+      return newPageCount;
+    });
+  };
+
   return (
     <CommonSafeAreaViewComponent>
-      {tasksLoading && <LogoLoaderComponent />}
+      {(tasksLoading ||
+        isLoadingAllPaginatedTasks ||
+        isLoadingUserPaginatedTasks) && <LogoLoaderComponent />}
       <Header
         title={I18n.t('tasks')}
         onLeftIconPressed={source === 'drawer' ? handleDrawerOpen : goBack}
@@ -121,44 +209,39 @@ export default function TaskScreen({navigation, route}) {
               handleTabPress={handleTabPress}
             />
             <FlatList
+              ref={flatListRef}
               style={CommonStyles.maxHeight}
               contentContainerStyle={[CommonStyles.infoStarting]}
               data={[activeTab]}
-              renderItem={() => (
-                <View>
-                  {activeTab === 0 ? (
-                    <TasksComponent
-                      taskType="all"
-                      data={role === 'Employee' ? employeeTasks : allTasks}
-                    />
-                  ) : activeTab === 1 ? (
-                    <TasksComponent
-                      taskType="Pending"
-                      data={
-                        role === 'Employee'
-                          ? employeeTasks?.filter(
-                              task => task.status === 'Pending',
-                            )
-                          : allTasks?.filter(task => task.status === 'Pending')
-                      }
-                    />
-                  ) : activeTab === 2 ? (
-                    <TasksComponent
-                      taskType="Completed"
-                      data={
-                        role === 'Employee'
-                          ? employeeTasks?.filter(
-                              task => task.status === 'Completed',
-                            )
-                          : allTasks?.filter(
-                              task => task.status === 'Completed',
-                            )
-                      }
-                    />
-                  ) : null}
-                </View>
-              )}
+              renderItem={() => {
+                const taskTypes = ['All', 'Pending', 'Completed'];
+                const selectedTaskType = taskTypes[activeTab];
+
+                return (
+                  <TasksComponent
+                    taskType={selectedTaskType}
+                    data={
+                      role === 'Employee'
+                        ? userPaginatedTasks
+                        : allPaginatedTasks
+                    }
+                    apiCall={() =>
+                      getTasks(Constants.PAGE_SIZE, 1, selectedTaskType)
+                    }
+                  />
+                );
+              }}
               keyExtractor={(item, index) => index.toString()}
+              onEndReached={() => {
+                if (
+                  !noMoreAllRecords &&
+                  !tasksLoading &&
+                  (!isLoadingAllPaginatedTasks || !isLoadingUserPaginatedTasks)
+                ) {
+                  loadMoreLeaves();
+                }
+              }}
+              onEndReachedThreshold={0.1}
             />
           </>
         }
@@ -166,6 +249,7 @@ export default function TaskScreen({navigation, route}) {
       <AddTaskModal
         isModalVisible={isAddTaskModalVisible}
         toggleModal={toggleAddTaskModal}
+        apiCall={() => getTasks(Constants.PAGE_SIZE, 1, 'All')}
       />
     </CommonSafeAreaViewComponent>
   );

@@ -12,7 +12,9 @@ import CommonButton from '../../../../components/ReusableComponents/CommonCompon
 import {useDispatch} from 'react-redux';
 import I18n from '../../../../i18n/i18n';
 import {
+  clearTasksState,
   fetchAllTasks,
+  getAllPaginatedTasks,
   postTaskRequest,
 } from '../../../../redux/tasks/TaskActions';
 import {convertToTimestamp} from '../../../../components/utils/dateUtils';
@@ -23,11 +25,11 @@ import CustomDatePickerComponent from '../../../../components/ReusableComponents
 import {TruncateTitle} from '../../../../components/utils/TruncateTitle';
 import {useAccountsData} from '../../../../hooks/useAccountsData';
 
-export default function AddTaskModal({isModalVisible, toggleModal}) {
+export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
   const dispatch = useDispatch();
   const {allUsersData} = useAccountsData();
   const {tasksLoading} = useTaskData();
-  const {userId} = useLoginData();
+  const {userId, role} = useLoginData();
   const [taskTitle, setTaskTitle] = useState('');
   const [taskCode, setTaskCode] = useState('');
   const [taskCategory, setTaskCategory] = useState(null);
@@ -119,7 +121,11 @@ export default function AddTaskModal({isModalVisible, toggleModal}) {
       Alert.alert('Task added successfully! ');
       clearStates();
       toggleModal();
+      dispatch(clearTasksState());
       dispatch(fetchAllTasks());
+      if (role === 'Admin') {
+        apiCall();
+      }
     } else {
       console.error('Failed to post task request:', response.error);
     }

@@ -1,4 +1,5 @@
 import Constants from '../../../components/common/Constants';
+import {setNoMoreAllTaskRecords} from '../../../redux/tasks/TaskActions';
 import GenericApiComponent from '../../GenericApiComponent';
 
 const TaskService = {
@@ -73,6 +74,7 @@ const TaskService = {
 
     try {
       const response = await GenericApiComponent(url, method, body, options);
+
       return {success: true, response};
     } catch (error) {
       console.error('Error in TaskService.patchTask:', error);
@@ -135,6 +137,160 @@ const TaskService = {
     try {
       const response = await GenericApiComponent(url, method, body, options);
       return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  // Function to fetch paginated TASKS by status and userId only
+  fetchUserPaginatedTasks: async ({
+    userId,
+    status,
+    pageSize,
+    pageCount,
+    dispatch,
+  }) => {
+    console.log('status, pageSize, pageCount', status, pageSize, pageCount);
+
+    const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
+    const method = 'post';
+    const offset = pageSize * (pageCount - 1);
+
+    const query = {
+      from: [
+        {
+          collectionId: Constants.TASKS,
+        },
+      ],
+      limit: pageSize,
+      offset: offset,
+    };
+
+    // Construct 'where' condition
+    if (userId) {
+      query.where = {
+        compositeFilter: {
+          op: 'OR',
+          filters: [
+            {
+              fieldFilter: {
+                field: {fieldPath: 'userId'},
+                op: 'EQUAL',
+                value: {stringValue: userId},
+              },
+            },
+            {
+              fieldFilter: {
+                field: {fieldPath: 'assignedTo'},
+                op: 'EQUAL',
+                value: {stringValue: userId},
+              },
+            },
+          ],
+        },
+      };
+    }
+
+    // Add status filter only if status is not "All"
+    if (status && status !== 'All') {
+      const statusFilter = {
+        fieldFilter: {
+          field: {fieldPath: 'status'},
+          op: 'EQUAL',
+          value: {stringValue: status},
+        },
+      };
+
+      if (query.where) {
+        // If a user filter exists, add status filter using AND
+        query.where = {
+          compositeFilter: {
+            op: 'AND',
+            filters: [query.where, statusFilter],
+          },
+        };
+      } else {
+        // If no user filter, just apply the status filter
+        query.where = statusFilter;
+      }
+    }
+
+    const body = {
+      structuredQuery: query,
+    };
+
+    try {
+      const response = await GenericApiComponent(url, method, body, {
+        resourceType: 'Task',
+      });
+
+      const filteredResponse = response.filter(record => record.name !== null);
+
+      console.log('fetchUserPaginatedTasks:', filteredResponse?.length);
+      console.log('pageSize', pageSize);
+
+      if (filteredResponse.length < pageSize) {
+        dispatch(setNoMoreAllTaskRecords(true));
+      }
+
+      return filteredResponse;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Function to fetch paginated TASKS by status only
+  fetchAllPaginatedTasks: async ({status, pageSize, pageCount, dispatch}) => {
+    console.log('status, pageSize, pageCount', status, pageSize, pageCount);
+
+    const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
+    const method = 'post';
+    const offset = pageSize * (pageCount - 1);
+
+    // Construct the query
+    const query = {
+      from: [
+        {
+          collectionId: Constants.TASKS,
+        },
+      ],
+      limit: pageSize,
+      offset: offset,
+    };
+
+    // Add the 'where' clause only if status is not "All"
+    if (status && status !== 'All') {
+      query.where = {
+        fieldFilter: {
+          field: {
+            fieldPath: 'status',
+          },
+          op: 'EQUAL',
+          value: {
+            stringValue: status,
+          },
+        },
+      };
+    }
+
+    const body = {
+      structuredQuery: query,
+    };
+
+    try {
+      const response = await GenericApiComponent(url, method, body, {
+        resourceType: 'Task',
+      });
+
+      const filteredResponse = response.filter(record => record.name !== null);
+
+      console.log('fetchAllPaginatedTasks:', filteredResponse?.length);
+      console.log('pageSize', pageSize);
+
+      if (filteredResponse.length < pageSize) {
+        dispatch(setNoMoreAllTaskRecords(true));
+      }
+
+      return filteredResponse;
     } catch (error) {
       throw error;
     }

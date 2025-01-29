@@ -12,6 +12,7 @@ import I18n from '../../../../i18n/i18n';
 import {formatDate} from '../../../../components/utils/dateUtils';
 import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
 import {
+  clearTasksState,
   fetchAllTasks,
   patchTaskStatus,
 } from '../../../../redux/tasks/TaskActions';
@@ -27,10 +28,11 @@ export default function TaskDetailModal({
   isModalVisible,
   toggleModal,
   taskDetails = {},
+  apiCall,
 }) {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.language.language);
-  const {userId} = useLoginData();
+  const {userId, role} = useLoginData();
 
   const {allUsersData} = useAccountsData();
   const {tasksLoading} = useTaskData();
@@ -116,7 +118,7 @@ export default function TaskDetailModal({
     const message = 'Are you sure you have update this task?';
 
     Alert.alert(
-      'Task Completed?',
+      'Confirm Update?',
       message,
       [
         {
@@ -139,9 +141,12 @@ export default function TaskDetailModal({
     const response = await dispatch(patchTaskStatus(taskId, taskData));
 
     if (response.success === true) {
-      Alert.alert('Task Status Updated Successfully!');
+      Alert.alert('Task Updated Successfully!');
       toggleModal();
+      dispatch(clearTasksState());
       dispatch(fetchAllTasks());
+
+      apiCall();
     } else {
       console.error('Failed to post leave request:', response.error);
     }

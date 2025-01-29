@@ -13,6 +13,13 @@ import {
   FETCH_ALL_TASKS_START,
   FETCH_ALL_TASKS_SUCCESS,
   FETCH_ALL_TASKS_FAILURE,
+  FETCH_ALL_PAGINATED_TASKS_START,
+  FETCH_ALL_PAGINATED_TASKS_SUCCESS,
+  FETCH_ALL_PAGINATED_TASKS_FAILURE,
+  SET_NO_MORE_ALL_TASKS_RECORDS,
+  FETCH_USER_PAGINATED_TASKS_START,
+  FETCH_USER_PAGINATED_TASKS_SUCCESS,
+  FETCH_USER_PAGINATED_TASKS_FAILURE,
 } from '../actions/actionTypes';
 
 export const fetchAllTasksStart = () => ({
@@ -39,6 +46,34 @@ export const fetchTasksSuccess = tasks => ({
 
 export const fetchTasksFailure = error => ({
   type: FETCH_TASKS_FAILURE,
+  payload: error,
+});
+
+export const fetchAllPaginatedTasksStart = () => ({
+  type: FETCH_ALL_PAGINATED_TASKS_START,
+});
+
+export const fetchAllPaginatedTasksSuccess = leaves => ({
+  type: FETCH_ALL_PAGINATED_TASKS_SUCCESS,
+  payload: leaves,
+});
+
+export const fetchAllPaginatedTasksFailure = error => ({
+  type: FETCH_ALL_PAGINATED_TASKS_FAILURE,
+  payload: error,
+});
+
+export const fetchUserPaginatedTasksStart = () => ({
+  type: FETCH_USER_PAGINATED_TASKS_START,
+});
+
+export const fetchUserPaginatedTasksSuccess = leaves => ({
+  type: FETCH_USER_PAGINATED_TASKS_SUCCESS,
+  payload: leaves,
+});
+
+export const fetchUserPaginatedTasksFailure = error => ({
+  type: FETCH_USER_PAGINATED_TASKS_FAILURE,
   payload: error,
 });
 
@@ -72,6 +107,11 @@ export const patchTaskStatusSuccess = response => ({
 export const patchTaskStatusFailure = error => ({
   type: PATCH_TASK_STATUS_FAILURE,
   payload: error,
+});
+
+export const setNoMoreAllTaskRecords = () => ({
+  type: SET_NO_MORE_ALL_TASKS_RECORDS,
+  payload: true,
 });
 
 export const fetchAllTasks = () => async dispatch => {
@@ -124,3 +164,40 @@ export const patchTaskStatus = (taskId, taskData) => async dispatch => {
 
   return response;
 };
+
+export const getUserPaginatedTasks =
+  ({userId, status, pageSize, pageCount}) =>
+  async dispatch => {
+    dispatch(fetchUserPaginatedTasksStart());
+    try {
+      const response = await TaskService.fetchUserPaginatedTasks({
+        userId,
+        status,
+        pageSize,
+        pageCount,
+        dispatch,
+      });
+
+      dispatch(fetchUserPaginatedTasksSuccess(response));
+    } catch (error) {
+      dispatch(fetchUserPaginatedTasksFailure(error));
+    }
+  };
+
+export const getAllPaginatedTasks =
+  ({status, pageSize, pageCount}) =>
+  async dispatch => {
+    dispatch(fetchAllPaginatedTasksStart());
+    try {
+      const response = await TaskService.fetchAllPaginatedTasks({
+        status,
+        pageSize,
+        pageCount,
+        dispatch,
+      });
+
+      dispatch(fetchAllPaginatedTasksSuccess(response));
+    } catch (error) {
+      dispatch(fetchAllPaginatedTasksFailure(error));
+    }
+  };

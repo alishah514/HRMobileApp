@@ -1,5 +1,5 @@
 import {View, Text, FlatList, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import CommonStyles from '../../../components/common/CommonStyles';
 import {Colors} from '../../../components/common/Colors';
@@ -10,12 +10,32 @@ import TaskDetailModal from './modals/TaskDetailModal';
 import {wp} from '../../../components/common/Dimensions';
 import {useSelector} from 'react-redux';
 import I18n from '../../../i18n/i18n';
+import useTaskData from '../../../hooks/useTaskData';
+import {useLoginData} from '../../../hooks/useLoginData';
 
-export default function TimeLine({data, status}) {
-  const currentLanguage = useSelector(state => state.language.language);
-  const tasks = useSelector(state => state.tasks.data);
+export default function TimeLine({data, status, apiCall}) {
+  const {allTasks} = useTaskData();
+  const {userId, role} = useLoginData();
   const [isTaskDetailModal, setIsTaskDetailModal] = useState(null);
   const [details, setDetails] = useState(null);
+  const [userTasks, setUserTasks] = useState({pending: 0, completed: 0});
+
+  useEffect(() => {
+    if (role === 'Employee') {
+      const employeeTasks = allTasks.filter(
+        task => task.assignedTo === userId || task.userId === userId,
+      );
+
+      const pendingTasks = employeeTasks.filter(
+        task => task.status === 'Pending',
+      ).length;
+      const completedTasks = employeeTasks.filter(
+        task => task.status === 'Completed',
+      ).length;
+
+      setUserTasks({pending: pendingTasks, completed: completedTasks});
+    }
+  }, [allTasks]);
 
   const sortedData = [...data].sort((a, b) => {
     if (a.status === 'Pending' && b.status === 'Completed') {
@@ -27,7 +47,7 @@ export default function TimeLine({data, status}) {
     const aCreateTime = new Date(a.createTime);
     const bCreateTime = new Date(b.createTime);
 
-    return aCreateTime - bCreateTime;
+    return bCreateTime - aCreateTime;
   });
 
   const toggleTaskDetailModal = item => {
@@ -35,10 +55,8 @@ export default function TimeLine({data, status}) {
     setDetails({...item});
   };
 
-  const pendingTasks = sortedData?.filter(task => task.status === 'Pending');
-  const completedTasks = sortedData?.filter(
-    task => task.status === 'Completed',
-  );
+  const pendingTasks = allTasks?.filter(task => task.status === 'Pending');
+  const completedTasks = allTasks?.filter(task => task.status === 'Completed');
 
   const TaskItem = ({item}) => (
     <TouchableOpacity
@@ -124,8 +142,14 @@ export default function TimeLine({data, status}) {
                       CommonStyles.textBlack,
                       CommonStyles.paddingLeft1,
                     ]}>
-                    {pendingTasks?.length}{' '}
-                    {pendingTasks?.length === 1
+                    {role === 'Admin'
+                      ? pendingTasks?.length
+                      : userTasks?.pending}{' '}
+                    {role === 'Admin'
+                      ? pendingTasks?.length === 1
+                        ? I18n.t('pendingTask')
+                        : I18n.t('pendingTasks')
+                      : userTasks?.pending === 1
                       ? I18n.t('pendingTask')
                       : I18n.t('pendingTasks')}
                   </Text>
@@ -144,8 +168,14 @@ export default function TimeLine({data, status}) {
                       CommonStyles.textBlack,
                       CommonStyles.paddingLeft1,
                     ]}>
-                    {completedTasks?.length}{' '}
-                    {completedTasks?.length === 1
+                    {role === 'Admin'
+                      ? completedTasks?.length
+                      : userTasks?.completed}{' '}
+                    {role === 'Admin'
+                      ? completedTasks?.length === 1
+                        ? I18n.t('completedTask')
+                        : I18n.t('completedTasks')
+                      : userTasks?.completed === 1
                       ? I18n.t('completedTask')
                       : I18n.t('completedTasks')}
                   </Text>
@@ -179,6 +209,7 @@ export default function TimeLine({data, status}) {
         isModalVisible={isTaskDetailModal}
         toggleModal={toggleTaskDetailModal}
         taskDetails={details}
+        apiCall={apiCall}
       />
     </>
   );

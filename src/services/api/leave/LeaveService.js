@@ -293,6 +293,8 @@ const LeaveService = {
 
       const filteredResponse = response.filter(record => record.name !== null);
 
+      console.log('filteredResponse:', filteredResponse.length);
+
       if (filteredResponse.length < pageSize) {
         dispatch(setNoMoreAllLeaveRecords(true));
       }
