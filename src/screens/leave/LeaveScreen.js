@@ -165,6 +165,10 @@ export default function LeaveScreen({navigation, route}) {
     });
   };
 
+  const clearAndCallApi = () => {
+    handleTabPress(0);
+  };
+
   return (
     <CommonSafeAreaViewComponent>
       {(leavesLoading ||
@@ -247,13 +251,13 @@ export default function LeaveScreen({navigation, route}) {
       <LeaveRequestModal
         isModalVisible={isAddLeaveRequestVisible}
         toggleModal={toggleLeaveRequestModal}
-        apiCall={() => getLeaves(Constants.PAGE_SIZE, 1, 'pending')}
+        apiCall={() => handleTabPress(0)}
       />
       <ViewLeaveRequestModal
         isModalVisible={isViewLeaveRequestVisible}
         toggleModal={toggleViewLeaveRequestModal}
         leaveDetails={details}
-        apiCall={() => getLeaves(Constants.PAGE_SIZE, 1, 'pending')}
+        apiCall={() => handleTabPress(0)}
       />
     </CommonSafeAreaViewComponent>
   );
