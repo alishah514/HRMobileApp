@@ -249,8 +249,6 @@ const LeaveService = {
 
   // Function to fetch paginated leaves by status only
   fetchAllPaginatedLeaves: async ({status, pageSize, pageCount, dispatch}) => {
-    console.log('status, pageSize, pageCount', status, pageSize, pageCount);
-
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const offset = pageSize * (pageCount - 1);

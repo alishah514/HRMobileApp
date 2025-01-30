@@ -287,6 +287,8 @@ const TaskService = {
       console.log('pageSize', pageSize);
 
       if (filteredResponse.length < pageSize) {
+        console.log('setNoMoreAllTaskRecords');
+
         dispatch(setNoMoreAllTaskRecords(true));
       }
 

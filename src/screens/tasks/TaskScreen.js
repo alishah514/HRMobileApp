@@ -142,6 +142,8 @@ export default function TaskScreen({navigation, route}) {
   };
 
   const loadMoreLeaves = () => {
+    console.log('Loading more leaves');
+
     setPageCount(prevPageCount => {
       const newPageCount = prevPageCount + 1;
 
@@ -149,8 +151,9 @@ export default function TaskScreen({navigation, route}) {
       const status = statusMap[activeTab];
       if (
         !noMoreAllRecords &&
-        !tasksLoading &&
-        !(isLoadingAllPaginatedTasks || !isLoadingUserPaginatedTasks)
+        !isLoadingAllPaginatedTasks &&
+        !isLoadingUserPaginatedTasks &&
+        !tasksLoading
       ) {
         getTasks(Constants.PAGE_SIZE, newPageCount, status);
       }
@@ -199,6 +202,7 @@ export default function TaskScreen({navigation, route}) {
                 {I18n.t('taskList')}
               </Text>
             </View>
+            {console.log('noMoreAllRecords', noMoreAllRecords)}
           </View>
         }
         bottomChild={
@@ -225,9 +229,7 @@ export default function TaskScreen({navigation, route}) {
                         ? userPaginatedTasks
                         : allPaginatedTasks
                     }
-                    apiCall={() =>
-                      getTasks(Constants.PAGE_SIZE, 1, selectedTaskType)
-                    }
+                    apiCall={() => handleTabPress(activeTab)}
                   />
                 );
               }}
@@ -235,8 +237,9 @@ export default function TaskScreen({navigation, route}) {
               onEndReached={() => {
                 if (
                   !noMoreAllRecords &&
-                  !tasksLoading &&
-                  (!isLoadingAllPaginatedTasks || !isLoadingUserPaginatedTasks)
+                  !isLoadingAllPaginatedTasks &&
+                  !isLoadingUserPaginatedTasks &&
+                  !tasksLoading
                 ) {
                   loadMoreLeaves();
                 }
@@ -249,7 +252,7 @@ export default function TaskScreen({navigation, route}) {
       <AddTaskModal
         isModalVisible={isAddTaskModalVisible}
         toggleModal={toggleAddTaskModal}
-        apiCall={() => getTasks(Constants.PAGE_SIZE, 1, 'All')}
+        apiCall={() => handleTabPress(0)}
       />
     </CommonSafeAreaViewComponent>
   );
