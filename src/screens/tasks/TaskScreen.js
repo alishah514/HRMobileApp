@@ -202,7 +202,6 @@ export default function TaskScreen({navigation, route}) {
                 {I18n.t('taskList')}
               </Text>
             </View>
-            {console.log('noMoreAllRecords', noMoreAllRecords)}
           </View>
         }
         bottomChild={

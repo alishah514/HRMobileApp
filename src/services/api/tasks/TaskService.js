@@ -149,8 +149,6 @@ const TaskService = {
     pageCount,
     dispatch,
   }) => {
-    console.log('status, pageSize, pageCount', status, pageSize, pageCount);
-
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const offset = pageSize * (pageCount - 1);
@@ -240,8 +238,6 @@ const TaskService = {
 
   // Function to fetch paginated TASKS by status only
   fetchAllPaginatedTasks: async ({status, pageSize, pageCount, dispatch}) => {
-    console.log('status, pageSize, pageCount', status, pageSize, pageCount);
-
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const offset = pageSize * (pageCount - 1);
@@ -282,9 +278,6 @@ const TaskService = {
       });
 
       const filteredResponse = response.filter(record => record.name !== null);
-
-      console.log('fetchAllPaginatedTasks:', filteredResponse?.length);
-      console.log('pageSize', pageSize);
 
       if (filteredResponse.length < pageSize) {
         console.log('setNoMoreAllTaskRecords');

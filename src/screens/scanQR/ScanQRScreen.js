@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
-import {View, Text, Alert} from 'react-native';
+import {Text, Alert} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import Constants from '../../components/common/Constants';
 import {
-  convertStringToByteArray,
   generateKey,
   decrypt,
 } from '../../components/ReusableComponents/Security';
