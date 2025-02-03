@@ -72,6 +72,108 @@ const AttendanceService = {
     }
   },
 
+  fetchUserWeeklyAttendance: async (userId, firstDate, lastDate) => {
+    const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
+
+    const startMoment = moment(firstDate);
+    const endMoment = moment(lastDate);
+
+    const startTimestamp = startMoment.valueOf();
+    const endTimestamp = endMoment.valueOf();
+
+    const body = {
+      structuredQuery: {
+        from: [
+          {
+            collectionId: Constants.ATTENDANCE,
+          },
+        ],
+        where: {
+          compositeFilter: {
+            op: 'AND',
+            filters: [
+              {
+                fieldFilter: {
+                  field: {
+                    fieldPath: 'userId',
+                  },
+                  op: 'EQUAL',
+                  value: {
+                    stringValue: userId,
+                  },
+                },
+              },
+              {
+                fieldFilter: {
+                  field: {
+                    fieldPath: 'creationDate',
+                  },
+                  op: 'GREATER_THAN_OR_EQUAL',
+                  value: {
+                    timestampValue: {
+                      seconds: Math.floor(startTimestamp / 1000),
+                      nanos: (startTimestamp % 1000) * 1000000,
+                    },
+                  },
+                },
+              },
+              {
+                fieldFilter: {
+                  field: {
+                    fieldPath: 'creationDate',
+                  },
+                  op: 'LESS_THAN_OR_EQUAL',
+                  value: {
+                    timestampValue: {
+                      seconds: Math.floor(endTimestamp / 1000),
+                      nanos: (endTimestamp % 1000) * 1000000,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+        orderBy: [
+          {
+            field: {
+              fieldPath: 'creationDate',
+            },
+            direction: 'ASCENDING',
+          },
+        ],
+      },
+    };
+
+    try {
+      const response = await axios.post(url, body);
+
+      const finalResponse = response.data
+        .map(item => {
+          const document = item.document || {};
+          const fields = document.fields || {};
+          const documentName = document.name || null;
+          const createTime = document.createTime || null;
+          const updateTime = document.updateTime || null;
+
+          const values = ExtractValues(fields);
+
+          return {
+            name: documentName,
+            createTime,
+            updateTime,
+            ...values,
+          };
+        })
+        .filter(user => user !== null);
+
+      return finalResponse;
+    } catch (error) {
+      console.error('Error fetching user attendance:', error);
+      throw error;
+    }
+  },
+
   postAttendance: async data => {
     const url = `${Constants.FIREBASE_URL}/${Constants.ATTENDANCE}?key=${Constants.FIREBASE_KEY}`;
     const body = {

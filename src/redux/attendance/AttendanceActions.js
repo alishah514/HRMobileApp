@@ -23,6 +23,9 @@ import {
   FETCH_ALL_ATTENDANCE_START,
   FETCH_ALL_ATTENDANCE_SUCCESS,
   FETCH_ALL_ATTENDANCE_FAILURE,
+  FETCH_USER_WEEKLY_ATTENDANCE_START,
+  FETCH_USER_WEEKLY_ATTENDANCE_SUCCESS,
+  FETCH_USER_WEEKLY_ATTENDANCE_FAILURE,
 } from '../actions/actionTypes';
 
 export const savePunchInTime = time => ({
@@ -93,6 +96,20 @@ export const fetchAttendanceFailure = error => ({
   payload: error,
 });
 
+export const fetchUserWeeklyAttendanceStart = () => ({
+  type: FETCH_USER_WEEKLY_ATTENDANCE_START,
+});
+
+export const fetchUserWeeklyAttendanceSuccess = attendance => ({
+  type: FETCH_USER_WEEKLY_ATTENDANCE_SUCCESS,
+  payload: attendance,
+});
+
+export const fetchUserWeeklyAttendanceFailure = error => ({
+  type: FETCH_USER_WEEKLY_ATTENDANCE_FAILURE,
+  payload: error,
+});
+
 export const fetchCurrentAttendanceStart = () => ({
   type: FETCH_ATTENDANCE_START,
 });
@@ -158,6 +175,21 @@ export const fetchAttendance = userId => async dispatch => {
     dispatch(fetchAttendanceFailure(error));
   }
 };
+
+export const fetchWeeklyUserAttendance =
+  (userId, firstDate, lastDate) => async dispatch => {
+    dispatch(fetchUserWeeklyAttendanceStart());
+    try {
+      const response = await AttendanceService.fetchUserWeeklyAttendance(
+        userId,
+        firstDate,
+        lastDate,
+      );
+      dispatch(fetchUserWeeklyAttendanceSuccess(response));
+    } catch (error) {
+      dispatch(fetchUserWeeklyAttendanceFailure(error));
+    }
+  };
 
 export const fetchCurrentAttendance =
   (userId, currentDate) => async dispatch => {

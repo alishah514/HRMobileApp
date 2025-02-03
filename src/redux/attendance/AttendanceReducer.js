@@ -22,6 +22,9 @@ import {
   FETCH_ALL_ATTENDANCE_START,
   FETCH_ALL_ATTENDANCE_SUCCESS,
   FETCH_ALL_ATTENDANCE_FAILURE,
+  FETCH_USER_WEEKLY_ATTENDANCE_START,
+  FETCH_USER_WEEKLY_ATTENDANCE_SUCCESS,
+  FETCH_USER_WEEKLY_ATTENDANCE_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -40,6 +43,8 @@ const initialState = {
   isLoading: false,
   error: null,
   postResponse: null,
+  isUserWeeklyAttendanceLoading: false,
+  weeklyUserAttendanceData: null,
 };
 
 const AttendanceReducer = (state = initialState, action) => {
@@ -120,6 +125,24 @@ const AttendanceReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+        error: action.payload,
+      };
+    case FETCH_USER_WEEKLY_ATTENDANCE_START:
+      return {
+        ...state,
+        isUserWeeklyAttendanceLoading: true,
+        error: null,
+      };
+    case FETCH_USER_WEEKLY_ATTENDANCE_SUCCESS:
+      return {
+        ...state,
+        isUserWeeklyAttendanceLoading: false,
+        weeklyUserAttendanceData: action.payload,
+      };
+    case FETCH_USER_WEEKLY_ATTENDANCE_FAILURE:
+      return {
+        ...state,
+        isUserWeeklyAttendanceLoading: false,
         error: action.payload,
       };
 

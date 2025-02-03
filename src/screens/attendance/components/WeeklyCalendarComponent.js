@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles';
@@ -22,6 +22,7 @@ export default function WeeklyCalendarComponent({
   employeeList,
   status,
   employeeName,
+  setWeekDates,
 }) {
   const {role} = useLoginData();
 
@@ -36,8 +37,18 @@ export default function WeeklyCalendarComponent({
         date: moment(weekStart).add(i, 'days').format('YYYY-MM-DD'),
       });
     }
+
     return weekDates;
   };
+
+  useEffect(() => {
+    const newWeekDates = getWeekDates(currentWeek);
+
+    const firstDate = newWeekDates[0]?.date;
+    const lastDate = newWeekDates[6]?.date;
+
+    setWeekDates({firstDate: firstDate, lastDate: lastDate});
+  }, [currentWeek]);
 
   const prevWeek = () => {
     setCurrentWeek(moment(currentWeek).subtract(1, 'week'));

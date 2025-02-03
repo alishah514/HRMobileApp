@@ -9,9 +9,8 @@ import {Colors} from '../../components/common/Colors';
 import moment from 'moment';
 import {useDispatch} from 'react-redux';
 import I18n from '../../i18n/i18n';
-import {fetchAttendance} from '../../redux/attendance/AttendanceActions';
+import {fetchWeeklyUserAttendance} from '../../redux/attendance/AttendanceActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
-import {useFocusEffect} from '@react-navigation/native';
 import {useLoginData} from '../../hooks/useLoginData';
 import WeeklyCalendarComponent from './components/WeeklyCalendarComponent';
 import {useAttendanceData} from '../../hooks/useAttendanceData';
@@ -30,24 +29,36 @@ export default function AttendanceScreen({navigation, route}) {
   const passedDate = route?.params?.selectedDate;
   const employeeName = route?.params?.employeeName;
 
-  const {attendanceData, attendanceLoading} = useAttendanceData();
+  const {isUserWeeklyAttendanceLoading, weeklyUserAttendanceData} =
+    useAttendanceData();
 
   const today = moment().format('YYYY-MM-DD');
   const [selectedDate, setSelectedDate] = useState(today);
   const [filteredAttendance, setFilteredAttendance] = useState([]);
   const [totalTimeWorked, setTotalTimeWorked] = useState('00:00:00');
+  const [weekDates, setWeekDates] = useState({firstDate: null, lastDate: null});
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getAttendance();
-    }, [route]),
-  );
+  useEffect(() => {
+    getAttendance(weekDates);
+  }, [weekDates, route]);
 
-  const getAttendance = () => {
+  const getAttendance = weekDates => {
     if (role === 'Employee') {
-      dispatch(fetchAttendance(userId));
+      dispatch(
+        fetchWeeklyUserAttendance(
+          userId,
+          weekDates?.firstDate,
+          weekDates?.lastDate,
+        ),
+      );
     } else {
-      dispatch(fetchAttendance(employeeId));
+      dispatch(
+        fetchWeeklyUserAttendance(
+          employeeId,
+          weekDates?.firstDate,
+          weekDates?.lastDate,
+        ),
+      );
     }
   };
 
@@ -57,10 +68,10 @@ export default function AttendanceScreen({navigation, route}) {
     } else {
       setDate(passedDate);
     }
-  }, [attendanceData, route]);
+  }, [weeklyUserAttendanceData, route]);
 
   const setDate = date => {
-    const filteredData = attendanceData?.filter(item => {
+    const filteredData = weeklyUserAttendanceData?.filter(item => {
       const creationDate = new Date(item.creationDate);
       const selected = new Date(date);
       return (
@@ -346,7 +357,7 @@ export default function AttendanceScreen({navigation, route}) {
 
   return (
     <CommonSafeAreaViewComponent>
-      {attendanceLoading && <LogoLoaderComponent />}
+      {isUserWeeklyAttendanceLoading && <LogoLoaderComponent />}
       <Header
         title={I18n.t('attendance')}
         onLeftIconPressed={
@@ -386,6 +397,7 @@ export default function AttendanceScreen({navigation, route}) {
         filteredAttendance={filteredAttendance}
         totalTimeWorked={totalTimeWorked}
         employeeName={employeeName}
+        setWeekDates={setWeekDates}
       />
     </CommonSafeAreaViewComponent>
   );
