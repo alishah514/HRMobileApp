@@ -19,6 +19,7 @@ import {useLoginData} from '../../../hooks/useLoginData';
 import {
   deleteEvent,
   fetchEvents,
+  fetchMonthlyEvents,
   patchEventStatus,
   postEventRequest,
 } from '../../../redux/events/EventActions';
@@ -29,8 +30,9 @@ import {extractId} from '../../../components/utils/ExtractId';
 export default function ManageEventModal({
   isModalVisible,
   toggleModal,
-  isEdit,
-  data,
+  isEdit = false,
+  data = null,
+  monthDates = null,
 }) {
   const dispatch = useDispatch();
   const {isLoading} = useEventData();
@@ -49,6 +51,39 @@ export default function ManageEventModal({
       setEventTo(data.endDate ? new Date(data.endDate) : null);
     }
   }, [data]);
+
+  const getEvents = () => {
+    if (monthDates) {
+      dispatch(fetchMonthlyEvents(monthDates));
+    } else {
+      const monthDates = getMonthDates();
+      dispatch(fetchMonthlyEvents(monthDates));
+    }
+  };
+
+  const getMonthDates = () => {
+    if (eventFrom && eventTo) {
+      const firstDate = new Date(eventFrom);
+      const lastDate = new Date(eventTo);
+
+      firstDate.setDate(1);
+
+      lastDate.setMonth(lastDate.getMonth() + 1);
+      lastDate.setDate(0);
+
+      const formattedFirstDate = firstDate.toISOString().split('T')[0];
+      const formattedLastDate = lastDate.toISOString().split('T')[0];
+
+      const monthDates = {
+        firstDate: formattedFirstDate,
+        lastDate: formattedLastDate,
+      };
+
+      console.log('monthDates', monthDates);
+      return monthDates;
+    }
+    return null;
+  };
 
   const askForConfirmation = (message, onConfirm, data = null) => {
     Alert.alert(
@@ -92,7 +127,6 @@ export default function ManageEventModal({
   };
 
   const submitDeleteRequest = async () => {
-    // const eventId = data?.name?.split('/').pop();
     const eventId = extractId(data?.name);
 
     const response = await dispatch(deleteEvent(eventId));
@@ -101,7 +135,8 @@ export default function ManageEventModal({
       Alert.alert(response.message);
       clearStates();
       toggleModal();
-      dispatch(fetchEvents());
+
+      getEvents();
     } else {
       console.error('Failed to delete event request:', response.error);
       Alert.alert('Error', response.error);
@@ -123,7 +158,8 @@ export default function ManageEventModal({
       Alert.alert('Event added successfully!');
       clearStates();
       toggleModal();
-      dispatch(fetchEvents());
+
+      getEvents();
     } else {
       console.error('Failed to post event request:', response.error);
     }

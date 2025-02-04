@@ -10,7 +10,7 @@ import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
 import EventCalendarComponent from './EventCalendarComponent';
-import {fetchEvents} from '../../redux/events/EventActions';
+import {fetchEvents, fetchMonthlyEvents} from '../../redux/events/EventActions';
 import ManageEventModal from './modals/ManageEventModal';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
@@ -20,21 +20,27 @@ import {useLoginData} from '../../hooks/useLoginData';
 export default function EventScreen({navigation}) {
   const dispatch = useDispatch();
   const {role} = useLoginData();
-  const {events, isLoading} = useEventData();
+  const {events, isLoading, monthlyEvents} = useEventData();
   const currentLanguage = useSelector(state => state.language.language);
   const [isManageEventModalVisible, setIsManageEventModalVisible] =
     useState(false);
+  const [monthDates, setMonthDates] = useState({
+    firstDate: null,
+    lastDate: null,
+  });
+
+  useEffect(() => {
+    if (monthDates) {
+      getEvents();
+    }
+  }, [monthDates]);
 
   const handleDrawerOpen = () => {
     navigation.openDrawer();
   };
 
-  useEffect(() => {
-    getEvents();
-  }, []);
-
   const getEvents = () => {
-    dispatch(fetchEvents());
+    dispatch(fetchMonthlyEvents(monthDates));
   };
 
   const toggleManageEventModal = item => {
@@ -88,7 +94,11 @@ export default function EventScreen({navigation}) {
         bottomChild={
           <>
             <View style={CommonStyles.paddingTop10} />
-            <EventCalendarComponent data={events} />
+            <EventCalendarComponent
+              data={monthlyEvents}
+              setMonthDates={setMonthDates}
+              monthDates={monthDates}
+            />
           </>
         }
       />

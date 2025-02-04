@@ -13,6 +13,9 @@ import {
   DELETE_EVENT_START,
   DELETE_EVENT_SUCCESS,
   DELETE_EVENT_FAILURE,
+  FETCH_MONTHLY_EVENT_START,
+  FETCH_MONTHLY_EVENT_SUCCESS,
+  FETCH_MONTHLY_EVENT_FAILURE,
 } from '../actions/actionTypes';
 
 export const fetchEventsStart = () => ({
@@ -26,6 +29,20 @@ export const fetchEventsSuccess = events => ({
 
 export const fetchEventsFailure = error => ({
   type: FETCH_EVENT_FAILURE,
+  payload: error,
+});
+
+export const fetchMonthlyEventsStart = () => ({
+  type: FETCH_MONTHLY_EVENT_START,
+});
+
+export const fetchMonthlyEventsSuccess = events => ({
+  type: FETCH_MONTHLY_EVENT_SUCCESS,
+  payload: events,
+});
+
+export const fetchMonthlyEventsFailure = error => ({
+  type: FETCH_MONTHLY_EVENT_FAILURE,
   payload: error,
 });
 
@@ -82,6 +99,16 @@ export const fetchEvents = () => async dispatch => {
     dispatch(fetchEventsSuccess(response));
   } catch (error) {
     dispatch(fetchEventsFailure(error));
+  }
+};
+
+export const fetchMonthlyEvents = monthDates => async dispatch => {
+  dispatch(fetchMonthlyEventsStart());
+  try {
+    const response = await EventService.fetchMonthEvents(monthDates);
+    dispatch(fetchMonthlyEventsSuccess(response));
+  } catch (error) {
+    dispatch(fetchMonthlyEventsFailure(error));
   }
 };
 

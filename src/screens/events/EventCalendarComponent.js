@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Touchable, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {Colors} from '../../components/common/Colors';
 import CommonStyles from '../../components/common/CommonStyles';
@@ -50,7 +50,11 @@ LocaleConfig.locales['en'] = {
 };
 LocaleConfig.defaultLocale = 'en';
 
-export default function EventCalendarComponent({data}) {
+export default function EventCalendarComponent({
+  data,
+  setMonthDates,
+  monthDates,
+}) {
   const {role} = useLoginData();
   const [isManageEventModalVisible, setIsManageEventModalVisible] =
     useState(false);
@@ -59,41 +63,30 @@ export default function EventCalendarComponent({data}) {
   );
   const [eventDetails, setEventDetails] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   useEffect(() => {
     if (!data || data.length === 0) return;
 
     const dates = {};
-
     data.forEach(event => {
       if (event.startDate && event.endDate) {
         const startDate = event.startDate.split('T')[0];
         const endDate = event.endDate.split('T')[0];
 
-        if (startDate === endDate) {
-          if (startDate === selectedDate) {
-            dates[startDate] = {marked: true, dotColor: Colors.white};
-          } else {
-            dates[startDate] = {marked: true, dotColor: Colors.orangeColor};
-          }
-        } else {
-          let currentDate = new Date(startDate);
-          const end = new Date(endDate);
+        let currentDate = new Date(startDate);
+        const end = new Date(endDate);
 
-          while (currentDate <= end) {
-            const formattedDate = currentDate.toISOString().split('T')[0];
-
-            if (formattedDate === selectedDate) {
-              dates[formattedDate] = {marked: true, dotColor: Colors.white};
-            } else {
-              dates[formattedDate] = {
-                marked: true,
-                dotColor: Colors.orangeColor,
-              };
-            }
-
-            currentDate.setDate(currentDate.getDate() + 1);
-          }
+        while (currentDate <= end) {
+          const formattedDate = currentDate.toISOString().split('T')[0];
+          dates[formattedDate] = {
+            marked: true,
+            dotColor:
+              formattedDate === selectedDate
+                ? Colors.white
+                : Colors.orangeColor,
+          };
+          currentDate.setDate(currentDate.getDate() + 1);
         }
       }
     });
@@ -112,20 +105,41 @@ export default function EventCalendarComponent({data}) {
   }, [data, selectedDate]);
 
   const handleDayPress = day => {
-    setSelectedDate(day?.dateString);
-
+    setSelectedDate(day.dateString);
     const event = data.find(event => {
       const startDate = event?.startDate?.split('T')[0];
       const endDate = event?.endDate?.split('T')[0];
-      return day?.dateString >= startDate && day?.dateString <= endDate;
+      return day.dateString >= startDate && day.dateString <= endDate;
     });
-
     setEventDetails(event || null);
   };
 
   const toggleManageEventModal = () => {
     setIsManageEventModalVisible(!isManageEventModalVisible);
   };
+
+  const getMonthDates = dateString => {
+    const date = new Date(dateString);
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth();
+
+    const firstDate = new Date(Date.UTC(year, month, 1))
+      .toISOString()
+      .split('T')[0];
+
+    const lastDate = new Date(Date.UTC(year, month + 1, 0))
+      .toISOString()
+      .split('T')[0];
+
+    return {firstDate, lastDate};
+  };
+
+  useEffect(() => {
+    if (setMonthDates) {
+      setMonthDates(getMonthDates(currentMonth));
+      console.log('monthDatesmonthDatesmonthDates', monthDates);
+    }
+  }, [currentMonth]);
 
   return (
     <View style={styles.container}>
@@ -134,7 +148,13 @@ export default function EventCalendarComponent({data}) {
         style={styles.parentStyle}
         onDayPress={handleDayPress}
         markedDates={markedDates}
+        enableSwipeMonths
+        onMonthChange={month => {
+          const newMonth = new Date(month.dateString);
+          setCurrentMonth(newMonth);
+        }}
       />
+
       {eventDetails ? (
         <View style={styles.eventDetails}>
           <View
@@ -169,19 +189,21 @@ export default function EventCalendarComponent({data}) {
             </Text>
           </View>
           <Text style={styles.eventDescription}>
-            {eventDetails.description || eventDetails.decription}{' '}
+            {eventDetails.description}
           </Text>
         </View>
       ) : (
-        <View style={[styles.eventDetails]}>
+        <View style={styles.eventDetails}>
           <Text style={styles.eventDate}>No Event on this Date</Text>
         </View>
       )}
+
       <ManageEventModal
         isModalVisible={isManageEventModalVisible}
         toggleModal={toggleManageEventModal}
         isEdit
         data={eventDetails}
+        monthDates={monthDates}
       />
     </View>
   );

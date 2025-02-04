@@ -29,6 +29,7 @@ export default function AdminAttendanceScreen({navigation}) {
   const [selectedDate, setSelectedDate] = useState(today);
   const [employeeList, setEmployeeList] = useState([]);
   const [currentAttendanceList, setCurrentAttendanceList] = useState([]);
+  const [weekDates, setWeekDates] = useState({firstDate: null, lastDate: null});
 
   const {attendanceLoading, allAttendanceData, punchInTime, punchOutTime} =
     useAttendanceData();
@@ -370,6 +371,7 @@ export default function AdminAttendanceScreen({navigation}) {
         selectedDate={selectedDate}
         employeeList={employeeList}
         status={status}
+        setWeekDates={setWeekDates}
       />
     </CommonSafeAreaViewComponent>
   );

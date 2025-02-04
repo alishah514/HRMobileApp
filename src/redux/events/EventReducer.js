@@ -12,10 +12,14 @@ import {
   DELETE_EVENT_START,
   DELETE_EVENT_SUCCESS,
   DELETE_EVENT_FAILURE,
+  FETCH_MONTHLY_EVENT_START,
+  FETCH_MONTHLY_EVENT_SUCCESS,
+  FETCH_MONTHLY_EVENT_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
   data: [],
+  monthlyData: [],
   isLoading: false,
   error: null,
   eventData: null,
@@ -36,6 +40,23 @@ const EventReducer = (state = initialState, action) => {
         data: action.payload,
       };
     case FETCH_EVENT_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
+    case FETCH_MONTHLY_EVENT_START:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case FETCH_MONTHLY_EVENT_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        monthlyData: action.payload,
+      };
+    case FETCH_MONTHLY_EVENT_FAILURE:
       return {
         ...state,
         isLoading: false,

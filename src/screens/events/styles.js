@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: wp(5),
     borderBottomRightRadius: wp(2.5),
     borderBottomLeftRadius: wp(2.5),
-    borderColor: Colors.orangeColor,
+    borderColor: Colors.blueColor,
   },
   container: {
     flex: 1,
