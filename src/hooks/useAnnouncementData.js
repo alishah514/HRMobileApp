@@ -16,7 +16,13 @@ export const useAnnouncementData = () => {
     state => state.announcements.paginatedError,
   );
 
-  const hasMore = useSelector(state => state.announcements.hasMore);
+  const postSuccess = useSelector(state => state.announcements.postSuccess);
+  const patchSuccess = useSelector(state => state.announcements.patchSuccess);
+  const deleteSuccess = useSelector(state => state.announcements.deleteSuccess);
+
+  const noMoreAllRecords = useSelector(
+    state => state.announcements.noMoreAllRecords,
+  );
 
   return {
     announcements,
@@ -25,6 +31,9 @@ export const useAnnouncementData = () => {
     loadingPaginatedAnnouncements,
     error,
     paginatedError,
-    hasMore,
+    postSuccess,
+    patchSuccess,
+    deleteSuccess,
+    noMoreAllRecords,
   };
 };

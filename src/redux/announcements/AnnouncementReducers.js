@@ -15,6 +15,7 @@ import {
   FETCH_PAGINATED_ANNOUNCEMENTS_START,
   FETCH_PAGINATED_ANNOUNCEMENTS_SUCCESS,
   FETCH_PAGINATED_ANNOUNCEMENTS_FAILURE,
+  SET_NO_MORE_ALL_ANNOUNCEMENTS_RECORDS,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -27,6 +28,7 @@ const initialState = {
   paginatedAnnouncements: [],
   loadingPaginatedAnnouncements: false,
   paginatedError: null,
+  noMoreAllRecords: false,
 };
 
 const AnnouncementsReducer = (state = initialState, action) => {
@@ -56,17 +58,14 @@ const AnnouncementsReducer = (state = initialState, action) => {
         loadingPaginatedAnnouncements: true,
         paginatedError: null,
       };
+
     case FETCH_PAGINATED_ANNOUNCEMENTS_SUCCESS:
-      const validRecords = action.payload.filter(
-        item => item.name && item.createTime && item.title,
-      );
       return {
         ...state,
         loadingPaginatedAnnouncements: false,
-
         paginatedAnnouncements: [
           ...state.paginatedAnnouncements,
-          ...validRecords,
+          ...action.payload,
         ],
       };
     case FETCH_PAGINATED_ANNOUNCEMENTS_FAILURE:
@@ -144,6 +143,11 @@ const AnnouncementsReducer = (state = initialState, action) => {
         isLoading: false,
         deleteSuccess: false,
         error: action.payload,
+      };
+    case SET_NO_MORE_ALL_ANNOUNCEMENTS_RECORDS:
+      return {
+        ...state,
+        noMoreAllRecords: action.payload,
       };
     case CLEAR_ANNOUNCEMENTS_STATE:
       return initialState;

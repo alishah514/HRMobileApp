@@ -35,6 +35,7 @@ import {
   clearSpecificUserData,
   fetchAllUsers,
 } from '../../redux/accounts/AccountActions';
+import {clearAnnouncementsState} from '../../redux/announcements/AnnouncementActions';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
@@ -53,6 +54,7 @@ export default function HomeScreen({navigation}) {
     dispatch(fetchAllTasks());
     dispatch(clearLeavesState());
     dispatch(clearTasksState());
+    dispatch(clearAnnouncementsState());
   }, [dispatch]);
 
   useEffect(() => {

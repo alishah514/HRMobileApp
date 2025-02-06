@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import Header from '../../../components/ReusableComponents/Header/Header';
 import CommonSafeAreaScrollViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import I18n from '../../../i18n/i18n';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import CommonStyles from '../../../components/common/CommonStyles';
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
 import {Colors} from '../../../components/common/Colors';
@@ -11,22 +11,23 @@ import Constants from '../../../components/common/Constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import {useLoginData} from '../../../hooks/useLoginData';
-import {
-  fetchAllAnnouncements,
-  postAnnouncements,
-} from '../../../redux/announcements/AnnouncementActions';
+import {postAnnouncements} from '../../../redux/announcements/AnnouncementActions';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {isSizeValid} from '../../../components/ReusableComponents/DocumentSizeComponent';
 import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentUploadAWS';
 import AttachmentPicker from '../../../components/ReusableComponents/AttachmentComponent';
+import {useAnnouncementData} from '../../../hooks/useAnnouncementData';
 
-export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
+export default function AddAnnouncementModal({
+  isModalVisible,
+  toggleModal,
+  apiCall,
+}) {
   const dispatch = useDispatch();
   const {userId} = useLoginData();
-  const {isLoading: announcementLoading} = useSelector(
-    state => state.announcements,
-  );
+
+  const {isLoading: announcementLoading} = useAnnouncementData();
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [attachment, setAttachment] = useState(null);
@@ -73,7 +74,8 @@ export default function AddAnnouncementModal({isModalVisible, toggleModal}) {
       Alert.alert('Announcement added successfully! ');
       clearStates();
       toggleModal();
-      dispatch(fetchAllAnnouncements());
+
+      apiCall();
     } else {
       console.error('Failed to post task request:', response.error);
     }

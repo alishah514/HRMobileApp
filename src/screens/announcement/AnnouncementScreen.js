@@ -3,7 +3,7 @@ import {View, Text, FlatList} from 'react-native';
 import CommonSafeAreaViewComponent from '../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
 import Header from '../../components/ReusableComponents/Header/Header';
 import I18n from '../../i18n/i18n';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import Constants from '../../components/common/Constants';
 import {Colors} from '../../components/common/Colors';
 import {useLoginData} from '../../hooks/useLoginData';
@@ -12,24 +12,38 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CommonStyles from '../../components/common/CommonStyles';
 import CustomerBackgroundComponent from '../../components/ReusableComponents/CustomerBackgroundComponent';
 import AnnouncementComponent from './components/AnnouncementComponent';
-import {fetchAllAnnouncements} from '../../redux/announcements/AnnouncementActions';
+import {
+  clearAnnouncementsState,
+  fetchPaginatedAnnouncements,
+} from '../../redux/announcements/AnnouncementActions';
 import styles from './styles';
 import AddAnnouncementModal from './modals/AddAnnouncemenModal';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
-import NoRecordView from '../../components/ReusableComponents/NoRecordView';
 import {useAnnouncementData} from '../../hooks/useAnnouncementData';
 
 export default function AnnouncementScreen({navigation}) {
   const dispatch = useDispatch();
-  // const {announcements, isLoading} = useSelector(state => state.announcements);
-  const {announcements, isLoading} = useAnnouncementData();
+
+  const {
+    paginatedAnnouncements,
+    loadingPaginatedAnnouncements,
+    noMoreAllRecords,
+  } = useAnnouncementData();
   const {role} = useLoginData();
   const [isAddAnnouncementModalVisible, setIsAddAnnouncementModalVisible] =
     useState(false);
+  const [pageCount, setPageCount] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchAllAnnouncements());
-  }, [dispatch]);
+    getAnnouncements(Constants.PAGE_SIZE, pageCount);
+    return () => {
+      dispatch(clearAnnouncementsState());
+    };
+  }, []);
+
+  const getAnnouncements = (pageSize, pageCount) => {
+    dispatch(fetchPaginatedAnnouncements({pageSize, pageCount}));
+  };
 
   const handleDrawerOpen = () => {
     navigation.openDrawer();
@@ -40,9 +54,27 @@ export default function AnnouncementScreen({navigation}) {
   };
 
   const getFilteredAnnouncements = () => {
-    return announcements.sort(
+    return paginatedAnnouncements.sort(
       (a, b) => new Date(b.creationDate) - new Date(a.creationDate),
     );
+  };
+
+  const loadMoreAnnouncements = () => {
+    setPageCount(prevPageCount => {
+      const newPageCount = prevPageCount + 1;
+
+      getAnnouncements(Constants.PAGE_SIZE, newPageCount);
+
+      return newPageCount;
+    });
+  };
+
+  const pageFirstCall = () => {
+    setPageCount(1); // Reset page count first
+    dispatch(clearAnnouncementsState()); // Clear old announcements
+    setTimeout(() => {
+      getAnnouncements(Constants.PAGE_SIZE, 1);
+    }, 0); // Delay to ensure state update before dispatching
   };
 
   return (
@@ -68,7 +100,7 @@ export default function AnnouncementScreen({navigation}) {
           )
         }
       />
-      {isLoading && <LogoLoaderComponent />}
+      {loadingPaginatedAnnouncements && <LogoLoaderComponent />}
       <CustomerBackgroundComponent
         topVerySmall
         topChild={
@@ -87,17 +119,15 @@ export default function AnnouncementScreen({navigation}) {
               return <AnnouncementComponent announcement={item} />;
             }}
             keyExtractor={(item, index) => index.toString()}
-            ListEmptyComponent={
-              <View style={CommonStyles.height100}>
-                <NoRecordView errorMessage={'No Record Found'} />
-              </View>
-            }
+            onEndReached={!noMoreAllRecords && loadMoreAnnouncements}
+            onEndReachedThreshold={0.1}
           />
         }
       />
       <AddAnnouncementModal
         isModalVisible={isAddAnnouncementModalVisible}
         toggleModal={toggleAddAnnouncementModal}
+        apiCall={pageFirstCall}
       />
     </CommonSafeAreaViewComponent>
   );

@@ -16,6 +16,7 @@ import {
   FETCH_PAGINATED_ANNOUNCEMENTS_START,
   FETCH_PAGINATED_ANNOUNCEMENTS_SUCCESS,
   FETCH_PAGINATED_ANNOUNCEMENTS_FAILURE,
+  SET_NO_MORE_ALL_ANNOUNCEMENTS_RECORDS,
 } from '../actions/actionTypes';
 
 export const fetchAllAnnouncementsStart = () => ({
@@ -36,9 +37,9 @@ export const fetchPaginatedAnnouncementsStart = () => ({
   type: FETCH_PAGINATED_ANNOUNCEMENTS_START,
 });
 
-export const fetchPaginatedAnnouncementsSuccess = leaves => ({
+export const fetchPaginatedAnnouncementsSuccess = response => ({
   type: FETCH_PAGINATED_ANNOUNCEMENTS_SUCCESS,
-  payload: leaves,
+  payload: response,
 });
 
 export const fetchPaginatedAnnouncementsFailure = error => ({
@@ -90,6 +91,11 @@ export const deleteAnnouncementsSuccess = leaveId => ({
 export const deleteAnnouncementsFailure = error => ({
   type: DELETE_ANNOUNCEMENTS_FAILURE,
   payload: error,
+});
+
+export const setNoMoreAllAnnouncementsRecords = () => ({
+  type: SET_NO_MORE_ALL_ANNOUNCEMENTS_RECORDS,
+  payload: true,
 });
 
 export const fetchAllAnnouncements = () => async dispatch => {
@@ -154,35 +160,36 @@ export const deleteAnnouncement = announcementId => async dispatch => {
   }
 };
 
-// export const fetchPaginatedAnnouncements =
-//   ({pageSize, pageCount}) =>
-//   async dispatch => {
-//     dispatch(fetchPaginatedAnnouncementsStart());
-//     try {
-//       const response =
-//         await AnnouncementsService.fetchAllPaginatedAnnouncements({
-//           pageSize,
-//           pageCount,
-//         });
-//       dispatch(fetchPaginatedAnnouncementsSuccess(response));
-//     } catch (error) {
-//       dispatch(fetchPaginatedAnnouncementsFailure(error));
-//     }
-//   };
-
 export const fetchPaginatedAnnouncements =
-  (options = {}) =>
+  ({pageSize, pageCount}) =>
   async dispatch => {
     dispatch(fetchPaginatedAnnouncementsStart());
     try {
-      const {limit, page} = options; // Destructure limit and page from options
       const response =
         await AnnouncementsService.fetchAllPaginatedAnnouncements({
-          limit,
-          page,
+          pageSize,
+          pageCount,
+          dispatch,
         });
       dispatch(fetchPaginatedAnnouncementsSuccess(response));
     } catch (error) {
       dispatch(fetchPaginatedAnnouncementsFailure(error));
     }
   };
+
+// export const fetchPaginatedAnnouncements =
+//   (options = {}) =>
+//   async dispatch => {
+//     dispatch(fetchPaginatedAnnouncementsStart());
+//     try {
+//       const {limit, page} = options; // Destructure limit and page from options
+//       const response =
+//         await AnnouncementsService.fetchAllPaginatedAnnouncements({
+//           limit,
+//           page,
+//         });
+//       dispatch(fetchPaginatedAnnouncementsSuccess(response));
+//     } catch (error) {
+//       dispatch(fetchPaginatedAnnouncementsFailure(error));
+//     }
+//   };
