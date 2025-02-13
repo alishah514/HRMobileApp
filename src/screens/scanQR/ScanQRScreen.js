@@ -22,10 +22,12 @@ export default function ScanQRScreen({navigation}) {
 
   const [scannedData, setScannedData] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [scannerKey, setScannerKey] = useState(0);
 
   const handleScanSuccess = async e => {
     try {
-      if (scannedData) return;
+      if (isModalVisible) return;
+
       const data = e.data;
       setScannedData(data);
 
@@ -36,7 +38,6 @@ export default function ScanQRScreen({navigation}) {
         Constants.ENCR_LENGTH,
       );
       const decryptedData = await decrypt(data, key);
-
       const parsedData = JSON.parse(decryptedData);
 
       setScannedData(parsedData);
@@ -49,7 +50,10 @@ export default function ScanQRScreen({navigation}) {
 
   const closeModal = () => {
     setModalVisible(false);
+    setScannedData(null);
+    setScannerKey(prevKey => prevKey + 1);
   };
+
   const handleDrawerOpen = () => {
     navigation.openDrawer();
   };
@@ -69,6 +73,7 @@ export default function ScanQRScreen({navigation}) {
       />
 
       <QRCodeScanner
+        key={scannerKey}
         onRead={handleScanSuccess}
         flashMode={RNCamera.Constants.FlashMode.off}
         showMarker={true}
