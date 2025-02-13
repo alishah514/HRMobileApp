@@ -221,5 +221,7 @@
   "ToDateMustBeGreaterThanFromDate": "To Date must be greater than or equal to From Date",
   "updateAnnouncement": "Update Announcement",
   "viewAnnouncement": "View Announcement",
-  "delete": "Delete"
+  "delete": "Delete",
+  "startDateValidation": "Start date must be earlier than the end date.",
+  "endDateValidation": "End date must be greater than the start date."
 }

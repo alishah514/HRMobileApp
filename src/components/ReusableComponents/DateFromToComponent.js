@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import React, {useState} from 'react';
 import CommonStyles from '../common/CommonStyles';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from '../common/Constants';
 import {useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
+import {formatDate} from '../utils/dateUtils';
 
 export default function DateFromToComponent({
   dateFrom,
@@ -18,15 +19,36 @@ export default function DateFromToComponent({
   const [isDateFromPickerVisible, setDateFromPickerVisible] = useState(false);
   const [isDateToPickerVisible, setDateToPickerVisible] = useState(false);
 
-  const handleConfirmDateFrom = date => {
-    setDateFrom(date.toDateString());
-    setDateFromPickerVisible(false);
+  const parseDate = dateString => {
+    if (!dateString || !dateString.includes('-')) return null;
+    const [day, month, year] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
   };
 
-  const handleConfirmDateTo = date => {
-    setDateTo(date.toDateString());
-    setDateToPickerVisible(false);
+  const handleDateChange = (selectedDate, type) => {
+    const selected = new Date(selectedDate);
+    const fromDate = parseDate(dateFrom);
+    const toDate = parseDate(dateTo);
+
+    if (type === 'from' && toDate && selected > toDate) {
+      Alert.alert(I18n.t('startDateValidation'));
+      return;
+    }
+
+    if (type === 'to' && fromDate && selected < fromDate) {
+      Alert.alert(I18n.t('endDateValidation'));
+      return;
+    }
+
+    if (type === 'from') {
+      setDateFrom(selected.getTime());
+      setDateFromPickerVisible(false);
+    } else {
+      setDateTo(selected.getTime());
+      setDateToPickerVisible(false);
+    }
   };
+
   return (
     <>
       <View style={[CommonStyles.rowBetween, CommonStyles.marginBottom5]}>
@@ -88,13 +110,13 @@ export default function DateFromToComponent({
       <DateTimePickerModal
         isVisible={isDateFromPickerVisible}
         mode="date"
-        onConfirm={handleConfirmDateFrom}
+        onConfirm={date => handleDateChange(date, 'from')}
         onCancel={() => setDateFromPickerVisible(false)}
       />
       <DateTimePickerModal
         isVisible={isDateToPickerVisible}
         mode="date"
-        onConfirm={handleConfirmDateTo}
+        onConfirm={date => handleDateChange(date, 'to')}
         onCancel={() => setDateToPickerVisible(false)}
       />
     </>
