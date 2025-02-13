@@ -116,7 +116,12 @@ export default function AnnouncementScreen({navigation}) {
             contentContainerStyle={[CommonStyles.infoStarting]}
             data={getFilteredAnnouncements()}
             renderItem={({item}) => {
-              return <AnnouncementComponent announcement={item} />;
+              return (
+                <AnnouncementComponent
+                  announcement={item}
+                  apiCall={pageFirstCall}
+                />
+              );
             }}
             keyExtractor={(item, index) => index.toString()}
             onEndReached={!noMoreAllRecords && loadMoreAnnouncements}

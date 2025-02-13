@@ -137,7 +137,6 @@ export default function EventCalendarComponent({
   useEffect(() => {
     if (setMonthDates) {
       setMonthDates(getMonthDates(currentMonth));
-      console.log('monthDatesmonthDatesmonthDates', monthDates);
     }
   }, [currentMonth]);
 

@@ -17,8 +17,6 @@ const AnnouncementsService = {
   },
 
   fetchAllPaginatedAnnouncements: async ({pageSize, pageCount, dispatch}) => {
-    console.log('pageSize, pageCount, dispatch', pageSize, pageCount, dispatch);
-
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
     const method = 'post';
     const offset = pageSize * (pageCount - 1);

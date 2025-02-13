@@ -26,6 +26,7 @@ export default function ViewDetailsAnnouncementModal({
   isModalVisible,
   toggleModal,
   data,
+  apiCall,
 }) {
   const dispatch = useDispatch();
   const {role} = useLoginData();
@@ -94,7 +95,7 @@ export default function ViewDetailsAnnouncementModal({
     if (response.success === true) {
       Alert.alert('Announcement updated successfully');
       toggleModal();
-      dispatch(fetchAllAnnouncements());
+      apiCall();
     } else {
       console.error('Failed to update Announcement request:', response.error);
     }
@@ -106,7 +107,7 @@ export default function ViewDetailsAnnouncementModal({
     if (response.success) {
       Alert.alert(response.message);
       toggleModal();
-      dispatch(fetchAllAnnouncements());
+      apiCall();
     } else {
       console.error('Failed to delete leave request:', response.error);
       Alert.alert('Error', response.error);

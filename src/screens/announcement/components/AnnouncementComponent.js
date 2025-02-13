@@ -7,7 +7,7 @@ import {TruncateTitle} from '../../../components/utils/TruncateTitle';
 import {useLoginData} from '../../../hooks/useLoginData';
 import ViewDetailsAnnouncementModal from '../modals/ViewDetailsAnnouncementModal';
 
-export default function AnnouncementComponent({announcement}) {
+export default function AnnouncementComponent({announcement, apiCall}) {
   const {role} = useLoginData();
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 
@@ -98,6 +98,7 @@ export default function AnnouncementComponent({announcement}) {
         isModalVisible={isEditModalVisible}
         toggleModal={toggleEditModal}
         data={announcement}
+        apiCall={apiCall}
       />
     </View>
   );

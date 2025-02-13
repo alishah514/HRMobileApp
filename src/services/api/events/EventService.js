@@ -121,8 +121,6 @@ const EventService = {
     }
   },
   fetchMonthEvents: async monthDates => {
-    console.log('monthDates', monthDates);
-
     const url = `${Constants.FIREBASE_POST_URL}key=${Constants.FIREBASE_KEY}`;
 
     const startMoment = moment(monthDates?.firstDate);

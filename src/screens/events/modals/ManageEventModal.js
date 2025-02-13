@@ -78,7 +78,6 @@ export default function ManageEventModal({
         lastDate: formattedLastDate,
       };
 
-      console.log('monthDates', monthDates);
       return monthDates;
     }
     return null;
