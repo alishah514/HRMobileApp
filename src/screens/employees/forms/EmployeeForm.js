@@ -382,6 +382,8 @@ const EmployeeForm = forwardRef((props, ref) => {
             setDateFrom={setDegreeFrom}
             dateTo={formatDate(degreeTo)}
             setDateTo={setDegreeTo}
+            dateFromLabel={I18n.t('startDate')}
+            dateToLabel={I18n.t('endDate')}
           />
 
           <InputFieldComponent

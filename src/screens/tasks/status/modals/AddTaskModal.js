@@ -17,13 +17,17 @@ import {
   getAllPaginatedTasks,
   postTaskRequest,
 } from '../../../../redux/tasks/TaskActions';
-import {convertToTimestamp} from '../../../../components/utils/dateUtils';
+import {
+  convertToTimestamp,
+  formatDate,
+} from '../../../../components/utils/dateUtils';
 import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
 import {useLoginData} from '../../../../hooks/useLoginData';
 import useTaskData from '../../../../hooks/useTaskData';
 import CustomDatePickerComponent from '../../../../components/ReusableComponents/CustomDatePickerComponent';
 import {TruncateTitle} from '../../../../components/utils/TruncateTitle';
 import {useAccountsData} from '../../../../hooks/useAccountsData';
+import DateFromToComponent from '../../../../components/ReusableComponents/DateFromToComponent';
 
 export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
   const dispatch = useDispatch();
@@ -208,20 +212,15 @@ export default function AddTaskModal({isModalVisible, toggleModal, apiCall}) {
               halfWidth={true}
             />
           </View>
-          <View style={CommonStyles.rowBetween}>
-            <CustomDatePickerComponent
-              selectedDate={assignedDate}
-              setSelectedDate={setAssignedDate}
-              label={I18n.t('assignedDate')}
-              half
-            />
-            <CustomDatePickerComponent
-              selectedDate={dueDate}
-              setSelectedDate={setDueDate}
-              label={I18n.t('dueDate')}
-              half
-            />
-          </View>
+
+          <DateFromToComponent
+            dateFrom={formatDate(assignedDate)}
+            setDateFrom={setAssignedDate}
+            dateTo={formatDate(dueDate)}
+            setDateTo={setDueDate}
+            dateFromLabel={I18n.t('assignedDate')}
+            dateToLabel={I18n.t('dueDate')}
+          />
           <View style={CommonStyles.rowBetween}>
             <CustomSectionedMultiSelectComponent
               title={I18n.t('priority')}

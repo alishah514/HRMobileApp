@@ -223,5 +223,7 @@
   "viewAnnouncement": "View Announcement",
   "delete": "Delete",
   "startDateValidation": "Start date must be earlier than the end date.",
-  "endDateValidation": "End date must be greater than the start date."
+  "endDateValidation": "End date must be greater than the start date.",
+  "startDate": "Start Date",
+  "endDate": "End Date"
 }

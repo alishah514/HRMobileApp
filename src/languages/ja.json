@@ -222,5 +222,7 @@
   "viewAnnouncement": "お知らせを見る",
   "delete": "削除",
   "startDateValidation": "開始日は終了日より前である必要があります。",
-  "endDateValidation": "終了日は開始日より後である必要があります。"
+  "endDateValidation": "終了日は開始日より後である必要があります。",
+  "startDate": "開始日",
+  "endDate": "終了日"
 }

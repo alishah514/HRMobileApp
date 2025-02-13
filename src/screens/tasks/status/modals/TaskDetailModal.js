@@ -9,7 +9,10 @@ import InputFieldComponent from '../../../../components/ReusableComponents/Input
 import CommonSafeAreaScrollViewComponent from '../../../../components/ReusableComponents/CommonComponents/CommonSafeAreaScrollViewComponent';
 import {useDispatch, useSelector} from 'react-redux';
 import I18n from '../../../../i18n/i18n';
-import {formatDate} from '../../../../components/utils/dateUtils';
+import {
+  convertToTimestamp,
+  formatDate,
+} from '../../../../components/utils/dateUtils';
 import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
 import {
   clearTasksState,
@@ -23,6 +26,7 @@ import CustomSectionedMultiSelectComponent from '../../../../components/Reusable
 import CustomDatePickerComponent from '../../../../components/ReusableComponents/CustomDatePickerComponent';
 import {TruncateTitle} from '../../../../components/utils/TruncateTitle';
 import {extractId} from '../../../../components/utils/ExtractId';
+import DateFromToComponent from '../../../../components/ReusableComponents/DateFromToComponent';
 
 export default function TaskDetailModal({
   isModalVisible,
@@ -104,14 +108,13 @@ export default function TaskDetailModal({
       category: taskCategory,
       department: department,
       priority: taskPriority,
-      // estimatedJobs: taskDetails?.estimatedJobs,
-      dueDate: dueDate,
+      dueDate: convertToTimestamp(dueDate),
       taskCode: taskCode,
       storypoints: storyPoints,
       assignedTo: assignedTo?.id,
       status: taskStatus,
       description: description,
-      assignedDate: assignedDate,
+      assignedDate: convertToTimestamp(assignedDate),
       userId: assignedBy?.id,
     };
 
@@ -244,20 +247,16 @@ export default function TaskDetailModal({
               halfWidth={true}
             />
           </View>
-          <View style={CommonStyles.rowBetween}>
-            <CustomDatePickerComponent
-              selectedDate={formatDate(assignedDate)}
-              setSelectedDate={setAssignedDate}
-              label={I18n.t('assignedDate')}
-              half
-            />
-            <CustomDatePickerComponent
-              selectedDate={formatDate(dueDate)}
-              setSelectedDate={setDueDate}
-              label={I18n.t('dueDate')}
-              half
-            />
-          </View>
+
+          <DateFromToComponent
+            dateFrom={formatDate(assignedDate)}
+            setDateFrom={setAssignedDate}
+            dateTo={formatDate(dueDate)}
+            setDateTo={setDueDate}
+            dateFromLabel={I18n.t('assignedDate')}
+            dateToLabel={I18n.t('dueDate')}
+          />
+
           <View style={CommonStyles.rowBetween}>
             <CustomSectionedMultiSelectComponent
               title={I18n.t('priority')}

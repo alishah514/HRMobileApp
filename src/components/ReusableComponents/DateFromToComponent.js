@@ -14,8 +14,9 @@ export default function DateFromToComponent({
   dateTo,
   setDateFrom,
   setDateTo,
+  dateFromLabel,
+  dateToLabel,
 }) {
-  const currentLanguage = useSelector(state => state.language.language);
   const [isDateFromPickerVisible, setDateFromPickerVisible] = useState(false);
   const [isDateToPickerVisible, setDateToPickerVisible] = useState(false);
 
@@ -31,12 +32,12 @@ export default function DateFromToComponent({
     const toDate = parseDate(dateTo);
 
     if (type === 'from' && toDate && selected > toDate) {
-      Alert.alert(I18n.t('startDateValidation'));
+      Alert.alert(`${dateFromLabel} should be less than ${dateToLabel}`);
       return;
     }
 
     if (type === 'to' && fromDate && selected < fromDate) {
-      Alert.alert(I18n.t('endDateValidation'));
+      Alert.alert(`${dateToLabel} should be greater than ${dateFromLabel}`);
       return;
     }
 
@@ -54,7 +55,7 @@ export default function DateFromToComponent({
       <View style={[CommonStyles.rowBetween, CommonStyles.marginBottom5]}>
         <View>
           <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
-            {I18n.t('degreeStart')}
+            {dateFromLabel || I18n.t('startDate')}
           </Text>
           <TouchableOpacity
             onPress={() => setDateFromPickerVisible(true)}
@@ -66,9 +67,7 @@ export default function DateFromToComponent({
             <Text
               style={[
                 CommonStyles.InputFieldDateHalf,
-                {
-                  color: dateFrom ? Colors.blackColor : Colors.greyColor,
-                },
+                {color: dateFrom ? Colors.blackColor : Colors.greyColor},
               ]}>
               {dateFrom || I18n.t('selectStartDate')}
             </Text>
@@ -81,7 +80,7 @@ export default function DateFromToComponent({
         </View>
         <View>
           <Text style={[CommonStyles.lessBold3P5, CommonStyles.textBlue]}>
-            {I18n.t('degreeEnd')}
+            {dateToLabel || I18n.t('endDate')}
           </Text>
           <TouchableOpacity
             onPress={() => setDateToPickerVisible(true)}
@@ -93,9 +92,7 @@ export default function DateFromToComponent({
             <Text
               style={[
                 CommonStyles.InputFieldDateHalf,
-                {
-                  color: dateTo ? Colors.blackColor : Colors.greyColor,
-                },
+                {color: dateTo ? Colors.blackColor : Colors.greyColor},
               ]}>
               {dateTo || I18n.t('selectEndDate')}
             </Text>
