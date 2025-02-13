@@ -6,6 +6,8 @@ import CommonStyles from '../../components/common/CommonStyles';
 import styles from './styles';
 import {useLoginData} from '../../hooks/useLoginData';
 import ManageEventModal from './modals/ManageEventModal';
+import {useSelector} from 'react-redux';
+import I18n from '../../i18n/i18n';
 
 LocaleConfig.locales['en'] = {
   monthNames: [
@@ -56,6 +58,8 @@ export default function EventCalendarComponent({
   monthDates,
 }) {
   const {role} = useLoginData();
+  const currentLanguage = useSelector(state => state.language.language);
+
   const [isManageEventModalVisible, setIsManageEventModalVisible] =
     useState(false);
   const [selectedDate, setSelectedDate] = useState(
@@ -180,11 +184,12 @@ export default function EventCalendarComponent({
               CommonStyles.paddingRight3,
             ]}>
             <Text style={styles.eventDate}>
-              Start Date:{' '}
+              {I18n.t('startDate')}:{' '}
               {new Date(eventDetails.startDate).toLocaleDateString()}
             </Text>
             <Text style={styles.eventDate}>
-              End Date: {new Date(eventDetails.endDate).toLocaleDateString()}
+              {I18n.t('endDate')}:{' '}
+              {new Date(eventDetails.endDate).toLocaleDateString()}
             </Text>
           </View>
           <Text style={styles.eventDescription}>
@@ -193,7 +198,7 @@ export default function EventCalendarComponent({
         </View>
       ) : (
         <View style={styles.eventDetails}>
-          <Text style={styles.eventDate}>No Event on this Date</Text>
+          <Text style={styles.eventDate}>{I18n.t('noEventOnThisDate')}</Text>
         </View>
       )}
 

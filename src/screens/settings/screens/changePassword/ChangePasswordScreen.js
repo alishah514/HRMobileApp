@@ -13,9 +13,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {ChangePasswordAction} from '../../../../redux/changePassword/ChangePasswordActions';
 import LogoLoaderComponent from '../../../../components/ReusableComponents/LogoLoaderComponent';
 import {useLoginData} from '../../../../hooks/useLoginData';
+import I18n from '../../../../i18n/i18n';
 
 export default function ChangePasswordScreen({navigation}) {
   const dispatch = useDispatch();
+  const currentLanguage = useSelector(state => state.language.language);
+
   const {userId} = useLoginData();
   const isLoading = useSelector(state => state.changePassword.isLoading);
 
@@ -34,16 +37,16 @@ export default function ChangePasswordScreen({navigation}) {
     setConfirmPasswordError('');
 
     if (currentPassword === '') {
-      setCurrentPasswordError('Current Password is required');
+      setCurrentPasswordError(I18n.t('currentPasswordRequired'));
       valid = false;
     } else if (newPassword === '') {
-      setNewPasswordError('New Password is required.');
+      setNewPasswordError(I18n.t('newPasswordRequired'));
       valid = false;
     } else if (confirmPassword === '') {
-      setConfirmPasswordError('Re-enter your new Password.');
+      setConfirmPasswordError(I18n.t('reEnterNewPasswordRequired'));
       valid = false;
     } else if (confirmPassword !== newPassword) {
-      setConfirmPasswordError('Your password does not match the new password');
+      setConfirmPasswordError(I18n.t('passwordMismatch'));
       valid = false;
     }
 
@@ -51,13 +54,14 @@ export default function ChangePasswordScreen({navigation}) {
       handleChangePassword();
     }
   };
+
   const handleChangePassword = async () => {
     const result = await dispatch(
       ChangePasswordAction(userId, currentPassword, newPassword),
     );
     if (result.success) {
       stateClear();
-      Alert.alert('Password changed successfully!');
+      Alert.alert(I18n.t('passwordChangedSuccess'));
     }
   };
 
@@ -88,7 +92,7 @@ export default function ChangePasswordScreen({navigation}) {
     <CommonSafeAreaViewComponent>
       {isLoading && <LogoLoaderComponent />}
       <Header
-        title="Change Password"
+        title={I18n.t('changePassword')}
         onLeftIconPressed={goBack}
         leftIcon={
           <Ionicons
@@ -104,7 +108,7 @@ export default function ChangePasswordScreen({navigation}) {
         topChild={
           <View style={CommonStyles.width90}>
             <Text style={[CommonStyles.lessBold5P, CommonStyles.textWhite]}>
-              Change your Password
+              {I18n.t('changeYourPassword')}
             </Text>
           </View>
         }
@@ -117,10 +121,10 @@ export default function ChangePasswordScreen({navigation}) {
             ]}>
             <View>
               <InputFieldComponent
-                title={'Current Password'}
+                title={I18n.t('currentPassword')}
                 value={currentPassword}
                 onChangeText={text => setState(setCurrentPassword, text, true)}
-                placeholder={'Enter Your Current Password'}
+                placeholder={I18n.t('enterYourCurrentPassword')}
                 placeholderColor={Colors.placeholderColorDark}
                 borderColor={Colors.greyColor}
                 textColor={Colors.blackColor}
@@ -131,10 +135,10 @@ export default function ChangePasswordScreen({navigation}) {
               <View style={CommonStyles.paddingVertical2} />
 
               <InputFieldComponent
-                title={'New Password'}
+                title={I18n.t('newPassword')}
                 value={newPassword}
                 onChangeText={text => setState(setNewPassword, text, true)}
-                placeholder={'Enter Your New Password'}
+                placeholder={I18n.t('enterYourNewPassword')}
                 placeholderColor={Colors.placeholderColorDark}
                 borderColor={Colors.greyColor}
                 textColor={Colors.blackColor}
@@ -145,10 +149,10 @@ export default function ChangePasswordScreen({navigation}) {
               <View style={CommonStyles.paddingVertical2} />
 
               <InputFieldComponent
-                title={'Confirm New Password'}
+                title={I18n.t('confirmNewPassword')}
                 value={confirmPassword}
                 onChangeText={text => setState(setConfirmPassword, text, true)}
-                placeholder={'Re-enter Your New Password'}
+                placeholder={I18n.t('reEnterNewPassword')}
                 placeholderColor={Colors.placeholderColorDark}
                 borderColor={Colors.greyColor}
                 textColor={Colors.blackColor}
@@ -157,7 +161,10 @@ export default function ChangePasswordScreen({navigation}) {
                 isPassword={true}
               />
               <View style={CommonStyles.paddingVertical2} />
-              <CommonButton title={'Change Password'} onPress={validateForm} />
+              <CommonButton
+                title={I18n.t('changePassword')}
+                onPress={validateForm}
+              />
             </View>
           </View>
         }

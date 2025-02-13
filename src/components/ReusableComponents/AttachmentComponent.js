@@ -46,7 +46,7 @@ const AttachmentPicker = ({
                 CommonStyles.bold500,
                 CommonStyles.textBlack,
               ]}>
-              {editable ? 'Choose File' : 'Press Link'}
+              {editable ? I18n.t('chooseFile') : I18n.t('pressLink')}
             </Text>
           </LinearGradient>
         </TouchableOpacity>
@@ -68,7 +68,7 @@ const AttachmentPicker = ({
               ]}>
               {attachment
                 ? attachment.split('_').slice(1).join('_').slice(-25)
-                : 'No file selected'}
+                : I18n.t('noFileSelected')}
             </Text>
           </TouchableOpacity>
         </View>

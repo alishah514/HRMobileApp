@@ -225,5 +225,22 @@
   "startDateValidation": "Start date must be earlier than the end date.",
   "endDateValidation": "End date must be greater than the start date.",
   "startDate": "Start Date",
-  "endDate": "End Date"
+  "endDate": "End Date",
+  "currentPasswordRequired": "Current Password is required",
+  "newPasswordRequired": "New Password is required.",
+  "reEnterNewPasswordRequired": "Re-enter your new Password.",
+  "passwordChangedSuccess": "Password changed successfully!",
+  "changeYourPassword": "Change Your Password",
+  "currentPassword": "Current Password",
+  "enterYourCurrentPassword": "Enter your current password",
+  "newPassword": "New Password",
+  "enterYourNewPassword": "Enter your new password",
+  "confirmNewPassword": "Confirm New Password",
+  "reEnterNewPassword": "Re-enter your new password",
+  "chooseFile": "Choose File",
+  "pressLink": "Press Link",
+  "noFileSelected": "No File Selected",
+  "updateDetails": "Update Details",
+  "viewDetails": "View Details",
+  "noEventOnThisDate": "No Event On This Date"
 }

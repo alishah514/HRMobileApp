@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity, Linking} from 'react-native';
+import {View, Text, TouchableOpacity, Linking, Alert} from 'react-native';
 import React, {useState} from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
 import styles from '../styles';
@@ -6,9 +6,13 @@ import {formatDate} from '../../../components/utils/dateUtils';
 import {TruncateTitle} from '../../../components/utils/TruncateTitle';
 import {useLoginData} from '../../../hooks/useLoginData';
 import ViewDetailsAnnouncementModal from '../modals/ViewDetailsAnnouncementModal';
+import I18n from '../../../i18n/i18n';
+import {useSelector} from 'react-redux';
 
 export default function AnnouncementComponent({announcement, apiCall}) {
   const {role} = useLoginData();
+  const currentLanguage = useSelector(state => state.language.language);
+
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 
   const toggleEditModal = () => {
@@ -53,7 +57,7 @@ export default function AnnouncementComponent({announcement, apiCall}) {
               CommonStyles.textGrey,
               CommonStyles.Bold600,
             ]}>
-            {role === 'Admin' ? 'Update Details' : 'View Details'}
+            {role === 'Admin' ? I18n.t('updateDetails') : I18n.t('viewDetails')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -89,7 +93,7 @@ export default function AnnouncementComponent({announcement, apiCall}) {
                 CommonStyles.marginLeft5,
                 CommonStyles.underlineText,
               ]}>
-              View Document
+              {I18n.t('viewDocument')}
             </Text>
           </TouchableOpacity>
         )}

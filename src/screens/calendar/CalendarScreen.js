@@ -12,6 +12,7 @@ import {fetchSettings} from '../../redux/settings/SettingsAction';
 
 export default function CalendarScreen({navigation}) {
   const dispatch = useDispatch();
+  const currentLanguage = useSelector(state => state.language.language);
 
   const {settings, isLoading: calendarLoading} = useSelector(
     state => state.settings,

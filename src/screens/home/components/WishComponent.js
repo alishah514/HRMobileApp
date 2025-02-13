@@ -7,7 +7,8 @@ import {useSelector} from 'react-redux';
 import {getGreetingMessage} from '../../../components/ReusableComponents/GreetingMessageComponent';
 
 export default function WishComponent({data}) {
-  const {language: currentLanguage} = useSelector(state => state.language);
+  const currentLanguage = useSelector(state => state.language.language);
+
   const {greeting, wish} = getGreetingMessage();
 
   return (

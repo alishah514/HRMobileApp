@@ -224,5 +224,22 @@
   "startDateValidation": "開始日は終了日より前である必要があります。",
   "endDateValidation": "終了日は開始日より後である必要があります。",
   "startDate": "開始日",
-  "endDate": "終了日"
+  "endDate": "終了日",
+  "currentPasswordRequired": "現在のパスワードが必要です",
+  "newPasswordRequired": "新しいパスワードが必要です。",
+  "reEnterNewPasswordRequired": "新しいパスワードを再入力してください。",
+  "passwordChangedSuccess": "パスワードが正常に変更されました！",
+  "changeYourPassword": "パスワードを変更する",
+  "currentPassword": "現在のパスワード",
+  "enterYourCurrentPassword": "現在のパスワードを入力してください",
+  "newPassword": "新しいパスワード",
+  "enterYourNewPassword": "新しいパスワードを入力してください",
+  "confirmNewPassword": "新しいパスワードを確認",
+  "reEnterNewPassword": "新しいパスワードを再入力してください",
+  "chooseFile": "ファイルを選択",
+  "pressLink": "リンクを押す",
+  "noFileSelected": "ファイルが選択されていません",
+  "updateDetails": "詳細を更新",
+  "viewDetails": "詳細を見る",
+  "noEventOnThisDate": "この日にイベントはありません"
 }
