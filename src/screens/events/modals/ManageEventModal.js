@@ -9,7 +9,6 @@ import {Colors} from '../../../components/common/Colors';
 import CommonStyles from '../../../components/common/CommonStyles';
 import InputFieldComponent from '../../../components/ReusableComponents/InputFieldComponent';
 import CommonSafeAreaViewComponent from '../../../components/ReusableComponents/CommonComponents/CommonSafeAreaViewComponent';
-import CustomDatePickerComponent from '../../../components/ReusableComponents/CustomDatePickerComponent';
 import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 import {
   convertToTimestamp,
@@ -18,7 +17,6 @@ import {
 import {useLoginData} from '../../../hooks/useLoginData';
 import {
   deleteEvent,
-  fetchEvents,
   fetchMonthlyEvents,
   patchEventStatus,
   postEventRequest,
@@ -26,6 +24,7 @@ import {
 import {useEventData} from '../../../hooks/useEventData';
 import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 import {extractId} from '../../../components/utils/ExtractId';
+import DateFromToComponent from '../../../components/ReusableComponents/DateFromToComponent';
 
 export default function ManageEventModal({
   isModalVisible,
@@ -210,15 +209,14 @@ export default function ManageEventModal({
             borderColor={Colors.greyColor}
             textColor={Colors.blackColor}
           />
-          <CustomDatePickerComponent
-            selectedDate={formatDate(eventFrom)}
-            setSelectedDate={setEventFrom}
-            label={I18n.t('eventStartDate')}
-          />
-          <CustomDatePickerComponent
-            selectedDate={formatDate(eventTo)}
-            setSelectedDate={setEventTo}
-            label={I18n.t('eventStartDate')}
+
+          <DateFromToComponent
+            dateFrom={formatDate(eventFrom)}
+            setDateFrom={setEventFrom}
+            dateTo={formatDate(eventTo)}
+            setDateTo={setEventTo}
+            dateFromLabel={I18n.t('startDate')}
+            dateToLabel={I18n.t('endDate')}
           />
           <InputFieldComponent
             title={I18n.t('eventDescription')}
