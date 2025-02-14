@@ -31,7 +31,6 @@ import styles from '../styles';
 import ImagePickerComponent from '../../../components/ReusableComponents/ImagePickerComponent';
 import {convertTo12HourFormat} from '../../../components/utils/ConvertTimeToInt';
 import PhoneInput from 'react-native-phone-input';
-import {wp} from '../../../components/common/Dimensions';
 
 const EmployeeForm = forwardRef((props, ref) => {
   const phoneInputRef = useRef();
@@ -42,6 +41,7 @@ const EmployeeForm = forwardRef((props, ref) => {
     useState(false);
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [phoneTouched, setPhoneTouched] = useState(false);
 
   //personal
   const [fullName, setFullName] = useState('');
@@ -164,6 +164,8 @@ const EmployeeForm = forwardRef((props, ref) => {
   };
 
   const validatePhone = () => {
+    if (!phoneTouched) return true;
+
     if (!phoneInputRef.current) return false;
 
     const fullPhoneNumber = phoneInputRef.current.getValue();
@@ -174,9 +176,8 @@ const EmployeeForm = forwardRef((props, ref) => {
       return false;
     }
 
-    const numericCountryCode = countryCode?.replace(/\D/g, '');
-
-    if (!fullPhoneNumber?.includes(`+${numericCountryCode}`)) {
+    const numericCountryCode = countryCode.replace(/\D/g, '');
+    if (!fullPhoneNumber.includes(`+${numericCountryCode}`)) {
       setPhoneError(I18n.t('pleaseSelectCountryCode'));
       return false;
     }
@@ -185,11 +186,7 @@ const EmployeeForm = forwardRef((props, ref) => {
       .replace(`+${numericCountryCode}`, '')
       .trim();
 
-    console.log('Full Phone:', fullPhoneNumber);
-    console.log('Country Code:', countryCode);
-    console.log('Local Number:', localNumber);
-
-    if (!localNumber || localNumber === '') {
+    if (!localNumber) {
       setPhoneError(I18n.t('phoneRequired'));
       return false;
     } else if (localNumber.length < 8) {
@@ -357,17 +354,17 @@ const EmployeeForm = forwardRef((props, ref) => {
               value={phoneNumber}
               onChangePhoneNumber={value => {
                 setPhoneNumber(value);
+                if (!phoneTouched) setPhoneTouched(true);
                 validatePhone();
               }}
               onSelectCountry={() => {
                 setPhoneNumber('');
+                setPhoneTouched(true);
                 setPhoneError(I18n.t('phoneRequired'));
               }}
               style={[
                 styles.phoneNumberStyle,
-                {
-                  borderColor: phoneError ? Colors.redColor : Colors.greyColor,
-                },
+                {borderColor: phoneError ? Colors.redColor : Colors.greyColor},
               ]}
               textStyle={CommonStyles.InputField}
               pickerBackgroundColor={
@@ -378,7 +375,7 @@ const EmployeeForm = forwardRef((props, ref) => {
               pickerItemStyle={CommonStyles.font5}
             />
 
-            {phoneError ? (
+            {phoneTouched && phoneError ? (
               <Text style={styles.errorText}>{phoneError}</Text>
             ) : null}
           </View>
@@ -400,6 +397,7 @@ const EmployeeForm = forwardRef((props, ref) => {
             textColor={Colors.blackColor}
             email={true}
           />
+
           <InputFieldComponent
             title={I18n.t('password')}
             value={password}
