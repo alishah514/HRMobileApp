@@ -7,6 +7,7 @@ const useProfileData = () => {
     isLoading,
     isPatching,
     isPosting,
+    isDeleting,
   } = useSelector(state => state.profile);
 
   return {
@@ -15,6 +16,7 @@ const useProfileData = () => {
     profileLoading: isLoading,
     isPatching,
     isPosting,
+    isDeleting,
   };
 };
 

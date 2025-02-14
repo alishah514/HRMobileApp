@@ -10,6 +10,9 @@ import {
   UPDATE_USER_FAILURE,
   UPDATE_USER_START,
   UPDATE_USER_SUCCESS,
+  DELETE_USER_START,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -19,6 +22,9 @@ const initialState = {
   error: null,
   isUpdating: false,
   patchSuccess: false,
+  isDeleting: false,
+  deleteError: null,
+  deleteSuccess: false,
 };
 
 const AccountReducers = (state = initialState, action) => {
@@ -106,6 +112,27 @@ const AccountReducers = (state = initialState, action) => {
         isUpdating: false,
         patchSuccess: false,
         error: action.payload.error,
+      };
+    case DELETE_USER_START:
+      return {
+        ...state,
+        isDeleting: true,
+        deleteError: null,
+        deleteSuccess: false,
+      };
+    case DELETE_USER_SUCCESS:
+      return {
+        ...state,
+        isDeleting: false,
+        deleteError: null,
+        deleteSuccess: true,
+      };
+    case DELETE_USER_FAILURE:
+      return {
+        ...state,
+        isDeleting: false,
+        deleteError: action.payload,
+        deleteSuccess: false,
       };
 
     default:

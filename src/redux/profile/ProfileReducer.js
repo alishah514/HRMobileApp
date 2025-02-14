@@ -12,6 +12,9 @@ import {
   POST_PROFILE_START,
   POST_PROFILE_SUCCESS,
   POST_PROFILE_FAILURE,
+  DELETE_PROFILE_START,
+  DELETE_PROFILE_SUCCESS,
+  DELETE_PROFILE_FAILURE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -25,6 +28,9 @@ const initialState = {
   isPatching: false,
   patchError: null,
   patchSuccess: false,
+  isDeleting: false,
+  deleteError: null,
+  deleteSuccess: false,
 };
 
 const ProfileReducer = (state = initialState, action) => {
@@ -114,6 +120,28 @@ const ProfileReducer = (state = initialState, action) => {
         isPatching: false,
         patchError: action.payload,
         patchSuccess: false,
+      };
+
+    case DELETE_PROFILE_START:
+      return {
+        ...state,
+        isDeleting: true,
+        deleteError: null,
+        deleteSuccess: false,
+      };
+    case DELETE_PROFILE_SUCCESS:
+      return {
+        ...state,
+        isDeleting: false,
+        deleteError: null,
+        deleteSuccess: true,
+      };
+    case DELETE_PROFILE_FAILURE:
+      return {
+        ...state,
+        isDeleting: false,
+        deleteError: action.payload,
+        deleteSuccess: false,
       };
 
     default:

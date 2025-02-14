@@ -8,6 +8,7 @@ import I18n from '../../../i18n/i18n';
 import {useDispatch, useSelector} from 'react-redux';
 import EmployeeForm from '../forms/EmployeeForm';
 import {
+  deleteProfile,
   fetchAllProfile,
   fetchProfile,
   postProfile,
@@ -17,6 +18,7 @@ import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoad
 import {convertTo24HourFormat} from '../../../components/utils/ConvertTimeToInt';
 import {
   clearSpecificUserData,
+  deleteSpecificUser,
   getSpecificUser,
   updateOrEditUser,
 } from '../../../redux/accounts/AccountActions';
@@ -26,6 +28,7 @@ import useProfileData from '../../../hooks/useProfileData';
 import {useAccountsData} from '../../../hooks/useAccountsData';
 import {fetchAllTasks} from '../../../redux/tasks/TaskActions';
 import {extractId} from '../../../components/utils/ExtractId';
+import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 
 export default function ManageEmployeeModal({
   isModalVisible,
@@ -36,9 +39,14 @@ export default function ManageEmployeeModal({
   const dispatch = useDispatch();
   const employeeFormRef = useRef();
   const currentLanguage = useSelector(state => state.language.language);
-  const {isLoading, isUpdating, specificUserData} = useAccountsData();
+  const {
+    isLoading,
+    isUpdating,
+    specificUserData,
+    isDeleting: userDeleting,
+  } = useAccountsData();
   const {userId: currentUserId} = useLoginData();
-  const {isPosting, isPatching} = useProfileData();
+  const {isPosting, isPatching, isDeleting: profileDeleting} = useProfileData();
   const [isFormValid, setIsFormValid] = useState(false);
   const [mergedData, setMergedData] = useState({
     profile: data,
@@ -270,6 +278,54 @@ export default function ManageEmployeeModal({
     toggleModal();
   };
 
+  const onDeletePress = () => {
+    const userId = mergedData?.profile?.userId;
+    const profileId = mergedData?.profile?.name?.split('/').pop();
+
+    Alert.alert(
+      'Delete Employee',
+      'Are you sure you want to delete this employee?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => submitDeleteProfileRequest(profileId, userId),
+        },
+      ],
+    );
+  };
+
+  const submitDeleteProfileRequest = async (profileId, userId) => {
+    const response = await dispatch(deleteProfile(profileId));
+
+    if (response.success) {
+      console.log('submitDeleteProfileRequest success');
+
+      submitDeleteUser(userId);
+    } else {
+      console.error('Failed to delete Profile request:', response.error);
+      Alert.alert('Error', response.error);
+    }
+  };
+
+  const submitDeleteUser = async userId => {
+    const response = await dispatch(deleteSpecificUser(userId));
+
+    if (response.success) {
+      console.log('submitDeleteUserRequest success');
+
+      Alert.alert('User Deleted Successfully');
+      dispatch(fetchAllProfile());
+      toggleModal();
+    } else {
+      console.error('Failed to delete User request:', response.error);
+      Alert.alert('Error', response.error);
+    }
+  };
+
   return (
     <Modal
       transparent={false}
@@ -297,14 +353,22 @@ export default function ManageEmployeeModal({
           />
         }
       />
-      {(isPosting || isLoading || isUpdating || isPatching) && (
-        <LogoLoaderComponent />
-      )}
+      {(isPosting ||
+        isLoading ||
+        isUpdating ||
+        isPatching ||
+        userDeleting ||
+        profileDeleting) && <LogoLoaderComponent />}
       <EmployeeForm
         ref={employeeFormRef}
         onFormValidityChange={setIsFormValid}
         data={mergedData}
         screen={screen}
+      />
+      <CommonButton
+        title={'Delete Employee'}
+        backgroundColor={Colors.redColor}
+        onPress={onDeletePress}
       />
     </Modal>
   );

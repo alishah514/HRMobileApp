@@ -8,10 +8,13 @@ export const useAccountsData = () => {
   );
   const allUsersData = useSelector(state => state.accounts.allUsersData);
 
+  const isDeleting = useSelector(state => state.accounts.isDeleting);
+
   return {
     isLoading,
     isUpdating,
     specificUserData,
     allUsersData,
+    isDeleting,
   };
 };

@@ -1,9 +1,13 @@
+import DeleteUserService from '../../services/api/accounts/delete/DeleteUserService';
 import GetUserService from '../../services/api/accounts/getUsers/GetUserService';
 import SignupService from '../../services/api/accounts/signup/SignupService';
 import UpdateUserService from '../../services/api/accounts/updateUser/UpdateUserService';
 import {
   CLEAR_ALL_USERS_DATA,
   CLEAR_SPECIFIC_USER_DATA,
+  DELETE_USER_FAILURE,
+  DELETE_USER_START,
+  DELETE_USER_SUCCESS,
   GET_ALL_USERS_FAILURE,
   GET_ALL_USERS_START,
   GET_ALL_USERS_SUCCESS,
@@ -65,6 +69,20 @@ export const updateUserFailure = error => ({
   payload: error,
 });
 
+export const deleteUserStart = () => ({
+  type: DELETE_USER_START,
+});
+
+export const deleteUserSuccess = response => ({
+  type: DELETE_USER_SUCCESS,
+  payload: response,
+});
+
+export const deleteUserFailure = error => ({
+  type: DELETE_USER_FAILURE,
+  payload: error,
+});
+
 export const fetchAllUsers = () => async dispatch => {
   dispatch(fetchAllUsersStart());
   try {
@@ -113,5 +131,23 @@ export const updateOrEditUser = (userId, userData) => async dispatch => {
       success: false,
       error: error.message || 'An unexpected error occurred.',
     };
+  }
+};
+
+export const deleteSpecificUser = userId => async dispatch => {
+  dispatch(deleteUserStart());
+  try {
+    const response = await DeleteUserService.deleteUser(userId);
+    if (response.success) {
+      dispatch(deleteUserSuccess(response));
+      return {success: true};
+    } else {
+      dispatch(deleteUserFailure(response.error));
+      return {success: false, error: response.error};
+    }
+  } catch (error) {
+    const errorMessage = error.message || 'An unexpected error occurred.';
+    dispatch(deleteUserFailure(errorMessage));
+    return {success: false, error: errorMessage};
   }
 };

@@ -32,6 +32,7 @@ import ImagePickerComponent from '../../../components/ReusableComponents/ImagePi
 import {convertTo12HourFormat} from '../../../components/utils/ConvertTimeToInt';
 import {wp} from '../../../components/common/Dimensions';
 import PhoneInput from 'react-native-phone-input';
+import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
 
 const EmployeeForm = forwardRef((props, ref) => {
   const phoneInputRef = useRef();

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Constants from '../../../components/common/Constants';
 import {ExtractValues} from './ProfileExtractComponent';
+import GenericApiComponent from '../../GenericApiComponent';
 
 const ProfileService = {
   fetchAllProfile: async () => {
@@ -313,13 +314,31 @@ const ProfileService = {
       },
     };
 
-    // console.log('body: ' + JSON.stringify(body));
-
     try {
       const response = await axios.patch(url, body);
       return {success: true, response: response.data};
     } catch (error) {
       console.error('Error in LeaveService.patchLeaveStatus:', error);
+      return {
+        success: false,
+        error: error.message || 'An unexpected error occurred.',
+      };
+    }
+  },
+  deleteUserProfile: async profileId => {
+    const url = `${Constants.FIREBASE_URL}/${Constants.EMPLOYEES}/${profileId}?key=${Constants.FIREBASE_KEY}`;
+    const method = 'delete';
+
+    try {
+      const response = await GenericApiComponent(url, method);
+
+      if (response) {
+        return {success: true, message: 'Profile deleted successfully'};
+      } else {
+        return {success: false, error: 'Failed to delete Profile'};
+      }
+    } catch (error) {
+      console.error('Error in ProfileService.deleteProfile:', error);
       return {
         success: false,
         error: error.message || 'An unexpected error occurred.',
