@@ -240,7 +240,7 @@ export default function ManageEmployeeModal({
 
   const onRightIconPressed = () => {
     if (!isFormValid) {
-      Alert.alert('Incomplete Form', 'Please complete all fields!');
+      // Alert.alert('Incomplete Form', 'Please complete all fields!');
       return;
     }
 

@@ -241,5 +241,9 @@
   "noFileSelected": "ファイルが選択されていません",
   "updateDetails": "詳細を更新",
   "viewDetails": "詳細を見る",
-  "noEventOnThisDate": "この日にイベントはありません"
+  "noEventOnThisDate": "この日にイベントはありません",
+  "phoneRequired": "電話番号は必須です",
+  "phoneLengthMustBeGreaterThan8": "電話番号の長さは10桁以上である必要があります",
+  "phoneLengthMustBeLessThan14": "電話番号の長さは18桁未満である必要があります",
+  "pleaseSelectCountryCode": "国コードを選択してください"
 }

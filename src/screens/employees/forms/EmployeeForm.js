@@ -30,9 +30,8 @@ import Constants from '../../../components/common/Constants';
 import styles from '../styles';
 import ImagePickerComponent from '../../../components/ReusableComponents/ImagePickerComponent';
 import {convertTo12HourFormat} from '../../../components/utils/ConvertTimeToInt';
-import {wp} from '../../../components/common/Dimensions';
 import PhoneInput from 'react-native-phone-input';
-import CommonButton from '../../../components/ReusableComponents/CommonComponents/CommonButton';
+import {wp} from '../../../components/common/Dimensions';
 
 const EmployeeForm = forwardRef((props, ref) => {
   const phoneInputRef = useRef();
@@ -42,6 +41,7 @@ const EmployeeForm = forwardRef((props, ref) => {
   const [isImagePickerOptionsVisible, setIsImagePickerOptionsVisible] =
     useState(false);
   const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
 
   //personal
   const [fullName, setFullName] = useState('');
@@ -84,6 +84,7 @@ const EmployeeForm = forwardRef((props, ref) => {
       setFullName(data?.profile?.personal?.fullName || '');
 
       const phone = data?.profile?.personal?.phone?.toString() || '';
+
       if (phone && !phone.startsWith('+')) {
         setPhoneNumber(`+${phone}`);
       } else {
@@ -162,12 +163,55 @@ const EmployeeForm = forwardRef((props, ref) => {
     }
   };
 
+  const validatePhone = () => {
+    if (!phoneInputRef.current) return false;
+
+    const fullPhoneNumber = phoneInputRef.current.getValue();
+    const countryCode = phoneInputRef.current.getCountryCode();
+
+    if (!countryCode) {
+      setPhoneError(I18n.t('pleaseSelectCountryCode'));
+      return false;
+    }
+
+    const numericCountryCode = countryCode?.replace(/\D/g, '');
+
+    if (!fullPhoneNumber?.includes(`+${numericCountryCode}`)) {
+      setPhoneError(I18n.t('pleaseSelectCountryCode'));
+      return false;
+    }
+
+    const localNumber = fullPhoneNumber
+      .replace(`+${numericCountryCode}`, '')
+      .trim();
+
+    console.log('Full Phone:', fullPhoneNumber);
+    console.log('Country Code:', countryCode);
+    console.log('Local Number:', localNumber);
+
+    if (!localNumber || localNumber === '') {
+      setPhoneError(I18n.t('phoneRequired'));
+      return false;
+    } else if (localNumber.length < 8) {
+      setPhoneError(I18n.t('phoneLengthMustBeGreaterThan8'));
+      return false;
+    } else if (localNumber.length > 14) {
+      setPhoneError(I18n.t('phoneLengthMustBeLessThan14'));
+      return false;
+    } else {
+      setPhoneError('');
+      return true;
+    }
+  };
+
   useEffect(() => {
     const isEmailValid = validateEmail(emailAddress);
+    const isPhoneValid = validatePhone(phoneNumber);
+
     const isFormValid =
       fullName &&
-      phoneNumber &&
-      emailAddress &&
+      isPhoneValid &&
+      isEmailValid &&
       dateOfBirth &&
       gender &&
       password &&
@@ -183,8 +227,7 @@ const EmployeeForm = forwardRef((props, ref) => {
       wageType &&
       punchInTime &&
       punchOutTime &&
-      profilePicture &&
-      isEmailValid;
+      profilePicture;
 
     onFormValidityChange(isFormValid);
   }, [
@@ -208,32 +251,31 @@ const EmployeeForm = forwardRef((props, ref) => {
     punchOutTime,
     profilePicture,
     emailError,
+    phoneError,
   ]);
 
   useImperativeHandle(ref, () => ({
-    getFormData: () => {
-      return {
-        fullName,
-        phoneNumber,
-        emailAddress,
-        dateOfBirth,
-        gender,
-        profilePicture: profilePicture?.uploadedUrl || profilePicture,
-        password,
-        degreeFrom,
-        degreeTo,
-        institution,
-        degreeTitle,
-        jobDesignation,
-        jobDepartment,
-        joiningDate,
-        employmentType,
-        salary,
-        wageType,
-        punchInTime,
-        punchOutTime,
-      };
-    },
+    getFormData: () => ({
+      fullName,
+      phoneNumber,
+      emailAddress,
+      dateOfBirth,
+      gender,
+      profilePicture: profilePicture?.uploadedUrl || profilePicture,
+      password,
+      degreeFrom,
+      degreeTo,
+      institution,
+      degreeTitle,
+      jobDesignation,
+      jobDepartment,
+      joiningDate,
+      employmentType,
+      salary,
+      wageType,
+      punchInTime,
+      punchOutTime,
+    }),
   }));
 
   useEffect(() => {
@@ -313,8 +355,20 @@ const EmployeeForm = forwardRef((props, ref) => {
               ref={phoneInputRef}
               initialCountry="us"
               value={phoneNumber}
-              onChangePhoneNumber={setPhoneNumber}
-              style={styles.phoneNumberView}
+              onChangePhoneNumber={value => {
+                setPhoneNumber(value);
+                validatePhone();
+              }}
+              onSelectCountry={() => {
+                setPhoneNumber('');
+                setPhoneError(I18n.t('phoneRequired'));
+              }}
+              style={[
+                styles.phoneNumberStyle,
+                {
+                  borderColor: phoneError ? Colors.redColor : Colors.greyColor,
+                },
+              ]}
               textStyle={CommonStyles.InputField}
               pickerBackgroundColor={
                 Platform.OS === 'android' ? Colors.blueColor : Colors.whiteColor
@@ -323,6 +377,10 @@ const EmployeeForm = forwardRef((props, ref) => {
               confirmTextStyle={styles.pickerTextStyle}
               pickerItemStyle={CommonStyles.font5}
             />
+
+            {phoneError ? (
+              <Text style={styles.errorText}>{phoneError}</Text>
+            ) : null}
           </View>
 
           <InputFieldComponent

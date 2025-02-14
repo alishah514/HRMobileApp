@@ -93,5 +93,14 @@ const styles = StyleSheet.create({
     },
     CommonStyles.underlineText,
   ],
+  phoneNumberStyle: {
+    borderBottomWidth: 1,
+    paddingBottom: wp(2.5),
+  },
+  errorText: {
+    color: Colors.redColor,
+    fontSize: wp(3),
+    marginTop: wp(1.5),
+  },
 });
 export default styles;

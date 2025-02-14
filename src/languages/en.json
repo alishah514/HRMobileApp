@@ -242,5 +242,9 @@
   "noFileSelected": "No File Selected",
   "updateDetails": "Update Details",
   "viewDetails": "View Details",
-  "noEventOnThisDate": "No Event On This Date"
+  "noEventOnThisDate": "No Event On This Date",
+  "phoneRequired": "Phone number is required",
+  "phoneLengthMustBeGreaterThan8": "Phone Number's Length must be greater than 8 digits",
+  "phoneLengthMustBeLessThan14": "Phone Number's Length must be less than 14 digits",
+  "pleaseSelectCountryCode": "Please select a country code"
 }

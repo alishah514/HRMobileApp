@@ -262,7 +262,7 @@ const ProfileService = {
                 stringValue: profileData.personal?.fullName || '',
               },
               phone: {
-                integerValue: profileData.personal?.phone || null,
+                stringValue: profileData.personal?.phone || null,
               },
               email: {
                 stringValue: profileData.personal?.email || '',
