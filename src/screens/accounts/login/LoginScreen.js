@@ -1,4 +1,4 @@
-import {View, Text, Image, Dimensions, Alert} from 'react-native';
+import {View, Image, Dimensions} from 'react-native';
 import React, {useState} from 'react';
 import CommonStyles from '../../../components/common/CommonStyles';
 import {Colors} from '../../../components/common/Colors';
@@ -113,35 +113,6 @@ export default function LoginScreen({navigation}) {
               />
               <View style={CommonStyles.paddingVertical2} />
               <CommonButton title={I18n.t('login')} onPress={validateForm} />
-              <View style={CommonStyles.paddingVertical2} />
-              <Text
-                style={[
-                  CommonStyles.textBlack,
-                  CommonStyles.font4P,
-                  CommonStyles.textCenter,
-                  CommonStyles.alignSelf,
-                  CommonStyles.paddingTop5,
-                ]}>
-                {I18n.t('dontHaveAnAccount')}{' '}
-                <Text
-                  onPress={() => navigation.navigate('Signup')}
-                  style={CommonStyles.textYellow}>
-                  {I18n.t('signUp')}
-                </Text>{' '}
-                {I18n.t('now')}
-              </Text>
-              <View style={CommonStyles.paddingVertical2} />
-              <Text
-                onPress={() => Alert.alert('SUPPORT', I18n.t('contactSupport'))}
-                style={[
-                  CommonStyles.textYellow,
-                  CommonStyles.font4P,
-                  CommonStyles.textCenter,
-                  CommonStyles.alignSelf,
-                  CommonStyles.paddingTop5,
-                ]}>
-                {I18n.t('forgotPassword')}
-              </Text>
             </View>
           </>
         }
