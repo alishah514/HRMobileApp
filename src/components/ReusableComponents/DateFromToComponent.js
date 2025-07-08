@@ -8,6 +8,7 @@ import Constants from '../common/Constants';
 import {useSelector} from 'react-redux';
 import I18n from '../../i18n/i18n';
 import {formatDate} from '../utils/dateUtils';
+import {TruncateTitle} from '../utils/TruncateTitle';
 
 export default function DateFromToComponent({
   dateFrom,
@@ -20,10 +21,14 @@ export default function DateFromToComponent({
   const [isDateFromPickerVisible, setDateFromPickerVisible] = useState(false);
   const [isDateToPickerVisible, setDateToPickerVisible] = useState(false);
 
-  const parseDate = dateString => {
-    if (!dateString || !dateString.includes('-')) return null;
-    const [day, month, year] = dateString.split('-').map(Number);
-    return new Date(year, month - 1, day);
+  const parseDate = date => {
+    if (!date) return null;
+    if (typeof date === 'number') return new Date(date);
+    if (typeof date === 'string' && date.includes('-')) {
+      const [day, month, year] = date.split('-').map(Number);
+      return new Date(year, month - 1, day);
+    }
+    return null;
   };
 
   const handleDateChange = (selectedDate, type) => {
@@ -50,6 +55,18 @@ export default function DateFromToComponent({
     }
   };
 
+  const dateToText =
+    dateTo ||
+    (dateToLabel
+      ? `${I18n.t('select')} ${TruncateTitle(dateToLabel, 10)}`
+      : I18n.t('selectEndDate'));
+
+  const dateFromText =
+    dateFrom ||
+    (dateFromLabel
+      ? `${I18n.t('select')} ${TruncateTitle(dateFromLabel, 10)}`
+      : I18n.t('selectStartDate'));
+
   return (
     <>
       <View style={[CommonStyles.rowBetween, CommonStyles.marginBottom5]}>
@@ -69,7 +86,7 @@ export default function DateFromToComponent({
                 CommonStyles.InputFieldDateHalf,
                 {color: dateFrom ? Colors.blackColor : Colors.greyColor},
               ]}>
-              {dateFrom || I18n.t('selectStartDate')}
+              {dateFromText}
             </Text>
             <Ionicons
               name="calendar-outline"
@@ -94,7 +111,7 @@ export default function DateFromToComponent({
                 CommonStyles.InputFieldDateHalf,
                 {color: dateTo ? Colors.blackColor : Colors.greyColor},
               ]}>
-              {dateTo || I18n.t('selectEndDate')}
+              {dateToText}
             </Text>
             <Ionicons
               name="calendar-outline"

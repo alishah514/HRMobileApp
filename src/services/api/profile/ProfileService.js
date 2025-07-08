@@ -202,6 +202,96 @@ const ProfileService = {
               })) || [],
           },
         },
+        documents: {
+          mapValue: {
+            fields: {
+              cnic: {
+                mapValue: {
+                  fields: {
+                    number: {
+                      stringValue: profileData.documents?.cnic?.number || '',
+                    },
+                    issueDate: {
+                      timestampValue: profileData.documents?.cnic?.issueDate
+                        ? new Date(
+                            profileData.documents.cnic.issueDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    expiryDate: {
+                      timestampValue: profileData.documents?.cnic?.expiryDate
+                        ? new Date(
+                            profileData.documents.cnic.expiryDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    documentUrl: {
+                      stringValue:
+                        profileData.documents?.cnic?.documentUrl || '',
+                    },
+                  },
+                },
+              },
+              visa: {
+                mapValue: {
+                  fields: {
+                    number: {
+                      stringValue: profileData.documents?.visa?.number || '',
+                    },
+                    issueDate: {
+                      timestampValue: profileData.documents?.visa?.issueDate
+                        ? new Date(
+                            profileData.documents.visa.issueDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    expiryDate: {
+                      timestampValue: profileData.documents?.visa?.expiryDate
+                        ? new Date(
+                            profileData.documents.visa.expiryDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    documentUrl: {
+                      stringValue:
+                        profileData.documents?.visa?.documentUrl || '',
+                    },
+                  },
+                },
+              },
+              residency: {
+                mapValue: {
+                  fields: {
+                    number: {
+                      stringValue:
+                        profileData.documents?.residency?.number || '',
+                    },
+                    issueDate: {
+                      timestampValue: profileData.documents?.residency
+                        ?.issueDate
+                        ? new Date(
+                            profileData.documents.residency.issueDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    expiryDate: {
+                      timestampValue: profileData.documents?.residency
+                        ?.expiryDate
+                        ? new Date(
+                            profileData.documents.residency.expiryDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    documentUrl: {
+                      stringValue:
+                        profileData.documents?.residency?.documentUrl || '',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     };
 
@@ -226,12 +316,8 @@ const ProfileService = {
         job: {
           mapValue: {
             fields: {
-              Designation: {
-                stringValue: profileData.job?.Designation || '',
-              },
-              Department: {
-                stringValue: profileData.job?.Department || '',
-              },
+              Designation: {stringValue: profileData.job?.Designation || ''},
+              Department: {stringValue: profileData.job?.Department || ''},
               JoiningDate: {
                 timestampValue: profileData.job?.JoiningDate
                   ? new Date(profileData.job.JoiningDate).toISOString()
@@ -240,50 +326,33 @@ const ProfileService = {
               employmentType: {
                 stringValue: profileData.job?.employmentType || '',
               },
-              salary: {
-                stringValue: profileData.job?.salary || '',
-              },
-              wageType: {
-                stringValue: profileData.job?.wageType || '',
-              },
-              punchInTime: {
-                integerValue: profileData.job?.punchInTime || null,
-              },
+              salary: {stringValue: profileData.job?.salary || ''},
+              wageType: {stringValue: profileData.job?.wageType || ''},
+              punchInTime: {integerValue: profileData.job?.punchInTime || null},
               punchOutTime: {
                 integerValue: profileData.job?.punchOutTime || null,
               },
             },
           },
         },
+
         personal: {
           mapValue: {
             fields: {
-              fullName: {
-                stringValue: profileData.personal?.fullName || '',
-              },
-              phone: {
-                stringValue: profileData.personal?.phone || null,
-              },
-              email: {
-                stringValue: profileData.personal?.email || '',
-              },
+              fullName: {stringValue: profileData.personal?.fullName || ''},
+              phone: {stringValue: profileData.personal?.phone || null},
+              email: {stringValue: profileData.personal?.email || ''},
               birthDate: {
                 timestampValue: profileData.personal?.birthDate
                   ? new Date(profileData.personal.birthDate).toISOString()
                   : '',
               },
-              gender: {
-                stringValue: profileData.personal?.gender || '',
-              },
-              imageUrl: {
-                stringValue: profileData.personal?.imageUrl || '',
-              },
+              gender: {stringValue: profileData.personal?.gender || ''},
+              imageUrl: {stringValue: profileData.personal?.imageUrl || ''},
             },
           },
         },
-        userId: {
-          stringValue: profileData.userId || '',
-        },
+
         education: {
           arrayValue: {
             values:
@@ -295,12 +364,8 @@ const ProfileService = {
                         ? new Date(edu.startDate).toISOString()
                         : '',
                     },
-                    Institute: {
-                      stringValue: edu.Institute || '',
-                    },
-                    Degree: {
-                      stringValue: edu.Degree || '',
-                    },
+                    Institute: {stringValue: edu.Institute || ''},
+                    Degree: {stringValue: edu.Degree || ''},
                     endDate: {
                       timestampValue: edu.endDate
                         ? new Date(edu.endDate).toISOString()
@@ -311,6 +376,128 @@ const ProfileService = {
               })) || [],
           },
         },
+
+        documents: {
+          mapValue: {
+            fields: {
+              cnic: {
+                mapValue: {
+                  fields: {
+                    number: {
+                      stringValue: profileData.documents?.cnic?.number || '',
+                    },
+                    issueDate: {
+                      timestampValue: profileData.documents?.cnic?.issueDate
+                        ? new Date(
+                            profileData.documents.cnic.issueDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    expiryDate: {
+                      timestampValue: profileData.documents?.cnic?.expiryDate
+                        ? new Date(
+                            profileData.documents.cnic.expiryDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    documentUrl: {
+                      stringValue:
+                        profileData.documents?.cnic?.documentUrl || '',
+                    },
+                  },
+                },
+              },
+              visa: {
+                mapValue: {
+                  fields: {
+                    number: {
+                      stringValue: profileData.documents?.visa?.number || '',
+                    },
+                    issueDate: {
+                      timestampValue: profileData.documents?.visa?.issueDate
+                        ? new Date(
+                            profileData.documents.visa.issueDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    expiryDate: {
+                      timestampValue: profileData.documents?.visa?.expiryDate
+                        ? new Date(
+                            profileData.documents.visa.expiryDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    documentUrl: {
+                      stringValue:
+                        profileData.documents?.visa?.documentUrl || '',
+                    },
+                  },
+                },
+              },
+              residency: {
+                mapValue: {
+                  fields: {
+                    number: {
+                      stringValue:
+                        profileData.documents?.residency?.number || '',
+                    },
+                    issueDate: {
+                      timestampValue: profileData.documents?.residency
+                        ?.issueDate
+                        ? new Date(
+                            profileData.documents.residency.issueDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    expiryDate: {
+                      timestampValue: profileData.documents?.residency
+                        ?.expiryDate
+                        ? new Date(
+                            profileData.documents.residency.expiryDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    documentUrl: {
+                      stringValue:
+                        profileData.documents?.residency?.documentUrl || '',
+                    },
+                  },
+                },
+              },
+              passport: {
+                mapValue: {
+                  fields: {
+                    number: {
+                      stringValue:
+                        profileData.documents?.passport?.number || '',
+                    },
+                    issueDate: {
+                      timestampValue: profileData.documents?.passport?.issueDate
+                        ? new Date(
+                            profileData.documents.passport.issueDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    expiryDate: {
+                      timestampValue: profileData.documents?.passport
+                        ?.expiryDate
+                        ? new Date(
+                            profileData.documents.passport.expiryDate,
+                          ).toISOString()
+                        : '',
+                    },
+                    documentUrl: {
+                      stringValue:
+                        profileData.documents?.passport?.documentUrl || '',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+
+        userId: {stringValue: profileData.userId || ''},
       },
     };
 
@@ -318,13 +505,14 @@ const ProfileService = {
       const response = await axios.patch(url, body);
       return {success: true, response: response.data};
     } catch (error) {
-      console.error('Error in LeaveService.patchLeaveStatus:', error);
+      console.error('Error in updateOrEditOProfile:', error);
       return {
         success: false,
         error: error.message || 'An unexpected error occurred.',
       };
     }
   },
+
   deleteUserProfile: async profileId => {
     const url = `${Constants.FIREBASE_URL}/${Constants.EMPLOYEES}/${profileId}?key=${Constants.FIREBASE_KEY}`;
     const method = 'delete';

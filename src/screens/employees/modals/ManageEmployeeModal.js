@@ -209,6 +209,33 @@ export default function ManageEmployeeModal({
         },
       ],
       userId: userId,
+      // 🆕 Documents
+      documents: {
+        cnic: {
+          number: employeeData.cnicNumber,
+          issueDate: employeeData.cnicIssueDate,
+          expiryDate: employeeData.cnicExpiryDate,
+          documentUrl: employeeData.cnicDocument,
+        },
+        visa: {
+          number: employeeData.visaNumber,
+          issueDate: employeeData.visaIssueDate,
+          expiryDate: employeeData.visaExpiryDate,
+          documentUrl: employeeData.visaDocument,
+        },
+        residency: {
+          number: employeeData.residencyNumber,
+          issueDate: employeeData.residencyIssueDate,
+          expiryDate: employeeData.residencyExpiryDate,
+          documentUrl: employeeData.residencyDocument,
+        },
+        passport: {
+          number: employeeData.passportNumber,
+          issueDate: employeeData.passportIssueDate,
+          expiryDate: employeeData.passportExpiryDate,
+          documentUrl: employeeData.passportDocument,
+        },
+      },
     };
   };
 
@@ -365,11 +392,13 @@ export default function ManageEmployeeModal({
         data={mergedData}
         screen={screen}
       />
-      <CommonButton
-        title={'Delete Employee'}
-        backgroundColor={Colors.redColor}
-        onPress={onDeletePress}
-      />
+      {screen !== 'add' && (
+        <CommonButton
+          title={'Delete Employee'}
+          backgroundColor={Colors.redColor}
+          onPress={onDeletePress}
+        />
+      )}
     </Modal>
   );
 }

@@ -20,12 +20,14 @@ import {fetchProfile} from '../../redux/profile/ProfileActions';
 import LogoLoaderComponent from '../../components/ReusableComponents/LogoLoaderComponent';
 import CardComponent from './types/CardComponent';
 import {useLoginData} from '../../hooks/useLoginData';
+import DocumentInfo from './types/DocumentInfo';
 
 const tabs = [
   {id: 0, icon: 'person-outline', iconSet: Ionicons},
   {id: 1, icon: 'graduation', iconSet: SimpleLineIcons},
   {id: 2, icon: 'briefcase', iconSet: SimpleLineIcons},
   {id: 3, icon: 'card-outline', iconSet: Ionicons},
+  {id: 4, icon: 'documents-outline', iconSet: Ionicons},
 ];
 
 export default function ProfileScreen({navigation}) {
@@ -63,6 +65,27 @@ export default function ProfileScreen({navigation}) {
 
   const handleTabPress = index => {
     setActiveTab(index);
+  };
+
+  const renderProfileTab = ({item}) => {
+    const employeeId = profile?.name?.split('/').pop();
+
+    switch (item) {
+      case 0:
+        return (
+          <PersonalInfo data={profile?.personal} employeeId={employeeId} />
+        );
+      case 1:
+        return <EducationInfo data={profile?.education} />;
+      case 2:
+        return <WorkInfo data={profile?.job} />;
+      case 3:
+        return <CardComponent data={profile} employeeId={employeeId} />;
+      case 4:
+        return <DocumentInfo data={profile?.documents} />;
+      default:
+        return null;
+    }
   };
 
   const handleDrawerOpen = () => {
@@ -103,34 +126,9 @@ export default function ProfileScreen({navigation}) {
             />
             <FlatList
               style={styles.maxHeight}
-              contentContainerStyle={[styles.infoStarting]}
+              contentContainerStyle={styles.infoStarting}
               data={[activeTab]}
-              renderItem={() => (
-                <View>
-                  {(() => {
-                    const employeeId = profile?.name?.split('/').pop();
-                    return (
-                      <>
-                        {activeTab === 0 ? (
-                          <PersonalInfo
-                            data={profile?.personal}
-                            employeeId={employeeId}
-                          />
-                        ) : activeTab === 1 ? (
-                          <EducationInfo data={profile?.education} />
-                        ) : activeTab === 2 ? (
-                          <WorkInfo data={profile?.job} />
-                        ) : activeTab === 3 ? (
-                          <CardComponent
-                            data={profile}
-                            employeeId={employeeId}
-                          />
-                        ) : null}
-                      </>
-                    );
-                  })()}
-                </View>
-              )}
+              renderItem={renderProfileTab}
               keyExtractor={(item, index) => index.toString()}
             />
           </>

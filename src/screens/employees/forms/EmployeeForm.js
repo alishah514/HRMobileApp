@@ -31,6 +31,12 @@ import styles from '../styles';
 import ImagePickerComponent from '../../../components/ReusableComponents/ImagePickerComponent';
 import {convertTo12HourFormat} from '../../../components/utils/ConvertTimeToInt';
 import PhoneInput from 'react-native-phone-input';
+import AttachmentPicker from '../../../components/ReusableComponents/AttachmentComponent';
+import DocumentPicker, {types} from 'react-native-document-picker';
+import {wp} from '../../../components/common/Dimensions';
+import {handleDocumentUploadAWS} from '../../../components/utils/handleDocumentUploadAWS';
+import {isSizeValid} from '../../../components/ReusableComponents/DocumentSizeComponent';
+import LogoLoaderComponent from '../../../components/ReusableComponents/LogoLoaderComponent';
 
 const EmployeeForm = forwardRef((props, ref) => {
   const phoneInputRef = useRef();
@@ -70,6 +76,95 @@ const EmployeeForm = forwardRef((props, ref) => {
   const [punchInTime, setPunchInTime] = useState(null);
   const [punchOutTime, setPunchOutTime] = useState(null);
 
+  //documents
+  const [cnicNumber, setCnicNumber] = useState('');
+  const [cnicIssueDate, setCnicIssueDate] = useState(null);
+  const [cnicExpiryDate, setCnicExpiryDate] = useState(null);
+  const [cnicDocument, setCnicDocument] = useState(null);
+
+  const [visaNumber, setVisaNumber] = useState('');
+  const [visaIssueDate, setVisaIssueDate] = useState(null);
+  const [visaExpiryDate, setVisaExpiryDate] = useState(null);
+  const [visaDocument, setVisaDocument] = useState(null);
+
+  const [residencyNumber, setResidencyNumber] = useState('');
+  const [residencyIssueDate, setResidencyIssueDate] = useState(null);
+  const [residencyExpiryDate, setResidencyExpiryDate] = useState(null);
+  const [residencyDocument, setResidencyDocument] = useState(null);
+
+  const [passportNumber, setPassportNumber] = useState('');
+  const [passportIssueDate, setPassportIssueDate] = useState(null);
+  const [passportExpiryDate, setPassportExpiryDate] = useState(null);
+  const [passportDocument, setPassportDocument] = useState(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDocumentPickFor = async type => {
+    try {
+      const result = await DocumentPicker.pickSingle({
+        type: [
+          DocumentPicker.types.pdf,
+          DocumentPicker.types.doc,
+          DocumentPicker.types.docx,
+          DocumentPicker.types.plainText,
+          DocumentPicker.types.images,
+        ],
+      });
+
+      if (!isSizeValid(result)) {
+        Alert.alert('File size error', 'File size must be less than 5 MB.');
+        return;
+      }
+
+      showConfirmationAlert(async () => {
+        setIsLoading(true);
+
+        const uploadedUrl = await handleDocumentUploadAWS(
+          result,
+          `documents/${type}/`,
+        );
+
+        console.log(`Uploaded ${type} document URL:`, uploadedUrl);
+
+        if (type === 'cnic') setCnicDocument(uploadedUrl);
+        if (type === 'visa') setVisaDocument(uploadedUrl);
+        if (type === 'residency') setResidencyDocument(uploadedUrl);
+        if (type === 'passport') setPassportDocument(uploadedUrl);
+
+        setIsLoading(false);
+      });
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('User cancelled document picker');
+      } else {
+        console.error('DocumentPicker Error:', err);
+        Alert.alert(
+          'Error',
+          'An unexpected error occurred while selecting a document.',
+        );
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const showConfirmationAlert = onConfirm => {
+    Alert.alert(
+      'Upload Confirmation',
+      'Are you sure you want to upload this document?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: onConfirm,
+        },
+      ],
+    );
+  };
+
   const employmentTypeOptions = [
     'Permanent',
     'Full-time',
@@ -81,42 +176,61 @@ const EmployeeForm = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (screen === 'edit' && data) {
-      setFullName(data?.profile?.personal?.fullName || '');
+      const personal = data?.profile?.personal || {};
+      const job = data?.profile?.job || {};
+      const educationItem = data?.profile?.education?.[0] || {};
+      const documents = data?.profile?.documents || {};
+      const users = data?.users || {};
 
-      const phone = data?.profile?.personal?.phone?.toString() || '';
+      setFullName(personal.fullName || '');
+      const phone = personal.phone?.toString() || '';
+      setPhoneNumber(phone && !phone.startsWith('+') ? `+${phone}` : phone);
+      setEmailAddress(personal.email || '');
+      setDateOfBirth(personal.birthDate || '');
+      setGender(personal.gender || '');
+      setProfilePicture(personal.imageUrl || null);
+      setPassword(users.password || '');
 
-      if (phone && !phone.startsWith('+')) {
-        setPhoneNumber(`+${phone}`);
-      } else {
-        setPhoneNumber(phone);
+      setDegreeFrom(educationItem.startDate || '');
+      setDegreeTo(educationItem.endDate || '');
+      setInstitution(educationItem.Institute || '');
+      setDegreeTitle(educationItem.Degree || '');
+
+      setJobDesignation(job.Designation || '');
+      setJobDepartment(job.Department || '');
+      setJoiningDate(job.JoiningDate || null);
+      setEmploymentType(job.employmentType || '');
+      setSalary(job.salary || '');
+      setWageType(job.wageType || '');
+      setPunchInTime(convertTo12HourFormat(job.punchInTime) || null);
+      setPunchOutTime(convertTo12HourFormat(job.punchOutTime) || null);
+
+      if (documents.cnic) {
+        setCnicNumber(documents.cnic.number || '');
+        setCnicIssueDate(documents.cnic.issueDate || null);
+        setCnicExpiryDate(documents.cnic.expiryDate || null);
+        setCnicDocument(documents.cnic.documentUrl || null);
       }
-      setEmailAddress(data?.profile?.personal?.email || '');
-      setDateOfBirth(data?.profile?.personal?.birthDate || '');
-      setGender(data?.profile?.personal?.gender || '');
-      setProfilePicture(data?.profile?.personal?.imageUrl || null);
-      setPassword(data?.users?.password || '');
 
-      if (data?.profile?.education && data?.profile?.education.length > 0) {
-        const educationItem = data?.profile?.education[0];
-
-        setDegreeFrom(educationItem?.startDate || '');
-        setDegreeTo(educationItem?.endDate || '');
-        setInstitution(educationItem?.Institute || '');
-        setDegreeTitle(educationItem?.Degree || '');
+      if (documents.visa) {
+        setVisaNumber(documents.visa.number || '');
+        setVisaIssueDate(documents.visa.issueDate || null);
+        setVisaExpiryDate(documents.visa.expiryDate || null);
+        setVisaDocument(documents.visa.documentUrl || null);
       }
 
-      setJobDesignation(data?.profile?.job?.Designation || '');
-      setJobDepartment(data?.profile?.job?.Department || '');
-      setJoiningDate(data?.profile?.job?.JoiningDate || null);
-      setEmploymentType(data?.profile?.job?.employmentType || '');
-      setSalary(data?.profile?.job?.salary || '');
-      setWageType(data?.profile?.job?.wageType || '');
-      setPunchInTime(
-        convertTo12HourFormat(data?.profile?.job?.punchInTime) || null,
-      );
-      setPunchOutTime(
-        convertTo12HourFormat(data?.profile?.job?.punchOutTime) || null,
-      );
+      if (documents.residency) {
+        setResidencyNumber(documents.residency.number || '');
+        setResidencyIssueDate(documents.residency.issueDate || null);
+        setResidencyExpiryDate(documents.residency.expiryDate || null);
+        setResidencyDocument(documents.residency.documentUrl || null);
+      }
+      if (documents.passport) {
+        setPassportNumber(documents.passport.number || '');
+        setPassportIssueDate(documents.passport.issueDate || null);
+        setPassportExpiryDate(documents.passport.expiryDate || null);
+        setPassportDocument(documents.passport.documentUrl || null);
+      }
     }
   }, [data, screen]);
 
@@ -224,8 +338,24 @@ const EmployeeForm = forwardRef((props, ref) => {
       wageType &&
       punchInTime &&
       punchOutTime &&
-      profilePicture;
-
+      profilePicture &&
+      // Documents
+      cnicNumber &&
+      cnicIssueDate &&
+      cnicExpiryDate &&
+      cnicDocument &&
+      visaNumber &&
+      visaIssueDate &&
+      visaExpiryDate &&
+      visaDocument &&
+      residencyNumber &&
+      residencyIssueDate &&
+      residencyExpiryDate &&
+      residencyDocument &&
+      passportNumber &&
+      passportIssueDate &&
+      passportExpiryDate &&
+      passportDocument;
     onFormValidityChange(isFormValid);
   }, [
     fullName,
@@ -249,6 +379,24 @@ const EmployeeForm = forwardRef((props, ref) => {
     profilePicture,
     emailError,
     phoneError,
+
+    // Add these to dependencies
+    cnicNumber,
+    cnicIssueDate,
+    cnicExpiryDate,
+    cnicDocument,
+    visaNumber,
+    visaIssueDate,
+    visaExpiryDate,
+    visaDocument,
+    residencyNumber,
+    residencyIssueDate,
+    residencyExpiryDate,
+    residencyDocument,
+    passportNumber,
+    passportIssueDate,
+    passportExpiryDate,
+    passportDocument,
   ]);
 
   useImperativeHandle(ref, () => ({
@@ -272,6 +420,26 @@ const EmployeeForm = forwardRef((props, ref) => {
       wageType,
       punchInTime,
       punchOutTime,
+      // Documents
+      cnicNumber,
+      cnicIssueDate,
+      cnicExpiryDate,
+      cnicDocument,
+
+      visaNumber,
+      visaIssueDate,
+      visaExpiryDate,
+      visaDocument,
+
+      residencyNumber,
+      residencyIssueDate,
+      residencyExpiryDate,
+      residencyDocument,
+
+      passportNumber,
+      passportIssueDate,
+      passportExpiryDate,
+      passportDocument,
     }),
   }));
 
@@ -283,6 +451,7 @@ const EmployeeForm = forwardRef((props, ref) => {
 
   return (
     <CommonSafeAreaScrollViewComponent>
+      {isLoading && <LogoLoaderComponent />}
       <View style={CommonStyles.mainPadding}>
         <View style={CommonStyles.alignSelf}>
           <TouchableOpacity
@@ -539,6 +708,134 @@ const EmployeeForm = forwardRef((props, ref) => {
               options={timeOptions}
               halfWidth={true}
               hideSearch={true}
+            />
+          </View>
+        </>
+        <View style={[CommonStyles.alignSelf, CommonStyles.paddingBottom5]}>
+          <Text
+            style={[
+              CommonStyles.font5P,
+              CommonStyles.Bold600,
+              CommonStyles.textBlack,
+              CommonStyles.underlineText,
+            ]}>
+            {I18n.t('documents')}
+          </Text>
+        </View>
+
+        <>
+          <View>
+            <InputFieldComponent
+              title={I18n.t('cnicNumber')}
+              value={cnicNumber}
+              placeholder={I18n.t('enterCnicNumber')}
+              placeholderColor={Colors.placeholderColorDark}
+              onChangeText={text => {
+                const cleaned = text.replace(/[^0-9]/g, '');
+                setCnicNumber(cleaned);
+              }}
+              borderColor={Colors.greyColor}
+              textColor={Colors.blackColor}
+            />
+
+            <DateFromToComponent
+              dateFrom={formatDate(cnicIssueDate)}
+              setDateFrom={setCnicIssueDate}
+              dateTo={formatDate(cnicExpiryDate)}
+              setDateTo={setCnicExpiryDate}
+              dateFromLabel={I18n.t('issueDate')}
+              dateToLabel={I18n.t('expiryDate')}
+            />
+
+            <AttachmentPicker
+              attachment={cnicDocument}
+              handleDocumentPick={() => handleDocumentPickFor('cnic')}
+            />
+          </View>
+
+          <View style={CommonStyles.marginTop10}>
+            <InputFieldComponent
+              title={I18n.t('visaNumber')}
+              value={visaNumber}
+              placeholder={I18n.t('enterVisaNumber')}
+              placeholderColor={Colors.placeholderColorDark}
+              onChangeText={text => {
+                const cleaned = text.replace(/[^0-9]/g, '');
+                setVisaNumber(cleaned);
+              }}
+              borderColor={Colors.greyColor}
+              textColor={Colors.blackColor}
+            />
+
+            <DateFromToComponent
+              dateFrom={formatDate(visaIssueDate)}
+              setDateFrom={setVisaIssueDate}
+              dateTo={formatDate(visaExpiryDate)}
+              setDateTo={setVisaExpiryDate}
+              dateFromLabel={I18n.t('issueDate')}
+              dateToLabel={I18n.t('expiryDate')}
+            />
+
+            <AttachmentPicker
+              attachment={visaDocument}
+              handleDocumentPick={() => handleDocumentPickFor('visa')}
+            />
+          </View>
+
+          <View style={CommonStyles.marginTop10}>
+            <InputFieldComponent
+              title={I18n.t('residencyCardNumber')}
+              value={residencyNumber}
+              placeholder={I18n.t('enterResidencyNumber')}
+              placeholderColor={Colors.placeholderColorDark}
+              onChangeText={text => {
+                const cleaned = text.replace(/[^0-9]/g, '');
+                setResidencyNumber(cleaned);
+              }}
+              borderColor={Colors.greyColor}
+              textColor={Colors.blackColor}
+            />
+
+            <DateFromToComponent
+              dateFrom={formatDate(residencyIssueDate)}
+              setDateFrom={setResidencyIssueDate}
+              dateTo={formatDate(residencyExpiryDate)}
+              setDateTo={setResidencyExpiryDate}
+              dateFromLabel={I18n.t('issueDate')}
+              dateToLabel={I18n.t('expiryDate')}
+            />
+
+            <AttachmentPicker
+              attachment={residencyDocument}
+              handleDocumentPick={() => handleDocumentPickFor('residency')}
+            />
+          </View>
+          <View style={CommonStyles.marginTop10}>
+            <InputFieldComponent
+              title={I18n.t('passportNumber')}
+              value={passportNumber}
+              placeholder={I18n.t('enterPassportNumber')}
+              placeholderColor={Colors.placeholderColorDark}
+              onChangeText={text => {
+                const cleaned = text.replace(/[^0-9]/g, '');
+                setPassportNumber(cleaned);
+              }}
+              borderColor={Colors.greyColor}
+              textColor={Colors.blackColor}
+            />
+
+            <DateFromToComponent
+              dateFrom={formatDate(passportIssueDate)}
+              setDateFrom={setPassportIssueDate}
+              dateTo={formatDate(passportExpiryDate)}
+              setDateTo={setPassportExpiryDate}
+              dateFromLabel={I18n.t('issueDate')}
+              dateToLabel={I18n.t('expiryDate')}
+            />
+
+            <AttachmentPicker
+              attachment={passportDocument}
+              handleDocumentPick={() => handleDocumentPickFor('passport')}
             />
           </View>
         </>

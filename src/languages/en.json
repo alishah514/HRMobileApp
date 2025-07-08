@@ -246,5 +246,19 @@
   "phoneRequired": "Phone number is required",
   "phoneLengthMustBeGreaterThan8": "Phone Number's Length must be greater than 8 digits",
   "phoneLengthMustBeLessThan14": "Phone Number's Length must be less than 14 digits",
-  "pleaseSelectCountryCode": "Please select a country code"
+  "pleaseSelectCountryCode": "Please select a country code",
+  "documents": "Documents",
+  "cnicNumber": "CNIC Number",
+  "enterCnicNumber": "Enter CNIC Number",
+  "visaNumber": "VISA Number",
+  "enterVisaNumber": "Enter VISA Number",
+  "residencyCardNumber": "Residency Card Number",
+  "enterResidencyNumber": "Enter Residency Card Number",
+  "issueDate": "Issue Date",
+  "uploadCnic": "Upload CNIC",
+  "uploadVisa": "Upload VISA",
+  "uploadResidencyCard": "Upload Residency Card",
+  "number": "Number",
+  "passportNumber": "Passport Number",
+  "enterPassportNumber": "Enter Passport Number"
 }

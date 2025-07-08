@@ -118,6 +118,7 @@ const CommonStyles = StyleSheet.create({
   marginBottom3: {marginBottom: wp('3')},
   marginBottom5: {marginBottom: wp('5')},
   marginBottom7: {marginBottom: wp('7')},
+  marginBottom10: {marginBottom: wp('10')},
   marginBottom20: {marginBottom: wp('20')},
 
   // top
